@@ -238,6 +238,8 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 <link rel="stylesheet" href="v23.css">
 <link rel="stylesheet" href="v24.css">
 <link rel="stylesheet" href="v25.css">
+<link rel="stylesheet" href="v28.css?v=28-1">
+<meta name="mind-garden-release" content="v2.8.0">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -871,9 +873,9 @@ $("bPl").onclick=openPl;$("bSet").onclick=openSet;$("bFam").onclick=famView;
 load();applyPrefs();renderHome();
 </script>
 <script src="upgrade.js"></script>
-<script src="multiplayer.js"></script>
+<script src="multiplayer.js?v=28-1"></script>
 <script src="i18n.js"></script>
-<script src="dashboard.js"></script>
+<script src="dashboard.js?v=28-1"></script>
 <script src="ambient.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
