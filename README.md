@@ -1,3 +1,5 @@
+> **v2.4 update:** Follow [UPGRADE-v2.4.md](UPGRADE-v2.4.md) and [CHECK-MULTIPLAYER.md](CHECK-MULTIPLAYER.md) for the approved designs and multiplayer repair.
+
 # Mind Garden v2.3 — Senior-friendly brain games + Cloudflare Pages multiplayer
 
 **Existing v2.2 user? Read [UPGRADE-v2.3.md](UPGRADE-v2.3.md).** No new SQL migration is required for v2.3.

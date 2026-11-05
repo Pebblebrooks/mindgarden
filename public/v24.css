@@ -1,0 +1,56 @@
+/* v2.4: faithful implementation of the TWO approved mockups. Single navbar on both pages. */
+:root{--vforest:#073c43;--vteal:#0b7176;--vmint:#cdf2c9;--vcream:#fffaf0}
+body:has(#home:not(.hidden)){background:#eef9ee}
+body:has(#home:not(.hidden)) #gbg{display:none}
+.wrap{max-width:none;padding:0 0 30px}
+#home{position:relative}
+#unifiedNav{position:sticky;top:8px;z-index:8;max-width:calc(100% - 30px);margin:10px 15px 0;padding:5px 10px;border:2px solid #8bc9c0;border-radius:28px;background:linear-gradient(110deg,#063b43,#0a5360 60%,#063944);box-shadow:0 7px 22px #0b343848}
+#unifiedNav button{min-height:45px}
+#unifiedNav .nav-brand{font-size:clamp(1rem,1.55vw,1.4rem);padding:4px 12px}
+#unifiedNav .nav-items{gap:5px}
+#unifiedNav .nav-link{padding:6px 12px;font-size:clamp(.84rem,.95vw,1rem)}
+#unifiedNav .nav-actions{gap:5px}
+#unifiedNav .nav-quiet{padding:4px 10px;min-height:44px}
+#unifiedNav .nav-player{max-width:155px;overflow:hidden}
+#unifiedNav .nav-link.current{background:linear-gradient(120deg,#a6eaa1,#cbf6bd);color:#10353b}
+#welcomeDashboard{max-width:none;min-height:calc(100dvh - 78px);margin-top:-74px;justify-content:center;display:flex}
+.welcome-scene{width:100%;min-height:100dvh;border:0;border-radius:0;box-shadow:none;background: url('garden-landscape.webp') center center / cover no-repeat;align-items:center;justify-content:center;padding:100px 22px 45px;}
+.welcome-scene:before{display:none}.welcome-scene:after{display:none}
+.welcome-shade{max-width:820px;width:min(94%,820px);margin:0;position:relative;background:linear-gradient(160deg,rgba(5,69,74,.88),rgba(5,77,70,.82));border:2px solid #b4ecdb;border-radius:62px;padding:34px 38px 27px;box-shadow:0 22px 60px #052f3450;backdrop-filter:blur(4px)}
+.welcome-sprout{font-size:3rem}
+.welcome-shade h1{font-size:clamp(2.6rem,5vw,5rem);line-height:1.02;margin:3px 0 15px}
+.welcome-shade h1 span{display:block}
+.welcome-shade p{font-size:clamp(1.1rem,1.55vw,1.55rem);max-width:29em;line-height:1.3}
+.welcome-shade .welcome-greeting{font-size:.95rem;color:#ddf6d3;margin:10px auto}
+.welcome-ctas{grid-template-columns:1.3fr 1fr 1fr;gap:14px;margin-top:25px}
+.welcome-ctas .btn{min-height:84px;border:2px solid #e7fff7;border-radius:27px;font-size:clamp(1rem,1.35vw,1.3rem);line-height:1.2;box-shadow:0 5px 0 #0b353d70}
+.welcome-ctas .welcome-start{background:linear-gradient(140deg,#23b1ad,#087486);color:white}
+.welcome-ctas .welcome-alt{background:#114c56d9;color:white}
+.welcome-stats{margin:15px 0 0;font-size:.73rem;gap:7px}
+.welcome-stats span{background:#0e4148d9;border:1px solid #9acbc2;padding:3px 11px}
+.welcome-progress{display:flex;justify-content:center;gap:12px;margin-top:14px}
+.welcome-progress button{background:#0d464fd9;color:white;border:1px solid #c4eadf;border-radius:40px;min-height:40px;padding:7px 18px;font-size:.88rem}
+.welcome-progress button:hover{background:#146f74}
+.dash-disclaimer{margin:-36px auto 0;z-index:2;position:relative;color:#113b38;background:#ffffffc7;border-radius:14px;padding:4px 12px;width:fit-content;max-width:90%;font-size:.71rem}
+/* All Games: same white/mint botanical library from approved reference */
+#gameLibrary{margin:-5px 0 0;max-width:none}
+#libraryDisplay{border:0;border-radius:0;min-height:calc(100dvh - 70px);padding:clamp(28px,3.5vw,55px) clamp(16px,4vw,70px) 60px;background:radial-gradient(ellipse at left top,#c9eedacb,transparent 44%),radial-gradient(ellipse at right bottom,#c9efb9b0,transparent 42%),linear-gradient(180deg,#ecfaf4,#f8fff9 60%,#dcf2df)}
+#libraryDisplay:before,#libraryDisplay:after{position:absolute;content:'🌿';pointer-events:none;font-size:clamp(60px,8vw,130px);opacity:.2}
+#libraryDisplay:before{left:-12px;top:70px;transform:rotate(-20deg)}
+#libraryDisplay:after{right:0;top:70px;transform:rotate(30deg)}
+.library-top{margin-bottom:18px}.library-sprout{font-size:2rem}.library-top h1{font-size:clamp(2.2rem,3.3vw,3.6rem);margin:0;color:#113e43}
+.library-top p{font-size:clamp(.92rem,1.25vw,1.15rem)}
+.game-filterbar{margin:16px auto 12px}.search-field{max-width:530px}.search-field input{min-height:53px}
+.category-pills{gap:12px;margin:13px auto 27px}.category-pill{font-size:clamp(.77rem,.9vw,1rem);min-height:45px}
+.category-pill.active{background:#075a6b}
+.game-card-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.game-tile{grid-template-columns:78px minmax(0,1fr) 31px;gap:12px;min-height:126px;padding:12px;border:2px solid #b8ded5;border-radius:20px;box-shadow:0 6px 18px #174d3a14;background:#fffefa}
+.game-tile .game-art{height:78px;width:78px;border-radius:17px;font-size:2.25rem}
+.game-info{gap:5px}.game-info strong{font-size:clamp(.94rem,1.1vw,1.15rem)}.game-desc{font-size:clamp(.75rem,.9vw,.97rem)}.game-meta{font-size:clamp(.67rem,.72vw,.8rem)}
+.game-play{width:30px;height:30px;background:#12948d}
+/* Prevent moving animals or animated backgrounds from making text hard to read. */
+#gardenLife{opacity:.72}
+@media(max-width:1350px){.game-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1100px){.game-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#unifiedNav .nav-link{padding:5px 8px}}
+@media(max-width:700px){#unifiedNav{top:4px;margin:5px 7px 0;max-width:calc(100% - 14px)}#welcomeDashboard{margin-top:-65px;min-height:100dvh}.welcome-scene{padding:86px 12px 32px;background-position:41% center;min-height:100dvh}.welcome-shade{border-radius:30px;padding:23px 18px 22px;width:100%}.welcome-shade h1{font-size:clamp(2.2rem,9vw,3.8rem)}.welcome-ctas{grid-template-columns:1fr;gap:10px}.welcome-ctas .btn{min-height:64px}.welcome-progress{flex-wrap:wrap}.dash-disclaimer{margin:-32px auto 8px}#libraryDisplay{padding:40px 11px 28px}.game-card-grid{grid-template-columns:1fr;gap:10px}.game-tile{min-height:100px;grid-template-columns:67px minmax(0,1fr) 30px}.game-tile .game-art{height:67px;width:67px;font-size:2rem}.category-pills{gap:6px}}
+@media(prefers-reduced-motion:reduce){.welcome-scene{background-attachment:initial}#gardenLife{display:none!important}}

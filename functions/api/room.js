@@ -13,9 +13,10 @@ const view=(r,who)=>({code:r.code,role:who,host:r.host_name,guest:r.guest_name||
 export async function onRequest({request,env}){
  if(!env.DB)return J({error:'Database binding DB is not configured.'},503);
  try{
-  const u=new URL(request.url),action=request.method==='GET'?'status':u.searchParams.get('action');
+  const u=new URL(request.url),action=u.searchParams.get('action')==='health'?'health':request.method==='GET'?'status':u.searchParams.get('action');
   if(!['GET','POST'].includes(request.method))return J({error:'Method not allowed'},405);
   const b=request.method==='POST'?await request.json():Object.fromEntries(u.searchParams);
+  if(action==='health'){const cols=await env.DB.prepare('PRAGMA table_info(rooms)').all();const found=new Set((cols.results||[]).map(x=>x.name));const required=['round_number','game_type','host_total','guest_total'];return J({ok:required.every(x=>found.has(x)),database:'connected',missingColumns:required.filter(x=>!found.has(x))})}
   if(action==='create'){
    if(!goodName(b.name))return J({error:'Enter a name (1–20 letters/numbers).'},400);
    const name=b.name.trim(),t=token(),seed=crypto.getRandomValues(new Uint32Array(1))[0];
@@ -66,5 +67,10 @@ export async function onRequest({request,env}){
    r=await find(env.DB,b.code);return J(view(r,who));
   }
   return J({error:'Unknown action.'},404);
- }catch(e){return J({error:'Request could not be processed. Check that the v2.2 database migration was applied.'},500)}
+ }catch(e){
+  const message=String(e&&e.message||e);
+  if(/no such column|has no column named|table rooms has no column/i.test(message))return J({error:'The multiplayer database schema is outdated. Open the D1 Console and apply only the missing columns from migrate-v2.2.sql.'},500);
+  if(/no such table/i.test(message))return J({error:'Multiplayer tables are missing. Run schema.sql in the D1 Console.'},500);
+  return J({error:'Multiplayer request failed on the server. Check Pages Functions logs for the underlying error.'},500);
+ }
 }
