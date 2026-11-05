@@ -1,5 +1,5 @@
 /* Mind Garden v2.3: offline cache for static assets, NEVER cache multiplayer API. */
-const V="mind-garden-v24",F=["./","index.html","i18n.js","upgrade.js","multiplayer.js","dashboard.js","ambient.js","v23.css","v24.css","garden-landscape.webp","manifest.webmanifest","icon.svg"];
+const V="mind-garden-v25",F=["./","index.html","i18n.js","upgrade.js","multiplayer.js","dashboard.js","ambient.js","v23.css","v24.css","v25.css","garden-landscape.webp","manifest.webmanifest","icon.svg"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(F)));self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{
