@@ -1,3 +1,7 @@
+# Mind Garden v2.5 — approved four-card home
+
+**Latest update:** see [UPGRADE-v2.5.md](UPGRADE-v2.5.md) for theme settings, deployment and multiplayer checks.
+
 > **v2.4 update:** Follow [UPGRADE-v2.4.md](UPGRADE-v2.4.md) and [CHECK-MULTIPLAYER.md](CHECK-MULTIPLAYER.md) for the approved designs and multiplayer repair.
 
 # Mind Garden v2.3 — Senior-friendly brain games + Cloudflare Pages multiplayer

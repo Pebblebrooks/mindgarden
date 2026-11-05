@@ -11,6 +11,8 @@
  home.appendChild(library);
  const dash=document.createElement('section');dash.id='welcomeDashboard';dash.setAttribute('aria-label','Welcome to Mind Garden');home.insertBefore(dash,library);
  const nav=document.createElement('nav');nav.id='unifiedNav';nav.setAttribute('aria-label','Main navigation');home.insertBefore(nav,dash);
+ // Keep garden growth visible, but never let its large SVG appear before the welcome page.
+ const progressStrip=document.createElement('section');progressStrip.id='gardenProgressStrip';progressStrip.setAttribute('aria-label','My garden progress');home.insertBefore(progressStrip,library);progressStrip.appendChild(hero);
  const T=(a,b)=>save.lang==='zh'?b:a;
  const today=()=>dstr();let page='dashboard',daily=null,filter='all',search='',length='standard';
  const META={seq:'memory',miss:'memory',rem:'memory',shopping:'memory',story:'memory',num:'numbers',sum:'numbers',sub:'numbers',tbl:'numbers',cnt:'numbers',add:'numbers',money:'numbers',sort:'logic',odd:'logic',same:'logic',routine:'logic',place:'logic',shp:'shapes',clk:'shapes',time:'shapes',calendar:'shapes',order:'shapes',diff:'attention',count:'attention',find:'attention',visual:'attention',wrd:'language',wm:'language',pic:'language',related:'language'};
@@ -61,7 +63,7 @@
   document.querySelectorAll('[data-pair-level]').forEach(b=>b.onclick=()=>start(Number(b.dataset.pairLevel)));
   document.getElementById('pairBack').onclick=closeOv;
  }
- function switchPage(p){page=p;dash.classList.toggle('hidden',p!=='dashboard');library.classList.toggle('hidden',p!=='library');top.classList.add('hidden');legacyNav.classList.add('hidden');if(p==='library')renderLibrary();else renderWelcome();buildNav();window.scrollTo({top:0,behavior:'instant'})}
+ function switchPage(p){page=p;dash.classList.toggle('hidden',p!=='dashboard');progressStrip.classList.toggle('hidden',p!=='dashboard');library.classList.toggle('hidden',p!=='library');top.classList.add('hidden');legacyNav.classList.add('hidden');if(p==='library')renderLibrary();else renderWelcome();buildNav();window.scrollTo({top:0,behavior:'instant'})}
  const oldShow=window.show;window.show=function(which){oldShow(which);nav.classList.toggle('hidden',which!=='home');if(which==='home')switchPage(page)};
  const oldRender=window.renderHome;window.renderHome=function(){oldRender();if(page==='dashboard')renderWelcome();else renderLibrary();buildNav()};
  function startDaily(){const t=Math.floor(new Date(today()+'T12:00:00').getTime()/86400000);const pools=[['shopping','rem','miss','story'],['visual','find','diff','count'],['calendar','routine','related','same']];daily={types:pools.map((a,i)=>a[(t+i*2)%a.length]),index:0};dailyIntro()}

@@ -68,3 +68,22 @@ body:has(#home:not(.hidden)){background:var(--mg-page);color:var(--mg-copy)}
 @media(max-width:1000px){.game-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.welcome-ctas{grid-template-columns:repeat(2,minmax(0,1fr));max-width:640px}.welcome-scene{padding-top:105px}}
 @media(max-width:700px){#unifiedNav{width:calc(100% - 14px);margin:6px auto 0;max-width:none}#welcomeDashboard{margin-top:-65px}.welcome-scene{min-height:calc(100dvh - 30px);padding:105px 13px 36px;background-position:40% center;gap:16px}.welcome-heading h1{font-size:clamp(2.5rem,8vw,3.5rem)}.welcome-heading p{font-size:.96rem}.welcome-ctas{gap:10px}.welcome-feature{min-height:140px;border-radius:21px;padding:14px 8px;font-size:.82rem}.welcome-feature strong{font-size:1.2rem}.welcome-feature .feature-icon{font-size:2.3rem}.welcome-extra{gap:8px}.welcome-extra span{font-size:.7rem}#libraryDisplay{padding:32px 11px 35px}.game-card-grid{grid-template-columns:1fr}.game-tile{min-height:102px}.game-tile .game-art{width:65px;height:65px}.game-tile{grid-template-columns:65px minmax(0,1fr) 28px}.category-pills{gap:6px}}
 @media(prefers-reduced-motion:reduce){.welcome-feature{transition:none}.welcome-feature:hover{transform:none}}
+
+/* v2.6: Welcome-first layout and compact garden progress.
+   The old garden SVG previously rendered before the welcome page and consumed
+   almost an entire viewport on desktop. Keep its progress data and controls. */
+#gardenProgressStrip{position:relative;z-index:1;max-width:1100px;margin:8px auto 22px;padding:0 18px}
+#gardenProgressStrip .hero{width:100%;max-width:none;margin:0;background:var(--mg-card);border:1px solid var(--mg-card-border);border-radius:22px;overflow:hidden;display:grid;grid-template-columns:minmax(190px,28%) minmax(0,1fr);align-items:center;box-shadow:var(--mg-card-shadow)}
+#gardenProgressStrip .hero .gsvg{height:clamp(115px,16vh,170px);width:100%;object-fit:cover;object-position:center bottom;align-self:stretch}
+#gardenProgressStrip .hero .hbody{padding:12px 20px;background:transparent;min-width:0}
+#gardenProgressStrip .hero .hmsg{font-size:clamp(.95rem,1.2vw,1.2rem);margin:0}
+#gardenProgressStrip .hero .gtxt{font-size:.85rem;margin:0}
+#gardenProgressStrip .hero .trkw{display:none}
+#gardenProgressStrip .hero .hchips{margin:5px auto;gap:6px}
+#gardenProgressStrip .hero .chip{font-size:.72rem;padding:3px 9px}
+#gardenProgressStrip .hero .hrow{margin:4px 0 0}
+#gardenProgressStrip .hero .hrow .btn{min-height:40px;height:auto;font-size:.83rem}
+/* The four welcome cards should be visible in the first desktop viewport. */
+@media (min-width:701px){.welcome-scene{min-height:0;height:auto;padding-top:clamp(88px,12vh,114px);padding-bottom:clamp(25px,4vh,42px);gap:clamp(12px,2.5vh,24px)}.welcome-feature{min-height:clamp(115px,16vh,158px)}}
+@media (max-width:700px){#gardenProgressStrip{padding:0 10px;margin:8px auto 18px}#gardenProgressStrip .hero{display:block}#gardenProgressStrip .hero .gsvg{height:90px;max-height:90px}#gardenProgressStrip .hero .hbody{padding:12px}#gardenProgressStrip .hero .hchips{flex-wrap:wrap}.welcome-scene{min-height:0;height:auto;padding-bottom:22px}}
+@media (max-height:650px) and (min-width:701px){.welcome-scene{padding-top:85px;padding-bottom:15px;gap:10px}.welcome-heading h1{font-size:clamp(2rem,4vw,3.5rem)}.welcome-feature{min-height:98px;padding:10px}.welcome-feature .feature-icon{font-size:1.9rem}.welcome-feature strong{font-size:1.2rem}}
