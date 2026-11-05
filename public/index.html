@@ -235,6 +235,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 #nav{position:sticky;top:max(8px,env(safe-area-inset-top,0px));z-index:3;margin:0 0 6px;padding:8px 12px;border-radius:20px;border:2px solid var(--line);background:color-mix(in srgb,var(--panel) 90%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 18px rgba(0,0,0,.18)}
 @media (max-width:640px){#nav{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:6px 8px;border-radius:16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}#nav::-webkit-scrollbar{display:none}#nav .btn{flex:0 0 auto}}
 </style>
+<link rel="stylesheet" href="v23.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -606,7 +607,7 @@ function pick(a,n){return shuffle(a.slice()).slice(0,n)}
 function lit(el,ms){el.classList.add("on");setTimeout(function(){el.classList.remove("on")},ms||300)}
 function startMG(t){
   try{ac&&ac.resume()}catch(x){}
-  mg={t:t,difficulty:window.mgDifficulty||1,r:0,R:t==="sort"?8:6,ok:0,n:t==="seq"?3:4,lo:t==="seq"?2:4,h:null,hist:[]};paused=false;mt0=Date.now();me().lg={k:t};persist();
+  mg={t:t,difficulty:window.mgDifficulty||1,r:0,R:window.mgSessionLength|| (t==="sort"?8:6),ok:0,n:t==="seq"?3:4,lo:t==="seq"?2:4,h:null,hist:[]};paused=false;mt0=Date.now();me().lg={k:t};persist();
   closeOv();show("mini");$("hLv2").textContent=MG[t].n;nextR();
 }
 function nextR(){
@@ -809,7 +810,7 @@ function gardenBg(){
 $("gbg").innerHTML=gardenBg();if(window.motion)motion();
 var MU=(function(){
 var ctx=null,master,rev,bus,dst,srcs=[],tm=[],cur="",run=false,vi=1,VOL=[.1,.2,.32],
- TR=[["chime","Garden chimes"],["box","Music box"],["pad","Warm evening"],["sea","Ocean waves"],["rain","Gentle rain"]];
+ TR=[["chime","Garden chimes"],["box","Music box"],["pad","Warm evening"],["sea","Ocean waves"],["rain","Gentle rain"],["forest","Forest morning"],["breeze","Soft breeze"],["stream","Quiet stream"],["crickets","Evening insects"],["birdsong","Birdsong garden"],["harp","Morning harp"],["lullaby","Gentle lullaby"]];
 function init(){if(ctx)return;ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=0;master.connect(ctx.destination);
  var len=ctx.sampleRate*3,ib=ctx.createBuffer(2,len,ctx.sampleRate),c,i,d;for(c=0;c<2;c++){d=ib.getChannelData(c);for(i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.5)}
  var cv=ctx.createConvolver();cv.buffer=ib;rev=ctx.createGain();rev.gain.value=.6;rev.connect(cv);cv.connect(master)}
@@ -828,8 +829,16 @@ function swell(brown,type,fr,q,base,depth,rate){var a=nz(brown),f=ctx.createBiqu
 function sea(){swell(1,"lowpass",700,.7,.9,.7,.085);swell(0,"bandpass",1800,.4,.05,.035,.085)}
 function rain(){var a=nz(0),h=ctx.createBiquadFilter(),l=ctx.createBiquadFilter(),g=ctx.createGain();h.type="highpass";h.frequency.value=1200;l.type="lowpass";l.frequency.value=6500;g.gain.value=.22;a.connect(h);h.connect(l);l.connect(g);g.connect(bus);a.start();
  (function n(){note(1200+Math.random()*1800,ctx.currentTime+.02,.25,"sine",.05,.5,.003);wait(n,200+Math.random()*500)})()}
+// Original, synthesized nature ambience; no external recordings or copyrighted songs.
+function forest(){swell(1,"lowpass",950,.5,.35,.18,.045);var seq=[523.25,587.33,659.25,783.99,659.25,587.33],i=0;(function loop(){var t=ctx.currentTime+.03;note(seq[i++%seq.length],t,3.5,"sine",.075,.4,.15);wait(loop,3000)})()}
+function breeze(){swell(1,"lowpass",360,.35,.45,.28,.03);swell(0,"bandpass",1100,.35,.02,.012,.075)}
+function stream(){swell(0,"bandpass",1100,.35,.23,.11,.14);swell(1,"lowpass",800,.4,.24,.08,.22)}
+function crickets(){swell(1,"lowpass",300,.4,.11,.035,.045);(function loop(){var t=ctx.currentTime+.04;for(var k=0;k<3;k++)note(1900+k*145,t+k*.18,.3,"sine",.022,0,.015);wait(loop,1800+Math.random()*1200)})()}
+function birdsong(){swell(1,"lowpass",550,.4,.25,.1,.045);(function loop(){var t=ctx.currentTime+.04,root=[880,987.77,1174.66,1318.51][Math.floor(Math.random()*4)];note(root,t,.28,"sine",.065,.3,.03);note(root*1.12,t+.32,.23,"sine",.055,.3,.03);note(root*.94,t+.62,.4,"sine",.04,.2,.03);wait(loop,3500+Math.random()*2500)})()}
+function harp(){var scale=[523.25,659.25,783.99,1046.5,987.77,783.99,659.25,587.33],i=0;(function loop(){var t=ctx.currentTime+.03;note(scale[i%scale.length],t,2.8,"triangle",.08,.65,.008);if(i%4===0)note(261.63,t,3.7,"sine",.045,.5,.03);i++;wait(loop,900)})()}
+function lullaby(){var scale=[392,440,523.25,440,392,329.63,349.23,392,329.63,293.66,261.63,0],i=0;(function loop(){var t=ctx.currentTime+.03,f=scale[i%scale.length];if(f)note(f,t,2.9,"sine",.08,.7,.09);if(i%4===0)note([196,174.61,130.81][Math.floor(i/4)%3],t,4.8,"sine",.042,.5,.3);i++;wait(loop,1100)})()}
 function stopTrack(){var i,ob=bus,os=srcs;for(i=0;i<tm.length;i++)clearTimeout(tm[i]);tm=[];srcs=[];if(!ob)return;ob.gain.setTargetAtTime(0,ctx.currentTime,.35);setTimeout(function(){os.forEach(function(s){try{s.stop()}catch(e){}});try{ob.disconnect()}catch(e){}},2200)}
-function start(id){try{init();if(ctx.resume)ctx.resume();stopTrack();cur=id;run=true;bus=ctx.createGain();bus.gain.value=0;bus.connect(master);dst=bus;bus.gain.setTargetAtTime(1,ctx.currentTime,.8);master.gain.setTargetAtTime(VOL[vi],ctx.currentTime,.3);({chime:chime,box:box,pad:pad,sea:sea,rain:rain})[id]()}catch(e){run=false}}
+function start(id){try{init();if(ctx.resume)ctx.resume();stopTrack();cur=id;run=true;bus=ctx.createGain();bus.gain.value=0;bus.connect(master);dst=bus;bus.gain.setTargetAtTime(1,ctx.currentTime,.8);master.gain.setTargetAtTime(VOL[vi],ctx.currentTime,.3);({chime:chime,box:box,pad:pad,sea:sea,rain:rain,forest:forest,breeze:breeze,stream:stream,crickets:crickets,birdsong:birdsong,harp:harp,lullaby:lullaby})[id]()}catch(e){run=false}}
 function stop(){run=false;if(!ctx)return;stopTrack();setTimeout(function(){if(!run&&ctx.suspend)ctx.suspend()},2600)}
 document.addEventListener("visibilitychange",function(){if(!ctx||!run)return;try{document.hidden?ctx.suspend():ctx.resume()}catch(e){}});
 return{TR:TR,start:start,stop:stop,on:function(){return run},cur:function(){return cur},vol:function(i){vi=i;if(ctx)master.gain.setTargetAtTime(VOL[i],ctx.currentTime,.2)}}})();
@@ -863,6 +872,7 @@ load();applyPrefs();renderHome();
 <script src="multiplayer.js"></script>
 <script src="i18n.js"></script>
 <script src="dashboard.js"></script>
+<script src="ambient.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

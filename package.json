@@ -1,0 +1,12 @@
+{
+  "name": "mind-garden-cloudflare",
+  "version": "2.3.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev public --local",
+    "check": "node --check functions/api/room.js && node --check public/upgrade.js && node --check public/multiplayer.js && node --check public/dashboard.js && node --check public/ambient.js && node --check public/sw.js"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

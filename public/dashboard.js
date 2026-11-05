@@ -1,116 +1,73 @@
-/* Mind Garden v2.1: simplified senior-first home, library and guided daily journey.
-   Existing game engines and local profiles are preserved. */
+/* Mind Garden v2.3: one navigation bar, immersive garden welcome,
+   searchable games library and guided daily activities. No framework required. */
 (function(){
  'use strict';
- const home=document.getElementById('home'), nav=document.getElementById('nav'), top=home.querySelector('.top');
+ const home=document.getElementById('home'),legacyNav=document.getElementById('nav');
+ const top=home.querySelector('.top'),hero=document.getElementById('hero');
  const oldDaily=document.getElementById('dailyStart');if(oldDaily)oldDaily.remove();
- const hero=document.getElementById('hero');
  const library=document.createElement('section');library.id='gameLibrary';library.className='hidden';
- const children=Array.from(home.children);
- let afterHero=false;
- children.forEach(el=>{if(el===hero){afterHero=true;return}if(el===nav||el===top)return;if(el.classList.contains('sub')||afterHero)library.appendChild(el)});
+ const children=Array.from(home.children);let afterHero=false;
+ children.forEach(el=>{if(el===hero){afterHero=true;return}if(el===legacyNav||el===top)return;if(el.classList.contains('sub')||afterHero)library.appendChild(el)});
  home.appendChild(library);
- const dash=document.createElement('section');dash.id='welcomeDashboard';dash.setAttribute('aria-label','Welcome to Mind Garden');
- home.insertBefore(dash,library);
- const gardenWrap=document.createElement('div');gardenWrap.className='dashboard-garden';dash.appendChild(gardenWrap);gardenWrap.appendChild(hero);
- let page='dashboard',daily=null;
- const isZh=()=>save.lang==='zh';
- const T=(en,zh)=>isZh()?zh:en;
- const today=()=>dstr();
- const picks=['shopping','visual','calendar'];
- const dailyPicks=()=>{const day=Math.floor(new Date(today()+'T12:00:00').getTime()/86400000);return [
-  ['shopping','rem','miss','story'][((day%4)+4)%4],
-  ['visual','find','diff','count'][((day%4)+4)%4],
-  ['calendar','routine','related','same'][((day%4)+4)%4]
- ];};
- const render=()=>{
-  const p=me(),log=(p.log||[]).filter(x=>x.d===today()),mins=Math.round(log.reduce((n,x)=>n+(x.s||0),0)/60),done=log.length;
-  const who=esc(p.name||'Friend');
-  dash.innerHTML='<div class="dash-welcome"><div class="dash-eyebrow">🌿 '+T('YOUR DAILY MIND GARDEN','每日心灵花园')+'</div><h1>'+T('Welcome, ','欢迎，')+who+'!</h1><p>'+T('A little joy for your mind, every day.','每天一点快乐，轻松动动脑。')+'</p></div>'+
-   '<div class="dash-counters" aria-label="'+T('Your activity','您的活动')+'"><span>🌱 '+T('Garden growth','花园成长')+': <strong>'+Math.min(60,p.gr||0)+'/60</strong></span><span>📅 '+T('Today','今天')+': <strong>'+done+' '+T('games','局')+'</strong></span>'+(mins?'<span>⏱️ <strong>'+mins+' '+T('min','分钟')+'</strong></span>':'')+'</div>'+
-   '<div id="dashHeroPosition"></div>'+
-   '<div class="dash-primary"><button id="dashStart" class="btn main dash-start"><span aria-hidden="true">▶</span><span>'+T('Start Today’s Games','开始今日游戏')+'<small>'+T('3 gentle activities · about 10 minutes · at your own pace','3项轻松活动 · 约10分钟 · 按自己的节奏')+'</small></span></button></div>'+
-   '<div class="dash-actions"><button class="dash-choice" id="dashBrowse"><span class="dash-icon" aria-hidden="true">🧩</span><strong>'+T('All Games','所有游戏')+'</strong><small>'+T('Explore activities and levels','浏览游戏和难度')+'</small></button><button class="dash-choice" id="dashTogether"><span class="dash-icon" aria-hidden="true">👥</span><strong>'+T('Play Together','一起玩')+'</strong><small>'+T('Invite a friend online','邀请朋友在线比赛')+'</small></button></div>'+
-   '<div class="dash-links"><button class="btn sm" id="dashPlayer">👤 '+T('Player','玩家')+': '+who+'</button><button class="btn sm" id="dashProgress">📈 '+T('My Progress','我的进度')+'</button><button class="btn sm" id="dashFamily">🤝 '+T('Family View','家人视图')+'</button><button class="btn sm" id="dashSettings">⚙️ '+T('Settings','设置')+'</button></div>'+
-   '<p class="dash-disclaimer">'+T('For enjoyment and cognitive engagement. Not a medical test or treatment.','用于娱乐和认知活动，并非医疗测试或治疗。')+'</p>';
-  dash.querySelector('#dashHeroPosition').appendChild(hero);
-  $('dashStart').onclick=startDaily;
-  $('dashBrowse').onclick=()=>switchPage('library');
-  $('dashTogether').onclick=()=>document.getElementById('bOnline').click();
-  $('dashPlayer').onclick=()=>document.getElementById('bPl').click();
-  $('dashProgress').onclick=()=>document.getElementById('bLb').click();
-  $('dashFamily').onclick=()=>document.getElementById('bFam').click();
-  $('dashSettings').onclick=()=>document.getElementById('bSet').click();
+ const dash=document.createElement('section');dash.id='welcomeDashboard';dash.setAttribute('aria-label','Welcome to Mind Garden');home.insertBefore(dash,library);
+ const nav=document.createElement('nav');nav.id='unifiedNav';nav.setAttribute('aria-label','Main navigation');home.insertBefore(nav,dash);
+ const T=(a,b)=>save.lang==='zh'?b:a;
+ const today=()=>dstr();let page='dashboard',daily=null,filter='all',search='',length='standard';
+ const META={seq:'memory',miss:'memory',rem:'memory',shopping:'memory',story:'memory',num:'numbers',sum:'numbers',sub:'numbers',tbl:'numbers',cnt:'numbers',add:'numbers',money:'numbers',sort:'logic',odd:'logic',same:'logic',routine:'logic',place:'logic',shp:'shapes',clk:'shapes',time:'shapes',calendar:'shapes',order:'shapes',diff:'attention',count:'attention',find:'attention',visual:'attention',wrd:'language',wm:'language',pic:'language',related:'language'};
+ const LABELS={all:['All games','全部游戏'],memory:['Memory','记忆'],attention:['Attention','观察'],logic:['Logic','逻辑'],language:['Language','语言'],numbers:['Numbers','数字'],shapes:['Shapes & time','图形与时间']};
+ const GAME_TIME={seq:4,miss:4,rem:3,shopping:5,story:5,diff:5,visual:4,wrd:5,related:4};
+ function navAction(action){if(action==='home')switchPage('dashboard');else if(action==='library')switchPage('library');else if(action==='online')document.getElementById('bOnline').click();else if(action==='progress')document.getElementById('bLb').click();else if(action==='family')document.getElementById('bFam').click();else if(action==='settings')document.getElementById('bSet').click();else if(action==='profile')document.getElementById('bPl').click();else if(action==='language')document.getElementById('bLang').click();else if(action==='music')document.getElementById('bMus').click();}
+ function buildNav(){
+  nav.innerHTML='<button class="nav-brand" data-go="home" aria-label="'+T('Mind Garden home','心灵花园主页')+'">🌱 <span>Mind Garden</span></button><div class="nav-items">'+
+  [['home','⌂','Home','主页'],['library','▦','All Games','所有游戏'],['online','♧','Play Together','一起玩'],['progress','▥','My Progress','我的进度'],['family','♡','Family','家人']].map(v=>'<button class="nav-link'+((v[0]==='progress'||v[0]==='family')?' nav-secondary':'')+((page==='dashboard'&&v[0]==='home'||page==='library'&&v[0]==='library')?' current':'')+'" data-go="'+v[0]+'"'+((page==='dashboard'&&v[0]==='home'||page==='library'&&v[0]==='library')?' aria-current="page"':'')+'><span aria-hidden="true">'+v[1]+'</span> '+T(v[2],v[3])+'</button>').join('')+
+  '</div><div class="nav-actions"><button class="nav-quiet" data-go="profile" aria-label="'+T('Switch player','切换玩家')+'">👤 <span>'+esc(me().name)+'</span></button><button class="nav-quiet" data-go="settings" aria-label="'+T('Settings','设置')+'">⚙ <span>'+T('Settings','设置')+'</span></button><button class="nav-quiet nav-symbol" data-go="music" aria-label="'+T('Music','音乐')+'">♫</button><button class="nav-quiet nav-symbol" data-go="language" aria-label="'+T('Language','语言')+'">文</button></div><button id="navMore" class="nav-more" aria-expanded="false">☰ '+T('More','更多')+'</button><div id="navMenu" class="nav-menu hidden">'+[['progress','▥','My Progress','我的进度'],['family','♡','Family View','家人视图'],['profile','👤','Switch Player','切换玩家'],['settings','⚙','Settings','设置'],['music','♫','Music','音乐'],['language','文','Language','语言']].map(v=>'<button data-go="'+v[0]+'">'+v[1]+' '+T(v[2],v[3])+'</button>').join('')+'</div>';
+  nav.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const menu=document.getElementById('navMenu');if(menu)menu.classList.add('hidden');navAction(b.dataset.go)});const more=document.getElementById('navMore'),menu=document.getElementById('navMenu');more.onclick=()=>{const open=menu.classList.toggle('hidden')===false;more.setAttribute('aria-expanded',String(open))};
+ }
+ const days=()=>{const t=new Date(today()+'T12:00:00').getTime()/86400000|0;return [['shopping','rem','miss','story'][Math.abs(t)%4],['visual','find','diff','count'][Math.abs(t)%4],['calendar','routine','related','same'][Math.abs(t)%4]]};
+ function renderWelcome(){
+  const p=me(),log=(p.log||[]).filter(x=>x.d===today()),mins=Math.round(log.reduce((a,x)=>a+(x.s||0),0)/60),growth=Math.min(60,p.gr||0);
+  dash.innerHTML='<div class="welcome-scene"><div class="welcome-shade"><div class="welcome-sprout" aria-hidden="true">🌱</div><h1>'+T('Welcome to','欢迎来到')+'<span>Mind Garden</span></h1><p>'+T('Fun, gentle brain games to keep your mind active and happy.','轻松有趣的益智游戏，让思维保持活跃与愉悦。')+'</p><p class="welcome-greeting">'+T('Hello, ','你好，')+esc(p.name||'Friend')+'! 🌻</p><div class="welcome-ctas"><button class="btn welcome-start" id="dashStart">▶ <span>'+T('Start Today’s Games','开始今日游戏')+'</span></button><button class="btn welcome-alt" id="dashBrowse">▦ '+T('All Games','所有游戏')+'</button><button class="btn welcome-alt" id="dashTogether">♧ '+T('Play Together','一起玩')+'</button></div><div class="welcome-stats"><span>🌱 '+T('Garden','花园')+' <strong>'+growth+'/60</strong></span><span>✓ '+T('Today','今日')+' <strong>'+log.length+'</strong> '+T('games','局')+'</span>'+(mins?'<span>◷ '+mins+' '+T('min','分钟')+'</span>':'')+'</div></div><div id="dashGardenPosition"></div></div><p class="dash-disclaimer">'+T('For enjoyment and cognitive engagement. Not a medical test or treatment.','用于娱乐和认知活动，并非医疗测试或治疗。')+'</p>';
+  document.getElementById('dashGardenPosition').appendChild(hero);
+  // The original SVG shows a personalized garden. Keep its progress and flower controls accessible.
+  document.getElementById('dashStart').onclick=startDaily;
+  document.getElementById('dashBrowse').onclick=()=>switchPage('library');
+  document.getElementById('dashTogether').onclick=()=>navAction('online');
+ }
+ const prettyCat=c=>T(...(LABELS[c]||LABELS.all));
+ function gameCard(k){const m=MG[k],cat=META[k]||'logic',lvl=(me().levels||{})[k]||1,minutes=GAME_TIME[k]||3;
+  return '<button class="game-tile" data-game="'+esc(k)+'" data-category="'+cat+'" aria-label="'+esc(m.n)+'"><span class="game-art" aria-hidden="true">'+m.ic+'</span><span class="game-info"><strong>'+esc(m.n)+'</strong><span class="game-desc">'+esc(m.d)+'</span><span class="game-meta">'+prettyCat(cat)+' · '+minutes+' '+T('min','分钟')+' · '+T('Level','第')+' '+lvl+(save.lang==='zh'?' 关':' / 15')+'</span></span><span class="game-play" aria-hidden="true">▶</span></button>'}
+ function renderLibrary(){
+  library.querySelectorAll('.zw,.decks,.levels,.garden,.sub,h2.sec,.tip').forEach(el=>{if(el.closest('#libraryDisplay'))return;el.classList.add('legacy-library')});
+  let panel=document.getElementById('libraryDisplay');if(!panel){panel=document.createElement('div');panel.id='libraryDisplay';library.insertBefore(panel,library.firstChild)}
+  const keys=Object.keys(MG).filter(k=>((META[k]||'logic')===filter||filter==='all')&&((MG[k].n+' '+MG[k].d).toLowerCase().includes(search.toLowerCase())));
+  const pairs=filter==='all'||filter==='memory';
+  const pairMatch=pairs&&('matching pairs memory picture cards').includes(search.toLowerCase());
+  panel.innerHTML='<div class="library-top"><span class="library-sprout">🌿</span><h1>'+T('All Games','所有游戏')+'</h1><p>'+T('Explore gentle activities for memory, attention, language, numbers and everyday thinking.','探索记忆、观察、语言、数字和日常思考的轻松游戏。')+'</p></div><div class="game-filterbar"><label class="search-field"><span aria-hidden="true">⌕</span><span class="sr">'+T('Search games','搜索游戏')+'</span><input id="gameSearch" type="search" placeholder="'+T('Search games…','搜索游戏…')+'" value="'+esc(search)+'"></label><label class="round-select">'+T('Session','局数')+' <select id="gameLength"><option value="short"'+(length==='short'?' selected':'')+'>'+T('Short · 4','短 · 4')+'</option><option value="standard"'+(length==='standard'?' selected':'')+'>'+T('Standard · 6','标准 · 6')+'</option><option value="long"'+(length==='long'?' selected':'')+'>'+T('Long · 10','长 · 10')+'</option></select></label></div><div class="category-pills" role="group" aria-label="'+T('Filter games by category','按类别筛选游戏')+'">'+Object.keys(LABELS).map(c=>'<button class="category-pill'+(filter===c?' active':'')+'" data-filter="'+c+'" aria-pressed="'+(filter===c)+'">'+({all:'◈',memory:'🧠',attention:'🎯',logic:'🧩',language:'🔤',numbers:'🔢',shapes:'◷'}[c])+' '+prettyCat(c)+'</button>').join('')+'</div><div id="gameCards" class="game-card-grid">'+(pairMatch?'<button class="game-tile" data-game="pairs"><span class="game-art" aria-hidden="true">🃏</span><span class="game-info"><strong>'+T('Matching Pairs','配对游戏')+'</strong><span class="game-desc">'+T('Find the matching picture cards.','找出相同的图片卡片。')+'</span><span class="game-meta">'+T('Memory · 6 levels · relaxed mode available','记忆 · 6关 · 可选轻松模式')+'</span></span><span class="game-play" aria-hidden="true">▶</span></button>':'')+keys.map(gameCard).join('')+'</div>'+(keys.length||pairMatch?'':'<div class="empty-games">🌱 '+T('No games match your search. Try another category or word.','没有找到符合条件的游戏，请换个关键词或类别。')+'</div>')+'<p class="library-foot">'+T('Choose the difficulty before starting. Pause or rest whenever you wish.','开始前可以选择难度，随时可以暂停休息。')+'</p>';
+  document.getElementById('gameSearch').oninput=e=>{const input=e.target;const pos=input.selectionStart;search=input.value;renderLibrary();const replacement=document.getElementById('gameSearch');replacement.focus();try{replacement.setSelectionRange(pos,pos)}catch(_){}};
+  document.getElementById('gameLength').onchange=e=>{length=e.target.value;window.mgSessionLength=({short:4,standard:6,long:10})[length]};
+  panel.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;renderLibrary()});
+  panel.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>{const k=b.dataset.game;if(k==='pairs')showPairs();else {window.mgSessionLength=({short:4,standard:6,long:10})[length];window.chooseMiniLevel(k)}});
+ }
+ function showPairs(){const opts=LEVELS.map((v,i)=>'<button class="btn" data-pair-level="'+i+'" '+(i>=save.unlocked?'disabled':'')+'>'+T('Level','第')+' '+(i+1)+(save.lang==='zh'?'关':'')+' · '+v.p+' '+T('pairs','对')+'</button>').join('');
+  overlay('<h2>'+T('Matching Pairs','配对游戏')+'</h2><p>'+T('Choose your matching game level.','请选择配对游戏关卡。')+'</p><div class="level-buttons">'+opts+'</div><p class="tip">'+T('Unlock additional levels by finishing earlier ones.','完成前面的关卡后可解锁后续关卡。')+'</p><div class="row"><button id="pairBack" class="btn">'+T('Back','返回')+'</button></div>');
+  document.querySelectorAll('[data-pair-level]').forEach(b=>b.onclick=()=>start(Number(b.dataset.pairLevel)));
+  document.getElementById('pairBack').onclick=closeOv;
+ }
+ function switchPage(p){page=p;dash.classList.toggle('hidden',p!=='dashboard');library.classList.toggle('hidden',p!=='library');top.classList.add('hidden');legacyNav.classList.add('hidden');if(p==='library')renderLibrary();else renderWelcome();buildNav();window.scrollTo({top:0,behavior:'instant'})}
+ const oldShow=window.show;window.show=function(which){oldShow(which);nav.classList.toggle('hidden',which!=='home');if(which==='home')switchPage(page)};
+ const oldRender=window.renderHome;window.renderHome=function(){oldRender();if(page==='dashboard')renderWelcome();else renderLibrary();buildNav()};
+ function startDaily(){const t=Math.floor(new Date(today()+'T12:00:00').getTime()/86400000);const pools=[['shopping','rem','miss','story'],['visual','find','diff','count'],['calendar','routine','related','same']];daily={types:pools.map((a,i)=>a[(t+i*2)%a.length]),index:0};dailyIntro()}
+ function dailyIntro(){if(!daily)return;const idx=daily.index,m=MG[daily.types[idx]];overlay('<p class="daily-progress">'+T('Activity','活动')+' '+(idx+1)+' / 3</p><h2>'+esc(m.n)+'</h2><p>'+esc(m.d)+'</p><p>'+T('Take your time. You can finish early or take a break.','慢慢来，可随时结束或休息。')+'</p><div class="row"><button class="btn main" id="dailyGo">'+T('Begin','开始')+'</button><button class="btn" id="dailyStop">'+T('Finish for now','暂时结束')+'</button></div>');
+  document.getElementById('dailyGo').onclick=()=>{window.mgSessionLength=6;window.mgDifficulty=(me().levels||{})[daily.types[idx]]||1;startMG(daily.types[idx])};
+  document.getElementById('dailyStop').onclick=()=>{daily=null;closeOv();switchPage('dashboard')};
+ }
+ const oldDone=window.mdone;window.mdone=function(){if(!daily){oldDone();return}oldDone();const completed=daily.index+1;
+  if(completed===3){daily=null;overlay('<p class="daily-progress">🌻 '+T('Daily journey complete','今日活动完成')+'</p><h2>'+T('Wonderful work!','做得真棒！')+'</h2><p>'+T('You completed three different activities. Enjoy a rest or browse more games.','您完成了三项不同的活动，可以休息或探索更多游戏。')+'</p><div class="row"><button class="btn main" id="dailyHome">'+T('Return to my garden','返回花园')+'</button></div>');document.getElementById('dailyHome').onclick=()=>{mg=null;toHome();switchPage('dashboard')}}
+  else{daily.index++;overlay('<p class="daily-progress">✓ '+completed+'/3 '+T('completed','已完成')+'</p><h2>'+T('Well done!','做得好！')+'</h2><p>'+T('Next activity: ','下一项：')+esc(MG[daily.types[daily.index]].n)+'</p><div class="row"><button class="btn main" id="dailyNext">'+T('Next activity','下一项')+'</button><button class="btn" id="dailyRest">'+T('Finish for today','今日结束')+'</button></div>');document.getElementById('dailyNext').onclick=dailyIntro;document.getElementById('dailyRest').onclick=()=>{daily=null;mg=null;toHome();switchPage('dashboard')}}
  };
- function switchPage(next){
-  page=next;
-  dash.classList.toggle('hidden',next!=='dashboard');
-  library.classList.toggle('hidden',next!=='library');
-  nav.classList.toggle('hidden',next!=='library');
-  top.classList.add('hidden');
-  document.getElementById('libraryBack').classList.toggle('hidden',next!=='library');
-  if(next==='dashboard')render();
-  window.scrollTo({top:0,behavior:'instant'});
- }
- const back=document.createElement('button');back.id='libraryBack';back.className='btn sm hidden';back.textContent='← '+T('Back to Home','返回主页');
- home.insertBefore(back,nav);back.onclick=()=>switchPage('dashboard');
- const libraryTitle=document.createElement('div');libraryTitle.className='library-heading';libraryTitle.innerHTML='<h1>'+T('All Games','所有游戏')+'</h1><p>'+T('Choose an activity. You can change the difficulty or take a break at any time.','选择喜欢的活动。您可以随时更换难度或休息。')+'</p>';
- library.insertBefore(libraryTitle,library.firstChild);
- const originalShow=window.show;
- window.show=function(which){originalShow(which);if(which==='home')switchPage(page==='library'?'library':'dashboard')};
- const originalRender=window.renderHome;
- window.renderHome=function(){originalRender();if(page==='dashboard')render()};
- function startDaily(){
-  daily={types:dailyPicks(),index:0};
-  showDailyIntro();
- }
- function showDailyIntro(){
-  if(!daily)return;
-  const idx=daily.index,game=MG[daily.types[idx]],label=T('Activity','活动')+' '+(idx+1)+' '+T('of','共')+' 3';
-  overlay('<div class="daily-progress">'+label+'</div><h2>'+esc(game.n)+'</h2><p>'+esc(game.d)+'</p><p>'+T('Go at your own pace. You can stop whenever you wish.','慢慢来，您随时可以停止。')+'</p><div class="row"><button class="btn main" id="dailyGo">'+T('Begin activity','开始活动')+'</button><button class="btn" id="dailyStop">'+T('Back to Home','返回主页')+'</button></div>');
-  $('dailyGo').onclick=()=>{window.mgDifficulty=Math.min(15,(me().levels||{})[daily.types[idx]]||1);startMG(daily.types[idx])};
-  $('dailyStop').onclick=()=>{daily=null;closeOv();switchPage('dashboard')};
- }
- const originalDone=window.mdone;
- window.mdone=function(){
-  if(!daily){originalDone();return}
-  const g=mg;
-  // Preserve scoring, garden growth, streaks, break reminders and achievements.
-  originalDone();
-  const completed=daily.index+1,finished=completed>=daily.types.length;
-  if(finished){daily=null;overlay('<div class="daily-progress">🌻 '+T('Today’s activities complete','今日活动已完成')+'</div><h2>'+T('Beautiful work!','做得真棒！')+'</h2><p>'+T('You completed three different activities. Your garden has grown a little.','您完成了三项不同的活动，花园又成长了一点。')+'</p><p>'+T('You may rest now or explore more games whenever you like.','现在可以休息，也可以随时浏览更多游戏。')+'</p><div class="row"><button class="btn main" id="dailyHome">'+T('Return to My Garden','返回我的花园')+'</button></div>');$('dailyHome').onclick=()=>{mg=null;toHome();switchPage('dashboard')};}
-  else{
-   daily.index++;const next=MG[daily.types[daily.index]];
-   overlay('<div class="daily-progress">✓ '+completed+' / 3 '+T('activities complete','项活动完成')+'</div><h2>'+T('Well done!','做得好！')+'</h2><p>'+T('Next: ','下一项：')+esc(next.n)+'</p><div class="row"><button class="btn main" id="dailyNext">'+T('Next Activity','下一项活动')+'</button><button class="btn" id="dailyRest">'+T('Finish for Today','今日结束')+'</button></div>');
-   $('dailyNext').onclick=showDailyIntro;
-   $('dailyRest').onclick=()=>{daily=null;mg=null;toHome();switchPage('dashboard')};
-  }
- };
- // Leaving the mini game cancels the guided sequence; completed activities remain saved.
- document.getElementById('bMn').addEventListener('click',()=>{daily=null},true);
- document.getElementById('bPause2').addEventListener('click',()=>{const b=document.getElementById('mn2');if(b)b.addEventListener('click',()=>{daily=null},{once:true})});
- // Keep navigation obvious after returning from normal games.
- const style=document.createElement('style');style.textContent=`
- #home{max-width:100%} #welcomeDashboard{max-width:860px;margin:0 auto;padding:0 0 12px}
- .dash-welcome{text-align:center;margin:20px auto 14px}.dash-eyebrow{font-size:.73em;letter-spacing:.13em;color:var(--soft);font-weight:700}
- .dash-welcome h1{font-size:clamp(2rem,5vw,3rem);margin:12px 0 4px}.dash-welcome p{margin:0;font-size:1.05em;color:var(--soft)}
- .dash-counters{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0 16px;font-size:.82em}
- .dash-counters span{background:var(--panel);border:2px solid var(--line);border-radius:99px;padding:6px 14px}
- #welcomeDashboard .hero{margin:0 auto 15px;max-width:860px}#welcomeDashboard .hrow{display:none}
- .dash-primary{margin:0 auto 16px;max-width:760px}.dash-start{display:flex;gap:14px;align-items:center;justify-content:center;width:100%;text-align:left;min-height:92px;font-size:1.13em}
- .dash-start>span:first-child{font-size:1.5em}.dash-start small{font-size:.68em;font-weight:400;display:block;margin-top:4px}
- .dash-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:0 auto 18px;max-width:760px}
- .dash-choice{min-height:162px;background:var(--panel);border:3px solid var(--line);border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:16px;text-align:center}
- .dash-choice:hover,.dash-choice:focus-visible{border-color:var(--back)}.dash-icon{font-size:2.3em}.dash-choice strong{font-size:1.18em}.dash-choice small{font-size:.72em;color:var(--soft)}
- .dash-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:8px 0 0}.dash-links .btn{min-height:52px;font-size:.85em}
- .dash-disclaimer{text-align:center;font-size:.68em;color:var(--soft);margin:22px auto;max-width:36em}
- #gameLibrary{padding-top:12px}.library-heading{text-align:center;margin:6px auto 18px}.library-heading h1{margin:0}.library-heading p{color:var(--soft);margin:8px auto}
- #libraryBack{margin:8px 0 10px;min-height:56px;background:var(--panel)} .daily-progress{font-weight:700;color:var(--leaf);margin:0 0 12px}
- #gameLibrary .sub{display:none}#gameLibrary .garden{display:none}
- @media(max-width:640px){.dash-welcome{margin-top:8px}.dash-actions{gap:10px}.dash-choice{min-height:140px;padding:10px}.dash-start{min-height:82px;padding:12px 14px;font-size:1em}.dash-counters{font-size:.7em}.dash-links .btn{min-height:50px;flex:1 1 42%}}
- @media(prefers-reduced-motion:reduce){.dash-choice,.dash-start{transition:none}}
- `;document.head.appendChild(style);
- // A post-render pass ensures the original garden scene survives the page transition.
- render();switchPage('dashboard');
- window.MindGardenDashboard={home:()=>switchPage('dashboard'),library:()=>switchPage('library'),refresh:render};
+ document.getElementById('bMn').addEventListener('click',()=>daily=null,true);
+ document.getElementById('bPause2').addEventListener('click',()=>{const b=document.getElementById('mn2');if(b)b.addEventListener('click',()=>daily=null,{once:true})});
+ window.MindGardenDashboard={home:()=>switchPage('dashboard'),library:()=>switchPage('library'),refresh:()=>{renderWelcome();buildNav()}};
+ // Preserve the dynamic garden generated by index.html and expose it below the welcome headline.
+ renderWelcome();switchPage('dashboard');
 })();
