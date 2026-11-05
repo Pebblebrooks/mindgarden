@@ -1,3 +1,5 @@
+> **v2.7 update:** See [UPGRADE-v2.7.md](UPGRADE-v2.7.md) for the approved layout, mobile menu and deployment steps.
+
 # Mind Garden v2.5 — approved four-card home
 
 **Latest update:** see [UPGRADE-v2.5.md](UPGRADE-v2.5.md) for theme settings, deployment and multiplayer checks.
