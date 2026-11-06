@@ -1,0 +1,56 @@
+#welcomeControls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:9px;position:relative;z-index:6;margin:0 auto 20px;max-width:90%}#welcomeControls .home-nature-toggle{margin:0;min-height:40px}.hero-arrow{position:absolute;top:55%;z-index:8;border:1px solid #ffffff9c;border-radius:50%;width:48px;height:56px;background:#123b42a6;color:white;font-size:2.5rem;line-height:1;box-shadow:0 4px 16px #102d3755;backdrop-filter:blur(12px);cursor:pointer}#heroPrevious{left:14px}#heroNext{right:14px}.hero-arrow:focus-visible{outline:3px solid #f7e9b6;outline-offset:3px}#heroMediaCaption{position:absolute;bottom:54px;left:50%;transform:translateX(-50%);max-width:75%;padding:5px 12px;border-radius:16px;background:#113d43cc;color:#fff;font-size:.75rem;z-index:6;text-align:center;overflow-wrap:anywhere}.welcome-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;border-radius:inherit}.has-welcome-video .welcome-heading,.has-welcome-video .welcome-name{position:relative;z-index:5}.has-welcome-video .welcome-heading{text-shadow:0 3px 12px #000}.has-welcome-video #gardenLife{opacity:.6}#heroVideoPlay{position:absolute;left:50%;transform:translateX(-50%);bottom:90px;z-index:7;font-size:.8rem;min-height:38px;padding:5px 14px}.video-settings{padding:16px;border:1px solid var(--line);border-radius:16px;margin:18px 0;text-align:center}.video-settings legend{font-weight:700}.video-settings p{font-size:.85rem;line-height:1.5}.video-settings input{display:block;margin:8px auto;max-width:100%;font-size:.75rem}.video-list>div{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;border-bottom:1px solid var(--line)}.video-list span{width:100%;overflow-wrap:anywhere}.video-list .btn{font-size:.8rem}
+/* Raised frosted surfaces: highlights remain static unless hovered. */
+#home .welcome-feature,.game-tile,.scene-choice,.category-pill,#box .btn{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,var(--journey-line) 75%,white)!important;box-shadow:inset 0 1px 0 #ffffff8c,inset 0 -1px 1px #072c251c,0 5px 0 #123c2912,0 12px 28px #10372c1c!important;background-image:linear-gradient(135deg,#ffffff30,transparent 48%,#102d2510)!important;transition:transform .2s,box-shadow .2s}#home .welcome-feature{background-color:#12454caa!important;border-color:#ffffff80!important}.game-tile{background-color:color-mix(in srgb,var(--journey-card) 82%,transparent)!important}.scene-choice{background-color:color-mix(in srgb,var(--panel) 82%,transparent)}#home .welcome-feature:hover,.game-tile:hover,.scene-choice:hover{transform:translateY(-3px);box-shadow:inset 0 1px 0 #ffffffb3,0 8px 0 #123c2910,0 18px 32px #10372c30!important}#home .welcome-feature:active,.game-tile:active{transform:translateY(1px)}#box .btn[aria-pressed=true],.scene-choice[aria-pressed=true]{box-shadow:inset 0 1px 0 #fff9,0 0 0 2px #79b39e,0 8px 18px #153d2920!important}html[data-hc="1"] .welcome-feature,html[data-hc="1"] .game-tile{backdrop-filter:none;background-color:var(--panel)!important;color:var(--ink)!important}html[data-motion=off] .welcome-feature,html[data-motion=off] .game-tile,html[data-motion=off] .scene-choice{transition:none!important}html[data-motion=off] .welcome-feature:hover,html[data-motion=off] .game-tile:hover,html[data-motion=off] .scene-choice:hover{transform:none!important}
+@media(max-width:650px){.hero-arrow{width:36px;height:48px;font-size:2rem;top:auto;bottom:46px}#heroPrevious{left:10px}#heroNext{right:10px}#heroMediaCaption{max-width:64%;bottom:55px}#welcomeControls{gap:6px}#welcomeControls button{font-size:.7rem;padding:5px 10px}.has-welcome-video{min-height:880px!important}}@media(prefers-reduced-motion:reduce){.welcome-feature,.game-tile,.scene-choice,#box .btn{transition:none!important}.welcome-feature:hover,.game-tile:hover,.scene-choice:hover{transform:none!important}}
+
+/* V3.8.1: centered progress footer and a compact raised flower control. */
+#gardenProgressStrip .progress-summary,#gardenProgressStrip button{text-align:center}
+#gardenProgressStrip .journey-heading{flex-direction:column;align-items:center;justify-content:center;gap:12px}
+#gardenProgressStrip .journey-score{align-items:center}
+#gardenProgressStrip .journey-stats>div{flex-direction:column;align-items:center;justify-content:center}
+#gardenProgressStrip #livingGarden{align-items:center}
+#gardenProgressStrip .progress-flowers{position:relative;justify-content:center;justify-self:center;width:fit-content;max-width:100%;min-height:44px;padding:8px 32px;border-radius:11px;border:1px solid color-mix(in srgb,var(--journey-accent),white 28%);background:linear-gradient(160deg,#ffffff24,transparent 55%,#00000018),var(--journey-accent);box-shadow:inset 0 1px 1px #ffffff70,inset 0 -1px 1px #00000020,0 3px 0 color-mix(in srgb,var(--journey-accent),black 22%),0 6px 12px #123c2926;font-size:calc(.82rem * var(--fs));line-height:1.35;margin:0 auto;white-space:normal}
+#gardenProgressStrip .progress-flowers>span{position:absolute;right:12px;top:50%;transform:translateY(-50%)}
+#gardenProgressStrip .progress-flowers:active{box-shadow:inset 0 1px 3px #00000025,0 1px 0 var(--journey-accent)}
+#gardenProgressStrip button:focus-visible{outline:3px solid var(--journey-accent);outline-offset:5px}
+#gardenProgressStrip .journey-new{justify-self:center;margin-left:auto;margin-right:auto}
+/* Hide complete decorative layers, including static GIF fallback posters. */
+html[data-motion=off] #gardenLife,html[data-motion=off] .garden-weather,html[data-motion=off] .library-leaves{display:none!important}
+@media(prefers-reduced-motion:reduce){#gardenLife,.garden-weather,.library-leaves{display:none!important}}
+
+/* V3.8 visual repair: explicit alignment, no welcome leaf overlays. */
+#home #gardenProgressStrip .journey-main,
+#home #gardenProgressStrip .journey-heading,
+#home #gardenProgressStrip .journey-heading > div,
+#home #gardenProgressStrip .journey-heading h2,
+#home #gardenProgressStrip .journey-heading p {
+  text-align:center !important;
+}
+#home #gardenProgressStrip .journey-heading {
+  display:flex; flex-direction:column !important; align-items:center !important;
+  justify-content:center !important; width:100%; gap:12px;
+}
+#home #gardenProgressStrip .journey-heading > div:first-child {width:100%;min-width:0}
+#home #gardenProgressStrip .journey-score {align-items:center !important}
+/* Remove animated SVG leaves, including oversized unstyled fallback rendering. */
+#welcomeDashboard .drifting-leaf,
+#welcomeDashboard .garden-weather > svg {display:none !important; width:0 !important;height:0 !important;animation:none !important}
+/* Cool translucent teal glass, with readable text and a raised lower edge. */
+#home #gardenProgressStrip .progress-flowers {
+  background:linear-gradient(145deg,#ffffff35 0%,#ffffff08 48%,#062b3526 100%),rgba(32,103,112,.72) !important;
+  color:#ffffff !important;border:1px solid #c5f4f0a6 !important;
+  border-radius:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:inset 0 1px 1px #ffffff9c,inset 0 -1px 2px #082e3a50,0 4px 0 #123c45b3,0 9px 18px #06272d40 !important;
+  display:flex;justify-content:center !important;align-items:center;
+  width:fit-content;max-width:100%;min-height:44px;padding:9px 32px;
+  margin:0 auto;text-align:center !important;font-size:calc(.82rem * var(--fs));line-height:1.35;
+}
+#home #gardenProgressStrip .progress-flowers:hover {
+  background-color:rgba(26,88,99,.86) !important;
+}
+#home #gardenProgressStrip .progress-flowers:active {
+  box-shadow:inset 0 2px 4px #082e3a55,0 1px 0 #123c45b3,0 3px 8px #06272d30 !important;
+}
+html[data-hc="1"] #home #gardenProgressStrip .progress-flowers {
+  background:#16444d !important;color:#fff !important;border:2px solid currentColor !important;backdrop-filter:none;
+}
