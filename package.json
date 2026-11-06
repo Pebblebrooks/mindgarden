@@ -1,12 +1,21 @@
 {
   "name": "mind-garden-cloudflare",
-  "version": "2.7.0",
+  "version": "3.4.0",
   "private": true,
   "scripts": {
     "dev": "wrangler pages dev public --local",
-    "check": "node --check functions/api/room.js && node --check public/upgrade.js && node --check public/multiplayer.js && node --check public/dashboard.js && node --check public/ambient.js && node --check public/sw.js"
+    "check": "node --check functions/api/room.js && node --check public/upgrade.js && node --check public/multiplayer.js && node --check public/dashboard.js && node --check public/ambient.js && node --check public/sw.js && node --check public/i18n.js && node --check functions/api/room8.js && node --check public/wildlife.js && node --check public/garden-wildlife.js && node --check public/soundscape.js",
+    "test": "node tests/room8.test.mjs && node tests/multiplayer-ui.test.mjs",
+    "test:browser": "node tests/garden-ui.test.cjs",
+    "build:wildlife": "esbuild src/garden-wildlife.js --bundle --minify --format=iife --outfile=public/garden-wildlife.js"
   },
   "devDependencies": {
-    "wrangler": "^4.0.0"
-  }
+    "wrangler": "^4.0.0",
+    "jsdom": "31.0.0",
+    "playwright": "1.62.1",
+    "sharp": "0.35.5",
+    "three": "0.187.0",
+    "esbuild": "0.28.2"
+  },
+  "type": "module"
 }

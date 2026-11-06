@@ -1,0 +1,13 @@
+Instrument samples: tonejs-instruments, Nicholaus P. Brosowsky.
+Source: https://github.com/nbrosowsky/tonejs-instruments
+Sample license: Creative Commons Attribution 3.0
+https://creativecommons.org/licenses/by/3.0/
+
+Underlying sources identified by the upstream sample-source-info.txt:
+piano, violin, harp, flute: Versilian Studios VSCO 2 Community Edition (VSO2 in upstream credits).
+cello: flcellogrl, Freesound sample pack 12408__flcellogrl__real-cello-notes.
+clarinet: credited to the tonejs-instruments collection; upstream does not identify a further source.
+
+Mind Garden changes: mono 32 kHz / 64 kbps MP3 conversion; duration capped at nine seconds with a half-second end fade; playback pitch-shifted to nearby notes, enveloped, panned and reverberated.
+The chamber and harp compositions/arrangements are original Mind Garden code. They are not recordings of existing songs.
+Retain these sample credits when redistributing the samples or rendered mixes. Exported WAV files include this attribution in a RIFF INFO comment.

@@ -238,8 +238,11 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 <link rel="stylesheet" href="v23.css">
 <link rel="stylesheet" href="v24.css">
 <link rel="stylesheet" href="v25.css">
-<link rel="stylesheet" href="v28.css?v=28-1">
+<link rel="stylesheet" href="v28.css?v=34-1">
 <meta name="mind-garden-release" content="v2.8.0">
+<link rel="stylesheet" href="v29.css?v=34-1">
+<link rel="stylesheet" href="v30.css?v=34-1">
+<link rel="stylesheet" href="v31.css?v=34-1"><link rel="stylesheet" href="v32.css?v=34-1"><link rel="stylesheet" href="v33.css?v=34-1">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -812,52 +815,6 @@ function gardenBg(){
  o+='</g>';
  return'<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">'+o+'</svg>'}
 $("gbg").innerHTML=gardenBg();if(window.motion)motion();
-var MU=(function(){
-var ctx=null,master,rev,bus,dst,srcs=[],tm=[],cur="",run=false,vi=1,VOL=[.1,.2,.32],
- TR=[["chime","Garden chimes"],["box","Music box"],["pad","Warm evening"],["sea","Ocean waves"],["rain","Gentle rain"],["forest","Forest morning"],["breeze","Soft breeze"],["stream","Quiet stream"],["crickets","Evening insects"],["birdsong","Birdsong garden"],["harp","Morning harp"],["lullaby","Gentle lullaby"]];
-function init(){if(ctx)return;ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=0;master.connect(ctx.destination);
- var len=ctx.sampleRate*3,ib=ctx.createBuffer(2,len,ctx.sampleRate),c,i,d;for(c=0;c<2;c++){d=ib.getChannelData(c);for(i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.5)}
- var cv=ctx.createConvolver();cv.buffer=ib;rev=ctx.createGain();rev.gain.value=.6;rev.connect(cv);cv.connect(master)}
-function wait(fn,ms){tm.push(setTimeout(fn,ms))}
-function nz(brown){var n=ctx.sampleRate*4,b=ctx.createBuffer(1,n,ctx.sampleRate),d=b.getChannelData(0),l=0,i,w,s;for(i=0;i<n;i++){w=Math.random()*2-1;if(brown){l=(l+.02*w)/1.02;d[i]=l*3.5}else d[i]=w}s=ctx.createBufferSource();s.buffer=b;s.loop=true;srcs.push(s);return s}
-function note(f,t,dur,type,vol,wet,att){att=att||.02;var o=ctx.createOscillator(),g=ctx.createGain(),s;o.type=type;o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+att);g.gain.exponentialRampToValueAtTime(.0005,t+dur);o.connect(g);g.connect(dst);if(wet){s=ctx.createGain();s.gain.value=wet;g.connect(s);s.connect(rev)}o.start(t);o.stop(t+dur+.1)}
-function rnd(a){return a[Math.floor(Math.random()*a.length)]}
-function chime(){var sc=[523.25,587.33,659.25,783.99,880,1046.5,392,329.63];
- [130.81,196,261.63].forEach(function(f,i){var o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=f;g.gain.value=.05/(i+1);o.connect(g);g.connect(bus);o.start();srcs.push(o)});
- (function n(){var t=ctx.currentTime+.05,f=rnd(sc);note(f,t,5,"sine",.13,.9,.01);note(f*2,t,3,"sine",.025,.9,.01);if(Math.random()<.3)note(rnd(sc.slice(0,5)),t+.45,5,"sine",.09,.9,.01);wait(n,1500+Math.random()*2400)})()}
-function box(){var P=[[659.25,783.99,880,783.99,659.25,587.33,523.25,587.33,659.25,783.99,659.25,587.33,523.25,0,0,0],[523.25,659.25,783.99,659.25,587.33,659.25,523.25,0,440,523.25,587.33,523.25,392,0,0,0],[783.99,880,783.99,659.25,587.33,659.25,783.99,0,659.25,587.33,523.25,587.33,523.25,0,0,0]],B=[261.63,196,220,174.61],p=0,i=0;
- (function n(){var f=P[p][i],t=ctx.currentTime+.05;if(f)note(f,t,2.6,"triangle",.15,.6,.008);if(i%4===0)note(B[i/4],t,3.2,"sine",.1,.5,.02);i++;if(i>=16){i=0;p=(p+1+Math.floor(Math.random()*2))%P.length}wait(n,640)})()}
-function pad(){var C=[[261.63,329.63,392,493.88],[220,261.63,329.63,392],[174.61,220,261.63,329.63],[196,246.94,293.66,329.63]],k=0,lp=ctx.createBiquadFilter();lp.type="lowpass";lp.frequency.value=1000;lp.connect(bus);dst=lp;
- (function n(){var t=ctx.currentTime+.05;C[k].forEach(function(f){note(f,t,11,"sine",.07,.7,3.5);note(f*1.003,t,11,"triangle",.025,.7,3.5)});note(C[k][0]/2,t,11,"sine",.09,.3,3.5);k=(k+1)%C.length;wait(n,8000)})()}
-function swell(brown,type,fr,q,base,depth,rate){var a=nz(brown),f=ctx.createBiquadFilter(),g=ctx.createGain(),l=ctx.createOscillator(),lg=ctx.createGain();f.type=type;f.frequency.value=fr;f.Q.value=q;g.gain.value=base;l.frequency.value=rate;lg.gain.value=depth;l.connect(lg);lg.connect(g.gain);a.connect(f);f.connect(g);g.connect(bus);a.start();l.start();srcs.push(l)}
-function sea(){swell(1,"lowpass",700,.7,.9,.7,.085);swell(0,"bandpass",1800,.4,.05,.035,.085)}
-function rain(){var a=nz(0),h=ctx.createBiquadFilter(),l=ctx.createBiquadFilter(),g=ctx.createGain();h.type="highpass";h.frequency.value=1200;l.type="lowpass";l.frequency.value=6500;g.gain.value=.22;a.connect(h);h.connect(l);l.connect(g);g.connect(bus);a.start();
- (function n(){note(1200+Math.random()*1800,ctx.currentTime+.02,.25,"sine",.05,.5,.003);wait(n,200+Math.random()*500)})()}
-// Original, synthesized nature ambience; no external recordings or copyrighted songs.
-function forest(){swell(1,"lowpass",950,.5,.35,.18,.045);var seq=[523.25,587.33,659.25,783.99,659.25,587.33],i=0;(function loop(){var t=ctx.currentTime+.03;note(seq[i++%seq.length],t,3.5,"sine",.075,.4,.15);wait(loop,3000)})()}
-function breeze(){swell(1,"lowpass",360,.35,.45,.28,.03);swell(0,"bandpass",1100,.35,.02,.012,.075)}
-function stream(){swell(0,"bandpass",1100,.35,.23,.11,.14);swell(1,"lowpass",800,.4,.24,.08,.22)}
-function crickets(){swell(1,"lowpass",300,.4,.11,.035,.045);(function loop(){var t=ctx.currentTime+.04;for(var k=0;k<3;k++)note(1900+k*145,t+k*.18,.3,"sine",.022,0,.015);wait(loop,1800+Math.random()*1200)})()}
-function birdsong(){swell(1,"lowpass",550,.4,.25,.1,.045);(function loop(){var t=ctx.currentTime+.04,root=[880,987.77,1174.66,1318.51][Math.floor(Math.random()*4)];note(root,t,.28,"sine",.065,.3,.03);note(root*1.12,t+.32,.23,"sine",.055,.3,.03);note(root*.94,t+.62,.4,"sine",.04,.2,.03);wait(loop,3500+Math.random()*2500)})()}
-function harp(){var scale=[523.25,659.25,783.99,1046.5,987.77,783.99,659.25,587.33],i=0;(function loop(){var t=ctx.currentTime+.03;note(scale[i%scale.length],t,2.8,"triangle",.08,.65,.008);if(i%4===0)note(261.63,t,3.7,"sine",.045,.5,.03);i++;wait(loop,900)})()}
-function lullaby(){var scale=[392,440,523.25,440,392,329.63,349.23,392,329.63,293.66,261.63,0],i=0;(function loop(){var t=ctx.currentTime+.03,f=scale[i%scale.length];if(f)note(f,t,2.9,"sine",.08,.7,.09);if(i%4===0)note([196,174.61,130.81][Math.floor(i/4)%3],t,4.8,"sine",.042,.5,.3);i++;wait(loop,1100)})()}
-function stopTrack(){var i,ob=bus,os=srcs;for(i=0;i<tm.length;i++)clearTimeout(tm[i]);tm=[];srcs=[];if(!ob)return;ob.gain.setTargetAtTime(0,ctx.currentTime,.35);setTimeout(function(){os.forEach(function(s){try{s.stop()}catch(e){}});try{ob.disconnect()}catch(e){}},2200)}
-function start(id){try{init();if(ctx.resume)ctx.resume();stopTrack();cur=id;run=true;bus=ctx.createGain();bus.gain.value=0;bus.connect(master);dst=bus;bus.gain.setTargetAtTime(1,ctx.currentTime,.8);master.gain.setTargetAtTime(VOL[vi],ctx.currentTime,.3);({chime:chime,box:box,pad:pad,sea:sea,rain:rain,forest:forest,breeze:breeze,stream:stream,crickets:crickets,birdsong:birdsong,harp:harp,lullaby:lullaby})[id]()}catch(e){run=false}}
-function stop(){run=false;if(!ctx)return;stopTrack();setTimeout(function(){if(!run&&ctx.suspend)ctx.suspend()},2600)}
-document.addEventListener("visibilitychange",function(){if(!ctx||!run)return;try{document.hidden?ctx.suspend():ctx.resume()}catch(e){}});
-return{TR:TR,start:start,stop:stop,on:function(){return run},cur:function(){return cur},vol:function(i){vi=i;if(ctx)master.gain.setTargetAtTime(VOL[i],ctx.currentTime,.2)}}})();
-var mFab=document.getElementById("mFab");
-function muSync(){var on=MU.on(),T=function(s){return window.tr?tr(s):s};mFab.innerHTML='<span class="mi" aria-hidden="true">\u266A</span> Music: <b>'+(on?"On":"Off")+'</b>';mFab.setAttribute("aria-pressed",on);mFab.setAttribute("aria-label",T(on?"Turn music off":"Turn music on"))}
-function muToggle(){if(MU.on()){save.mus=0;MU.stop()}else{save.mus=1;MU.start(save.mt||"chime")}persist();muSync()}
-function openMu(){var on=MU.on(),vv=save.mv==null?1:save.mv;overlay('<h2>Calming music</h2><p class="tip" style="margin-top:0">Soft music to help you feel calm and relaxed. Tap a tune to play it.</p><div class="list"><button class="btn tg" data-mu="toggle" aria-pressed="'+on+'">Music: <b>'+(on?"On":"Off")+'</b></button>'+MU.TR.map(function(t){return'<button class="btn tg" data-mu="'+t[0]+'" aria-pressed="'+(on&&MU.cur()===t[0])+'">'+t[1]+'</button>'}).join("")+'</div><b>Volume</b><div class="prow">'+["Quiet","Medium","Louder"].map(function(n,i){return'<button class="btn tg" data-mv="'+i+'" aria-pressed="'+(vv===i)+'">'+n+'</button>'}).join("")+'</div><div class="row"><button class="btn main" id="mud">Done</button></div>');$("mud").onclick=closeOv}
-$("box").addEventListener("click",function(e){var b=e.target.closest("button[data-mu],button[data-mv]");if(!b)return;var d=b.dataset;
- if(d.mv!==undefined){save.mv=+d.mv;MU.vol(save.mv);persist();openMu();return}
- if(d.mu==="toggle")muToggle();else{save.mt=d.mu;save.mus=1;MU.start(d.mu);persist();muSync()}
- openMu()});
-MU.vol(save.mv==null?1:save.mv);
-mFab.onclick=muToggle;$("bMus").onclick=openMu;
-if(save.mus){var arm=function(e){document.removeEventListener("pointerdown",arm,true);document.removeEventListener("keydown",arm,true);if(e.target.closest&&e.target.closest("#mFab"))return;if(save.mus&&!MU.on()){MU.start(save.mt||"chime");muSync()}};document.addEventListener("pointerdown",arm,true);document.addEventListener("keydown",arm,true)}
-muSync();addEventListener("load",muSync);
 save.cl7=save.cl7||{};if(save.brk===undefined)save.brk=1;
 [].forEach.call(document.querySelectorAll("#home h2.sec"),function(h,i){
  var body=[],n=h.nextElementSibling;while(n&&n.tagName!=="H2"&&!n.classList.contains("tip")){body.push(n);n=n.nextElementSibling}
@@ -873,10 +830,11 @@ $("bPl").onclick=openPl;$("bSet").onclick=openSet;$("bFam").onclick=famView;
 load();applyPrefs();renderHome();
 </script>
 <script src="upgrade.js"></script>
-<script src="multiplayer.js?v=28-1"></script>
-<script src="i18n.js"></script>
-<script src="dashboard.js?v=28-1"></script>
-<script src="ambient.js"></script>
+<script src="multiplayer.js?v=34-1"></script>
+<script src="i18n.js?v=34-1"></script>
+<script src="dashboard.js?v=34-1"></script>
+<script src="garden-wildlife.js?v=34-1"></script>
+<script src="ambient.js?v=34-1"></script><script src="soundscape.js?v=34-1"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

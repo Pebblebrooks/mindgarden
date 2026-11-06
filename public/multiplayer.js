@@ -1,96 +1,100 @@
-/* Mind Garden v2.8 — reliable two-player multi-round rooms, shareable invitation links.
-   Scores are friendly game points, not cognitive assessments. */
+/* v3.0: 2–8 players, online lobby invitations, host launch and shared rounds. */
 (function(){
- 'use strict';
- const KEY='mindGardenOnlineRoom',MODES=[['pairs6','Matching pairs · 6 pairs'],['pairs10','Matching pairs · 10 pairs'],['sums','Mental sums · 8 questions'],['patterns','Number patterns · 8 questions'],['odd','Odd one out · 8 questions'],['sums12','Mental sums · 12 questions'],['patterns12','Number patterns · 12 questions'],['odd12','Odd one out · 12 questions']];
- let room=null,interval=null,game=null,shownRound=0,pollBusy=false,lastStatusError=0;
- const $=id=>document.getElementById(id);
- function api(action,data={}){return fetch('/api/room?action='+encodeURIComponent(action),{method:'POST',headers:{'content-type':'application/json'},cache:'no-store',body:JSON.stringify(data)}).then(async r=>{let j;try{j=await r.json()}catch(_){throw Error('The multiplayer service did not return a valid response. Refresh the page or check Pages Functions deployment.')}if(!r.ok)throw Error(j.error||'Connection failed');return j})}
- function stop(){if(interval){clearInterval(interval);interval=null}}
- function watch(fn){stop();interval=setInterval(fn,1700)}
- function name(){return(me().name||'Player').replace(/[^\p{L}\p{N} ._'-]/gu,'').slice(0,20)||'Player'}
- function error(e){const el=$('multiError');if(el)el.textContent=e.message||String(e)}
- function invite(){const u=new URL(location.pathname,location.origin);/* Prefer stable production Pages URL over a deployment-specific URL. */u.hostname=u.hostname.replace(/^[a-f0-9]{8,}\.(?=[^.]+\.pages\.dev$)/i,'');u.searchParams.set('room',room.code);return u.toString()}
- function base(s){return '<h2>Play Together 🌍</h2><p class="tip">Room: <strong>'+esc(room.code)+'</strong>'+(s?' · Round '+s.round:'')+'</p>'}
- function buttons(){return '<div class="row"><button class="btn" id="mpCopy">Copy invitation link</button><button class="btn" id="mpShare">Share</button><button class="btn" id="mpExit">Leave screen</button></div>'}
- function wireShare(){
-  $('mpCopy').onclick=async()=>{const link=invite();try{if(!navigator.clipboard?.writeText)throw Error('Clipboard unavailable');await navigator.clipboard.writeText('Play Mind Garden with me! '+link);const m=$('multiState');if(m)m.textContent='Invitation link copied! Send it to your friend.'}catch(e){showLink(link)}};
-  $('mpShare').onclick=async()=>{const link=invite();if(navigator.share){try{await navigator.share({title:'Mind Garden invitation',text:'Play together with me!',url:link});return}catch(e){if(e.name==='AbortError')return}}showLink(link)};
-  $('mpExit').onclick=()=>{stop();game=null;closeOv()};
- }
- function showLink(link){const el=$('multiError');if(el)el.innerHTML='<label class="lab">Copy this invitation link<input id="mpLink" readonly value="'+esc(link)+'"></label>';const input=$('mpLink');input.focus();input.select()}
- function menu(){stop();game=null;shownRound=0;room=null;
-  const prev=localStorage.getItem(KEY),inviteParam=(new URLSearchParams(location.search).get('room')||'').toUpperCase().trim();
-  const prefill=/^[A-Z2-9]{6}$/.test(inviteParam)?inviteParam:'';
-  overlay('<h2>Play Together 🌍</h2>'+(prefill?'<p class="mp-invited">🌻 You have been invited to room <strong>'+esc(prefill)+'</strong>. Your invitation code has been filled in.</p>':'<p>Enjoy several activities with one friend without creating a new room each time.</p>')+'<p class="tip">Two players per room · Same challenge · Several rounds · No chat required.</p><label class="lab">Your display name<input id="mpName" maxlength="20" autocomplete="nickname" value="'+esc(name())+'"></label><div class="row"><button class="btn main" id="mpCreate">Create a room</button></div><label class="lab">Join an invitation<input id="mpCode" maxlength="6" autocomplete="off" placeholder="6-character code" style="text-transform:uppercase" value="'+esc(prefill)+'"></label><div class="row"><button class="btn main" id="mpJoin">'+(prefill?'Join room '+esc(prefill):'Join room')+'</button>'+(prev?'<button class="btn" id="mpResume">Resume room</button>':'')+'<button class="btn" id="mpClose">Close</button></div><p id="multiError" role="alert" aria-live="polite"></p>');
-  $('mpCreate').onclick=()=>act('create');$('mpJoin').onclick=()=>act('join');$('mpClose').onclick=closeOv;
-  if(prev)$('mpResume').onclick=()=>{try{room=JSON.parse(prev);waiting()}catch(e){localStorage.removeItem(KEY);menu()}};
-  if(prefill){$('mpJoin').focus();const b=$('mpJoin');b.title='Invitation code entered automatically. Select Join room to continue.'}
- }
- async function act(action){try{const n=$('mpName').value.trim(),code=($('mpCode')?.value||'').trim().toUpperCase();
-  const prev=JSON.parse(localStorage.getItem(KEY)||'null');
-  if(action==='join'&&prev?.code===code&&prev?.token){room=prev;history.replaceState(null,'',location.pathname);waiting();return}
-  const j=await api(action,{name:n,code});room={code:j.code,token:j.token,role:j.role};localStorage.setItem(KEY,JSON.stringify(room));history.replaceState(null,'',location.pathname);waiting()
- }catch(e){error(e)}}
- const status=()=>api('status',room);
- function waiting(){stop();if(!room)return menu();overlay(base()+'<p id="multiState">Connecting…</p><p id="multiError" role="alert"></p>'+buttons());wireShare();watch(poll);poll()}
- async function poll(){
-  if(!room||pollBusy)return;
-  pollBusy=true;
-  try{
-   const current=room;
-   const s=await status();
-   if(!room||room!==current||s.code!==room.code)return;
-   lastStatusError=0;
-   if(!s.started){
-    const m=$('multiState');if(m)m.textContent='Waiting for your friend. Share the invitation link or room code '+room.code;
-    return;
-   }
-   // A new server round is authoritative. Both devices move into it independently.
-   if(s.round!==shownRound){
-    shownRound=s.round;
-    game=null;
-    if((room.role==='host'&&s.hostDone)||(room.role==='guest'&&s.guestDone)){waitingForOther(s);return}
-    start(s);return;
-   }
-   if(s.finished){
-    if(!$('mpLeave'))results(s);
-    return;
-   }
-   if(game?.saved&&!$('mpShare'))waitingForOther(s);
-  }catch(e){
-   if(++lastStatusError>=2)error(Error('Connection interrupted. Keeping your room; reconnecting automatically. '+(e.message||'')));
-  }finally{pollBusy=false}
- }
+'use strict';
+const KEY='mindGardenRoom8',SESSION='mindGardenLobby',GAME='mindGardenRound8';
+const MODES=[['pairs6','Matching pairs · 6 pairs'],['pairs10','Matching pairs · 10 pairs'],['sums','Mental sums · 8 questions'],['patterns','Number patterns · 8 questions'],['odd','Odd one out · 8 questions'],['sums12','Mental sums · 12 questions'],['patterns12','Number patterns · 12 questions'],['odd12','Odd one out · 12 questions']];
+const $=id=>document.getElementById(id),T=(a,b)=>save.lang==='zh'?b:a;
+const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}};
+let session=read(SESSION)?.offline?null:read(SESSION),room=null,game=null,shownRound=0,screen='',generation=0,busy=false,pollBusy=false,loungeBusy=false,last=null,loungeRooms=[],loungeTimer=null;
+const noticed=new Set();
+function api(action,data={}){return fetch('/api/room8?action='+action,{method:'POST',headers:{'content-type':'application/json'},cache:'no-store',body:JSON.stringify({...data,token:session?.token||data.token})}).then(async r=>{let j;try{j=await r.json()}catch{throw Error(T('Online service unavailable. Check the deployment.','在线服务不可用，请检查部署。'))}if(!r.ok)throw Object.assign(Error(j.error||'Connection failed'),{status:r.status});return j})}
+function error(e){const el=$('multiError');if(el)el.textContent=save.lang==='zh'&&window.tr?tr(e.message):e.message}
+function name(){return (me().name||'Player').replace(/[^\p{L}\p{N} ._'-]/gu,'').slice(0,20)||'Player'}
+function invite(c=room?.code){const u=new URL(location.pathname,location.origin);u.hostname=u.hostname.replace(/^[a-f0-9]{8,}\.(?=[^.]+\.pages\.dev$)/i,'');u.searchParams.set('room',c);return u.href}
+function user(n){return '<span translate="no">'+esc(n)+'</span>'}
+function base(s){return '<h2>'+T('Play Together','一起玩')+' · '+T('Up to 8 players','最多8人')+'</h2><p class="mp-room-code">'+T('Room code','房间码')+' <strong translate="no">'+esc(room.code)+'</strong>'+(s?.round?' · '+T('Round ','第 ')+s.round+T('',' 轮'):'')+'</p><p id="mpConnection" class="tip" role="status"></p>'}
+function checkpoint(){if(!game||!room)return;try{localStorage.setItem(GAME,JSON.stringify({code:room.code,...game,done:game.done?[...game.done]:undefined}))}catch{}}
+function exitScreen(){checkpoint();generation++;room=null;game=null;shownRound=0;screen='';last=null;closeOv()}
+function clearInvite(){const u=new URL(location.href);u.searchParams.delete('room');history.replaceState(null,'',u.pathname+u.search+u.hash)}
+async function action(fn){if(busy)return;busy=true;try{await fn()}catch(e){error(e)}finally{busy=false}}
+async function login(){const n=$('mpName')?.value.trim()||name();session=await api('login',{name:n,token:read(SESSION)?.token});localStorage.setItem(SESSION,JSON.stringify(session));startLounge()}
+function startLounge(){if(loungeTimer)clearInterval(loungeTimer);loungeTimer=setInterval(lounge,2500);lounge()}
+async function lounge(){
+ if(!session||loungeBusy||document.hidden)return;loungeBusy=true;
+ try{const s=await api('lounge');loungeRooms=s.rooms;
+  if($('mpOnlineCount'))$('mpOnlineCount').textContent=s.online+' '+T('players online','位玩家在线');
+  const list=$('mpOpenRooms');if(list){list.innerHTML=s.rooms.length?s.rooms.map(r=>'<div class="mp-open-room">'+user(r.host)+' · <strong translate="no">'+r.code+'</strong> · '+r.players+'/8 <button class="btn sm" data-join-room="'+r.code+'">'+T('Join','加入')+'</button></div>').join(''):'<p>'+T('No open rooms yet. Create one to invite everyone online.','暂无开放房间。创建房间即可邀请所有在线玩家。')+'</p>';list.querySelectorAll('[data-join-room]').forEach(b=>b.onclick=()=>action(()=>join(b.dataset.joinRoom)))}
+  const fresh=s.rooms.filter(r=>!noticed.has(r.code)&&r.code!==room?.code);
+  if(fresh.length){let notice=$('onlineInvitation');if(!notice){notice=document.createElement('aside');notice.id='onlineInvitation';notice.setAttribute('role','status');document.body.appendChild(notice)}
+   notice.innerHTML='<span>'+T('New room invitations: ','新房间邀请：')+fresh.map(r=>user(r.host)+' <b translate="no">'+r.code+'</b>').join(' · ')+'</span><button class="btn sm" id="mpSeeInvite">'+T('View lobby','查看大厅')+'</button><button class="btn sm" id="mpDismissInvite" aria-label="'+T('Dismiss','关闭')+'">×</button>';
+   $('mpSeeInvite').onclick=()=>{if(room){notice.remove();return}menu();notice.remove()};$('mpDismissInvite').onclick=()=>notice.remove();
+  }
+  // Acknowledge only after invitations have been rendered on the player's device.
+  if(s.rooms.length){await api('ack',{codes:s.rooms.map(r=>r.code)});s.rooms.forEach(r=>noticed.add(r.code))}
+ }catch(e){if($('mpOnlineCount'))$('mpOnlineCount').textContent=T('Reconnecting to the lobby…','正在重新连接大厅……');if(e.status===401){session=null;localStorage.removeItem(SESSION);clearInterval(loungeTimer)}}finally{loungeBusy=false}
+}
+function menu(){generation++;room=null;game=null;shownRound=0;last=null;screen='menu';
+ const prefill=(new URLSearchParams(location.search).get('room')||'').toUpperCase();
+ overlay('<h2>'+T('Online lobby · 2–8 players','在线大厅 · 2至8人')+'</h2><p>'+T('Enter the lobby to receive room codes from hosts online. Joining a room shares your display name and game scores with its players.','进入大厅即可接收在线房主的房间码。加入房间后，其他玩家可看到你的显示名称和游戏积分。')+'</p>'+(!session?'<label class="lab">'+T('Your display name','你的显示名称')+'<input id="mpName" maxlength="20" value="'+esc(name())+'"></label><button class="btn main" id="mpLogin">'+T('Enter online lobby','进入在线大厅')+'</button>':'<p>'+T('Online as ','在线玩家：')+user(session.name)+' · <span id="mpOnlineCount" role="status"></span></p><button class="btn main" id="mpCreate">'+T('Create room & invite online players','创建房间并邀请在线玩家')+'</button><h3>'+T('Open rooms — room codes arrive here','开放房间——在此接收房间码')+'</h3><div id="mpOpenRooms" aria-live="polite"></div>')+'<label class="lab">'+T('Room code','房间码')+'<input id="mpCode" maxlength="6" value="'+(/^[A-Z2-9]{6}$/.test(prefill)?prefill:'')+'"></label><div class="row"><button class="btn" id="mpJoin">'+T('Join room','加入房间')+'</button>'+(session&&read(KEY)?'<button class="btn" id="mpResume">'+T('Resume room','返回房间')+'</button>':'')+'<button class="btn" id="mpClose">'+T('Close','关闭')+'</button>'+(session?'<button class="btn" id="mpLogout">'+T('Go offline','退出在线大厅')+'</button>':'')+'</div><p id="multiError" role="alert"></p>');
+ if($('mpLogin'))$('mpLogin').onclick=()=>action(async()=>{await login();menu()});
+ if($('mpCreate'))$('mpCreate').onclick=()=>action(async()=>{const r=await api('create');enter(r.code)});
+ $('mpJoin').onclick=()=>action(async()=>{const c=$('mpCode').value.trim().toUpperCase();if(!session)await login();await join(c)});
+ if($('mpResume'))$('mpResume').onclick=()=>action(()=>join(read(KEY).code));
+ if($('mpLogout'))$('mpLogout').onclick=()=>action(async()=>{await api('logout');localStorage.setItem(SESSION,JSON.stringify({...session,offline:true}));session=null;clearInterval(loungeTimer);$('onlineInvitation')?.remove();menu()});
+ $('mpClose').onclick=exitScreen;if(session)lounge();
+ if(/^[A-Z2-9]{6}$/.test(prefill))action(async()=>{if(!session)await login();await join(prefill)});
+}
+async function join(code){await api('join',{code});enter(code);clearInvite()}
+function enter(code){generation++;room={code};localStorage.setItem(KEY,JSON.stringify(room));shownRound=0;game=null;screen='loading';last=null;overlay(base()+'<p>'+T('Connecting…','正在连接……')+'</p><p id="multiError" role="alert"></p><button class="btn" id="mpExit">'+T('Leave screen','离开此页面')+'</button>');$('mpExit').onclick=exitScreen;poll()}
+function shareControls(){return '<label class="lab">'+T('Invitation link','邀请链接')+'<input id="mpVisibleLink" readonly aria-label="'+T('Invitation link','邀请链接')+'" value="'+esc(invite())+'"></label><div class="row"><button class="btn" id="mpCopy">'+T('Copy link','复制链接')+'</button><button class="btn" id="mpShare">'+T('Share','分享')+'</button><button class="btn" id="mpExit">'+T('Leave screen','离开此页面')+'</button></div>'}
+function wireShare(){
+ $('mpExit').onclick=exitScreen;$('mpVisibleLink').onclick=e=>e.target.select();
+ $('mpCopy').onclick=async()=>{try{await navigator.clipboard.writeText(invite());$('multiError').textContent=T('Invitation copied.','邀请已复制。')}catch{$('mpVisibleLink').focus();$('mpVisibleLink').select()}};
+ $('mpShare').onclick=async()=>{try{if(navigator.share){await navigator.share({title:T('Mind Garden invitation','心灵花园邀请'),url:invite()});return}}catch(e){if(e.name==='AbortError')return}$('mpVisibleLink').focus();$('mpVisibleLink').select()};
+}
+function modeOptions(){return MODES.map(m=>'<option value="'+m[0]+'">'+esc(save.lang==='zh'?tr(m[1]):m[1])+'</option>').join('')}
+function people(s){return '<ul class="mp-roster">'+s.players.map(p=>'<li>'+user(p.name)+(p.host?' <small>'+T('Host','房主')+'</small>':'')+'<span>'+ (p.skipped?T('Not finished','未完成'):p.score!==null?T('Finished','已完成'):s.started?(p.seenRound===s.round?T('Playing','游戏中'):T('Receiving launch…','正在接收开始通知……')):T('Joined','已加入'))+' · '+(s.serverTime-p.lastSeen<15000?T('Online','在线'):T('Reconnecting','重新连接中'))+'</span></li>').join('')+'</ul>'}
+function renderLobby(s){screen='lobby';overlay(base(s)+'<h3 id="mpPlayerCount"></h3><div id="mpRoster"></div><div id="mpDelivery" aria-live="polite"></div>'+(s.host?'<label class="lab">'+T('Activity','活动')+'<select id="mpMode">'+modeOptions()+'</select></label><button class="btn main" id="mpLaunch">'+T('Launch for all joined players','为所有已加入玩家开始游戏')+'</button><p>'+T('Wait for your friends to join before launching. No new players can join after launch.','请等待朋友加入后再开始。开始后将不能加入新玩家。')+'</p>':'<p>'+T('Your room code is received. The game starts here when the host launches.','已收到房间码。房主开始游戏后，此页面将自动进入游戏。')+'</p>')+(s.host?'<button class="btn" id="mpCancelRoom">'+T('Close room','关闭房间')+'</button>':'')+shareControls()+'<p id="multiError" role="alert"></p>');wireShare();if($('mpCancelRoom'))$('mpCancelRoom').onclick=()=>action(async()=>{await api('close',room);accept({code:room.code,closed:true})});if(s.host)$('mpLaunch').onclick=()=>action(async()=>{const state=await api('launch',{...room,round:0,mode:$('mpMode').value});accept(state)});updateLobby(s)}
+function updateLobby(s){if($('mpPlayerCount'))$('mpPlayerCount').textContent=s.players.length+'/8 '+T('players joined','位玩家已加入');if(s.players&&$('mpRoster'))$('mpRoster').innerHTML=people(s);if($('mpLaunch'))$('mpLaunch').disabled=s.players.length<2;
+ if($('mpDelivery')&&s.host)$('mpDelivery').innerHTML='<p>'+T('Invitation delivery','邀请送达')+': '+s.invitations.filter(p=>p.receivedAt).length+'/'+s.invitations.length+'</p><ul class="mp-receipts">'+s.invitations.map(p=>'<li>'+user(p.name)+' — '+(p.receivedAt?T('Room code received','已收到房间码'):T('Awaiting connection','等待连接'))+'</li>').join('')+'</ul>';
+}
+async function poll(){if(!room||screen==='closed'||pollBusy||document.hidden)return;pollBusy=true;const gen=generation,c=room.code;try{const s=await api('status',{...room,seenRound:shownRound});if(gen!==generation||room?.code!==c)return;accept(s);if($('mpConnection'))$('mpConnection').textContent=''}catch(e){if(gen===generation){if($('mpConnection'))$('mpConnection').textContent=T('Connection interrupted. Reconnecting; your room and score are kept.','连接中断，正在重连；房间和积分已保留。');error(e)}}finally{pollBusy=false}}
+function endRound(){if(confirm(T('End this round? Unfinished players receive no points.','结束本轮？未完成的玩家本轮不得分。')))action(async()=>accept(await api('finishRound',{...room,round:last.round})))}
+function livePanel(){if(!last)return;const panel=document.createElement('details');panel.className='mp-live';panel.innerHTML='<summary>'+T('Room players and launch status','房间玩家与开始状态')+'</summary><div id="mpRoster">'+people(last)+'</div>'+(last.host?'<button class="btn sm" id="mpEndRound">'+T('End current round','结束本轮')+'</button>':'');$('multiError').before(panel);if($('mpEndRound'))$('mpEndRound').onclick=endRound}
+function accept(s){if(!room||s.code!==room.code)return;last=s;if(s.players&&$('mpRoster'))$('mpRoster').innerHTML=people(s);if(s.closed){screen='closed';overlay(base()+'<p>'+T('The host closed this room.','房主已关闭此房间。')+'</p><button id="mpExit" class="btn">'+T('Close','关闭')+'</button>');$('mpExit').onclick=exitScreen;localStorage.removeItem(KEY);return}
+ if(!s.started){if(screen!=='lobby')renderLobby(s);else updateLobby(s);return}
+ const mine=s.players.find(p=>p.id===s.me);if(s.finished){if(screen!=='results'||shownRound!==s.round)results(s);return}
+ if(mine?.score!==null||mine?.skipped){shownRound=s.round;if(screen!=='waiting')waitingForOther(s);else updateLobby(s);return}
+ if(shownRound!==s.round||!game){shownRound=s.round;screen='game';const saved=read(GAME);if(saved?.code===room.code&&saved.round===s.round&&saved.mode===s.mode){game=saved;if(saved.done)game.done=new Set(saved.done);game.locked=false;if(game.open?.length===2)game.open=[];if(game.submitted){finish();return}game.mode.startsWith('pairs')?draw('Find the matching picture.'):drawQuiz('Choose the best answer. Take your time.')}else start(s)}
+}
+setInterval(poll,1500);
  function randomizer(seed){let x=(seed>>>0)||1;return()=>{x+=0x6D2B79F5;let t=x;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
  function shuffle(a,rand){for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
  function problems(mode,rand){let qs=[];const count=mode.endsWith('12')?12:8;const baseMode=mode.replace('12','');for(let i=0;i<count;i++){
   if(baseMode==='sums'){const a=3+Math.floor(rand()*35),b=2+Math.floor(rand()*15),sub=rand()>.5,ans=sub?a-b:a+b;qs.push({title:a+(sub?' − ':' + ')+b+' = ?',answer:String(ans),options:shuffle([ans,ans+1,ans-1,ans+3].map(String),rand)})}
-  else if(baseMode==='patterns'){const start=1+Math.floor(rand()*20),step=2+Math.floor(rand()*7),ans=start+step*4;qs.push({title:[0,1,2,3].map(j=>start+j*step).join(', ')+', ?',answer:String(ans),options:shuffle([ans,ans-step,ans+step,ans+2].map(String),rand)})}
+  else if(baseMode==='patterns'){const start=1+Math.floor(rand()*20),step=2+Math.floor(rand()*7),ans=start+step*4;qs.push({title:[0,1,2,3].map(j=>start+j*step).join(', ')+', ?',answer:String(ans),options:shuffle([ans,ans-step,ans+step,ans+2*step].map(String),rand)})}
   else{const groups=[['🍎','🍌','🍓','🍇'],['🐶','🐱','🐢','🐦'],['🚲','🚂','🚗','🚌'],['🌻','🌷','🌹','🌼']];let k=Math.floor(rand()*4),other=(k+1+Math.floor(rand()*3))%4;let choices=shuffle(groups[k].slice(0,3).concat(groups[other][Math.floor(rand()*4)]),rand);qs.push({title:'Which picture belongs to a different group?',answer:groups[other].find(e=>choices.includes(e)),options:choices})}
  }return qs}
- function start(s){stop();const mode=s.mode||'pairs6',rand=randomizer((s.seed^Math.imul(s.round,0x9E3779B1))>>>0);
+ function start(s){const mode=s.mode||'pairs6',rand=randomizer((s.seed^Math.imul(s.round,0x9E3779B1))>>>0);
   if(mode.startsWith('pairs')){const count=mode==='pairs10'?10:6,pool=['🌻','🍎','🐦','🐶','🌈','🚲','🌷','🍓','🐢','🎹','🏡','🦋','🍊','☕','🌹','🚂','🎨','🪁','🥕','🐞'];const values=shuffle(pool.slice(),rand).slice(0,count);game={mode,round:s.round,deck:shuffle(values.concat(values),rand),open:[],done:new Set(),moves:0,locked:false,started:Date.now(),submitted:false,saved:false};draw('Find all '+count+' pairs. Take your time.')}
   else {game={mode,round:s.round,questions:problems(mode,rand),index:0,moves:0,correct:0,started:Date.now(),submitted:false,saved:false};drawQuiz('Choose the best answer. Take your time.')}
-  watch(poll);
+  checkpoint();
  }
  function progress(s){return '<p class="tip">Round '+s.round+' · '+(MODES.find(m=>m[0]===s.mode)?.[1]||s.mode)+'</p>'}
- function draw(msg){const g=game;if(!g)return;const count=g.deck.length/2,cards=g.deck.map((x,i)=>'<button class="mp-tile'+(g.open.includes(i)||g.done.has(i)?' revealed':'')+'" data-tile="'+i+'" '+(g.done.has(i)||g.locked?'disabled':'')+' aria-label="'+(g.open.includes(i)||g.done.has(i)?x:'Hidden picture')+'">'+(g.open.includes(i)||g.done.has(i)?x:'❀')+'</button>').join('');overlay(base({round:g.round})+'<p>'+esc(msg)+'</p><p>'+g.done.size/2+' of '+count+' pairs · '+g.moves+' turns</p><div class="mp-board" style="grid-template-columns:repeat('+(count===10?5:4)+',minmax(0,1fr))">'+cards+'</div><div class="row"><button class="btn" id="mpExit">Leave screen</button></div><p id="multiError" role="alert"></p>');$('mpExit').onclick=()=>{stop();game=null;closeOv()};document.querySelectorAll('[data-tile]').forEach(b=>b.onclick=()=>flip(+b.dataset.tile))}
+ function draw(msg){screen='game';checkpoint();const g=game;if(!g)return;const count=g.deck.length/2,cards=g.deck.map((x,i)=>'<button class="mp-tile'+(g.open.includes(i)||g.done.has(i)?' revealed':'')+'" data-tile="'+i+'" '+(g.done.has(i)||g.locked?'disabled':'')+' aria-label="'+(g.open.includes(i)||g.done.has(i)?x:'Hidden picture')+'">'+(g.open.includes(i)||g.done.has(i)?x:'❀')+'</button>').join('');overlay(base({round:g.round})+'<p>'+esc(msg)+'</p><p>'+g.done.size/2+' of '+count+' pairs · '+g.moves+' turns</p><div class="mp-board" style="grid-template-columns:repeat('+(count===10?5:4)+',minmax(0,1fr))">'+cards+'</div><div class="row"><button class="btn" id="mpExit">Leave screen</button></div><p id="multiError" role="alert"></p>');$('mpExit').onclick=exitScreen;document.querySelectorAll('[data-tile]').forEach(b=>b.onclick=()=>flip(+b.dataset.tile));livePanel()}
  function flip(i){const g=game;if(!g||g.locked||g.submitted||g.open.includes(i)||g.done.has(i))return;g.open.push(i);if(g.open.length<2){draw('Find the matching picture.');return}g.moves++;const[a,b]=g.open;if(g.deck[a]===g.deck[b]){g.done.add(a);g.done.add(b);g.open=[];if(g.done.size===g.deck.length){g.submitted=true;finish();return}draw('Lovely match!')}else{g.locked=true;draw('Have another look.');setTimeout(()=>{if(game===g){g.open=[];g.locked=false;draw('Try another pair.')}},950)}}
- function drawQuiz(msg){const g=game;if(!g)return;const q=g.questions[g.index];overlay(base({round:g.round})+'<p>'+esc(msg)+'</p><p>Question '+(g.index+1)+' of '+g.questions.length+'</p><div class="seqline">'+esc(q.title)+'</div><div class="gridm" style="--c:2">'+q.options.map((o,i)=>'<button class="big txt" data-answer="'+i+'">'+esc(o)+'</button>').join('')+'</div><div class="row"><button class="btn" id="mpExit">Leave screen</button></div><p id="multiError" role="alert"></p>');$('mpExit').onclick=()=>{stop();game=null;closeOv()};document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>answer(+b.dataset.answer))}
+ function drawQuiz(msg){screen='game';checkpoint();const g=game;if(!g)return;const q=g.questions[g.index];overlay(base({round:g.round})+'<p>'+esc(msg)+'</p><p>Question '+(g.index+1)+' of '+g.questions.length+'</p><div class="seqline">'+esc(q.title)+'</div><div class="gridm" style="--c:2">'+q.options.map((o,i)=>'<button class="big txt" data-answer="'+i+'">'+esc(o)+'</button>').join('')+'</div><div class="row"><button class="btn" id="mpExit">Leave screen</button></div><p id="multiError" role="alert"></p>');$('mpExit').onclick=exitScreen;document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>answer(+b.dataset.answer));livePanel()}
  function answer(i){const g=game;if(!g||g.submitted)return;const q=g.questions[g.index],good=q.options[i]===q.answer;g.moves+=good?1:2;if(good)g.correct++;g.index++;if(g.index===g.questions.length){g.submitted=true;finish()}else drawQuiz(good?'Well done!':'Good try! The answer was '+q.answer+'.')}
- async function finish(){const g=game;if(!g)return;overlay(base({round:g.round})+'<h3>Well played!</h3><p>'+(g.mode.startsWith('pairs')?'You found every pair in '+g.moves+' turns.':'You finished '+g.questions.length+' questions!')+'</p><p id="multiState">Saving your result…</p><p id="multiError" role="alert"></p><div class="row"><button class="btn" id="mpExit">Leave screen</button></div>');$('mpExit').onclick=()=>{stop();game=null;closeOv()};try{const elapsed=Math.max(1,Math.round((Date.now()-g.started)/1000));const s=await api('submit',{...room,round:g.round,moves:g.moves,elapsed});g.saved=true;if(s.finished)results(s);else waitingForOther(s)}catch(e){error(e);const m=$('multiState');if(m)m.textContent='Could not save the result. Please retry.';const retry=document.createElement('button');retry.className='btn main';retry.textContent='Retry saving';retry.onclick=()=>{retry.disabled=true;finish()};m?.after(retry)}}
- function waitingForOther(s){stop();overlay(base(s)+'<h3>Round complete!</h3><p id="multiState">Your result is saved. Waiting for your friend to finish.</p><p id="multiError" role="alert"></p>'+buttons());wireShare();watch(poll)}
- function results(s){stop();game=null;shownRound=s.round;const mine=room.role==='host'?s.hostScore:s.guestScore,other=room.role==='host'?s.guestScore:s.hostScore;const headline=mine===other?'A friendly tie!':mine>other?'You won this round!':'Your friend won this round!';overlay(base(s)+'<h3>'+headline+'</h3><p>'+esc(s.host)+': '+s.hostScore+' points<br>'+esc(s.guest||'Friend')+': '+s.guestScore+' points</p><h3>Total points after '+s.round+' round'+(s.round===1?'':'s')+'</h3><p>'+esc(s.host)+': <b>'+s.hostTotal+'</b><br>'+esc(s.guest||'Friend')+': <b>'+s.guestTotal+'</b></p><p class="tip">Keep the same room! Choose another activity or play a longer matching board. Points are for fun, not a measure of cognitive health.</p>'+(room.role==='host'?'<label class="lab">Next game<select id="mpMode">'+MODES.map(m=>'<option value="'+m[0]+'">'+esc(m[1])+'</option>').join('')+'</select></label><div class="row"><button class="btn main" id="mpNext">Start next round</button><button class="btn" id="mpLeave">Finish together</button></div>':'<p id="multiState">Waiting for the host to select the next game. You can keep this screen open.</p><div class="row"><button class="btn" id="mpLeave">Leave screen</button></div>')+'<p id="multiError" role="alert"></p>');
-  $('mpLeave').onclick=()=>{stop();localStorage.removeItem(KEY);room=null;closeOv()};
-  if(room.role==='host')$('mpNext').onclick=async()=>{const b=$('mpNext');b.disabled=true;try{const s2=await api('advance',{...room,round:s.round,mode:$('mpMode').value});shownRound=0;start(s2);shownRound=s2.round}catch(e){error(e);b.disabled=false}};
-  else watch(poll);
- }
- window.addEventListener('focus',()=>{if(room)poll()});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&room)poll()});
- $('bOnline').onclick=menu;
- const inviteCode=new URLSearchParams(location.search).get('room');if(inviteCode&&/^[A-Z2-9]{6}$/i.test(inviteCode)){
-  $('bOnline').textContent='🌍 Join friend';
-  // Prefill the room code and show the one-tap Join action; do not submit identity silently.
-  setTimeout(()=>{if(!$('ov').classList.contains('hidden'))return;menu()},350);
- }
+
+async function finish(){const g=game;if(!g||!room)return;checkpoint();const gen=generation,c=room.code;screen='saving';overlay(base({round:g.round})+'<p>'+T('Saving your result…','正在保存成绩……')+'</p><p id="multiError" role="alert"></p><button class="btn" id="mpExit">'+T('Leave screen','离开此页面')+'</button>');$('mpExit').onclick=exitScreen;
+ try{const s=await api('submit',{code:c,round:g.round,moves:g.moves,elapsed:Math.max(1,Math.floor((Date.now()-g.started)/1000))});if(gen!==generation||room?.code!==c)return;g.saved=true;checkpoint();accept(s)}catch(e){if(gen!==generation)return;error(e);const b=document.createElement('button');b.className='btn';b.textContent=T('Retry saving','重新保存');b.onclick=()=>finish();$('multiError').after(b)}}
+function waitingForOther(s){screen='waiting';overlay(base(s)+'<h3>'+T('Your round is complete','本轮已完成')+'</h3><div id="mpRoster"></div><p>'+T('Waiting for the other players. Your result is saved.','等待其他玩家，成绩已保存。')+'</p>'+ (s.host?'<button class="btn" id="mpEndRound">'+T('End round for unfinished players','结束未完成玩家的本轮游戏')+'</button>':'')+shareControls()+'<p id="multiError" role="alert"></p>');wireShare();updateLobby(s);if($('mpEndRound'))$('mpEndRound').onclick=()=>{if(confirm(T('End this round? Unfinished players will be marked not finished and receive no points for this round.','结束本轮？未完成的玩家将标记为未完成，本轮不得分。')))action(async()=>accept(await api('finishRound',{...room,round:s.round})))}}
+function results(s){screen='results';game=null;shownRound=s.round;localStorage.removeItem(GAME);const players=[...s.players].sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name));
+ overlay(base(s)+'<h3>'+T('Room leaderboard','房间排行榜')+'</h3><div class="mp-table-wrap"><table class="mp-table"><thead><tr><th>'+T('Rank','排名')+'</th><th>'+T('Player','玩家')+'</th><th>'+T('This round','本轮')+'</th><th>'+T('Total','总积分')+'</th></tr></thead><tbody>'+players.map((p,i)=>'<tr><td>'+(1+players.filter(x=>x.total>p.total).length)+'</td><td>'+user(p.name)+'</td><td>'+(p.skipped?T('Not finished','未完成'):p.score)+'</td><td>'+p.total+'</td></tr>').join('')+'</tbody></table></div>'+(s.host?'<label class="lab">'+T('Next activity','下一项活动')+'<select id="mpMode">'+modeOptions()+'</select></label><div class="row"><button class="btn main" id="mpNext">'+T('Start next round for everyone','为所有玩家开始下一轮')+'</button><button class="btn" id="mpCloseRoom">'+T('Close room','关闭房间')+'</button></div>':'<p>'+T('Waiting for the host to start the next round.','等待房主开始下一轮。')+'</p>')+shareControls()+'<p id="multiError" role="alert"></p>');wireShare();
+ if(s.host){$('mpNext').onclick=()=>action(async()=>accept(await api('advance',{...room,round:s.round,mode:$('mpMode').value})));$('mpCloseRoom').onclick=()=>action(async()=>{await api('close',room);accept({code:room.code,closed:true})})}
+}
+window.addEventListener('focus',()=>{poll();lounge()});document.addEventListener('visibilitychange',()=>{if(!document.hidden){poll();lounge()}});
+$('bOnline').onclick=menu;
+if(session)startLounge();
+if(/^[A-Z2-9]{6}$/i.test(new URLSearchParams(location.search).get('room')||''))setTimeout(menu,350);
 })();

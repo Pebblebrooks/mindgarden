@@ -1,0 +1,62 @@
+/* Articulated wildlife: natural joint cycles, independent from the route. */
+#gardenLife{opacity:1!important;z-index:3!important}
+#gardenLife .wildlife-route{position:absolute;display:block;pointer-events:none;width:clamp(60px,7vw,120px);height:auto;left:0;bottom:0;animation:animalTrail 34s linear infinite}
+.wildlife-facing{display:block;animation:animalFacing 34s steps(1,end) infinite}
+.wildlife-route svg{display:block;width:100%;overflow:visible;filter:drop-shadow(0 2px 1px #17352c20)}
+#gardenLife .animal-cat{animation-delay:-4s;bottom:0}
+#gardenLife .animal-dog{animation-delay:-17s;bottom:1%}
+#gardenLife .animal-rabbit{animation-delay:-28s;width:clamp(52px,6vw,100px);bottom:0}
+.animal-cat .wildlife-facing{animation-delay:-4s}.animal-dog .wildlife-facing{animation-delay:-17s}.animal-rabbit .wildlife-facing{animation-delay:-28s}
+.wf-leg,.wf-knee{transform-origin:0 0;animation:legSwing .9s ease-in-out infinite}
+.wf-knee{animation-name:kneeFlex}
+.wf-leg.phase-1,.wf-knee.phase-1{animation-delay:-.45s}.wf-leg.phase-2,.wf-knee.phase-2{animation-delay:-.225s}.wf-leg.phase-3,.wf-knee.phase-3{animation-delay:-.675s}
+.wf-body{animation:bodyWalk .45s ease-in-out infinite}
+.wf-head{transform-origin:121px 62px;animation:headWalk .9s ease-in-out infinite}
+.wf-tail{transform-origin:47px 66px;animation:tailSway 1.8s ease-in-out infinite}
+.wf-ear{transform-origin:114px 39px;animation:earSwing .9s ease-in-out infinite}
+.wf-ears{transform-origin:132px 36px;animation:earSwing 1.3s ease-in-out infinite}
+.animal-rabbit .wf-body{animation:rabbitBody 1.3s ease-in-out infinite}
+.animal-rabbit .wf-leg,.animal-rabbit .wf-knee{animation-duration:1.3s}
+.animal-rabbit .phase-1{animation-delay:0s}.animal-rabbit .phase-2,.animal-rabbit .phase-3{animation-delay:-.3s}
+@keyframes legSwing{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(21deg)}}
+@keyframes kneeFlex{0%,100%{transform:rotate(7deg)}35%{transform:rotate(-24deg)}65%{transform:rotate(3deg)}}
+@keyframes bodyWalk{50%{transform:translateY(-1.8px)}}
+@keyframes headWalk{50%{transform:rotate(2.8deg) translateY(-1px)}}
+@keyframes tailSway{50%{transform:rotate(11deg)}}
+@keyframes earSwing{50%{transform:rotate(-8deg)}}
+@keyframes rabbitBody{0%,100%{transform:translateY(0)}40%{transform:translateY(-4px) rotate(-1deg)}}
+@keyframes animalTrail{0%{left:-10%}48%,50%{left:94%}98%,100%{left:-10%}}
+@keyframes animalFacing{0%,49%{transform:scaleX(1)}50%,99%{transform:scaleX(-1)}}
+#gardenLife .animal-butterfly{width:clamp(34px,4vw,65px);left:5%;top:22%;bottom:auto;animation:butterflyWander 22s ease-in-out infinite}
+#gardenLife .animal-butterfly.second{left:85%;top:35%;animation-delay:-9s;animation-direction:reverse}
+.animal-butterfly .wildlife-facing,.animal-bird .wildlife-facing,.animal-bee .wildlife-facing{animation:none}
+.butterfly-left,.butterfly-right{transform-origin:0 0;animation:butterflyFlap .3s ease-in-out infinite}
+@keyframes butterflyFlap{0%,100%{transform:scaleX(.95)}50%{transform:scaleX(.12)}}
+@keyframes butterflyWander{0%,100%{transform:translate(0,0) rotate(-14deg)}25%{transform:translate(8vw,-20px) rotate(9deg)}55%{transform:translate(4vw,40px) rotate(-9deg)}75%{transform:translate(-2vw,15px) rotate(14deg)}}
+#gardenLife .animal-bird{width:clamp(55px,6vw,100px);top:12%;bottom:auto;animation:birdCrossing 26s linear infinite;animation-delay:-8s}
+.bird-near{transform-origin:0 0;animation:birdFlap .48s ease-in-out infinite}
+.bird-far{transform-origin:0 0;animation:birdFlap .48s ease-in-out infinite;animation-delay:-.06s}
+.wf-bird-body{animation:birdLift .48s ease-in-out infinite}.wf-bird-head{transform-origin:135px 60px;animation:headWalk 1.9s ease-in-out infinite}
+@keyframes birdFlap{0%,100%{transform:rotate(-12deg) scaleY(1)}50%{transform:rotate(18deg) scaleY(-.6)}}
+@keyframes birdLift{50%{transform:translateY(-2px)}}
+@keyframes birdCrossing{0%{left:-12%;transform:translateY(8px)}50%{transform:translateY(-9px)}100%{left:105%;transform:translateY(8px)}}
+#gardenLife .animal-bee{width:clamp(26px,3vw,42px);left:91%;top:64%;bottom:auto;animation:beeHover 12s ease-in-out infinite}
+.bee-wing{transform-origin:0 0;animation:butterflyFlap .075s linear infinite}
+@keyframes beeHover{50%{transform:translate(-35px,-18px) rotate(-10deg)}}
+html[data-motion="gentle"] #gardenLife .wildlife-route{animation-duration:48s}
+html[data-motion="gentle"] #gardenLife .animal-cat .wildlife-facing,html[data-motion="gentle"] #gardenLife .animal-dog .wildlife-facing,html[data-motion="gentle"] #gardenLife .animal-rabbit .wildlife-facing{animation-duration:48s}
+html[data-motion="gentle"] .wf-leg,html[data-motion="gentle"] .wf-knee{animation-duration:1.2s}
+html[data-motion="off"] #gardenLife *,html[data-ambient-paused="true"] #gardenLife *{animation-play-state:paused!important}
+html[data-motion="off"] .animal-cat{left:8%!important}html[data-motion="off"] .animal-dog{left:75%!important}html[data-motion="off"] .animal-rabbit{left:40%!important}
+@media(prefers-reduced-motion:reduce){#gardenLife *{animation:none!important}.animal-cat{left:8%!important}.animal-dog{left:75%!important}.animal-rabbit{left:40%!important}}
+/* Lobby and room status. */
+#onlineInvitation{position:fixed;z-index:12;bottom:12px;left:12px;right:12px;max-width:850px;margin:auto;display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--panel);color:var(--ink);border:2px solid var(--back);border-radius:16px;box-shadow:0 4px 24px #1234;font-size:.85rem}
+#onlineInvitation>span{flex:1}#onlineInvitation .btn{font-size:.85rem;min-height:40px;padding:6px 10px}
+.mp-room-code{background:var(--bg);border:2px dashed var(--back);border-radius:12px;padding:10px;letter-spacing:.04em}.mp-room-code strong{font-size:1.3em;letter-spacing:.14em}
+.mp-roster,.mp-receipts{list-style:none;padding:0;margin:10px 0}.mp-roster li{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border-bottom:1px solid var(--line);font-size:.85em}.mp-roster li>span:last-child{margin-left:auto;font-size:.8em}.mp-roster small{border-radius:9px;padding:2px 7px;background:var(--sun);color:var(--sunink)}
+.mp-receipts{font-size:.75em;max-height:130px;overflow-y:auto}.mp-receipts li{padding:3px 0}.mp-open-room{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px;border-bottom:1px solid var(--line);font-size:.85em}.mp-open-room button{margin-left:auto}
+.mp-table-wrap{overflow:auto}.mp-table{width:100%;border-collapse:collapse;font-size:.85em}.mp-table th,.mp-table td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+.mp-live{margin:14px 0;font-size:.8em}.mp-live summary{cursor:pointer;font-weight:bold}
+@media(max-width:600px){#onlineInvitation{flex-wrap:wrap;padding:9px;gap:5px}.mp-table th,.mp-table td{padding:6px}.mp-room-code{font-size:.85em}}
+
+html[data-still="1"] #gardenLife{display:block!important}

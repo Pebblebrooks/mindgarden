@@ -1,0 +1,20 @@
+/* A lawn with space to explore, grounded planting and distance-scaled wildlife. */
+#home .welcome-scene{padding-bottom:0!important;min-height:max(760px,80dvh)!important}
+#livingGarden{width:min(680px,63%);flex:0 0 auto;min-height:0;margin:170px auto 0;transform:translateX(8%);padding:0 0 7px}
+#livingGarden figcaption{position:absolute;bottom:5px;font-size:calc(.68rem * var(--fs));padding:3px 11px;margin:0;z-index:2}
+#livingGarden svg{max-height:148px;min-height:0;filter:none}
+#gardenLife{position:absolute!important;inset:0!important;overflow:hidden;pointer-events:none;z-index:3!important;contain:layout paint}
+#gardenLife canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+#gardenLife .wildlife-poster{display:none;position:absolute;top:25%;left:6%;width:38px}
+#gardenLife .wildlife-poster img{width:100%;height:auto}
+#gardenLife.wildlife-fallback .wildlife-poster{display:block}
+#gardenLife.wildlife-fallback canvas{display:none}
+#home .welcome-heading,#home .welcome-ctas,#home .welcome-extra{position:relative;z-index:5}
+@media(max-width:650px){#home .welcome-scene{min-height:0!important}#livingGarden{width:82%;margin-top:165px;transform:translateX(6%);padding-bottom:10px}#livingGarden svg{min-height:86px}#livingGarden figcaption{font-size:calc(.61rem * var(--fs));bottom:3px}}
+/* Plant on the open grass to the right of the existing path. */
+#livingGarden{width:min(520px,43%);margin-left:auto;margin-right:9%;transform:none}
+#livingGarden figcaption{display:none}
+@media(max-width:650px){#livingGarden{width:51%;margin-right:5%;transform:translateY(-78px);margin-top:165px}#livingGarden svg{min-height:72px}}
+#gardenLife .fallback-cat{top:auto;bottom:12%;left:13%;width:65px}
+#gardenLife .fallback-fox{top:auto;bottom:18%;left:80%;width:65px}
+#gardenLife .fallback-owl{top:24%;left:76%;width:40px}

@@ -1,0 +1,50 @@
+const {chromium}=require('playwright');
+const fs=require('fs'),path=require('path'),http=require('http'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'../public');
+(async()=>{
+ const server=http.createServer((req,res)=>{const name=decodeURIComponent(req.url.split('?')[0]),file=path.join(root,name==='/'?'index.html':name);if(!file.startsWith(root+path.sep)){res.writeHead(403);res.end();return}try{res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.webp':'image/webp','.png':'image/png','.gif':'image/gif','.svg':'image/svg+xml'})[path.extname(file)]||'text/plain');res.end(fs.readFileSync(file))}catch{res.writeHead(404);res.end()}});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
+ try{
+  browser=await chromium.launch({headless:true,...(process.env.BROWSER_EXECUTABLE?{executablePath:process.env.BROWSER_EXECUTABLE}:{}),args:['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+  const context=await browser.newContext({viewport:{width:1440,height:1050},serviceWorkers:'block'}),page=await context.newPage(),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));await page.route('https://fonts.googleapis.com/**',r=>r.abort());
+  await page.addInitScript(()=>{if(!localStorage.getItem('gardenMatch'))localStorage.setItem('gardenMatch',JSON.stringify({lang:'en',mode:'light',motionMode:'standard',still:0,pr:{p:{name:'Test',gr:9,log:[],stars:{},unlocked:1,fl:'mixed'}},cp:'p'}))});
+  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>window.MindGardenAmbient&&document.getElementById('gardenLife').dataset.ready==='3');
+  assert.equal(await page.locator('#seaScene').count(),0);assert.equal(await page.locator('.welcome-scene #livingGarden').count(),0);assert.equal(await page.locator('#progressDisplay #livingGarden').count(),1);assert.equal(await page.locator('#bedSoil').count(),0);assert.equal(await page.locator('.bed-plant[data-stage="1"]').count(),9);assert.equal(await page.locator('.journey-meter').getAttribute('aria-valuenow'),'9');
+  const bounds=await page.evaluate(()=>{const a=document.getElementById('dashStart').getBoundingClientRect(),b=document.getElementById('dailyCaption').getBoundingClientRect();return {gap:b.top-a.bottom,delta:Math.abs((a.left+a.width/2)-(b.left+b.width/2))}});assert(bounds.gap>=8);assert(bounds.delta<2);
+  const background=()=>page.locator('.welcome-scene').evaluate(e=>getComputedStyle(e).backgroundImage);
+  assert((await background()).includes('garden-day.webp'));
+  await page.evaluate(()=>{save.mode='dark';applyPrefs()});assert((await background()).includes('garden-sunset.webp'));
+  await page.evaluate(()=>{save.mode='auto';applyPrefs()});await page.emulateMedia({colorScheme:'dark'});assert((await background()).includes('garden-sunset.webp'));
+  await page.emulateMedia({colorScheme:'light'});assert((await background()).includes('garden-day.webp'));
+  const initial=await page.evaluate(()=>MindGardenAmbient.snapshot());
+  assert.equal(initial.actors.length,3);assert.equal(initial.flyers,10);
+  assert(initial.actors.find(x=>x.kind==='cat').size>initial.actors.find(x=>x.kind==='owl').size,'Near cat should be larger than distant owl');
+  await page.waitForTimeout(13500);
+  const moving=await page.evaluate(()=>MindGardenAmbient.snapshot());
+  assert(moving.actors.some((a,i)=>Math.abs(a.y-initial.actors[i].y)>.002),'Animals must wander in depth, not only left and right');
+  const canvas=page.locator('#gardenLife canvas');const a=await canvas.screenshot();await page.waitForTimeout(120);const b=await canvas.screenshot();assert(!a.equals(b),'3D limbs and wings must animate');
+  await page.evaluate(()=>openSet());await page.waitForFunction(()=>MindGardenAmbient.snapshot().paused);
+  const pausedTime=await page.evaluate(()=>MindGardenAmbient.snapshot().time);await page.waitForTimeout(180);assert.equal(await page.evaluate(()=>MindGardenAmbient.snapshot().time),pausedTime);
+  await page.locator('[data-motion-mode="off"]').click();await page.evaluate(()=>closeOv());assert.equal(await page.evaluate(()=>MindGardenAmbient.snapshot().paused),true);
+  await page.evaluate(()=>openSet());await page.locator('[data-motion-mode="gentle"]').click();await page.evaluate(()=>closeOv());await page.waitForFunction(()=>!MindGardenAmbient.snapshot().paused);
+  await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>MindGardenAmbient.snapshot().paused);await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.evaluate(()=>{me().gr=60;renderHero()});assert.equal(await page.locator('.bed-plant[data-stage="5"]').count(),12);
+  await page.locator('#progressFlowers').click();await page.locator('[data-fl="tulip"]').click();await page.locator('#fld').click();assert.equal(await page.locator('.bed-plant[data-flower="tulip"]').count(),12);
+  await page.locator('#progressNew').click();assert.equal(await page.locator('.bed-plant[data-stage="0"]').count(),12);assert.equal(await page.locator('.journey-meter').getAttribute('aria-valuenow'),'0');
+  await page.evaluate(()=>{save.pr.other={name:'Other',gr:36,log:[],stars:{},unlocked:1};save.cp='other';load();renderHome()});assert.equal(await page.locator('.bed-plant[data-stage="3"]').count(),12);
+  for(const [width,height] of [[1440,900],[768,1024],[390,844],[320,740]]){await page.setViewportSize({width,height});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Overflow at '+width);const r=await page.locator('#dailyCaption').boundingBox(),q=await page.locator('#dashStart').boundingBox();assert(r.y>=q.y+q.height+8)}
+  await page.evaluate(()=>{save.lang='zh';save.hc=1;save.fs=1;persist()});await page.reload();await page.waitForSelector('#livingGarden');assert((await page.locator('#progressDisplay').innerText()).includes('花园'));assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.equal(await page.locator('#livingGarden .bed-plant').count(),12);
+  const fallback=await context.newPage();
+  await fallback.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/.test(type)?null:original.call(this,type,...args)}});
+  await fallback.goto('http://127.0.0.1:'+server.address().port);
+  await fallback.waitForSelector('#gardenLife.wildlife-fallback');
+  await fallback.waitForFunction(()=>[...document.querySelectorAll('.wildlife-poster img')].every(x=>x.complete&&x.naturalWidth));
+  assert.equal(await fallback.locator('.wildlife-poster img').count(),3);
+  await fallback.evaluate(()=>{save.still=0;save.motionMode='standard';openSet();closeOv()});
+  await fallback.waitForFunction(()=>document.querySelector('.fallback-cat img').src.endsWith('.gif'));
+  const gif=fallback.locator('.fallback-cat img'),g1=await gif.screenshot();await fallback.waitForTimeout(200);const g2=await gif.screenshot();assert(!g1.equals(g2),'3D-rendered GIF fallback must change frames');
+  await fallback.evaluate(()=>openSet());await fallback.locator('[data-motion-mode="off"]').click();await fallback.evaluate(()=>closeOv());await fallback.waitForFunction(()=>[...document.querySelectorAll('.wildlife-poster img')].every(x=>x.src.endsWith('.png')));await fallback.close();
+  assert.deepEqual(errors,[]);console.log('PASS: Chromium desktop/mobile/Chinese/large-text layout; no sea banner; live 12-plant progression, flower selection, reset, profile switch; day/sunset/auto themes; centered separate daily caption; 3D animation, depth wandering, pause and reduced motion.');
+ }finally{await browser?.close();server.close()}
+})().catch(e=>{console.error(e);process.exitCode=1});
