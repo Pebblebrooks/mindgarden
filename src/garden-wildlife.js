@@ -31,7 +31,7 @@ window.createGardenWildlife=async function(host){
  }
  function choose(a){
   if(a.state==='walk'||a.state==='fly'){
-   const choices=a.kind==='owl'?['idle','sit']:(a.kind==='cat'?['idle','idle_alt','eat','sit','sleep','play','roll']:['idle','idle_alt','eat','sit','sleep','play']);
+   const choices=a.kind==='dog'?['idle','idle']:a.kind==='owl'?['idle','sit']:(a.kind==='cat'?['idle','idle_alt','eat','sit','sleep','play','roll']:['idle','idle_alt','eat','sit','sleep','play']);
    let next=choices[Math.floor(Math.random()*choices.length)];
    change(a,next==='play'?'jump':next==='roll'?'sleep':next);a.state=next;
    a.duration=next==='sleep'?rand(16,28):next==='roll'?5:next==='play'?rand(2,3.8):rand(5,12);
@@ -48,6 +48,7 @@ window.createGardenWildlife=async function(host){
   try{
    const filename='wildlife/animal_'+kind+'.glb';
    const gltf=await loader.loadAsync(window.MindGardenAssets?.[filename]||filename);
+   if(kind==='dog'&&gltf.animations.length===1){const clip=gltf.animations[0];gltf.animations=[THREE.AnimationUtils.subclip(clip,'idle',0,29,24),THREE.AnimationUtils.subclip(clip,'walk',90,119,24)];}
    const model=gltf.scene,box=new THREE.Box3().setFromObject(model),h=box.max.y-box.min.y;
    const group=new THREE.Group(),tilt=new THREE.Group();group.add(tilt);const rollPivot=new THREE.Group();rollPivot.position.y=.35;tilt.add(rollPivot);rollPivot.add(model);scene.add(group);tilt.rotation.x=.12;
    model.position.y-=box.min.y;model.scale.setScalar(1/h);model.position.y=model.position.y/h-.35;
@@ -55,6 +56,11 @@ window.createGardenWildlife=async function(host){
    actors.push(a);change(a,kind==='fox'?'sleep':kind==='cat'?'sit':'idle');a.mixer.update(rand(.1,.5));return a;
   }catch(e){console.warn('Garden animal unavailable:',kind);return null;}
  }
+
+ const hen=new THREE.Group(),henBody=new THREE.Group(),henHead=new THREE.Group(),henLegs=[];scene.add(hen);hen.add(henBody);henBody.add(henHead);
+ ellipsoid(0xd7b182,0,.38,0,.25,.27,.36,henBody);henHead.position.set(0,.63,.27);ellipsoid(0xe8d0a4,0,0,0,.13,.15,.13,henHead);ellipsoid(0xbd5945,0,.16,0,.055,.09,.09,henHead);ellipsoid(0xdab351,0,-.02,.17,.06,.04,.09,henHead);ellipsoid(0x30342a,.10,.035,.08,.018,.018,.018,henHead);ellipsoid(0x30342a,-.10,.035,.08,.018,.018,.018,henHead);ellipsoid(0x876951,0,.50,-.35,.10,.23,.12,henBody);
+ for(const side of [-1,1]){ellipsoid(0xb38b60,side*.23,.38,0,.055,.17,.22,henBody);const leg=new THREE.Group();leg.position.set(side*.12,.18,0);hen.add(leg);ellipsoid(0xb48c48,0,-.09,0,.025,.12,.025,leg);ellipsoid(0xb48c48,0,-.18,.07,.045,.025,.10,leg);henLegs.push(leg)}
+ let henX=.52,henY=.60,henTime=0;function drawHen(dt){if(time%34<12)henTime+=dt;const cycle=time%34,walking=cycle<12,t=Math.min(cycle/12,1),x=walking?(henX=.52+.10*Math.sin(henTime*.04)):henX,y=walking?(henY=.60+.08*Math.sin(henTime*.028)):henY,size=33*Math.min(1,width/650+.35);hen.position.set(x*width,height-(lawnTop+y*(height-lawnTop-14)),45);hen.scale.setScalar(size);hen.rotation.y=Math.cos(henTime*.04)>0?1.1:-1.1;henHead.rotation.x=walking?.08:Math.max(0,Math.sin(cycle*1.6))*.9;henBody.rotation.z=walking?Math.sin(time*8)*.035:0;henLegs.forEach((l,i)=>l.rotation.x=walking?Math.sin(time*8+i*Math.PI)*.55:0)}
  // Small curved surfaces, lit in 3D, articulate independently of flight paths.
  function ellipsoid(color,x,y,z,sx,sy,sz,parent){const mesh=new THREE.Mesh(new THREE.SphereGeometry(1,12,8),new THREE.MeshStandardMaterial({color,roughness:.7}));mesh.position.set(x,y,z);mesh.scale.set(sx,sy,sz);parent.add(mesh);return mesh;}
  function insect(kind,color,index){
@@ -92,8 +98,8 @@ window.createGardenWildlife=async function(host){
  }
  [0xdca536,0xf0e6cb,0x8eb6cf,0xd48c46].forEach((c,i)=>insect('butterfly',c,i));
  insect('dragonfly',0,4);insect('bee',0,5);insect('bee',0,6);
- bird('swallow',0x344953,0);bird('finch',0xa87a40,1);bird('swallow',0x53656e,2);
- const loaded=await Promise.all([animal('cat',.18,.65,46),animal('fox',.81,.40,48),animal('owl',.80,.08,28)]);
+ bird('swallow',0x344953,0);bird('finch',0xa87a40,1);bird('swallow',0x53656e,2);insect('dragonfly',0,10);
+ const loaded=await Promise.all([animal('cat',.18,.65,46),animal('fox',.81,.40,48),animal('owl',.80,.08,28),animal('dog',.43,.77,43)]);
  function draw(dt){
   time+=dt;
   for(const a of actors){
@@ -134,7 +140,7 @@ window.createGardenWildlife=async function(host){
   }
   const dark=document.documentElement.dataset.theme==='dark'||(!['dark','light'].includes(document.documentElement.dataset.theme)&&matchMedia('(prefers-color-scheme:dark)').matches);
   sun.color.setHex(dark?0xffae71:0xfff0d3);sun.intensity=dark?1.7:2.5;
-  renderer.render(scene,camera);
+  drawHen(dt);renderer.render(scene,camera);
  }
  function tick(now){
   if(disposed)return;frame=requestAnimationFrame(tick);
@@ -142,6 +148,6 @@ window.createGardenWildlife=async function(host){
  }
  renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();paused=true;host.classList.add('wildlife-fallback');});
  renderer.domElement.addEventListener('webglcontextrestored',()=>{host.classList.remove('wildlife-fallback');api.setMode(mode,false);});
- const api={setMode(value,shouldPause){mode=value;flyers.forEach((f,i)=>f.group.visible=value==='standard'||i<4||i===7||i===9);paused=shouldPause||value==='off';host.dataset.paused=String(paused);last=performance.now();draw(0)},snapshot(){return {time,paused,actors:actors.map(a=>({kind:a.kind,state:a.state,x:a.pos.x,y:a.pos.y,size:a.group.scale.x})),flyers:flyers.length}},dispose(){disposed=true;cancelAnimationFrame(frame);observer.disconnect();renderer.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose())})}};
+ const api={setMode(value,shouldPause){mode=value;flyers.forEach((f,i)=>f.group.visible=value==='standard'||[0,1,4,5,7,9].includes(i));paused=shouldPause||value==='off';host.dataset.paused=String(paused);last=performance.now();draw(0)},snapshot(){return {time,paused,actors:actors.map(a=>({kind:a.kind,state:a.state,x:a.pos.x,y:a.pos.y,size:a.group.scale.x})),flyers:flyers.length}},dispose(){disposed=true;cancelAnimationFrame(frame);observer.disconnect();renderer.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose())})}};
  host.dataset.ready=String(loaded.filter(Boolean).length);resize();frame=requestAnimationFrame(tick);return api;
 };
