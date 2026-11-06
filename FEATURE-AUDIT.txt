@@ -1,0 +1,83 @@
+MIND GARDEN — PRIOR REQUEST AUDIT, 6 NOVEMBER 2026
+Scope: current V3.8 source plus the 3.8.3 repair. Later design choices supersede
+earlier ones. This does not claim all browser/device combinations are tested.
+
+VERIFIED THIS RUN (browser and/or automated tests)
+- Homepage Animation control beside Nature sounds; Off hides the whole
+  wildlife layer and On restores it. Reduced-motion rules remain present.
+- Left/right media arrows cycle backgrounds and stored media.
+- Welcome video upload, native controls, explicit play/pause, muted start,
+  storage and selection after page reload. A 3-second MP4 was uploaded,
+  played and restored. Video is separate from decorative-animation settings.
+- Six scene choices: three gardens, each with day/sunset artwork and
+  independent selections. Settings thumbnails render at bounded dimensions.
+- Normal and large-text Settings: no horizontal overflow in desktop check.
+- Personal photo settings and saved-photo thumbnail present. Per-player
+  photo storage is in the source; fresh photo upload was not retested today.
+- Per-player background, music, motion, nature and video preferences;
+  switching profiles and renaming retain values without profile leakage.
+- Desktop player/rename/family/sound access; hamburger menu and closure.
+- My Progress and Leaderboard open different views.
+- Centered growth heading, bouquet panel and compact translucent flower button.
+- Four music choices, six nature choices, personal music input, independent
+  volumes and 60-second WAV export controls are available in the browser.
+  Audio rendering/export was not re-measured in this repair.
+- English/Chinese multiplayer clients; Chinese bundled settings/media labels.
+- Eight-client test: room-code delivery to seven online lobby guests,
+  acknowledgements, host launch, reconnect, leaderboard, second round,
+  closure and rename/logout-name persistence covered by regression suite.
+- Source syntax checks and shipped-bundle execution passed.
+- All entry-page and offline-manifest files exist in the complete project.
+- Service-worker tests: offline bundle retrieval; no API caching; no HTML
+  substituted for missing CSS/JS; old app caches cleaned without deleting
+  unrelated caches; incomplete releases rejected during installation.
+
+IMPLEMENTED; SOURCE REVIEWED / EXISTING COVERAGE, NOT FULLY REVALIDATED TODAY
+- Daily guided games, difficulty choices, game library/search, personal
+  progress and family views, flowers selected per player and 60-point bouquet.
+- Centered daily-game button/caption; home icon and compact navigation.
+- Personal welcome photos/videos, day/dark scene preferences and media carousel.
+- Personalized welcome name and inline multiplayer rename with identification.
+- Four separate sampled music arrangements, procedural nature mixes,
+  personal audio playlists and downloadable built-in 60-second WAV mix.
+- Homepage day/night nature mix, first-interaction audio start, pause when
+  leaving home or playing other audio, and visible nature on/off control.
+- Enlarged text, high contrast, colour-safe and left-handed settings; motion
+  Off/Gentle/Standard and pause behavior during dialogs/background tabs.
+- Garden-themed All Games page and translucent selection-card styling.
+- 3D wildlife with species movement, depth sizing and fallback GIFs; dog,
+  additional flying insects, hen and drifting clouds remain in source.
+
+SUPERSEDED REQUESTS
+- Sailboat banner: removed at your later request.
+- Flower bed in the hero: replaced by the progress-panel bouquet to avoid
+  positioning problems as viewports crop the background.
+- Floating welcome leaves: now removed at your latest request. The decorative
+  leaves on the All Games page remain separate and obey motion settings.
+
+KNOWN LIMITATIONS — NOT CLAIMED AS COMPLETE
+- Wildlife remains stylized 3D/GIF, not photorealistic filmed animals.
+  This browser had no WebGL, so GIF fallback was verified; 3D playback needs
+  a WebGL-capable device check. Fallback has fewer species.
+- Nature calls/waves are synthesized. Instrument arrangements use recorded
+  samples. A complete live orchestra recording is not included.
+- Profiles, photos, video and preferences live in this browser/device;
+  there are no cross-device personal accounts/cloud backups.
+- Personal music files must be selected again after reloading; the saved
+  preferences are not a persistent uploaded music library.
+- Room broadcasts reach active Play Together lobby sessions, not every user
+  merely viewing the homepage and not people outside the app.
+- Live Cloudflare room delivery between physical devices has not been checked
+  in this repair. Automated backend/DOM-client results are not that test.
+- Mobile layout has responsive rules; this run checked desktop and larger
+  text. It did not repeat a complete phone/tablet hardware matrix.
+- Broad Chinese coverage exists; this repair checked relevant settings and
+  multiplayer flows, not every sentence in every possible game state.
+- Digital pet feeding/stroking, Simple Home, remote caregiver portal,
+  commercialization/pricing and synchronized accounts were recommendations,
+  not approved implementations, and have not been added.
+
+DELIVERY
+Only four deployment files and these two notes are in this repair ZIP.
+Existing images/audio/models/backend must remain in your deployment.
+Do not deploy this patch alone. See READ-ME-FIRST.txt.

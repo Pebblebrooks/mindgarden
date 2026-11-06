@@ -1,0 +1,51 @@
+MIND GARDEN 3.8.3 — AFFECTED-FILES REPAIR ONLY
+6 November 2026
+
+This is NOT a complete deployment. Keep your existing app, images, audio,
+models, functions and database. Apply all FOUR files together:
+
+  public/index.html            replaces the existing entry page
+  public/garden-ui-383.css     new complete versioned UI stylesheet
+  public/garden-ui-383.js      new complete versioned feature-script bundle
+  public/sw.js                replaces the service worker
+
+The entry page now loads the two versioned bundles instead of the many
+individual v23–v38 CSS and feature JS files. Bundles have labelled source
+sections. Old files may remain but are no longer loaded by this entry page.
+Further UI edits must update the bundle loaded by index.html.
+
+INSTALL
+1. Keep a backup of your existing project.
+2. Extract this patch and merge its public folder into your EXISTING public
+   folder, replacing index.html and sw.js and adding both new bundle files.
+3. Redeploy the UPDATED EXISTING PROJECT using your usual deployment method.
+   If uploading static files from a public folder, index.html, the bundles,
+   sw.js and the existing assets must all appear at the site's root.
+   Do NOT upload this small patch ZIP as a standalone Cloudflare deployment:
+   it intentionally does not contain your other assets or API functions.
+4. Reopen the site while online, then reload once. Ctrl+F5 is also suitable.
+   Do not clear site data: that would remove local profiles/photos/videos.
+5. Open Settings and look near the bottom for 'Mind Garden 3.8.3'. Confirm
+   Welcome videos/Add videos appears above it and the six scene thumbnails
+   stay small. Check Animation beside Nature sounds and both hero arrows.
+
+No SQL migration, database reset, API changes, or billing changes are needed.
+The full ZIP from earlier conversations was NOT replaced by this repair.
+
+WHAT THIS FIXES
+- All current styles/scripts load as a coherent version, independent of old
+  individual patch CSS/JS references and their cached copies.
+- Cached CSS/JS no longer falls back to index.html when unavailable.
+- Offline installation checks the new bundles; all needed style rules,
+  including the previously omitted v35 styling, are included.
+- Welcome leaf SVGs are no longer generated, rather than merely hidden.
+- Settings thumbnails have explicit width/height and responsive limits.
+- Animation controls, media arrows, video upload/player, per-player settings
+  and all current feature modules are included in the loaded JS bundle.
+- Next: Seeds alignment and the translucent teal flower button are retained.
+- Arrow labels update with language. Closed hamburger state/label agrees.
+- The release identification now reports 3.8.3, not the old 2.8 metadata.
+
+The screenshots are consistent with incomplete/stale styles and feature
+scripts. They do not prove what files your live server is serving. No live
+Cloudflare URL was supplied, so that deployment has not been inspected.
