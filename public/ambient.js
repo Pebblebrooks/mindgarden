@@ -17,7 +17,6 @@ function sync(){
  const scene=dash.querySelector('.welcome-scene');if(scene&&!scene.contains(life))scene.prepend(life);
  const mode=reduced.matches||save.still?'off':save.motionMode;
  document.documentElement.dataset.motion=mode;
- life.hidden=mode==='off';
  const paused=!visible||document.hidden||!document.getElementById('ov').classList.contains('hidden')||document.getElementById('home').classList.contains('hidden')||dash.classList.contains('hidden');
  document.documentElement.dataset.ambientPaused=String(paused);
  engine?.setMode(mode,paused);
