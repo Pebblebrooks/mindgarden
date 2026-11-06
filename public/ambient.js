@@ -7,6 +7,7 @@ const assetUrl=name=>window.MindGardenAssets?.[name]||name;
 const life=document.createElement('div');life.id='gardenLife';life.setAttribute('aria-hidden','true');
 // Locally bundled 3D animation; GIFs are the fallback if WebGL is unavailable.
 life.innerHTML=['cat','fox','owl'].map(kind=>'<div class="wildlife-poster fallback-'+kind+'"><img data-kind="'+kind+'" src="'+assetUrl('wildlife/'+kind+'.png')+'" alt=""></div>').join('');
+life.insertAdjacentHTML('beforeend','<div class="garden-weather"><i class="garden-cloud cloud-one"></i><i class="garden-cloud cloud-two"></i>'+[0,1,2].map(i=>'<svg class="drifting-leaf leaf-'+i+'" viewBox="0 0 30 30"><path d="M4 24Q0 4 26 3Q28 25 4 24" fill="#a7b75a"/><path d="M4 24L23 6" stroke="#e1c779" fill="none"/></svg>').join('')+'</div>');
 let engine=null,visible=true;
 if(window.IntersectionObserver)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;sync()},{threshold:0}).observe(dash);
 (window.createGardenWildlife?window.createGardenWildlife(life):Promise.resolve(null)).then(value=>{engine=value;window.MindGardenAmbient=value;life.classList.toggle('wildlife-fallback',!value);sync()});
@@ -16,6 +17,7 @@ function sync(){
  const scene=dash.querySelector('.welcome-scene');if(scene&&!scene.contains(life))scene.prepend(life);
  const mode=reduced.matches||save.still?'off':save.motionMode;
  document.documentElement.dataset.motion=mode;
+ life.hidden=mode==='off';
  const paused=!visible||document.hidden||!document.getElementById('ov').classList.contains('hidden')||document.getElementById('home').classList.contains('hidden')||dash.classList.contains('hidden');
  document.documentElement.dataset.ambientPaused=String(paused);
  engine?.setMode(mode,paused);
@@ -36,5 +38,6 @@ window.openSet=function(){original();const group=document.createElement('fieldse
 document.getElementById('bSet').onclick=window.openSet;
 // Replace the old binary setting with the three explicit modes.
 const idx=SET.findIndex(x=>x[0]==='still');if(idx>=0)SET.splice(idx,1);
+window.MindGardenMotion={sync};window.addEventListener('gardenPlayerChange',sync);
 sync();
 })();

@@ -1,3 +1,7 @@
+# Mind Garden V3.8
+
+See UPGRADE-v3.8.md for the latest changes. No additional SQL migration is needed when V3 is already installed.
+
 # Mind Garden v3.4
 
 Start with **UPGRADE-v3.4.md** for the distinct sampled piano/violin/cello chamber music and harp/woodwind arrangements, deployment and checks.

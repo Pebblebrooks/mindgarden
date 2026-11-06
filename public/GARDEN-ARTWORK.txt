@@ -1,0 +1,4 @@
+V3.6 garden backgrounds generated with the built-in image generation tool.
+Assets: garden-meadow-day.webp, garden-meadow-dusk.webp, garden-pond-day.webp, garden-pond-dusk.webp.
+Prompt template: Create a wide landscape background for a calming garden game. [SCENE]. Polished painterly storybook illustration with realistic soft natural light, beautiful detailed flowers at the edges. Large clear open grass lawn across entire lower half and center for animated animals, uncluttered soft sky across upper center for interface. Eye level scenic view. No text, no people, no animals, no UI. Landscape 3:2.
+Scenes: luminous daylight / golden sunset English meadow garden, birch trees at edges, distant lavender beds and low hills; luminous daylight / golden peach sunset Japanese-inspired garden, small lily pond at far left, flowering cherry tree at right, distant stone lantern and lush foliage.

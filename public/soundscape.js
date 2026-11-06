@@ -5,8 +5,8 @@ const T=(en,zh)=>save.lang==='zh'?zh:en;
 const prefs=Object.assign({music:'strings',nature:'garden',master:45,musicVolume:55,natureVolume:35,horn:false},save.soundscape||{});
 const clamp=n=>Math.max(0,Math.min(100,Number(n)||0));
 for(const key of ['master','musicVolume','natureVolume'])prefs[key]=clamp(prefs[key]);
-if(!['none','strings','harp','personal'].includes(prefs.music))prefs.music='strings';
-if(!['none','ocean','garden','wind'].includes(prefs.nature))prefs.nature='garden';
+if(!['none','strings','harp','piano','serenade','personal'].includes(prefs.music))prefs.music='strings';
+if(!['none','ocean','garden','wind','rain','stream','night'].includes(prefs.nature))prefs.nature='garden';
 let ctx,master,musicBus,natureBus,limiter,engine,timer,playing=false,generation=0,exporting=false,tracks=[],trackIndex=0,mediaSource;
 const player=new Audio();player.preload='metadata';
 function persistPrefs(){save.soundscape=prefs;save.mus=0;persist()}
@@ -15,13 +15,14 @@ const sampleNotes={piano:{C3:48,G3:55,C4:60,E4:64,G4:67,C5:72},violin:{A3:57,C4:
 const sampleBank={},sampleLoads={};
 const sampleCredit='Instrument samples: Nicholaus P. Brosowsky, tonejs-instruments (CC BY 3.0), https://github.com/nbrosowsky/tonejs-instruments ; https://creativecommons.org/licenses/by/3.0/ . Sources include Versilian Studios VSCO 2 and flcellogrl cello. Samples converted to mono 32kHz/64kbps and capped at 9s. Original arrangement by Mind Garden.';
 async function ensureSamples(context,mode){
- const instruments=mode==='strings'?['piano','violin','cello','clarinet']:mode==='harp'?['harp','flute','clarinet']:[];
+ const instruments=mode==='strings'?['piano','violin','cello','clarinet']:mode==='harp'?['harp','flute','clarinet']:mode==='piano'?['piano','cello']:mode==='serenade'?['violin','cello','flute','clarinet']:[];
  await Promise.all(instruments.map(name=>sampleLoads[name]||(sampleLoads[name]=Promise.all(Object.entries(sampleNotes[name]).map(async([note,midi])=>{const path='audio/'+name+'/'+note+'.mp3',url=window.MindGardenAssets?.[path]||path,response=await fetch(url);if(!response.ok)throw Error('Instrument unavailable');return {midi,buffer:await context.decodeAudioData(await response.arrayBuffer())}})).then(samples=>{sampleBank[name]=samples}).catch(error=>{delete sampleLoads[name];throw error}))));
 }
 function composer(context,musicOut,natureOut,options,seed){
  const random=rng(seed),sources=new Set(),nodes=new Set();let phrase=0,nextMusic=context.currentTime+.12,nextWave=context.currentTime+.2,nextBird=context.currentTime+3+random()*5,nextHorn=context.currentTime+30+random()*18,nextWind=context.currentTime+.3;
  const rate=context.sampleRate,noise=context.createBuffer(1,rate*5,rate),data=noise.getChannelData(0);let brown=0;
  for(let i=0;i<data.length;i++){brown=(brown+.025*(random()*2-1))/1.025;data[i]=brown*4.2}
+ const rainNoise=context.createBuffer(1,rate*5,rate);const drops=rainNoise.getChannelData(0);for(let i=0;i<drops.length;i++)drops[i]=(random()*2-1)*.35;let nextDetail=context.currentTime+.8;
  function connect(source,envelope,out,pan){
   const p=context.createStereoPanner();p.pan.value=pan;source.connect(envelope);envelope.connect(p);p.connect(out);sources.add(source);nodes.add(envelope);nodes.add(p);
   source.onended=()=>{source.disconnect();envelope.disconnect();p.disconnect();sources.delete(source);nodes.delete(envelope);nodes.delete(p)};return p;
@@ -73,9 +74,24 @@ function composer(context,musicOut,natureOut,options,seed){
   instrument('clarinet',chord[3],start+beat*3.6,beat*2.2,.08,.05);
   return length;
  }
- function score(start){const length=options.music==='strings'?chamber(start):harpScore(start);phrase++;return length;}
- function wash(start,duration,volume,frequency,pan){
-  const source=context.createBufferSource(),filter=context.createBiquadFilter(),gain=context.createGain();source.buffer=noise;source.loop=true;source.playbackRate.value=.7+random()*.55;
+ const pianoChords=[[51,55,58,62],[48,55,58,63],[44,51,55,60],[46,53,56,62]];
+ const pianoMelody=[[67,65,63],[67,70,72],[72,70,67],[65,62,63]];
+ function pianoScore(start){const bar=phrase%4,chord=pianoChords[bar],beat=60/52,length=beat*8;
+  [0,1,2,1].forEach((v,i)=>instrument('piano',chord[v],start+i*beat*2,4.6,.19,-.2));
+  pianoMelody[bar].forEach((n,i)=>{instrument('piano',n,start+.3+i*beat*2.5,4,.26,.15);instrument('piano',n-12,start+.34+i*beat*2.5,3.8,.08,-.05)});
+  instrument('cello',chord[0]-12,start+.15,beat*7.6,.13,.32);return length;
+ }
+ const duskChords=[[43,50,54,59],[40,47,55,59],[48,55,60,64],[50,57,60,66],[43,50,59,62],[45,52,55,60]];
+ const duskMelody=[[74,71,69],[71,67,66],[72,76,74],[74,72,69],[71,74,79],[76,72,71]];
+ function serenadeScore(start){const bar=phrase%6,chord=duskChords[bar],beat=60/66,length=beat*6;
+  instrument('cello',chord[0]-12,start,beat*6.2,.15,.3);instrument('violin',chord[2]+12,start+.2,beat*6,.065,-.3);
+  duskMelody[bar].forEach((n,i)=>instrument('violin',n,start+i*beat*2+.18,beat*2.1,.105,-.15));
+  instrument('clarinet',chord[1]+12,start+beat,beat*3.1,.08,.12);
+  if(bar%2)instrument('flute',duskMelody[bar][2],start+beat*3.7,beat*2,.08,.38);return length;
+ }
+ function score(start){const length=({strings:chamber,harp:harpScore,piano:pianoScore,serenade:serenadeScore}[options.music]||chamber)(start);phrase++;return length;}
+ function wash(start,duration,volume,frequency,pan,white=false){
+  const source=context.createBufferSource(),filter=context.createBiquadFilter(),gain=context.createGain();source.buffer=white?rainNoise:noise;source.loop=true;source.playbackRate.value=.7+random()*.55;
   filter.type='lowpass';filter.frequency.setValueAtTime(frequency*.35,start);filter.frequency.linearRampToValueAtTime(frequency,start+duration*.46);filter.frequency.linearRampToValueAtTime(frequency*.4,start+duration);filter.Q.value=.5;
   gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(volume,start+duration*.4);gain.gain.linearRampToValueAtTime(volume*.5,start+duration*.64);gain.gain.linearRampToValueAtTime(0,start+duration);
   source.connect(filter);const p=connect(filter,gain,natureOut,pan);sources.delete(filter);sources.add(source);nodes.add(filter);
@@ -89,15 +105,36 @@ function composer(context,musicOut,natureOut,options,seed){
   }
  }
  function horn(start){for(const [freq,vol]of [[65.4,.07],[98,.025],[130.8,.012]]){const o=context.createOscillator(),g=context.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(vol,start+1.4);g.gain.setTargetAtTime(.0001,start+2.4,.9);connect(o,g,natureOut,-.55);o.start(start);o.stop(start+6)}}
+ function detail(start,kind){
+  const count=kind==='night'?4:kind==='rain'?2:1;
+  for(let i=0;i<count;i++){const o=context.createOscillator(),g=context.createGain(),t=start+i*.075,d=kind==='night'?.045:kind==='rain'?.07:.25,f=kind==='night'?2900+random()*500:kind==='rain'?1600+random()*1600:280+random()*420;
+   o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*(kind==='stream'?.45:1.12),t+d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(kind==='night'?.016:kind==='rain'?.014:.035,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+d);connect(o,g,natureOut,random()*1.4-.7);o.start(t);o.stop(t+d+.02);
+  }
+ }
+ let nextAnimal=context.currentTime+18+random()*22,nextOwl=context.currentTime+35+random()*35;
+ function animalCall(start,kind){const voices={owl:[340,.45,2,.028],frog:[160,.18,3,.022],cat:[580,.65,1,.018],dog:[210,.14,2,.014],hen:[680,.09,3,.016],rooster:[650,.4,4,.012]},[f,d,count,vol]=voices[kind];const pan=random()*1.4-.7;
+  for(let i=0;i<count;i++){const t=start+i*(d+.15),o=context.createOscillator(),g=context.createGain();o.type=kind==='dog'||kind==='frog'?'triangle':'sine';o.frequency.setValueAtTime(f*(.95+random()*.1),t);o.frequency.exponentialRampToValueAtTime(f*(kind==='cat'?1.4:kind==='rooster'?1.3:1.08),t+d*.35);o.frequency.exponentialRampToValueAtTime(f*.7,t+d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.035);g.gain.exponentialRampToValueAtTime(.0001,t+d);connect(o,g,natureOut,pan);o.start(t);o.stop(t+d+.02)}
+ }
  function schedule(until){
   if(options.music!=='none'&&options.music!=='personal')while(nextMusic<until){nextMusic+=score(nextMusic)}
   if(options.nature==='none')return;
+  if(options.nature==='home-day'||options.nature==='home-night'){
+   const night=options.nature==='home-night';
+   while(nextWind<until){wash(nextWind,18,.16,650,random()-.5);wash(nextWind+3,12,.06,2600,random()-.5,true);nextWind+=12+random()*8}
+   while(nextBird<until){night?detail(nextBird,'night'):call(nextBird,false);nextBird+=night?4+random()*8:10+random()*18}
+   while(nextAnimal<until){const hour=new Date().getHours(),k=night?'frog':(hour>=5&&hour<9&&random()<.2?'rooster':['hen','cat','dog'][Math.floor(random()*3)]);animalCall(nextAnimal,k);nextAnimal+=40+random()*65}
+   if(night)while(nextOwl<until){animalCall(nextOwl,'owl');nextOwl+=70+random()*65}return;
+  }
   while(nextWind<until){const duration=10+random()*11;wash(nextWind,duration,options.nature==='wind'?.48:.13,350+random()*500,random()-.5);nextWind+=duration*(.65+random()*.3)}
+  if(['rain','stream','night'].includes(options.nature)){
+   while(nextWave<until){const d=options.nature==='rain'?11+random()*7:5+random()*6;wash(nextWave,d,options.nature==='rain'?.34:options.nature==='stream'?.32:.06,options.nature==='rain'?4800:options.nature==='stream'?1800:400,random()*.6-.3,options.nature==='rain');nextWave+=d*.7}
+   while(nextDetail<until){detail(nextDetail,options.nature);nextDetail+=options.nature==='night'?2+random()*6:options.nature==='rain'?.4+random()*1.6:.3+random()*1.4}
+  }
   if(options.nature==='ocean'){
    while(nextWave<until){const duration=6+random()*6;wash(nextWave,duration,.65+random()*.35,1000+random()*1800,random()*.8-.4);nextWave+=duration*(.62+random()*.45)}
    if(options.horn)while(nextHorn<until){horn(nextHorn);nextHorn+=38+random()*42}
   }
-  if(options.nature!=='wind')while(nextBird<until){call(nextBird,options.nature==='ocean');nextBird+=options.nature==='ocean'?12+random()*18:6+random()*13}
+  if(['ocean','garden'].includes(options.nature))while(nextBird<until){call(nextBird,options.nature==='ocean');nextBird+=options.nature==='ocean'?12+random()*18:6+random()*13}
  }
  return {schedule,stop(){for(const s of sources){try{s.stop()}catch{}try{s.disconnect()}catch{}}sources.clear();for(const n of nodes)n.disconnect();nodes.clear()},stats:()=>({sources:sources.size,phrases:phrase})};
 }
@@ -106,7 +143,7 @@ function init(){
 }
 function levels(){if(!ctx)return;master.gain.setTargetAtTime(prefs.master/100,ctx.currentTime,.12);musicBus.gain.setTargetAtTime(prefs.musicVolume/100,ctx.currentTime,.12);natureBus.gain.setTargetAtTime(prefs.natureVolume/100,ctx.currentTime,.12)}
 function message(text){const e=document.getElementById('soundMessage');if(e)e.textContent=text}
-function sync(){const fab=document.getElementById('mFab');if(fab){fab.textContent='♫ '+T('Sound: ','声音：')+(playing?T('On','开'):T('Off','关'));fab.setAttribute('aria-pressed',String(playing));fab.setAttribute('aria-label',T('Open music and nature sounds','打开音乐与自然音效'))}const b=document.getElementById('soundPlay');if(b){b.textContent=playing?T('Pause sound','暂停声音'):T('Play sound','播放声音');b.setAttribute('aria-pressed',String(playing))}}
+function sync(){window.dispatchEvent(new Event('gardenSoundChange'));const fab=document.getElementById('mFab');if(fab){fab.textContent='♫ '+T('Sound: ','声音：')+(playing?T('On','开'):T('Off','关'));fab.setAttribute('aria-pressed',String(playing));fab.setAttribute('aria-label',T('Open music and nature sounds','打开音乐与自然音效'))}const b=document.getElementById('soundPlay');if(b){b.textContent=playing?T('Pause sound','暂停声音'):T('Play sound','播放声音');b.setAttribute('aria-pressed',String(playing))}}
 function stop(){generation++;playing=false;clearInterval(timer);engine?.stop();engine=null;player.pause();if(ctx)ctx.suspend().catch(()=>{});sync()}
 async function start(){
  const g=++generation,selected={...prefs};playing=true;sync();try{init();await ctx.resume();message(T('Loading instruments…','正在加载乐器……'));await ensureSamples(ctx,selected.music);if(g!==generation)return;message('');engine?.stop();clearInterval(timer);player.pause();
@@ -117,11 +154,11 @@ async function start(){
 }
 function choose(key,value){prefs[key]=value;persistPrefs();if(playing)start();openSound()}
 function openSound(){
- const music=[['none','No music','无音乐'],['strings','Chamber garden','室内乐花园'],['harp','Harp & woodwinds','竖琴与木管'],['personal','My own music','我的音乐']];
- const nature=[['none','No nature sounds','无自然音效'],['ocean','Ocean & gulls','海浪与海鸥'],['garden','Garden & birds','花园与鸟鸣'],['wind','Soft wind','轻柔微风']];
+ const music=[['none','No music','无音乐'],['strings','Chamber garden','室内乐花园'],['harp','Harp & woodwinds','竖琴与木管'],['piano','Piano & cello','钢琴与大提琴'],['serenade','Twilight ensemble','暮色合奏'],['personal','My own music','我的音乐']];
+ const nature=[['none','No nature sounds','无自然音效'],['ocean','Ocean & gulls','海浪与海鸥'],['garden','Garden & birds','花园与鸟鸣'],['wind','Soft wind','轻柔微风'],['rain','Rain on leaves','叶上细雨'],['stream','Woodland stream','林间溪流'],['night','Evening crickets','晚间虫鸣']];
  const choices=(key,items)=>'<div class="sound-choices">'+items.map(([id,en,zh])=>'<button class="btn" data-sound-'+key+'="'+id+'" aria-pressed="'+(prefs[key]===id)+'">'+T(en,zh)+'</button>').join('')+'</div>';
  const slider=(key,en,zh)=>'<label class="sound-range"><span>'+T(en,zh)+'</span><input type="range" min="0" max="100" value="'+prefs[key]+'" data-sound-volume="'+key+'"><output>'+prefs[key]+'%</output></label>';
- overlay('<div class="sound-panel"><h2>'+T('Music & nature','音乐与自然')+'</h2><p class="sound-intro">'+T('Make space for a softer moment. Blend layered music with an ever-changing landscape.','给自己一段柔和的时光，将多声部音乐与不断变化的自然声景融合。')+'</p><div class="sound-actions"><button class="btn main" id="soundPlay"></button><button class="btn" id="soundDone">'+T('Done','完成')+'</button></div>'+slider('master','Overall','总音量')+'<fieldset class="sound-section"><legend>'+T('Music','音乐')+'</legend>'+choices('music',music)+slider('musicVolume','Music level','音乐音量')+'<p class="sound-note">'+(prefs.music==='strings'?T('Piano, violin and cello with soft clarinet harmony. A slow, full-bodied chamber arrangement.','钢琴、小提琴、大提琴与柔和的单簧管和声，舒缓而饱满的室内乐。'):prefs.music==='harp'?T('A separate melody in flowing triple time: plucked harp, flute and clarinet.','独立的三拍子旋律：拨弦竖琴、长笛与单簧管，轻盈流畅。'):T('Choose an arrangement or bring a recording you love.','选择一种编曲，或使用你喜爱的录音。'))+'</p></fieldset><fieldset class="sound-section"><legend>'+T('Nature soundscape','自然声景')+'</legend>'+choices('nature',nature)+slider('natureVolume','Nature level','自然音量')+'<label><input id="soundHorn" type="checkbox" '+(prefs.horn?'checked':'')+'> '+T('Occasional distant foghorn (ocean only)','偶尔传来的远处雾笛（仅海洋模式）')+'</label><p class="sound-note">'+T('Procedural waves and wind rise and fall at varied intervals; bird calls leave quiet gaps.','合成海浪与风声以不同节奏起伏，鸟鸣之间留有宁静的空隙。')+'</p></fieldset><fieldset class="sound-section"><legend>'+T('Bring your own music','使用自己的音乐')+'</legend><label>'+T('Add music files','添加音乐文件')+'<input class="sound-upload" id="soundFiles" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac" multiple></label><p class="sound-note">'+T('Files stay on your device and are not uploaded. Choose them again after reloading. Your playlist repeats while playing.','文件保留在你的设备上，不会上传。刷新后请重新选择。播放时歌单会循环。')+'</p><div id="personalTracks" class="personal-tracks"></div><button class="btn" id="soundClear" '+(!tracks.length?'disabled':'')+'>'+T('Clear playlist','清空歌单')+'</button></fieldset><div class="sound-actions"><button class="btn" id="soundDownload" '+(exporting||prefs.music==='personal'?'disabled':'')+'>'+T('Download built-in mix · 60s WAV','下载内置混音 · 60秒 WAV')+'</button></div><p class="sound-note">'+T('The download uses your selected built-in music, nature sounds and volume levels. Personal tracks are not included.','下载包含你选择的内置音乐、自然音效与音量设置，不包含个人音乐。')+'</p><p class="sound-note">'+T('Instrument samples: ','乐器采样：')+'<a href="https://github.com/nbrosowsky/tonejs-instruments" target="_blank" rel="noopener">Nicholaus P. Brosowsky</a> · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a></p><p id="soundMessage" class="sound-message" role="status"></p></div>');
+ overlay('<div class="sound-panel"><h2>'+T('Music & nature','音乐与自然')+'</h2><p class="sound-intro">'+T('Make space for a softer moment. Blend layered music with an ever-changing landscape.','给自己一段柔和的时光，将多声部音乐与不断变化的自然声景融合。')+'</p><div class="sound-actions"><button class="btn main" id="soundPlay"></button><button class="btn" id="soundDone">'+T('Done','完成')+'</button></div>'+slider('master','Overall','总音量')+'<fieldset class="sound-section"><legend>'+T('Music','音乐')+'</legend>'+choices('music',music)+slider('musicVolume','Music level','音乐音量')+'<p class="sound-note">'+(prefs.music==='strings'?T('Piano, violin and cello with soft clarinet harmony. A slow, full-bodied chamber arrangement.','钢琴、小提琴、大提琴与柔和的单簧管和声，舒缓而饱满的室内乐。'):prefs.music==='harp'?T('A separate melody in flowing triple time: plucked harp, flute and clarinet.','独立的三拍子旋律：拨弦竖琴、长笛与单簧管，轻盈流畅。'):prefs.music==='piano'?T('Unhurried piano melodies with a warm cello foundation.','悠缓的钢琴旋律，搭配温暖的大提琴低音。'):prefs.music==='serenade'?T('Singing strings with clarinet and flute, in a gentle six-beat flow.','弦乐、单簧管与长笛，在柔和的六拍节奏中交织。'):T('Choose an arrangement or bring a recording you love.','选择一种编曲，或使用你喜爱的录音。'))+'</p></fieldset><fieldset class="sound-section"><legend>'+T('Nature soundscape','自然声景')+'</legend>'+choices('nature',nature)+slider('natureVolume','Nature level','自然音量')+'<label><input id="soundHorn" type="checkbox" '+(prefs.horn?'checked':'')+'> '+T('Occasional distant foghorn (ocean only)','偶尔传来的远处雾笛（仅海洋模式）')+'</label><p class="sound-note">'+T('Procedural waves and wind rise and fall at varied intervals; bird calls leave quiet gaps.','合成海浪与风声以不同节奏起伏，鸟鸣之间留有宁静的空隙。')+'</p></fieldset><fieldset class="sound-section"><legend>'+T('Bring your own music','使用自己的音乐')+'</legend><label>'+T('Add music files','添加音乐文件')+'<input class="sound-upload" id="soundFiles" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac" multiple></label><p class="sound-note">'+T('Files stay on your device and are not uploaded. Choose them again after reloading. Your playlist repeats while playing.','文件保留在你的设备上，不会上传。刷新后请重新选择。播放时歌单会循环。')+'</p><div id="personalTracks" class="personal-tracks"></div><button class="btn" id="soundClear" '+(!tracks.length?'disabled':'')+'>'+T('Clear playlist','清空歌单')+'</button></fieldset><div class="sound-actions"><button class="btn" id="soundDownload" '+(exporting||prefs.music==='personal'?'disabled':'')+'>'+T('Download built-in mix · 60s WAV','下载内置混音 · 60秒 WAV')+'</button></div><p class="sound-note">'+T('The download uses your selected built-in music, nature sounds and volume levels. Personal tracks are not included.','下载包含你选择的内置音乐、自然音效与音量设置，不包含个人音乐。')+'</p><p class="sound-note">'+T('Instrument samples: ','乐器采样：')+'<a href="https://github.com/nbrosowsky/tonejs-instruments" target="_blank" rel="noopener">Nicholaus P. Brosowsky</a> · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a></p><p id="soundMessage" class="sound-message" role="status"></p></div>');
  document.getElementById('soundDone').onclick=closeOv;document.getElementById('soundPlay').onclick=()=>playing?stop():start();
  document.querySelectorAll('[data-sound-music]').forEach(b=>b.onclick=()=>choose('music',b.dataset.soundMusic));document.querySelectorAll('[data-sound-nature]').forEach(b=>b.onclick=()=>choose('nature',b.dataset.soundNature));
  document.querySelectorAll('[data-sound-volume]').forEach(input=>input.oninput=()=>{prefs[input.dataset.soundVolume]=clamp(input.value);input.nextElementSibling.textContent=input.value+'%';levels();persistPrefs()});
@@ -144,6 +181,6 @@ player.onended=()=>{if(playing&&tracks.length){trackIndex=(trackIndex+1)%tracks.
 player.onerror=()=>{if(prefs.music==='personal'&&player.src){stop();message(T('This file cannot be played. Try MP3, WAV or another supported file.','无法播放此文件。请尝试 MP3、WAV 或其他支持的文件。'))}};
 document.addEventListener('visibilitychange',()=>{if(!ctx||!playing)return;if(document.hidden){ctx.suspend();player.pause()}else{ctx.resume().then(()=>{if(playing&&prefs.music==='personal'&&tracks.length)player.play().catch(()=>stop())})}});
 window.addEventListener('pagehide',stop);
-window.openMu=openSound;window.muSync=sync;window.MindGardenSound={open:openSound,start,stop,status:()=>({playing,music:prefs.music,nature:prefs.nature,tracks:tracks.length,context:ctx?.state,engine:engine?.stats()})};
+window.MindGardenNatureComposer=composer;window.openMu=openSound;window.muSync=sync;window.MindGardenSound={restorePreferences(){stop();Object.assign(prefs,save.soundscape);tracks.forEach(t=>URL.revokeObjectURL(t.url));tracks=[];trackIndex=0;player.removeAttribute('src');levels();sync()},open:openSound,start,stop,status:()=>({playing,music:prefs.music,nature:prefs.nature,tracks:tracks.length,context:ctx?.state,engine:engine?.stats()})};
 document.getElementById('bMus').onclick=openSound;document.getElementById('mFab').onclick=openSound;sync();
 })();
