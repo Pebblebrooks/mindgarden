@@ -1,0 +1,37 @@
+MIND GARDEN 3.8.4 — VALIDATION
+
+Passed:
+- JavaScript syntax checks for app scripts, API functions and new bundles.
+- Eight-client English/Chinese multiplayer workflow: room cap, receipts, host
+  launch, reconnect, two rounds, scoring, skipped results, close and authorization.
+- Rename save collapses the editor and persists the displayed name.
+- Received current-player multiplayer results are retained for export.
+- Per-player history, ranking and preferences remain isolated.
+- Shipped release boots with animation toggle, both scenery arrows, six bounded
+  thumbnails, photo/video inputs and bilingual controls.
+- Daily quote selection is stable within a local date and switches on the next day.
+- JSON/CSV content/scope checks, token exclusion and CSV formula protection.
+- Both JSON and CSV downloaded successfully through the browser UI and parsed.
+- 9,000 collision frames across phone/tablet/desktop dimensions plus head-on cases.
+- 1,200 animation frames with four actual GLB models/rigs and all flyers:
+  no visible collision-envelope overlap, all 16 creatures present in that run.
+  GPU drawing was stubbed for that geometry/animation test.
+- Offline cache installs the release together, rejects missing assets, keeps API
+  requests out of cache and never substitutes HTML for missing CSS/JS.
+- Visual desktop preview: larger caption, short nature-sound label, daily thought,
+  centered garden heading, retained translucent buttons, no giant decorative leaf,
+  scenery label separated from quote, no horizontal page overflow.
+
+Limitations:
+The QA browser has no WebGL, so the full GPU-rendered scene needs verification
+on a WebGL-capable device. Its visible GIF fallback and animation toggle were
+checked. The hosted preview has no Cloudflare multiplayer backend; automated
+multiplayer tests use the actual app/API code with test clients and a test DB.
+Checks address the tested paths and do not guarantee that every possible browser
+or input is free of bugs.
+
+Deployment file SHA-256:
+1932f720ae0285280f744417205bca0de3956e68c5693dad60f3c2305df7d6c4  public/index.html
+f44cb5e88b7cc01cfb75e503d5712831a16eb6cf0b8e8f26c5f8518eac78e64d  public/garden-ui-384.css
+1f731ba296ea4e4653d661787dedf19ec9e46029bf2d60407d9545fef37a3c02  public/garden-ui-384.js
+347ef55c0b977a10dbb089e4b69954b87b6693c713297d623cd01ae4988a6adb  public/sw.js

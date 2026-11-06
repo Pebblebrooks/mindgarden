@@ -1,51 +1,43 @@
-MIND GARDEN 3.8.3 — AFFECTED-FILES REPAIR ONLY
-6 November 2026
+MIND GARDEN 3.8.4 — AFFECTED FILES ONLY
 
-This is NOT a complete deployment. Keep your existing app, images, audio,
-models, functions and database. Apply all FOUR files together:
+This is an update for your existing Mind Garden v3.8 / v3.8.3 project.
+It is not a complete standalone Cloudflare upload.
 
-  public/index.html            replaces the existing entry page
-  public/garden-ui-383.css     new complete versioned UI stylesheet
-  public/garden-ui-383.js      new complete versioned feature-script bundle
-  public/sw.js                replaces the service worker
-
-The entry page now loads the two versioned bundles instead of the many
-individual v23–v38 CSS and feature JS files. Bundles have labelled source
-sections. Old files may remain but are no longer loaded by this entry page.
-Further UI edits must update the bundle loaded by index.html.
-
-INSTALL
 1. Keep a backup of your existing project.
-2. Extract this patch and merge its public folder into your EXISTING public
-   folder, replacing index.html and sw.js and adding both new bundle files.
-3. Redeploy the UPDATED EXISTING PROJECT using your usual deployment method.
-   If uploading static files from a public folder, index.html, the bundles,
-   sw.js and the existing assets must all appear at the site's root.
-   Do NOT upload this small patch ZIP as a standalone Cloudflare deployment:
-   it intentionally does not contain your other assets or API functions.
-4. Reopen the site while online, then reload once. Ctrl+F5 is also suitable.
-   Do not clear site data: that would remove local profiles/photos/videos.
-5. Open Settings and look near the bottom for 'Mind Garden 3.8.3'. Confirm
-   Welcome videos/Add videos appears above it and the six scene thumbnails
-   stay small. Check Animation beside Nature sounds and both hero arrows.
+2. Copy this patch's public folder INTO your existing project's public folder.
+   Replace index.html and sw.js, and add the two garden-ui-384 bundle files.
+   Keep all existing images, sounds, animal models, functions and database files.
+3. Deploy the complete updated existing project using your usual Cloudflare method.
+   For a static-assets directory, use the contents of the merged public folder.
+   Online multiplayer still requires the existing Cloudflare Functions/D1 backend.
+4. Reload the app. Settings should show Mind Garden 3.8.4.
+   If necessary close other app tabs, reopen, and use Ctrl+Shift+R once.
+   Do not clear site data: history and personal media live in this browser.
 
-No SQL migration, database reset, API changes, or billing changes are needed.
-The full ZIP from earlier conversations was NOT replaced by this repair.
+All four deployment files must be applied together. Replacing only the CSS
+cannot add the JavaScript features or update the release/cache references.
+No SQL migration or backend change is required.
 
-WHAT THIS FIXES
-- All current styles/scripts load as a coherent version, independent of old
-  individual patch CSS/JS references and their cached copies.
-- Cached CSS/JS no longer falls back to index.html when unavailable.
-- Offline installation checks the new bundles; all needed style rules,
-  including the previously omitted v35 styling, are included.
-- Welcome leaf SVGs are no longer generated, rather than merely hidden.
-- Settings thumbnails have explicit width/height and responsive limits.
-- Animation controls, media arrows, video upload/player, per-player settings
-  and all current feature modules are included in the loaded JS bundle.
-- Next: Seeds alignment and the translucent teal flower button are retained.
-- Arrow labels update with language. Closed hamburger state/label agrees.
-- The release identification now reports 3.8.3, not the old 2.8 metadata.
+NEW FEATURES AND FIXES
+- Nature sounds button shows only On / Off; no 'tap to begin'.
+- Larger guided-activity caption, with responsive wrapping.
+- Original inspirational thought changes each local calendar day (English/Chinese).
+- Animal, bird and insect movement uses shared collision safety bounds.
+- Settings > Export my data: JSON profile/preferences backup and activity CSV.
+- Saving a name in Play Together collapses the inline editor on success.
+  It remains open if saving fails. The separate rename dialog also closes on success.
+- Scene label/video controls have reserved space below the new quote.
 
-The screenshots are consistent with incomplete/stale styles and feature
-scripts. They do not prove what files your live server is serving. No live
-Cloudflare URL was supplied, so that deployment has not been inspected.
+EXPORT SCOPE
+Exports contain only the selected player's retained data on this device.
+JSON includes preferences. CSV includes retained activity, stars/levels,
+garden growth and received online round scores. Historical records which were
+never stored cannot be reconstructed. Online result recording starts in 3.8.4.
+Photos, videos, music files, authentication tokens and other players are excluded.
+Automatic import/restore is not included in this release.
+
+WILDLIFE
+The existing stylized 3D animals are retained, with GIF fallback when WebGL is
+unavailable. Safety bounds cover creatures together; paths yield or bend around
+one another. On a very crowded viewport, a creature can temporarily be hidden.
+Background trees/benches are painted scenery, not physical collision objects.
