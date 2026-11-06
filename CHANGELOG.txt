@@ -1,35 +1,51 @@
-MIND GARDEN v3.8.7
+MIND GARDEN v3.8.8
+Approved update package — 7 November 2026
 
-APPROVED CHANGES
-- Keep the navbar on one row and measure available space before showing optional
-  controls. Overflow controls remain accessible in the hamburger menu.
-- Recalculate the navbar as viewport size, text size, language or font metrics
-  change. Keep visible main links centered and utility controls right aligned.
-- Show the hamburger symbol without "More"; retain accessible menu labels.
-- Include About, Contact and synchronized text-size controls in the menu.
-- Keep menu controls usable in narrow and short viewports; support keyboard
-  dismissal and return focus appropriately.
-- Fix the bouquet SVG's conflicting width rule. Artwork now fits within
-  340 x 289 pixels, scales down on narrow screens and preserves its aspect ratio.
-  Large-text stacked cards no longer stretch the artwork to full page width.
-- Remove the leftover side padding from the stacked large-text bouquet card.
-- Update the app version and coherent offline assets to v3.8.7.
+ABOUT AND DOCUMENTATION
+- Updated English/Chinese user guidance for current navigation, text controls,
+  daily practice, bouquet rotation, media, backup/restore and online play.
+- Added copyright attribution to developer Pebblebrooks.
+- Expanded Privacy, PDPA & my data with factual local/online storage, third-party
+  services, privacy-request guidance and retention limits. This is an information
+  notice, not a certification of legal compliance.
+- Added help for storage warnings and unavailable/expired rooms.
+
+AUDIT FIXES
+- Prevented completed or failed uploads from reopening closed Settings or
+  changing another player's preferences after a profile switch.
+- Preserved the appearance selection when a video upload finishes; handled
+  aborted photo/video storage transactions.
+- Prevented delayed room responses and game updates from reopening closed
+  screens or replacing another dialog. Successful room membership stays resumable.
+- Stopped endless retries for expired/unavailable rooms, with Back to lobby.
+- Prevented stale invitations after Go offline and safe-handled clipboard/share
+  completion after leaving the room screen.
+- Fixed player switching during renaming so another player's screen is not renamed.
+- Rejected malformed JSON, invalid request shapes and invalid round numbers
+  without changing multiplayer rooms.
+- Added visible save-failure warnings and temporary in-memory online state with
+  retry of pending writes when storage becomes available.
+- Preserved original unreadable saves as recovery data instead of silently
+  replacing them or failing startup. Recovery export retains the original bytes.
+
+RETAINED FROM v3.8.7
+- Navigation overflow automatically moves into an icon-only hamburger menu.
+- Bouquet artwork stays proportional at enlarged text sizes.
 
 VALIDATION
-- Browser viewport checks from 320 to 1920 pixels, including 100%, 140% and
-  200% text. Navbar stayed on one row without overlapping controls in the tested
-  combinations; English and Chinese controls were checked.
-- Bouquet layout checked at 390, 768 and 1920 pixel iframe widths, each with
-  100%, 140% and 200% text. Artwork remained within its size limits and aspect
-  ratio, rotation controls stayed inside the card, and there was no horizontal
-  page overflow in these checks.
-- Navigation, accessibility restoration, shipped UI and offline-cache checks
-  passed during preparation. These are viewport simulations, not physical
-  iPhone, iPad or Android device certification.
-- No new database migration or server changes. Live multiplayer/database state
-  was not modified or revalidated as part of this UI-only update.
+- 26 automated suites passed, including four fault/lifecycle suites.
+- All 36 JavaScript syntax checks passed.
+- Tests covered eight independent multiplayer clients; room ownership, capacity,
+  closure, history and rankings; gameplay/difficulty; daily practice; backups;
+  preferences; responsive navigation; bouquet; caching; and animation.
+- Browser checks at 390 px and 768 px widths with 200% text passed for navigation
+  and bouquet proportions. Mobile About had no measured horizontal overflow.
+- Simulated storage warnings/recovery worked; the browser recovery download
+  matched the original test bytes.
+- Release files match the approved draft checkpoint; ZIP integrity, file hashes,
+  production references and required existing assets were checked during packaging.
 
-PACKAGE CONTENTS
-Four prebuilt application files plus installation instructions, this changelog
-and checksums. Unchanged images, sounds, backend files and earlier SQL are not
-duplicated. Requires the existing complete v3.8.6 project.
+LIMITS
+Live Cloudflare/D1 configuration and physical iOS/Android devices were not verified.
+The audit does not guarantee the absence of every possible defect. No new database
+migration is included; any incomplete earlier setup still needs to be completed.

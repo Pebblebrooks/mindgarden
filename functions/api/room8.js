@@ -16,7 +16,10 @@ export async function onRequest({request,env}){
  const db=env.DB,now=Date.now();
  try{
   if(request.method!=='POST')return json({error:'POST required.'},405);
-  const a=new URL(request.url).searchParams.get('action'),b=await request.json();
+  const a=new URL(request.url).searchParams.get('action');
+  let b;try{b=await request.json()}catch{fail('Send a valid JSON object.')}
+  if(!b||typeof b!=='object'||Array.isArray(b))fail('Send a valid JSON object.');
+  if(['launch','advance','finishRound','submit','bingoCall','bingoMark'].includes(a)&&(!Number.isSafeInteger(b.round)||b.round<0))fail('Enter a valid round number.');
   if(a==='login'){
    const name=String(b.name||'').trim();
    if(!/^[\p{L}\p{N} ._'-]{1,20}$/u.test(name))fail('Enter a name (1–20 letters/numbers).');

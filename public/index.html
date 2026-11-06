@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v3.8.7">
+<meta name="mind-garden-release" content="v3.8.8">
 
 
 
@@ -287,7 +287,12 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-387.css">
+
+
+
+
+
+<link rel="stylesheet" href="garden-ui-388.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -344,13 +349,43 @@ var LN={garden:["First blooms","Garden path","Sunny border","Greenhouse","Orchar
 var PRAISE=["Lovely match!","Well spotted!","Sharp eyes!","That’s a pair!","Nicely done!"];
 var COLS={3:3,4:4,6:4,8:4,10:5,12:6};
 var save={unlocked:1,stars:{},fs:0,snd:1,timed:0,speak:0,deck:"garden",cb:0,hc:0,lh:0,pr:{},cp:""};
-try{var s=JSON.parse(localStorage.getItem("gardenMatch")||"null");if(s)save=Object.assign(save,s)}catch(e){}
+var storedGarden=null,storageReadBlocked=false,storageWriteFailed=false;
+function savedObject(v){return v!==null&&typeof v==="object"&&!Array.isArray(v)}
+function checkSavedGarden(s){
+ if(!savedObject(s))throw Error("Invalid saved garden");
+ if(s.pr!==undefined){if(!savedObject(s.pr))throw Error("Invalid players");Object.values(s.pr).forEach(function(p){
+  if(!savedObject(p))throw Error("Invalid player");
+  if(p.name!==undefined&&typeof p.name!=="string")throw Error("Invalid player name");
+  ["stars","levels","bt","preferences"].forEach(function(k){if(p[k]!==undefined&&!savedObject(p[k]))throw Error("Invalid player data")});
+  ["log","multiplayerHistory"].forEach(function(k){if(p[k]!==undefined&&(!Array.isArray(p[k])||p[k].some(function(r){return !savedObject(r)})))throw Error("Invalid history")});
+  if(p.preferences&&p.preferences.soundscape!==undefined&&!savedObject(p.preferences.soundscape))throw Error("Invalid sound preferences");
+ });}
+ if(s.stars!==undefined&&!savedObject(s.stars))throw Error("Invalid stars");
+ if(s.deck&&!Object.hasOwn(DECKS,s.deck)&&s.deck!=="photos")throw Error("Invalid deck");
+ if(s.photos!==undefined&&!Array.isArray(s.photos))throw Error("Invalid photos");
+ if(s.recoveryOriginal!==undefined&&typeof s.recoveryOriginal!=="string")throw Error("Invalid recovery copy");
+ return s;
+}
+try{storedGarden=localStorage.getItem("gardenMatch")}catch(e){storageReadBlocked=true}
+if(storedGarden!==null){try{var s=JSON.parse(storedGarden,function(k,v){if(["__proto__","constructor","prototype"].includes(k))throw Error("Invalid saved key");return v});save=Object.assign(save,checkSavedGarden(s))}catch(e){save.recoveryOriginal=storedGarden}}
+function storageNotice(){
+ var existing=document.getElementById("storageWarning"),recovery=typeof save.recoveryOriginal==="string",failed=storageWriteFailed||storageReadBlocked;
+ if(!failed&&!recovery){if(existing)existing.remove();return}
+ var zh=save.lang==="zh",message=failed?(zh?"浏览器无法保存更改。关闭页面前，请在设置中导出JSON备份；检查浏览器存储空间或权限。":"Your browser could not save changes. Export a JSON backup in Settings before closing; check browser storage space or permissions."):(zh?"已保存的资料无法读取。原始资料已作为恢复副本保留，请下载并妥善保管。":"Saved data could not be read. The original data has been kept as a recovery copy; download and keep it safe.");
+ if(existing&&existing.dataset.message===message&&!!existing.querySelector("button")===recovery)return;
+ var box=existing||document.createElement("aside");box.id="storageWarning";box.setAttribute("role","alert");box.style.cssText="padding:16px;margin:12px;border:2px solid #9b6d19;border-radius:16px;background:#fff0cf;color:#382b15;overflow-wrap:anywhere;position:relative;z-index:101";box.dataset.message=message;box.textContent=message;
+ if(recovery){var button=document.createElement("button");button.type="button";button.className="btn";button.id="storageRecoveryDownload";button.textContent=zh?"下载原始资料":"Download original data";button.onclick=function(){var url=URL.createObjectURL(new Blob([save.recoveryOriginal],{type:"text/plain;charset=utf-8"})),link=document.createElement("a");link.href=url;link.download="mind-garden-original-save.txt";document.body.append(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url)},10000)};box.append(button)}
+ if(!existing)document.body.prepend(box);
+}
+function reportStorageFailure(){storageWriteFailed=true;storageNotice()}
+
 function newP(n){return{name:n,unlocked:1,stars:{},streak:0,last:"",log:[],share:0}}
 if(!save.pr||!Object.keys(save.pr).length){var id0="p"+Date.now();save.pr={};save.pr[id0]=newP("Player 1");save.pr[id0].unlocked=save.unlocked||1;save.pr[id0].stars=save.stars||{};save.cp=id0}
-if(!save.pr[save.cp])save.cp=Object.keys(save.pr)[0];
+Object.keys(save.pr).forEach(function(id){save.pr[id]=Object.assign(newP("Player"),save.pr[id])});
+if(!Object.hasOwn(save.pr,save.cp))save.cp=Object.keys(save.pr)[0];
 function me(){return save.pr[save.cp]}
 function load(){var p=me();save.unlocked=p.unlocked;save.stars=p.stars}
-function persist(){var p=me();p.unlocked=save.unlocked;p.stars=save.stars;try{localStorage.setItem("gardenMatch",JSON.stringify(save))}catch(e){}}
+function persist(){var p=me();p.unlocked=save.unlocked;p.stars=save.stars;try{if(storageReadBlocked)throw Error("Storage unavailable");localStorage.setItem("gardenMatch",JSON.stringify(save));storageWriteFailed=window.MindGardenMultiplayer?.flushStorage?.()===false;storageNotice();return !storageWriteFailed}catch(e){reportStorageFailure();return false}}
 var $=function(i){return document.getElementById(i)};
 var cur=0,left=0,total=0,first=null,lock=true,found=0,timer=null,paused=false,hints=0,fails={},streak=0;
 
@@ -921,7 +956,12 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-387.js"></script>
+
+
+
+
+
+<script src="garden-ui-388.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>
