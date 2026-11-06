@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v3.8.4">
+<meta name="mind-garden-release" content="v3.8.5">
 
 
 
@@ -250,7 +250,28 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-384.css">
+
+
+
+
+
+
+
+
+<meta name="mind-garden-feedback" content="https://forms.gle/L3NGNsizZcATs9xA8">
+<meta name="mind-garden-feedback-embed" content="https://docs.google.com/forms/d/e/1FAIpQLScquXT1iQ4-drqac4HywkyjngnqM7nccWO78IUStLI2_Wun-w/viewform?embedded=true">
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="garden-ui-385.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -325,7 +346,7 @@ function chime(){beep(660,.18);setTimeout(function(){beep(880,.28)},120)}
 function win(){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){beep(f,.35)},i*150)})}
 
 function fmt(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+":"+("0"+s%60).slice(-2)}
-function applyPrefs(){var h=document.documentElement;if(window.motion)motion();h.style.setProperty("--fs",save.hc?1.4:save.fs?1.25:1);h.setAttribute("data-hc",save.hc?"1":"0");h.setAttribute("data-cb",save.cb?"1":"0");document.body.classList.toggle("lh",!!save.lh);h.setAttribute("data-th",save.th||"cream");var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.content=save.th==="sand"?"#B5532E":"#1F6F78";if(save.mode==="light"||save.mode==="dark")h.setAttribute("data-theme",save.mode);else h.removeAttribute("data-theme")}
+function applyPrefs(){var h=document.documentElement;if(window.motion)motion();var scale=typeof save.textScale==="number"&&Number.isFinite(save.textScale)?Math.max(.8,Math.min(2,save.textScale)):(save.hc?1.4:save.fs?1.25:1);h.style.setProperty("--fs",scale);h.dataset.textLarge=scale>1.3?"1":"0";h.setAttribute("data-hc",save.hc?"1":"0");h.setAttribute("data-cb",save.cb?"1":"0");document.body.classList.toggle("lh",!!save.lh);h.setAttribute("data-th",save.th||"cream");var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.content=save.th==="sand"?"#B5532E":"#1F6F78";if(save.mode==="light"||save.mode==="dark")h.setAttribute("data-theme",save.mode);else h.removeAttribute("data-theme")}
 
 function renderHome(){
   var h="";
@@ -470,7 +491,7 @@ $("box").addEventListener("click",function(e){
   if(d.fc){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to clear";return}var q=save.pr[d.fc];q.log=[];q.streak=0;q.last="";q.gp=0;q.bt={};persist();renderHome();famView();return}
   if(d.m){save.mode=d.m;persist();applyPrefs();openSet();return}
   if(d.th){save.th=d.th;persist();applyPrefs();openSet();return}
-  if(d.k){save[d.k]=save[d.k]?0:1;persist();applyPrefs();openSet();if(d.k==="snd")beep(600,.1);return}
+  if(d.k){if(d.k==="fs"||d.k==="hc")save.textScale=null;save[d.k]=save[d.k]?0:1;persist();applyPrefs();openSet();if(d.k==="snd")beep(600,.1);return}
   if(d.d){save.deck=d.d;persist();renderHome();openSet();return}
   if(d.p){persist();save.cp=d.p;load();persist();renderHome();window.MindGardenIdentity?.syncSelected();openPl();return}
   if(d.x){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to remove";return}delete save.pr[d.x];if(d.x===save.cp){save.cp=Object.keys(save.pr)[0];load()}persist();renderHome();openPl()}
@@ -744,7 +765,7 @@ function heroSvg(pts,full,f,g,o,gh){
  +'<g fill="#EADFC6" opacity=".9">'+f+'<rect y="103" width="360" height="2"/><rect y="110" width="360" height="2"/></g>'
  +'<rect y="116" width="360" height="34" fill="#6B4A2B"/><rect y="114" width="360" height="5" fill="#66B15F"/><g fill="#4FA25A">'+g+'</g>'
  +'<g transform="translate(0,22)"><g opacity=".16">'+gh+'</g>'+o+'</g></g>'+ex+'</svg>'}
-function motion(){var rm=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;if(save.still===undefined&&rm)save.still=1;var s=!!save.still;document.documentElement.setAttribute("data-still",s?"1":"0");[].forEach.call(document.querySelectorAll("#hero svg,#gbg svg"),function(sv){try{if(sv.pauseAnimations){s?sv.pauseAnimations():sv.unpauseAnimations()}}catch(e){}})}
+function motion(){var rm=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;var s=window.MindGardenMotion?window.MindGardenMotion.effectiveMode()==="off":!!save.still||save.motionMode==="off"||(rm&&!save.motionExplicit);document.documentElement.setAttribute("data-still",s?"1":"0");[].forEach.call(document.querySelectorAll("#hero svg,#gbg svg"),function(sv){try{if(sv.pauseAnimations){s?sv.pauseAnimations():sv.unpauseAnimations()}}catch(e){}})}
 function renderHero(){var p=me(),pts=Math.min(60,p.gr||0),ty=p.fl||"mixed",st=gstage(pts),full=pts>=60,tk=function(i){return ty==="mixed"?FLK[i%6]:ty},o="",gh="",i,k,sn=curStreak(p),t=dstr(),
  tm=Math.round(p.log.filter(function(x){return x.d===t}).reduce(function(a,x){return a+x.s},0)/60),f="",g="",ex="";
  for(i=0;i<12;i++){if(st[i]<5)gh+=flower(i,5,tk(i));if(!st[i])o+='<ellipse cx="'+(20+i*30)+'" cy="97" rx="9" ry="2.6" fill="#553819"/>';var fx=20+i*30,fq=flower(i,st[i],tk(i));o+=st[i]>=2?'<g>'+fq+'<animateTransform attributeName="transform" type="rotate" values="-2.4 '+fx+' 96;2.4 '+fx+' 96;-2.4 '+fx+' 96" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="'+(4+i%4*.7).toFixed(1)+'s" begin="-'+(i*.9).toFixed(1)+'s" repeatCount="indefinite"/></g>':fq}
@@ -847,7 +868,26 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-384.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="garden-ui-385.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>
