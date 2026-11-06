@@ -1,0 +1,67 @@
+MIND GARDEN v3.8.6 — CHANGES SINCE v3.8.5
+
+WELCOME, CONTROLS AND ACCESSIBILITY
+- Centered button labels and music actions; music play uses a solid triangle.
+- Bouquet pause uses ||. Standard rotation takes about 24 seconds per turn;
+  Gentle takes about 36 seconds. Pause and motion-off remain available.
+- Navbar T-/T+ shows percentage presets from 80% to 200%, plus reset to 100%.
+  Card labels and action text scale with the preference, and layouts wrap.
+- Main navigation centered; utility controls right-aligned with responsive rows.
+- Fixed the welcome screen remaining visible above a newly started game.
+- Fixed multiplayer name editor closing after Save name.
+
+PERSONAL DAILY PRACTICE
+- Today's Games selects the three lowest average results across each game's
+  last five valid local results for the current player. Fewer than three played
+  activities are supplemented with other activities and an explanatory message.
+- Players can choose a comfortable practice level before each activity.
+- Matching Pairs and the five newer games now participate in daily completion.
+- Keeping a game after a leave confirmation preserves the daily journey.
+- Results can retain level information through JSON export/import.
+- The selection uses recorded game results (accuracy/completion/wins depending
+  on the activity), not a clinical assessment or a comparable skill test.
+
+DIFFICULTY
+- Reworked progression across the 30 original mini-games. Higher levels use
+  longer memory loads, more distractors, larger numbers and more complex rules.
+- Advanced Number Patterns includes growing differences, interleaved sequences,
+  weighted recurrences and mixed operations. Numeric displays resist automatic
+  translation. Spelled-out number answers were not an intended feature; the
+  reported word display was not reproduced in the source or local review.
+- Stronger mental arithmetic, calendar/time and market-change challenges.
+- Complete the Saying expands answer choices; harder dominoes uses stronger
+  CPU move selection. Existing board-size progression in pairs, puzzles,
+  pathways and bingo is retained.
+
+MULTIPLAYER
+- Eight additional online activities: Times tables, Missing number, Market
+  change, Calendar day, Shape patterns, Find the picture, Match the word and
+  Same group. The host has 17 choices across 13 activity types.
+- Completed room rankings remain available after closure/expiry; participants
+  can revisit total and round scores. Equal totals share a rank.
+- Existing mg_results remains the score store. New mg_rounds stores activity
+  metadata. Missing metadata on older rounds is explicitly labelled.
+- New quiz answers are checked by the server. Participant-only history access,
+  cancellation, withdrawal and one-active-room restrictions are retained.
+- Online history follows this browser's online identity. Local backup imports
+  do not restore online identity credentials.
+
+CONTACT
+- Current feedback link: https://forms.gle/TizHdrEgGxHGZV5q7
+- Verified that the new short link resolves to the existing canonical form;
+  its embed and the existing local autumn banner are retained.
+
+CHECKS COMPLETED
+- All 30 original mini-games at 15 levels in English and Chinese; unique
+  answer choices containing the correct answer, plus pattern-rule checks.
+- Last-five weakest-game selection, missing-history fallback, mixed daily
+  completion, leave/keep handling and level-aware backup validation.
+- 300 generated pathway boards, 150 domino deals and five newer-game flows.
+- Text-size/restore checks and desktop/narrow-screen visual review, including
+  a 320px viewport at 200% text. These are not physical-device tests.
+- Eight new online modes, 800 deterministic bilingual quiz sets, answer
+  validation, retained history, tied ranks and participant privacy.
+- Eight-player bingo, host cancellation, guest withdrawal, one active room,
+  repeat-safe score submission and repeatable SQL migrations.
+- Shipped bundle startup, welcome controls, media inputs and offline cache
+  behavior. This does not certify every device or live Cloudflare deployment.

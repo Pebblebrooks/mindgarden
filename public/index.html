@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v3.8.5">
+<meta name="mind-garden-release" content="v3.8.6">
 
 
 
@@ -258,7 +258,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-feedback" content="https://forms.gle/L3NGNsizZcATs9xA8">
+<meta name="mind-garden-feedback" content="https://forms.gle/TizHdrEgGxHGZV5q7">
 <meta name="mind-garden-feedback-embed" content="https://docs.google.com/forms/d/e/1FAIpQLScquXT1iQ4-drqac4HywkyjngnqM7nccWO78IUStLI2_Wun-w/viewform?embedded=true">
 
 
@@ -271,7 +271,21 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-385.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="garden-ui-386.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -448,6 +462,7 @@ function end(ok){
   }
   $("ag").onclick=function(){start(cur)};
   $("mn").onclick=toHome;
+  window.MindGardenDaily?.complete('pairs');
 }
 $("levels").addEventListener("click",function(e){var b=e.target.closest(".lv");if(b&&!b.disabled){try{ac&&ac.resume()}catch(x){}start(+b.dataset.i)}});
 /* ---------- helpers ---------- */
@@ -457,7 +472,7 @@ function dstr(d){d=d||new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1
 function ystr(){var y=new Date();y.setDate(y.getDate()-1);return dstr(y)}
 function age(d){return Math.round((new Date(dstr())-new Date(d))/864e5)}
 function curStreak(p){return p.last===dstr()||p.last===ystr()?(p.streak||0):0}
-function logPlay(g,r,s){var p=me(),t=dstr();if(p.last!==t){p.streak=p.last===ystr()?(p.streak||0)+1:1;p.last=t}p.log.push({d:t,g:g,r:Math.round(r*100)/100,s:Math.max(1,s|0)});if(p.log.length>300)p.log.shift();persist()}
+function logPlay(g,r,s,details){var p=me(),t=dstr();if(p.last!==t){p.streak=p.last===ystr()?(p.streak||0)+1:1;p.last=t}var record={d:t,g:g,r:Math.round(r*100)/100,s:Math.max(1,s|0)};var lev=details&&details.level||((mg&&mg.t===g)?mg.difficulty:g==="pairs"?cur+1:null);if(lev)record.level=lev;p.log.push(record);if(p.log.length>300)p.log.shift();persist()}
 /* ---------- home extras ---------- */
 var MG={seq:{n:"Remember the order",d:"Watch the pictures light up, then repeat them.",ic:"🔔"},miss:{n:"What’s missing?",d:"One picture disappears. Which one was it?",ic:"🧺"},sort:{n:"Sort it",d:"Put each picture in the right group.",ic:"🗂️"}};
 function renderExtra(){
@@ -522,7 +537,7 @@ Object.assign(MG,{
 function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
 function numOpts(ans){var c=[ans],ds=shuffle([1,-1,2,-2,3,-3,10,-10]);for(var i=0;i<ds.length&&c.length<4;i++){var v=ans+ds[i];if(v>=0&&c.indexOf(v)<0)c.push(v)}return shuffle(c).map(function(n){return{v:n,h:n}})}
 function ask(top,opts,ans,okm,badm,txt){
-  $("mp").innerHTML=top+'<div class="gridm" style="--c:'+opts.length+'">'+opts.map(function(o){return '<button class="big'+(txt?' txt'+(txt===2?' nm':''):'')+'" data-a="'+esc(o.v)+'" aria-label="'+esc(o.l||o.v)+'">'+o.h+'</button>'}).join("")+'</div>';
+  $("mp").innerHTML=top+'<div class="gridm" style="--c:'+opts.length+'">'+opts.map(function(o){return '<button class="big'+(txt?' txt'+(txt===2?' nm':''):'')+'" data-a="'+esc(o.v)+'"'+(/^[-+]?\d+(?:\.\d+)?$/.test(String(o.h))?' translate="no"':'')+' aria-label="'+esc(o.l||o.v)+'">'+o.h+'</button>'}).join("")+'</div>';
   mg.ans=String(ans);mg.h=function(b){var ok=b.dataset.a===String(ans);res(ok,ok?okm:badm)};
 }
 function rNum(){
@@ -582,7 +597,7 @@ function rClk(){
   ask('<div style="text-align:center;margin-bottom:18px">'+clockSvg(h,m)+'</div>',shuffle(c).map(function(t){return{v:t,h:t}}),ans,"Yes – it’s "+ans+"!","It was "+ans+". Well tried!",2);
 }
 function rDiff(){
-  var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),n=r<3?6:r<5?9:12,cols=n===12?4:3,it=pick(allItems(),n+1),extra=it.pop(),k=rnd(0,n-1),tries=0,g=mg;
+  var r=mg.difficulty||1,n=5+r,cols=n>9?4:3,it=pick(allItems(),n+1),extra=it.pop(),k=rnd(0,n-1),tries=0,g=mg;
   var cell=function(x,i,btn){return btn?'<button class="big sm" data-a="'+i+'" aria-label="Picture '+(i+1)+'">'+x.e+'</button>':'<div class="big st sm">'+x.e+'</div>'};
   var right=it.map(function(x,i){return i===k?extra:x});
   $("mp").innerHTML='<div class="dp"><div class="dpp"><div class="lbl">Original</div><div class="gridm" style="--c:'+cols+'">'+it.map(function(x,i){return cell(x,i)}).join("")+'</div></div><div class="dpp t"><div class="lbl">Find the change</div><div class="gridm" style="--c:'+cols+'">'+right.map(function(x,i){return cell(x,i,1)}).join("")+'</div></div></div>';
@@ -591,8 +606,9 @@ function rDiff(){
   g.h=function(b){if(+b.dataset.a===k){lit(bs[k],1500);return res(true,"Yes – you spotted it!")}tries++;if(tries>1){lit(bs[k],2000);return res(false,"It was the one that flashed. Well tried!")}$("mmsg").textContent="Not that one – look again."};
 }
 function rWrd(){
-  var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),mx=r<3?4:r<5?6:8,pool=allItems().filter(function(x){return/^[a-z]{3,8}$/.test(x.n)&&x.n.length<=mx&&(r<3||x.n.length>3)}),it=pool[rnd(0,pool.length-1)],w=it.n.toUpperCase(),L=w.split(""),sc,pos=0,bad=0,g=mg;
+  var r=mg.difficulty||1,mx=Math.min(10,3+Math.floor(r/2)),pool=allItems().filter(function(x){return/^[a-z]{3,10}$/.test(x.n)&&x.n.length<=mx&&x.n.length>=Math.max(3,mx-2)}),it=pool[rnd(0,pool.length-1)],w=it.n.toUpperCase(),L=w.split(""),sc,pos=0,bad=0,g=mg;
   for(var t=0;t<9;t++){sc=shuffle(L.slice());if(sc.join("")!==w)break}
+  if(r>=6){var extra=pick("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").filter(function(c){return L.indexOf(c)<0}),Math.min(4,1+Math.floor((r-6)/3)));sc=shuffle(sc.concat(extra))}
   function slots(){return L.map(function(c,i){return i<pos?c:"_"}).join(" ")}
   $("mp").innerHTML='<div class="big st one">'+it.e+'</div><div class="seqline" id="sl">'+slots()+'</div><div class="gridm" style="--c:'+Math.min(L.length,4)+'">'+sc.map(function(c,i){return '<button class="big txt nm" data-a="'+i+'" aria-label="Letter '+c+'">'+c+'</button>'}).join("")+'</div>';
   $("mmsg").textContent="Tap the letters in the right order to spell the word.";say(it.n);
@@ -620,11 +636,11 @@ function rTime(){var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),h=rnd(1,12
  while(c.length<4){var t=f(rnd(1,12));if(c.indexOf(t)<0)c.push(t)}
  $("mmsg").textContent="What time will it be in "+n+" hours?";
  ask('<div class="seqline">'+f(h)+'</div>',shuffle(c).map(function(t){return{v:t,h:t}}),ans,"Yes – it’s "+ans+"!","It was "+ans+". Well tried!",2)}
-function rCount(){var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),tot=r<3?8:r<5?10:12,n=rnd(2,r<3?5:7),it=pick(allItems(),3),t=it[0],cells=[];
+function rCount(){var r=mg.difficulty||1,tot=5+r*2,n=rnd(2,Math.min(tot-2,3+r)),it=pick(allItems(),3),t=it[0],cells=[];
  for(var i=0;i<n;i++)cells.push(t.e);for(var j=n;j<tot;j++)cells.push(it[1+j%2].e);
  $("mmsg").textContent="How many of this picture can you see?";
  ask('<div class="big st one">'+t.e+'</div><div class="gridm" style="--c:4">'+shuffle(cells).map(function(e){return'<div class="big st sm">'+e+'</div>'}).join("")+'</div>',numOpts(n),n,"Yes – "+n+"!","The answer was "+n+". Well tried!",2)}
-function rFind(){var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),n=r<3?6:r<5?9:12,it=pick(allItems(),n),a=it[0];
+function rFind(){var r=mg.difficulty||1,n=4+r,it=pick(allItems(),n),a=it[0];
  $("mmsg").textContent="Find the "+a.n+".";say(a.n);
  ask('',shuffle(it.slice()).map(function(x){return{v:x.e,h:x.e,l:x.n}}),a.e,"Yes – you spotted it!","It was the "+a.n+". Well tried!");
  $("mp").querySelector(".gridm").style.setProperty("--c",n===6?3:n===9?3:4)}
@@ -643,8 +659,8 @@ function pick(a,n){return shuffle(a.slice()).slice(0,n)}
 function lit(el,ms){el.classList.add("on");setTimeout(function(){el.classList.remove("on")},ms||300)}
 function startMG(t){
   try{ac&&ac.resume()}catch(x){}
-  mg={t:t,difficulty:window.mgDifficulty||1,r:0,R:window.mgSessionLength|| (t==="sort"?8:6),ok:0,n:t==="seq"?3:4,lo:t==="seq"?2:4,h:null,hist:[]};paused=false;mt0=Date.now();me().lg={k:t};persist();
-  closeOv();show("mini");$("hLv2").textContent=MG[t].n;nextR();
+  mg={t:t,difficulty:window.mgDifficulty||1,r:0,R:window.mgSessionLength|| (t==="sort"?8:6),ok:0,n:(t==="seq"?2:3)+Math.floor(((window.mgDifficulty||1)-1)/2),lo:(t==="seq"?2:3)+Math.floor(((window.mgDifficulty||1)-1)/3),hi:Math.min(12,(t==="seq"?4:5)+Math.floor((window.mgDifficulty||1)/2)),h:null,hist:[]};paused=false;mt0=Date.now();me().lg={k:t};persist();
+  closeOv();show("mini");$("hLv2").textContent=MG[t].n;nextR();window.scrollTo(0,0);$("hLv2").tabIndex=-1;$("hLv2").focus({preventScroll:true});
 }
 function nextR(){
   if(!mg)return;
@@ -653,14 +669,14 @@ function nextR(){
   ({seq:rSeq,miss:rMiss,sort:rSort,num:rNum,sum:rSum,odd:rOdd,shp:rShp,tbl:rTbl,clk:rClk,diff:rDiff,wrd:rWrd,wm:rWm,sub:rSub,rem:rRem,cnt:rCnt,add:rAdd,same:rSame,time:rTime,count:rCount,find:rFind,pic:rPic,...(window.MindGardenExtras||{})})[mg.t]();
 }
 function res(good,note){
-  var g=mg;g.h=null;g.hist.push(!!good);if(good)g.ok++;if(g.t==="seq"||g.t==="miss")g.n=Math.max(g.lo,Math.min(8,g.n+(good?1:-1)));
+  var g=mg;g.h=null;g.hist.push(!!good);if(good)g.ok++;if(g.t==="seq"||g.t==="miss")g.n=Math.max(g.lo,Math.min(g.hi||8,g.n+(good?1:-1)));
   var ch=g.last;if(g.t==="wrd")ch=null;
   if(ch&&ch.isConnected){ch.classList.add(good?"right":"wrong");if(!good&&g.ans!=null)[].forEach.call($("mp").querySelectorAll("[data-a]"),function(x){if(x.dataset.a===g.ans)x.classList.add("right")})}
   good?chime():beep(300,.3,"triangle");$("mmsg").textContent=note;
   pt(function(){if(mg===g)nextR()},1900);
 }
 function rSeq(){
-  var g=mg,n=g.n,k=n>5?6:4,it=pick(allItems(),k),s=[],pos=0,i=0;
+  var g=mg,n=g.n,k=Math.min(8,3+Math.floor((g.difficulty||1)/3)),it=pick(allItems(),k),s=[],pos=0,i=0;
   for(var q=0;q<n;q++)s.push(Math.floor(Math.random()*k));
   $("mp").innerHTML='<div class="gridm" style="--c:'+(k===6?3:2)+'">'+it.map(function(x,j){return '<button class="big" data-a="'+j+'" aria-label="'+x.n+'">'+x.e+'</button>'}).join("")+'</div>';
   var b=$("mp").querySelectorAll(".big");$("mmsg").textContent="Watch the order…";
@@ -677,8 +693,8 @@ function rMiss(){
   (function tick(){
     if(mg!==g)return;
     if(c>0){$("mmsg").textContent="Remember these… "+c;c--;pt(tick,1000);return}
-    var shown=it.map(function(x){return x.e}),opts=shuffle([it[m]].concat(pick(allItems().filter(function(x){return shown.indexOf(x.e)<0}),3)));
-    $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(function(x,i){return i===m?'<div class="big st q">?</div>':cell(x)}).join("")+'</div><div class="gridm" style="--c:'+opts.length+'">'+opts.map(function(x){return '<button class="big" data-a="'+x.e+'" aria-label="'+x.n+'">'+x.e+'</button>'}).join("")+'</div>';
+    var shown=it.map(function(x){return x.e}),opts=shuffle([it[m]].concat(pick(allItems().filter(function(x){return shown.indexOf(x.e)<0}),Math.min(5,2+Math.floor((g.difficulty||1)/3)))));
+    $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(function(x,i){return i===m?'<div class="big st q">?</div>':cell(x)}).join("")+'</div><div class="gridm" style="--c:'+Math.min(3,opts.length)+'">'+opts.map(function(x){return '<button class="big" data-a="'+x.e+'" aria-label="'+x.n+'">'+x.e+'</button>'}).join("")+'</div>';
     $("mmsg").textContent="One has disappeared. Which one was it?";
     g.ans=it[m].e;g.h=function(x){var ok=x.dataset.a===it[m].e;say(it[m].n);res(ok,ok?"Yes – the "+it[m].n+"!":"It was the "+it[m].n+". Well tried!")};
   })();
@@ -887,7 +903,21 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-385.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="garden-ui-386.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

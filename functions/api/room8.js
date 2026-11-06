@@ -1,7 +1,9 @@
+import {onlineActivities,makeOnlineQuestions} from '../../shared/online-activities.js';
 // Eight-player rooms and in-app invitation delivery. Sessions are device identities, not accounts.
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}});
 const fail=(message,status=400)=>{throw Object.assign(new Error(message),{status})};
 const modes={bingo9:9,pairs6:6,pairs10:10,sums:8,patterns:8,odd:8,sums12:12,patterns12:12,odd12:12};
+for(const activity of onlineActivities)modes[activity.id]=8;
 const random=n=>Array.from(crypto.getRandomValues(new Uint8Array(n)),x=>x.toString(16).padStart(2,'0')).join('');
 const code=()=>Array.from(crypto.getRandomValues(new Uint8Array(6)),x=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[x%32]).join('');
 const query=(db,sql,...args)=>db.prepare(sql).bind(...args);
@@ -59,6 +61,31 @@ export async function onRequest({request,env}){
      query(db,'INSERT INTO mg_invites(code,token) SELECT ?,token FROM mg_sessions WHERE last_seen>? AND token!=?',c,now-45000,b.token)
     ]);return json({code:c})}catch(e){if(String(e).includes('mg_active_rooms.token')){const claimed=await active(db,b.token);if(claimed?.host_token===b.token)return json({code:claimed.code});activeError()}if(!String(e).includes('UNIQUE'))throw e;const won=await one(db,"SELECT code FROM mg_rooms WHERE host_token=? AND status!='closed'",b.token);if(won)return json({code:won.code})}
    }fail('Unable to create room. Please retry.',503);
+  }
+  if(a==='history'){
+   const offset=Math.max(0,Math.min(10000,Number.isInteger(b.offset)?b.offset:0));
+   const rooms=await all(db,`SELECT r.code,r.created_at AS createdAt,r.status,
+    COUNT(q.score) AS completed,COALESCE(SUM(q.score),0) AS total,
+    (SELECT COUNT(DISTINCT p.token) FROM mg_results p WHERE p.code=r.code AND p.score IS NOT NULL) AS players
+    FROM mg_rooms r JOIN mg_members m ON m.code=r.code AND m.token=?
+    LEFT JOIN mg_results q ON q.code=r.code AND q.token=m.token
+    WHERE r.round>0 GROUP BY r.code ORDER BY r.created_at DESC,r.code LIMIT 21 OFFSET ?`,b.token,offset);
+   return json({rooms:rooms.slice(0,20),nextOffset:rooms.length>20?offset+20:null});
+  }
+  if(a==='rankings'){
+   const c=String(b.code||'').toUpperCase();if(!/^[A-Z2-9]{6}$/.test(c))fail('Enter a valid six-character room code.');
+   if(!await one(db,'SELECT token FROM mg_members WHERE code=? AND token=?',c,b.token))fail('Only room participants can view its saved rankings.',403);
+   const offset=Math.max(0,Math.min(10000,Number.isInteger(b.offset)?b.offset:0));
+   const players=await all(db,`SELECT s.id,s.name,COUNT(q.score) AS completed,COALESCE(SUM(q.score),0) AS total
+    FROM mg_members m JOIN mg_sessions s ON s.token=m.token LEFT JOIN mg_results q ON q.code=m.code AND q.token=m.token
+    WHERE m.code=? GROUP BY s.id,s.name ORDER BY total DESC,s.name,s.id`,c);
+   const rounds=await all(db,`SELECT q.round,MAX(t.mode) AS mode,MAX(t.started_at) AS startedAt,
+    COUNT(q.score) AS completed,MAX(q.score) AS best FROM mg_results q
+    LEFT JOIN mg_rounds t ON t.code=q.code AND t.round=q.round
+    WHERE q.code=? GROUP BY q.round ORDER BY q.round DESC LIMIT 21 OFFSET ?`,c,offset);
+   const details=rounds.slice(0,20);for(const r of details)r.results=await all(db,`SELECT s.id,s.name,q.score,q.skipped FROM mg_results q
+    JOIN mg_sessions s ON s.token=q.token WHERE q.code=? AND q.round=? ORDER BY q.score DESC,s.name,s.id`,c,r.round);
+   return json({code:c,me:session.id,players:players.map(p=>({...p,rank:p.completed?1+players.filter(v=>v.completed&&v.total>p.total).length:null})),rounds:details,nextOffset:rounds.length>20?offset+20:null});
   }
   const c=String(b.code||'').toUpperCase();if(!/^[A-Z2-9]{6}$/.test(c))fail('Enter a valid six-character room code.');
   let room=await one(db,'SELECT * FROM mg_rooms WHERE code=?',c);
@@ -128,7 +155,14 @@ export async function onRequest({request,env}){
    const moves=Number(b.moves),elapsed=Number(b.elapsed),min=modes[room.mode];
    if(!Number.isInteger(moves)||moves<min||moves>1000||!Number.isInteger(elapsed)||elapsed<1||elapsed>86400)fail('Invalid game result.');
    if(now-room.started_at<1500)fail('Game result submitted too soon.',409);
-   const score=Math.max(0,Math.round(3000-moves*40-Math.min(900,elapsed)*3));
+   const questions=makeOnlineQuestions(room.mode,room.seed,room.round);
+   let verifiedMoves=moves;
+   if(questions){
+    if(!Array.isArray(b.answers)||b.answers.length!==questions.length||b.answers.some((v,i)=>typeof v!=='string'||!questions[i].options.includes(v)))fail('Invalid answers. Reopen the room and try again.');
+    verifiedMoves=questions.length+questions.filter((q,i)=>q.answer!==b.answers[i]).length;
+    if(moves!==verifiedMoves)fail('Result does not match the answers.');
+   }
+   const score=Math.max(0,Math.round(3000-verifiedMoves*40-Math.min(900,elapsed)*3));
    // Compare-and-set makes retries idempotent and prevents late submissions after host closure.
    await query(db,'UPDATE mg_results SET score=?,moves=?,elapsed=? WHERE code=? AND round=? AND token=? AND score IS NULL AND skipped=0',score,moves,elapsed,c,room.round,b.token).run();
   }else if(a!=='status')fail('Unknown action.',404);
@@ -152,6 +186,7 @@ export async function onRequest({request,env}){
   if(msg.includes('mg_active_rooms.token')){msg='Leave your current room, or cancel it if you are the host, before joining or creating another.';status=409}
   else if(msg.includes('ROOM_FULL')){msg='This room already has eight players.';status=409}
   else if(msg.includes('ROOM_STARTED')){msg='This room has launched. Join another room.';status=409}
+  else if(/no such table.*mg_rounds/.test(msg)){msg='Run migrate-v3.8.6.sql in the D1 Console to enable saved room rankings.';status=503}
   else if(/no such table/.test(msg)){msg='Run migrate-v3.sql and migrate-v3.8.5.sql in the D1 Console before using these room controls.';status=503}
   else if(!e.status&&status===500)msg='Online request failed. Please retry.';
   return json({error:msg},status);
