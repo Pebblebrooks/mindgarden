@@ -23,7 +23,7 @@ try{
  assert(host.document.getElementById('mpRoster').textContent.includes('Garden Friend'));
  assert.equal(ws[1].eval('me().name'),'Garden Friend');
  host.document.getElementById('mpMode').value='sums';host.document.getElementById('mpLaunch').click();await pause(1700);
- for(const w of ws){assert(w.document.querySelector('[data-answer]'));assert(w.document.querySelector('.mp-room-code').textContent.includes(code))}
+ for(const w of ws){assert(!w.document.querySelector('[data-answer]'));w.document.getElementById('mpBeginGame').click();await pause(25);assert(w.document.querySelector('[data-answer]'));assert(w.document.querySelector('.mp-room-code').textContent.includes(code))}
  const question=ws[2].document.querySelector('.seqline').textContent;
  ws[2].document.getElementById('mpExit').click();ws[2].document.getElementById('bOnline').click();ws[2].document.getElementById('mpResume').click();await pause(100);assert.equal(ws[2].document.querySelector('.seqline').textContent,question);
  // Solve all eight identical challenges through actual DOM buttons and the real SQL API.
@@ -33,7 +33,7 @@ try{
  for(const w of ws){assert.equal(w.eval('me().multiplayerHistory.length'),1);assert(w.eval('me().multiplayerHistory[0].score')>0)}
  host.document.getElementById('mpMode').value='pairs10';host.document.getElementById('mpNext').click();await pause(1700);for(const w of ws)assert.equal(w.document.querySelectorAll('[data-tile]').length,20);
  host.document.getElementById('mpEndRound').click();await pause(1700);for(const w of ws)assert.equal(w.document.querySelectorAll('.mp-table tbody tr').length,8);
- host.document.getElementById('mpCloseRoom').click();await pause(1700);for(const w of ws){assert(w.document.getElementById('mpCode'),'Closing a room returns every player to the lobby');assert.equal(w.localStorage.getItem('mindGardenRoom8'),null)}
+ host.document.getElementById('mpCloseRoom').click();await pause(1700);for(const w of ws){assert(w.document.getElementById('mpSessionFinished'),'Finishing shows final scores');w.document.getElementById('mpFinalLobby').click();assert(w.document.getElementById('mpCode'));assert.equal(w.localStorage.getItem('mindGardenRoom8'),null)}
  // Exercise withdrawal and host cancellation while a new round is live.
  host.document.getElementById('mpCreate').click();await pause(60);
  const secondCode=host.document.querySelector('.mp-room-code strong').textContent;

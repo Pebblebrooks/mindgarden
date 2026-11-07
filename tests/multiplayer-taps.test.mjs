@@ -24,8 +24,8 @@ try{
    const buttons=tiles(w),count=mode==='pairs6'?12:20;assert.equal(buttons.length,count);
    assert(q(w,'#mpBeginPairs'),'Begin is available before the preview');assert(buttons.every(b=>b.disabled&&!b.classList.contains('revealed')),'Every card starts closed');assert.equal(stored(w).phase,'ready');
    assert.equal(q(w,'.mp-board').querySelectorAll('.game-illustration').length,count,'All artwork is mounted before play');
-   q(w,'#mpBeginPairs').click();assert.equal(stored(w).phase,'preview');assert.equal(stored(w).started,null);assert(buttons.every(b=>b.disabled&&b.classList.contains('revealed')));
-   const deadline=stored(w).previewEndsAt,duration=mode==='pairs10'?8000:5000;q(w,'#mpBeginPairs').click();assert.equal(stored(w).previewEndsAt,deadline,'Double Begin cannot restart preview');
+   q(w,'#mpBeginPairs').click();await pause(30);assert.equal(stored(w).phase,'preview');assert.equal(stored(w).started,null);assert(buttons.every(b=>b.disabled&&b.classList.contains('revealed')));
+   const deadline=stored(w).previewEndsAt,duration=deadline-w.Date.now();q(w,'#mpBeginPairs').click();assert.equal(stored(w).previewEndsAt,deadline,'Double Begin cannot restart preview');
    w.advanceTime(duration-1);await pause(120);assert(buttons.every(b=>b.classList.contains('revealed')),'Cards remain open until the full duration');
    w.advanceTime(1);await pause(120);assert.equal(stored(w).phase,'playing');assert.equal(stored(w).started,deadline,'Matching timer begins exactly at preview end');assert(buttons.every(b=>!b.disabled&&!b.classList.contains('revealed')),'The countdown closes all cards without another tap');
    const deck=stored(w).deck,a=0,b=deck.findIndex(x=>x!==deck[a]),c=deck.findIndex((x,i)=>i!==a&&i!==b),calls=w.requests(),board=q(w,'.mp-board');

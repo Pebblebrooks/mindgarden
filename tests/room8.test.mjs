@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 import {onRequest} from '../functions/api/room8.js';
 export function database(){
  const sqlite=new DatabaseSync(':memory:');sqlite.exec(readFileSync(new URL('../migrate-v3.sql',import.meta.url),'utf8'));
+ sqlite.exec(readFileSync(new URL('../migrate-v3.8.5.sql',import.meta.url),'utf8'));
+ sqlite.exec(readFileSync(new URL('../migrate-v3.8.6.sql',import.meta.url),'utf8'));
+ sqlite.exec(readFileSync(new URL('../migrate-v4.0.3.sql',import.meta.url),'utf8'));
  const DB={
   prepare(sql){return {bind(...args){return {
    async first(){return sqlite.prepare(sql).get(...args)||null},
@@ -23,21 +26,23 @@ async function test(){const {DB,sqlite}=database(),api=client(DB),users=[];
  await api('launch',{...host,code,round:0,mode:'pairs6'},400);
  await Promise.all(users.slice(1,8).map(u=>api('join',{...u,code})));
  await Promise.all([api('join',{...users[8],code},409),api('join',{...users[9],code},409)]);await api('join',{...users[1],code});
+ sqlite.exec(readFileSync(new URL('../migrate-v3.8.5.sql',import.meta.url),'utf8'));
  await api('launch',{...users[1],code,round:0,mode:'pairs6'},403);
  s=await api('launch',{...host,code,round:0,mode:'pairs6'});assert.equal(s.players.length,8);assert.equal(s.round,1);
  for(const u of users.slice(0,8)){const v=await api('status',{...u,code,seenRound:1});assert.equal(v.seed,s.seed);assert.equal(v.round,1)}
  s=await api('status',{...host,code});assert(s.players.every(p=>p.seenRound===1));
  await api('join',{...users[8],code},409);await api('join',{...users[1],code});
  sqlite.prepare('UPDATE mg_rooms SET started_at=? WHERE code=?').run(Date.now()-5000,code);
- for(const u of users.slice(0,8))await api('submit',{...u,code,round:1,moves:6,elapsed:5});
+ for(const u of users.slice(0,8)){await api('begin',{...u,code,round:1});await api('submit',{...u,code,round:1,moves:6,elapsed:5})}
  const totals=(await api('status',{...host,code})).players.map(p=>p.total);
  s=await api('submit',{...host,code,round:1,moves:7,elapsed:6});assert.deepEqual(s.players.map(p=>p.total),totals);assert(s.finished);
  s=await api('advance',{...host,code,round:1,mode:'sums12'});assert.equal(s.round,2);assert(s.players.every(p=>p.score===null));assert.deepEqual(s.players.map(p=>p.total),totals);
  await api('advance',{...host,code,round:1,mode:'odd'},400);await api('submit',{...host,code,round:1,moves:6,elapsed:5},409);
  sqlite.prepare('UPDATE mg_rooms SET started_at=? WHERE code=?').run(Date.now()-5000,code);
+ await api('begin',{...host,code,round:2});
  await api('submit',{...host,code,round:2,moves:12,elapsed:10});
  s=await api('finishRound',{...host,code,round:2});assert(s.finished);assert.equal(s.players.filter(p=>p.skipped).length,7);
- const before=s.players.map(p=>p.total);s=await api('submit',{...users[1],code,round:2,moves:12,elapsed:10});assert.deepEqual(s.players.map(p=>p.total),before);
+ const before=s.players.map(p=>p.total);await api('submit',{...users[1],code,round:2,moves:12,elapsed:10},409);s=await api('status',{...host,code});assert.deepEqual(s.players.map(p=>p.total),before);
  await api('close',{...users[1],code},403);await api('close',{...host,code});assert((await api('status',{...users[1],code})).closed);await api('join',{...users[1],code},410);
  assert.equal((await api('lounge',users[1])).rooms.length,0);
  // Same token re-login preserves identity; malformed credentials never authorize room reads.

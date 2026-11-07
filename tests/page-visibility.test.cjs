@@ -1,5 +1,5 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8');
-const base=html.match(/<style>([\s\S]*?)<\/style>/)[1],css=fs.readFileSync(p+'garden-ui-402.css','utf8');
+const base=html.match(/<style>([\s\S]*?)<\/style>/)[1],css=fs.readFileSync(p+'garden-ui-403.css','utf8');
 const d=new JSDOM('<style>'+base+css+'</style><div class="wrap"><section id="home"><div id="welcomeDashboard">Welcome</div></section><section id="mini" class="hidden">Daily game</section><section id="game" class="hidden">Pairs</section></div>',{virtualConsole:new VirtualConsole()}),w=d.window;
 try{const home=w.document.getElementById('home');assert.notEqual(w.getComputedStyle(home).display,'none');for(const id of ['mini','game']){home.classList.add('hidden');const game=w.document.getElementById(id);game.classList.remove('hidden');assert.equal(w.getComputedStyle(home).display,'none','Welcome must leave layout when any game starts');assert.notEqual(w.getComputedStyle(game).display,'none');game.classList.add('hidden');home.classList.remove('hidden');assert.notEqual(w.getComputedStyle(home).display,'none')}console.log('PASS: complete release CSS hides welcome during both original and daily game transitions.')}finally{d.window.close()}

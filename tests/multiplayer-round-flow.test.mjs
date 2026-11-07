@@ -21,7 +21,7 @@ try{
  const first=await api('create',h1),second=await api('create',h2),a=await boot(guest);await a.join(first.code);
  await api('launch',{...h1,code:first.code,round:0,mode:'pairs6'});await a.poll();assert.equal(a.stored('mindGardenRound8').phase,'ready');
  // A preview is a deadline, not an interval counter: returning must not replay it.
- a.click('mpBeginPairs');const deadline=a.stored('mindGardenRound8').previewEndsAt;a.advance(2000);a.click('mpExit');a.click('bOnline');await tick();a.click('mpResume');await tick();
+ a.click('mpBeginPairs');await tick();const deadline=a.stored('mindGardenRound8').previewEndsAt;a.advance(2000);a.click('mpExit');a.click('bOnline');await tick();a.click('mpResume');await tick();
  assert.equal(a.stored('mindGardenRound8').previewEndsAt,deadline);assert.equal(a.stored('mindGardenRound8').phase,'preview');
  a.click('mpExit');a.advance(5000);a.click('bOnline');await tick();a.click('mpResume');await tick();
  assert.equal(a.stored('mindGardenRound8').phase,'playing');assert.equal(a.stored('mindGardenRound8').started,deadline);assert(tiles(a).every(b=>!b.disabled&&!b.classList.contains('revealed')));
