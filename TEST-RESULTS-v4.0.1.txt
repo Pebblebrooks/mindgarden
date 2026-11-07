@@ -1,0 +1,36 @@
+MIND GARDEN v4.0.1 — validation, 7 November 2026
+
+SOURCE AND BUILD
+Based on the released V4.0.0 source checkpoint. JavaScript syntax checks pass. Versioned index.html, garden-ui-401.js, garden-ui-401.css and sw.js are built together.
+
+16 PASSING AUTOMATED SUITES
+- audio-gesture: mocked strict gesture requirement, delayed AudioContext resume, cancel during loading, one-click retry, rejected playback feedback.
+- multiplayer-taps: both matching board sizes, English/Chinese, all-face-up preview, timer excludes study, stable DOM and focus, rapid mismatch continuation, no network on flips, immediate-exit checkpoint, rejoin, four results persisted through the actual local SQL API.
+- multiplayer-ui: eight clients; join, invitations, rename, launch, submissions, leaderboard, next round, ending and cancellation.
+- bingo-ui: two clients, host pacing, marks, rejoin and saved history.
+- online-expansion-ui: 17 host selections, eight additional activities completed in English/Chinese, saved rankings and closed-room history.
+- v4-design: light/dark/auto, quiet view, guide, illustration fallbacks, per-player settings and JSON backup round-trip.
+- daily-and-controls: daily start and controls.
+- navbar-overflow: adaptive menu and About version.
+- release-cache: coherent offline install, old-cache cleanup, no API caching and no HTML fallback for scripts/styles.
+- bouquet-speed: rotation timing, pause, motion-off and no redraw rotation behind overlays.
+- motion-navigation: navigation and motion lifecycle.
+- player-preferences: per-player preferences.
+- restore-accessibility: import/restore and accessibility behavior.
+- page-visibility: welcome leaves layout when games start.
+- game-visuals: 140 generated activity states across low/high levels and English/Chinese, plus Matching Pairs rendering.
+- home-nature-overlay: nature synthesis stops behind overlays, resumes on welcome and stays paused away from home.
+
+The new preview/tap test fails against the original V4.0.0 multiplayer source because no preview exists. The new audio gesture test fails against the original V4.0.0 sound source because media playback is requested after awaiting resume. Both tests pass against v4.0.1.
+
+BROWSER CHECKS
+Chromium: 375, 768, 1024 and 1366 px widths, each at 80%, 100%, 140% and 200% app text scale. All 16 combinations passed: equal measured gaps between the tested welcome groups and wrapped destination cards; no page-width overflow.
+Verified actual computed pale-green Start/category colours and the selected-category checkmark.
+Verified Start Today's Games > Begin opens an activity using one click per button.
+A local browser fixture displayed all 20 online matching pictures; all 20 bundled illustrations loaded. Begin matching hid them. Three successive distinct card clicks left only the third card open after a mismatch.
+The fixture was for visual inspection only and is excluded from the release. Real multiplayer logic and persistence were tested separately against the app's local SQLite-backed API.
+
+LIMITS / FOLLOW-UP
+No physical iPhone, iPad or Android-device test. The specific models and browsers reported by the user are unknown, so device-specific failures cannot be ruled out.
+Cloud-browser WebGL was unavailable; the existing fallback was displayed. No new animal assets or gait changes are included. The animal realism request was assessed from source/asset metadata and remains a separate proposed animation pass.
+No production deployment, production D1 mutation or new SQL migration was performed.

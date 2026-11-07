@@ -1,3 +1,17 @@
+MIND GARDEN v4.0.1 — 7 November 2026
+
+- Online Matching Pairs now opens with every picture revealed in both 6-pair and 10-pair modes. Begin matching hides the cards and starts that player's timer. The host can still end or cancel the round.
+- Card flips update an existing board instead of rebuilding the complete dialog. Touch targets, loaded illustrations, focus and scroll position stay stable.
+- A new card tap dismisses an unmatched pair and opens the selected card immediately. The optional 950 ms auto-close no longer disables all card input.
+- Round checkpoint writes are deferred briefly after flips, with immediate flushing when exiting or hiding the page. Rejoining preserves the preview/play stage and progress.
+- Personal music playback is requested during the Play gesture, before asynchronous loading. Loading feedback, cancellation and rejected-play recovery are tested.
+- Nature audio and bouquet redraws pause behind dialogs and multiplayer overlays. Removed backdrop blur from opaque game controls and touch hover movement.
+- Light-mode primary actions and selected category filters now use pale green (#cfe2ce) with dark teal (#173e37) text. The selected category includes a checkmark. Dark and high-contrast modes retain their own treatments.
+- Welcome sections share one spacing rule: 24 px at 100%, 33.6 px at 140%, capped at 34 px for larger text. Wrapped cards use the same gap. Game library card gaps also scale with text size.
+- About version and bilingual online matching instructions updated. Versioned UI bundles and service-worker cache updated together.
+
+No new API, SQL migration or animal replacement assets. The requested more realistic animal animations remain a proposed separate animation pass. Existing motion controls and collision handling are retained.
+
 MIND GARDEN v4.0.0 — 7 November 2026
 
 Implemented the approved visual redesign and the v3.8.9 game-picture fixes.

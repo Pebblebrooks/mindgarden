@@ -1,28 +1,28 @@
-MIND GARDEN V4.0.0 — UPDATE INSTALLATION
+MIND GARDEN V4.0.1 — UPDATE INSTALLATION
 Developer: Pebblebrooks
 Release date: 7 November 2026
 
 WHAT THIS DOWNLOAD IS
-This is a cumulative update for your existing complete Mind Garden v3.8.8 project (also suitable for the reviewed v3.8.9 draft). It includes affected files and new artwork only. It is not a standalone website: unchanged scenery, audio and server files remain in your existing project.
+This is an affected-files update for your existing complete Mind Garden v4.0.0 project. Install V4.0.0 first if you are still on v3.x. This download contains only the files changed for v4.0.1. It is not a standalone website: unchanged scenery, audio and server files remain in your existing project.
 
 1. BACK UP
 Keep a copy of your complete current project. In the app, use Menu > Settings > Backup and restore to export a JSON backup for each player you want to protect. JSON backups do not contain personal photos, videos or music. Keep originals separately.
 
 2. MERGE THE UPDATE
-Extract Mind-Garden-v4.0.0-update.zip.
+Extract Mind-Garden-v4.0.1-update.zip.
 Open its mind-garden-cloudflare folder.
 Copy its CONTENTS into the root of your existing complete project, matching the folders and replacing the files when prompted.
 The project root is the folder containing package.json, public and functions.
 Merge public into public; do not replace/delete the entire old public folder.
-Keep your existing functions, shared, scenery/audio files, deployment configuration and D1 bindings.
+Keep your existing functions, shared, art, scenery/audio files, deployment configuration and D1 bindings.
 Do not upload the small update folder by itself.
 
 The complete updated public folder must include:
   index.html
-  garden-ui-400.css
-  garden-ui-400.js
+  garden-ui-401.css
+  garden-ui-401.js
   sw.js
-  art/ (all supplied SVG illustrations and attribution files)
+  art/ (all SVG illustrations and attribution files from V4.0.0)
   your existing scenery, audio, models and other assets
 
 The prebuilt UI is included. You do not need to build before deploying it.
@@ -47,14 +47,18 @@ https://developers.cloudflare.com/pages/functions/get-started/
 https://developers.cloudflare.com/pages/get-started/direct-upload/
 
 4. DATABASE
-V4 has NO new SQL migration and does not change the API or database schema.
-A working current multiplayer database still requires the previous V3, v3.8.5 and v3.8.6 migrations. If the app already reports a database setup problem, this visual update does not resolve it. Check the existing migration files and schema before changing the database. Do not drop or reset tables. The V4 package contains no new SQL to paste into D1.
+V4.0.1 has NO new SQL migration and does not change the API or database schema.
+A working current multiplayer database still requires the previous V3, v3.8.5 and v3.8.6 migrations. If the app already reports a database setup problem, this visual update does not resolve it. Check the existing migration files and schema before changing the database. Do not drop or reset tables. The V4.0.1 package contains no new SQL to paste into D1.
 
 5. CONFIRM THE UPDATE
 Open the existing app address while online, allow the update to load, then reload. If an older page remains, close all Mind Garden tabs and reopen the same address. A hard refresh on desktop may also help. Do not clear site data as a first step; it contains local progress and media.
-Open Menu > About: it must show v4.0.0.
+Open Menu > About: it must show v4.0.1.
 Check that:
-- Light mode uses ivory/sage surfaces with dark teal text and primary buttons.
+- Light mode uses pale green primary actions and selected category filters with dark teal text.
+- Welcome sections have even gaps at 100%, 140% and 200% text sizes.
+- Online Matching Pairs shows every picture before Begin matching. The timer starts when you begin.
+- One tap flips a card; after a mismatch, tapping another card continues immediately.
+- Your own music starts from the Play gesture; Pause cancels a pending audio start.
 - Start Today's Games appears before the three secondary destination cards.
 - The hamburger is icon-only; controls that cannot fit move into its menu.
 - Quick guide opens and closes, including at large text sizes.
@@ -66,7 +70,7 @@ Check that:
 
 Quiet view is initially selected. Change it above a game board or in Settings. The setting and the dismissed first-use hint are saved per player and included in JSON backups. The welcome garden remains scenic in either mode.
 
-If pictures are missing, confirm the ENTIRE new art folder was merged and deployed with the new bundle. Do not mix old index.html, new CSS and old JavaScript.
+If pictures are missing, confirm the ENTIRE V4.0.0 art folder was retained and deployed with the new bundle. Do not mix old index.html, new CSS and old JavaScript.
 
 ROLLBACK
-Re-deploy your complete previous project backup to the same Pages project. V4 makes no database schema changes. Keep user backups; do not clear browser data just to roll back the visual release.
+Re-deploy your complete previous project backup to the same Pages project. V4.0.1 makes no database schema changes. Keep user backups; do not clear browser data just to roll back the visual release.
