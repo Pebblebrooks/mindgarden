@@ -1,11 +1,11 @@
-# Mind Garden V3.8
+# Mind Garden V4.0.0
 
-See UPGRADE-v3.8.md for the latest changes. No additional SQL migration is needed when V3 is already installed.
+Developed by Pebblebrooks. This major visual update introduces a consistent light palette, clearer daily start, optional Quiet game view, bundled game illustrations and bilingual first-use help.
 
-# Mind Garden v3.4
+Read **README-INSTALL.txt** before applying the cumulative update. **CHANGELOG-V4.txt** describes changes; **TEST-RESULTS-V4.txt** records validation and its limits; **USABILITY-CHECKLIST.txt** is the proposed participant test plan. Older UPGRADE documents describe historical releases, not the current migration requirements.
 
-Start with **UPGRADE-v3.4.md** for the distinct sampled piano/violin/cello chamber music and harp/woodwind arrangements, deployment and checks.
+Cloudflare Pages output is `public`. Keep the project's Pages Functions and D1 binding `DB`. V4 adds no SQL migration. Existing multiplayer needs the prior `migrate-v3.sql`, complete `migrate-v3.8.5.sql` and `migrate-v3.8.6.sql` schema. Do not reset an existing database.
 
-The eight-player multiplayer system from V3.0 is preserved. New multiplayer installations should also read **UPGRADE-v3.0.md** and apply `migrate-v3.sql` to an existing pre-V3 database, or `schema.sql` to a new database. No new migration is required from V3.0.
+Prebuilt assets are supplied. Rebuild editable UI sources with `python3 scripts/build-release.py`. The version in `package.json` generates matching assets and About version metadata. Use Node.js 24+ for the test tools; install development dependencies before running `npm run check`, `npm test`, or the focused tests in `tests/`.
 
-Cloudflare Pages output: `public`. D1 binding: `DB`. Tests: Node.js 24+, `npm install`, `npm run check`, `npm test`. Browser: `npx playwright install chromium`, then `npm run test:browser`.
+Artwork credits and licence: `public/art/ATTRIBUTION.txt`, `public/art/LICENSE-GRAPHICS`, and `THIRD-PARTY-NOTICES.txt`. No external artwork service is needed during gameplay.

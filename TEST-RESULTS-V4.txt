@@ -1,0 +1,41 @@
+MIND GARDEN V4.0.0 — VALIDATION RECORD
+7 November 2026
+
+Passed 15 focused/regression suites:
+- v4-design: light/dark/automatic appearance; daily action before secondary destinations; dismissed first-use hint; bilingual quick guide and focus return; Quiet/Garden switching without question reset; per-player preferences and JSON export/import; online game view; local illustration coverage/fallbacks; 36 illustrated library cards; scenery controls grouped outside action cards.
+- game-visuals: all 36 game renderers; picture/text classification; low/high-level original and added games in English and Chinese; memory clues, bingo and matching faces.
+- navbar-overflow: width budgets, English/Chinese menu actions, text percentage/reset, About version, Contact and appearance controls.
+- progression-practice: 30 original games at all 15 levels in English and Chinese; valid unique answers; numeric protection; daily selection.
+- five-games: completion of all five added games; 300 solvable path boards, 150 domino deals, bilingual sayings and persistence.
+- daily-and-controls: original activities, 16 completed daily journeys, ready buttons, text controls and file picker.
+- online-expansion-ui: expanded modes, English/Chinese questions, results and history against a local test database.
+- bingo-ui: two simulated clients, marking, reconnect and saved results.
+- release-cache: coherent assets, offline cache behavior, scoped old-cache cleanup and incomplete-release rejection.
+- player-preferences: independent per-player preferences and rename behavior.
+- restore-accessibility: backup validation/import, text sizes and bouquet controls.
+- page-visibility; media-lifecycle; personal-garden; release-ui.
+
+Syntax checks passed for the inline application script, V4 bundle, new modules, dashboard, welcome media and service worker.
+All 220 selected illustration files exist, have no SVG script/event handlers, and are in the offline cache manifest. Twemoji graphics and licence are bundled; no runtime artwork CDN.
+
+REAL CHROMIUM LAYOUT REVIEW
+1,296 sampled game states: 36 games x two challenge levels x light/dark x 100/140/200% text x three frame-width settings (320, 768, 1440 CSS px). The browser viewport constrained the widest requested frame. No checked game-container horizontal overflow, undersized picture font (<31px), or clipped picture-width failures were reported.
+
+Additional inspected states:
+- New light home hierarchy at tablet width and 140% text.
+- Chinese mobile home/menu at 200%: single-row navbar, no home horizontal overflow, and proportional bouquet (approximately 247 x 210 CSS px in that sample).
+- Dark picture bingo: bundled SVGs loaded and measured at 90px for board pictures; the called picture measured approximately 75px.
+- Real Quick guide open/close, Animation toggle and first-use hint dismissal.
+- Welcome name wrapping and Quick guide keyboard focus return were corrected and the focused V4 tests rerun.
+
+SELECTED PALETTE CONTRAST CALCULATIONS
+#173E37 text on #FFFDF7: 11.59:1
+#173E37 text on #E6EFE3: 10.01:1
+#4E665D text on #FFFDF7: 6.10:1
+#FFFDF7 text on #22574B: 8.15:1
+#61766E picture border on #FFFDF7: 4.77:1
+#6D8377 control border on #E6EFE3: 3.45:1
+These are selected solid-colour pairs, not an accessibility certification of all pixels, illustrations or photos.
+
+LIMITS
+No production deployment or live Cloudflare D1 change/test was performed. Multiplayer checks used test fixtures/local SQLite-backed requests. Browser validation used desktop Chromium with simulated widths, not physical iOS/Safari or Android devices. This was not a new WebGL performance audit. Randomised games mean samples are not every possible picture/question. No recruited older-adult usability session or formal WCAG/PDPA certification is claimed. The included usability checklist describes the remaining real-participant work.

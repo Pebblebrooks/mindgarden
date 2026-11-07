@@ -1,0 +1,19 @@
+MIND GARDEN v4.0.0 — 7 November 2026
+
+Implemented the approved visual redesign and the v3.8.9 game-picture fixes.
+
+- Consistent light appearance: warm ivory page/cards, pale sage navigation and secondary controls, deep teal primary actions and text. Explicit light and automatic system-light modes both use the new palette. Dark and high-contrast options remain available.
+- Start Today's Games is first in visual and keyboard order. Three secondary cards provide All Games, Play Together and My Progress. Leaderboard remains a quieter secondary button and a navigation/menu destination.
+- Quiet game view removes the decorative game background. Garden view remains available. Switching the view does not restart a question. The preference is stored separately for each local player and exported/imported with other preferences.
+- Previous/next scenery controls share a dedicated row with the scene caption. Welcome video playback controls use the same area.
+- Consistent secondary/primary button styling, restrained shadows, rounded corners, clear focus and selected states, and 44–48px minimum targets for the redesigned utility controls.
+- Dismissible first-use hint and bilingual Quick guide, available from the welcome page and hamburger menu.
+- Bundled Twemoji illustrations for game pictures and library badges: 214 source illustrations plus six simple geometric symbols. No runtime artwork CDN request. Attribution and licence supplied. Personal photo cards keep their original photos.
+- Picture answers are distinguished from text/numbers; enlarged neutral picture planes, stronger borders, non-colour selection cues and flexible grids improve visibility.
+- Matching cards no longer shrink with viewport height. Picture clues, online pictures, bingo, dominoes, paths and clock faces retain the earlier visibility fixes.
+- Single-row navigation overflow and bounded bouquet proportions preserved. Welcome name wrapping improved at narrow widths and large text sizes.
+- About shows v4.0.0, describes the new controls and includes artwork credits. Existing Pebblebrooks copyright, first-time setup, FAQ and privacy/PDPA information retained.
+
+No new games, API changes or SQL migration in this design release. Existing games, difficulty progression, daily practice selection, multiplayer modes, saved rankings and Contact form remain in place.
+
+User research is a separate remaining task. This release has not been tested with recruited older adults. See USABILITY-CHECKLIST.txt.

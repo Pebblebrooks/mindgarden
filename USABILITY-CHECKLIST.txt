@@ -1,0 +1,23 @@
+MIND GARDEN V4 — OLDER-ADULT USABILITY SESSION
+This is a proposed test plan, not a record of completed participant testing.
+
+Invite a small, varied initial group, for example 5–8 older adults, including people with low vision, different technology experience, and both English and Chinese readers. Use their usual phones/tablets where possible. Ask permission before observing or recording. Use test nicknames and test rooms; avoid collecting personal health information.
+
+Ask each person to do these tasks without coaching first:
+1. Start today's first activity and finish or stop it comfortably.
+2. Make text larger, then restore 100%.
+3. Find an activity in All Games and choose an easier/harder level.
+4. Identify the pictures in matching pairs, bingo and picture clues.
+5. Select Quiet view, then restore Garden view without losing progress.
+6. Find the hamburger menu, change language or appearance, and return home.
+7. Turn welcome animation/sound off, then on.
+8. Use the scenery arrows and identify the selected scenery.
+9. Join a prepared multiplayer room, complete a round, leave, and find the saved ranking.
+10. Export a test-player backup and restore it as a separate profile.
+11. Find help in About and open Contact without submitting private information.
+
+Record for each task: completed independently, needed help, wrong turns, missed controls, accidental taps, unreadable text/pictures, discomfort, and the participant's own description. Observe whether they understand Quiet/Garden and the distinction between local progress and online rankings.
+
+Include portrait/landscape rotation, 140% and 200% text, light/dark/high-contrast modes, reduced motion, touch input and an interrupted connection. Physical Safari/iPhone and Android checks remain necessary; a desktop browser simulation is not a substitute.
+
+Prioritize issues that prevent a task or cause data loss/confusion, then improve readability and discoverability. Retest changed tasks with participants. Do not infer medical benefit or accessibility certification from game scores or this checklist.
