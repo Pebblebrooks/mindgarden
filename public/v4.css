@@ -108,3 +108,15 @@ html[data-v4-mode="light"]:not([data-hc="1"]) .category-pill.active::after{conte
 #home .welcome-links{row-gap:var(--welcome-gap);column-gap:clamp(12px,calc(16px * var(--fs)),24px)}
 #home .welcome-feature{gap:clamp(8px,calc(8px * var(--fs)),14px)}
 .game-card-grid{gap:clamp(16px,calc(20px * var(--fs)),32px)!important}
+
+/* V4.0.3: one document scroller; wheel events cannot be trapped by body. */
+html{overflow-x:clip;overflow-y:auto;overscroll-behavior-y:auto;scrollbar-gutter:stable}
+html body{overflow:visible;overscroll-behavior:auto}
+html:has(.ov:not(.hidden)){overflow-y:hidden;overscroll-behavior:none}
+.ov{box-sizing:border-box;overflow:hidden;overscroll-behavior:contain;height:100dvh}
+.ov .box{box-sizing:border-box;max-height:calc(100dvh - 48px);overflow:auto;overscroll-behavior:contain;min-height:0}
+@media(max-width:640px){.ov .box{max-height:calc(100dvh - 24px)}}
+.mp-ready{display:grid;gap:1em;justify-items:center;padding:1em 0}
+.mp-ready p{margin:0}
+#onlineInvitation{flex-wrap:wrap}
+#mpInviteTip{display:block;flex:1 1 100%;order:4}
