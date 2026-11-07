@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v3.8.8">
+<meta name="mind-garden-release" content="v4.0.0">
 
 
 
@@ -292,7 +292,15 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-388.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="garden-ui-400.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -421,8 +429,8 @@ function start(i){
   var D=icons().slice(0,L.p),deck=shuffle(D.concat(D));
   var g=$("grid");g.style.setProperty("--c",COLS[L.p]);
   var rows=Math.ceil(deck.length/COLS[L.p]);
-  g.style.setProperty("--mw",Math.min(1050,COLS[L.p]*Math.min(190,(window.innerHeight-230)/rows))+"px");
-  g.innerHTML=deck.map(function(e,k){return '<button class="card up" data-k="'+k+'" data-e="'+(e.k||e.e)+'" data-n="'+e.n+'" aria-label="Card"><div class="in"><div class="f b"></div><div class="f a" aria-hidden="true">'+(e.h||e.e)+'</div></div></button>'}).join("");
+  g.style.setProperty("--mw",Math.min(1050,COLS[L.p]*190)+"px");
+  g.innerHTML=deck.map(function(e,k){return '<button class="card up" data-k="'+k+'" data-e="'+(e.k||e.e)+'" data-n="'+e.n+'" aria-label="Card"><div class="in"><div class="f b"></div><div class="f a" aria-hidden="true">'+(e.h||gamePicture(e.e))+'</div></div></button>'}).join("");
   $("hLv").textContent="Level "+(i+1);
   $("hPairs").textContent="0 / "+L.p+" pairs";
   $("hTime").textContent=fmt(left);
@@ -573,8 +581,13 @@ Object.assign(MG,{
 });
 function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
 function numOpts(ans){var c=[ans],ds=shuffle([1,-1,2,-2,3,-3,10,-10]);for(var i=0;i<ds.length&&c.length<4;i++){var v=ans+ds[i];if(v>=0&&c.indexOf(v)<0)c.push(v)}return shuffle(c).map(function(n){return{v:n,h:n}})}
+// Picture answers keep picture sizing even when a caller requests text choices.
+function isGamePicture(value){return /^(?:\p{Extended_Pictographic}|[\uFE0F\u200D●■▲◆★✚])+$/u.test(String(value).trim())}
+function gamePicture(value){return window.MindGardenArt?window.MindGardenArt.html(value):'<span class="game-picture">'+esc(value)+'</span>'}
+function gamePictureLine(values){return '<div class="picture-sequence" translate="no">'+values.map(function(v){return '<span class="picture-symbol">'+gamePicture(v)+'</span>'}).join('')+'</div>'}
+function gamePrompt(value){return esc(value).replace(/\p{Extended_Pictographic}(?:[\uFE0F\u200D]|\p{Extended_Pictographic})*/gu,function(v){return '<span class="inline-picture">'+gamePicture(v)+'</span>'})}
 function ask(top,opts,ans,okm,badm,txt){
-  $("mp").innerHTML=top+'<div class="gridm" style="--c:'+opts.length+'">'+opts.map(function(o){return '<button class="big'+(txt?' txt'+(txt===2?' nm':''):'')+'" data-a="'+esc(o.v)+'"'+(/^[-+]?\d+(?:\.\d+)?$/.test(String(o.h))?' translate="no"':'')+' aria-label="'+esc(o.l||o.v)+'">'+o.h+'</button>'}).join("")+'</div>';
+  $("mp").innerHTML=top+'<div class="gridm" style="--c:'+opts.length+'">'+opts.map(function(o){return '<button class="big'+(isGamePicture(o.h)?' picture-answer':txt?' txt'+(txt===2?' nm':''):'')+'" data-a="'+esc(o.v)+'"'+(/^[-+]?\d+(?:\.\d+)?$/.test(String(o.h))?' translate="no"':'')+' aria-label="'+esc(o.l||o.v)+'">'+(isGamePicture(o.h)?gamePicture(o.h):o.h)+'</button>'}).join("")+'</div>';
   mg.ans=String(ans);mg.h=function(b){var ok=b.dataset.a===String(ans);res(ok,ok?okm:badm)};
 }
 function rNum(){
@@ -620,9 +633,9 @@ function rTbl(){
   ask('<div class="seqline">'+a+' × '+b+' = ?</div>',shuffle(c).map(function(n){return{v:n,h:n}}),ans,"Yes – "+ans+"!","It was "+ans+". Well tried!",2);
 }
 function clockSvg(h,m){
-  var s='<svg viewBox="0 0 200 200" width="260" height="260" role="img" aria-label="Analogue clock"><circle cx="100" cy="100" r="94" fill="var(--panel)" stroke="var(--ink)" stroke-width="6"/>';
-  for(var i=1;i<=12;i++){var a=i*Math.PI/6;s+='<text x="'+(100+74*Math.sin(a)).toFixed(1)+'" y="'+(100-74*Math.cos(a)+8).toFixed(1)+'" font-size="22" font-weight="700" text-anchor="middle" fill="var(--ink)">'+i+'</text>'}
-  s+='<line x1="100" y1="100" x2="100" y2="56" stroke="var(--ink)" stroke-width="9" stroke-linecap="round" transform="rotate('+((h%12)*30+m/2)+' 100 100)"/><line x1="100" y1="100" x2="100" y2="28" stroke="var(--back)" stroke-width="5" stroke-linecap="round" transform="rotate('+m*6+' 100 100)"/><circle cx="100" cy="100" r="7" fill="var(--ink)"/></svg>';
+  var s='<svg viewBox="0 0 200 200" width="260" height="260" role="img" aria-label="Analogue clock"><circle cx="100" cy="100" r="94" fill="var(--game-art-paper,#FFFDF7)" stroke="var(--game-art-ink,#173E37)" stroke-width="6"/>';
+  for(var i=1;i<=12;i++){var a=i*Math.PI/6;s+='<text x="'+(100+74*Math.sin(a)).toFixed(1)+'" y="'+(100-74*Math.cos(a)+8).toFixed(1)+'" font-size="22" font-weight="700" text-anchor="middle" fill="var(--game-art-ink,#173E37)">'+i+'</text>'}
+  s+='<line x1="100" y1="100" x2="100" y2="56" stroke="var(--game-art-ink,#173E37)" stroke-width="9" stroke-linecap="round" transform="rotate('+((h%12)*30+m/2)+' 100 100)"/><line x1="100" y1="100" x2="100" y2="28" stroke="var(--game-art-ink,#173E37)" stroke-width="5" stroke-linecap="round" transform="rotate('+m*6+' 100 100)"/><circle cx="100" cy="100" r="7" fill="var(--game-art-ink,#173E37)"/></svg>';
   return s;
 }
 function rClk(){
@@ -635,7 +648,7 @@ function rClk(){
 }
 function rDiff(){
   var r=mg.difficulty||1,n=5+r,cols=n>9?4:3,it=pick(allItems(),n+1),extra=it.pop(),k=rnd(0,n-1),tries=0,g=mg;
-  var cell=function(x,i,btn){return btn?'<button class="big sm" data-a="'+i+'" aria-label="Picture '+(i+1)+'">'+x.e+'</button>':'<div class="big st sm">'+x.e+'</div>'};
+  var cell=function(x,i,btn){return btn?'<button class="big sm" data-a="'+i+'" aria-label="Picture '+(i+1)+'">'+gamePicture(x.e)+'</button>':'<div class="big st sm">'+gamePicture(x.e)+'</div>'};
   var right=it.map(function(x,i){return i===k?extra:x});
   $("mp").innerHTML='<div class="dp"><div class="dpp"><div class="lbl">Original</div><div class="gridm" style="--c:'+cols+'">'+it.map(function(x,i){return cell(x,i)}).join("")+'</div></div><div class="dpp t"><div class="lbl">Find the change</div><div class="gridm" style="--c:'+cols+'">'+right.map(function(x,i){return cell(x,i,1)}).join("")+'</div></div></div>';
   $("mmsg").textContent="One picture has changed. Tap it in the “Find the change” set.";mg.ans=String(k);
@@ -647,7 +660,7 @@ function rWrd(){
   for(var t=0;t<9;t++){sc=shuffle(L.slice());if(sc.join("")!==w)break}
   if(r>=6){var extra=pick("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").filter(function(c){return L.indexOf(c)<0}),Math.min(4,1+Math.floor((r-6)/3)));sc=shuffle(sc.concat(extra))}
   function slots(){return L.map(function(c,i){return i<pos?c:"_"}).join(" ")}
-  $("mp").innerHTML='<div class="big st one">'+it.e+'</div><div class="seqline" id="sl">'+slots()+'</div><div class="gridm" style="--c:'+Math.min(L.length,4)+'">'+sc.map(function(c,i){return '<button class="big txt nm" data-a="'+i+'" aria-label="Letter '+c+'">'+c+'</button>'}).join("")+'</div>';
+  $("mp").innerHTML='<div class="big st one">'+gamePicture(it.e)+'</div><div class="seqline" id="sl">'+slots()+'</div><div class="gridm" style="--c:'+Math.min(L.length,4)+'">'+sc.map(function(c,i){return '<button class="big txt nm" data-a="'+i+'" aria-label="Letter '+c+'">'+c+'</button>'}).join("")+'</div>';
   $("mmsg").textContent="Tap the letters in the right order to spell the word.";say(it.n);
   g.h=function(b){if(b.disabled)return;var c=sc[+b.dataset.a];if(c===L[pos]){pos++;b.disabled=true;b.style.opacity=.35;$("sl").textContent=slots();if(pos===L.length)res(bad<3,"Yes – “"+it.n+"”!")}else{bad++;$("mmsg").textContent="Not that letter – try another."}};
 }
@@ -657,7 +670,7 @@ function rSub(){var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),hi=r<3?20:r
   ask('<div class="seqline">'+a+' − ? = '+b+'</div>',numOpts(d),d,"Yes – "+d+"!","The answer was "+d+". Well tried!",2);
 }
 var GRP={seq:0,miss:0,rem:0,num:1,sum:1,sub:1,tbl:1,cnt:1,add:1,sort:2,odd:2,same:2,shp:3,clk:3,time:3,diff:4,count:4,find:4,wrd:5,wm:5,pic:5};for(var gk in GRP)MG[gk].g=GRP[gk];
-function rRem(){var g=mg,it=pick(allItems(),4),a=it[0],c=3;$("mp").innerHTML='<div class="big st one">'+a.e+'</div>';
+function rRem(){var g=mg,it=pick(allItems(),4),a=it[0],c=3;$("mp").innerHTML='<div class="big st one">'+gamePicture(a.e)+'</div>';
  (function t(){if(mg!==g)return;if(c>0){$("mmsg").textContent="Remember this… "+c;c--;pt(t,1000);return}
   $("mmsg").textContent="Which picture did you see?";ask('',shuffle(it.slice()).map(function(x){return{v:x.e,h:x.e,l:x.n}}),a.e,"Yes – the "+a.n+"!","It was the "+a.n+". Well tried!")})()}
 function rCnt(){var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),s=[2,3,5,10,4,6,7,9][rnd(0,r<3?3:7)],a=rnd(60,100);
@@ -676,7 +689,7 @@ function rTime(){var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),h=rnd(1,12
 function rCount(){var r=mg.difficulty||1,tot=5+r*2,n=rnd(2,Math.min(tot-2,3+r)),it=pick(allItems(),3),t=it[0],cells=[];
  for(var i=0;i<n;i++)cells.push(t.e);for(var j=n;j<tot;j++)cells.push(it[1+j%2].e);
  $("mmsg").textContent="How many of this picture can you see?";
- ask('<div class="big st one">'+t.e+'</div><div class="gridm" style="--c:4">'+shuffle(cells).map(function(e){return'<div class="big st sm">'+e+'</div>'}).join("")+'</div>',numOpts(n),n,"Yes – "+n+"!","The answer was "+n+". Well tried!",2)}
+ ask('<div class="big st one">'+gamePicture(t.e)+'</div><div class="gridm" style="--c:4">'+shuffle(cells).map(function(e){return'<div class="big st sm">'+gamePicture(e)+'</div>'}).join("")+'</div>',numOpts(n),n,"Yes – "+n+"!","The answer was "+n+". Well tried!",2)}
 function rFind(){var r=mg.difficulty||1,n=4+r,it=pick(allItems(),n),a=it[0];
  $("mmsg").textContent="Find the "+a.n+".";say(a.n);
  ask('',shuffle(it.slice()).map(function(x){return{v:x.e,h:x.e,l:x.n}}),a.e,"Yes – you spotted it!","It was the "+a.n+". Well tried!");
@@ -687,7 +700,7 @@ function rPic(){var it=pick(allItems(),4),a=it[0];
 function rWm(){
   var it=pick(allItems(),4),a=it[0];
   $("mmsg").textContent="Which word matches the picture?";say(a.n);
-  ask('<div class="big st one">'+a.e+'</div>',shuffle(it.slice()).map(function(x){return{v:x.n,h:x.n,l:x.n}}),a.n,"Yes – the "+a.n+"!","It was the "+a.n+". Well tried!",1);
+  ask('<div class="big st one">'+gamePicture(a.e)+'</div>',shuffle(it.slice()).map(function(x){return{v:x.n,h:x.n,l:x.n}}),a.n,"Yes – the "+a.n+"!","It was the "+a.n+". Well tried!",1);
   $("mp").querySelector(".gridm").style.setProperty("--c",2);
 }
 var mg=null,mt0=0;
@@ -715,7 +728,7 @@ function res(good,note){
 function rSeq(){
   var g=mg,n=g.n,k=Math.min(8,3+Math.floor((g.difficulty||1)/3)),it=pick(allItems(),k),s=[],pos=0,i=0;
   for(var q=0;q<n;q++)s.push(Math.floor(Math.random()*k));
-  $("mp").innerHTML='<div class="gridm" style="--c:'+(k===6?3:2)+'">'+it.map(function(x,j){return '<button class="big" data-a="'+j+'" aria-label="'+x.n+'">'+x.e+'</button>'}).join("")+'</div>';
+  $("mp").innerHTML='<div class="gridm" style="--c:'+(k===6?3:2)+'">'+it.map(function(x,j){return '<button class="big" data-a="'+j+'" aria-label="'+x.n+'">'+gamePicture(x.e)+'</button>'}).join("")+'</div>';
   var b=$("mp").querySelectorAll(".big");$("mmsg").textContent="Watch the order…";
   (function go(){
     if(mg!==g)return;
@@ -725,20 +738,20 @@ function rSeq(){
 }
 function rMiss(){
   var g=mg,n=g.n,it=pick(allItems(),n),m=Math.floor(Math.random()*n),c=n+3,cols=n>6?4:3;
-  var cell=function(x){return '<div class="big st">'+x.e+'</div>'};
+  var cell=function(x){return '<div class="big st">'+gamePicture(x.e)+'</div>'};
   $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(cell).join("")+'</div>';
   (function tick(){
     if(mg!==g)return;
     if(c>0){$("mmsg").textContent="Remember these… "+c;c--;pt(tick,1000);return}
     var shown=it.map(function(x){return x.e}),opts=shuffle([it[m]].concat(pick(allItems().filter(function(x){return shown.indexOf(x.e)<0}),Math.min(5,2+Math.floor((g.difficulty||1)/3)))));
-    $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(function(x,i){return i===m?'<div class="big st q">?</div>':cell(x)}).join("")+'</div><div class="gridm" style="--c:'+Math.min(3,opts.length)+'">'+opts.map(function(x){return '<button class="big" data-a="'+x.e+'" aria-label="'+x.n+'">'+x.e+'</button>'}).join("")+'</div>';
+    $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(function(x,i){return i===m?'<div class="big st q">?</div>':cell(x)}).join("")+'</div><div class="gridm" style="--c:'+Math.min(3,opts.length)+'">'+opts.map(function(x){return '<button class="big" data-a="'+x.e+'" aria-label="'+x.n+'">'+gamePicture(x.e)+'</button>'}).join("")+'</div>';
     $("mmsg").textContent="One has disappeared. Which one was it?";
     g.ans=it[m].e;g.h=function(x){var ok=x.dataset.a===it[m].e;say(it[m].n);res(ok,ok?"Yes – the "+it[m].n+"!":"It was the "+it[m].n+". Well tried!")};
   })();
 }
 function rSort(){
   var ks=pick(Object.keys(CATS),mg.r<4?2:3),a=ks[Math.floor(Math.random()*ks.length)],x=P(CATS[a][Math.floor(Math.random()*5)]);
-  $("mp").innerHTML='<div class="big st one">'+x.e+'</div><div class="gridm" style="--c:'+ks.length+'">'+ks.map(function(k){return '<button class="big txt" data-a="'+k+'">'+k+'</button>'}).join("")+'</div>';
+  $("mp").innerHTML='<div class="big st one">'+gamePicture(x.e)+'</div><div class="gridm" style="--c:'+ks.length+'">'+ks.map(function(k){return '<button class="big txt" data-a="'+k+'">'+k+'</button>'}).join("")+'</div>';
   $("mmsg").textContent="Which group does the "+x.n+" belong to?";say(x.n);
   mg.ans=a;mg.h=function(b){var ok=b.dataset.a===a;res(ok,ok?"Yes – well done!":"It goes with “"+a+"”. Well tried!")};
 }
@@ -961,7 +974,15 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-388.js"></script>
+
+
+
+
+
+
+
+
+<script src="garden-ui-400.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

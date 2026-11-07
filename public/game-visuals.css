@@ -1,0 +1,40 @@
+/* Picture planes are deliberately neutral in every appearance mode. Game colour
+   remains visible; selection and correctness are carried by borders and symbols. */
+:root{--game-art-paper:#fffdf7;--game-art-ink:#173e37;--game-art-edge:#61766e;--game-art-gap:12px}
+#mp .big:not(.txt),#box .big.picture-answer,#grid .f.a,.mp-board .mp-tile.revealed,.new-game .bingo-card,.new-game .bingo-call{background:var(--game-art-paper);color:var(--game-art-ink);border-color:var(--game-art-edge);opacity:1}
+#mp .big:not(.txt),#box .big.picture-answer,#grid .f.a,.mp-board .mp-tile,.bingo-picture{container-type:inline-size;min-width:0}
+.game-picture{display:block;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:clamp(36px,62cqi,144px);line-height:1.18;text-align:center;filter:drop-shadow(0 1px 1px #173e3770);max-width:100%;white-space:nowrap}
+#mp .gridm,#box .gridm{--game-art-gap:12px;gap:var(--game-art-gap);grid-template-columns:repeat(var(--c),minmax(0,1fr))}
+#mp .gridm:has(>.big:not(.txt)),#box .gridm:has(>.picture-answer){grid-template-columns:repeat(auto-fit,minmax(min(100%,max(calc((100% - (var(--c) - 1) * var(--game-art-gap)) / var(--c)),calc(84px * var(--fs)))),1fr))!important}
+#mp .big:not(.txt),#box .big.picture-answer{padding:8px;max-height:none;min-height:96px;aspect-ratio:1.15;border-width:3px;display:grid;place-items:center;font-size:clamp(40px,7vw,88px)}
+#mp .big:not(.txt)>.game-picture,#box .big.picture-answer>.game-picture,#grid .f.a>.game-picture,.mp-tile>.game-picture{width:100%}
+#mp .big.one{width:min(240px,100%);margin:16px auto;aspect-ratio:1.15}
+#mp .big.sm{min-height:72px;aspect-ratio:1.1;padding:4px}
+#mp .big.sm .game-picture{font-size:clamp(32px,64cqi,88px)}
+#mp .big.on,#mp .big.right,#box .big.right{background:var(--game-art-paper);border-color:#246a49;box-shadow:inset 0 0 0 3px #246a49,0 4px 0 #173e3726}
+#mp .big.wrong,#box .big.wrong{background:var(--game-art-paper);border-color:#a0322b;box-shadow:inset 0 0 0 2px #a0322b}
+#mp .big.right::after,#mp .big.wrong::after{font-size:24px;background:#fffdf7;border-radius:50%;width:30px;height:30px;line-height:30px;color:#173e37}
+#mp .big.on{outline:4px solid #246a49;outline-offset:2px}
+#mp .big:focus-visible,#grid .card:focus-visible,#box .big:focus-visible,.new-game button:focus-visible,.mp-tile:focus-visible{outline:3px solid #ffffff;outline-offset:2px;box-shadow:0 0 0 7px #173e37}
+.picture-sequence{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin:20px auto;max-width:100%}
+.picture-symbol{container-type:inline-size;width:clamp(72px,calc(76px * var(--fs)),116px);padding:5px;aspect-ratio:1;background:var(--game-art-paper);color:var(--game-art-ink);border:2px solid var(--game-art-edge);border-radius:14px;display:grid;place-items:center}
+.picture-symbol .game-picture{font-size:clamp(38px,74cqi,80px);width:100%}
+.inline-picture{display:inline-block;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:1.6em;line-height:1.15;vertical-align:middle;padding:6px;margin:4px;background:var(--game-art-paper);color:var(--game-art-ink);border:2px solid var(--game-art-edge);border-radius:12px}
+#grid{--game-art-gap:10px;gap:var(--game-art-gap);grid-template-columns:repeat(auto-fit,minmax(min(100%,max(calc((100% - (var(--c) - 1) * var(--game-art-gap)) / var(--c)),calc(72px * var(--fs)))),1fr))}
+#grid .card{min-width:0;min-height:72px}#grid .f.a{padding:4px;border-width:3px}#grid .f.a img{width:100%;height:100%;object-fit:contain;border-radius:12px}
+#grid .card.ok .f.a{background:var(--game-art-paper);border-color:#246a49;box-shadow:inset 0 0 0 2px #246a49}#grid .card.ok .f.a::after{font-size:22px;background:#fffdf7;color:#173e37;border-radius:50%;line-height:1.2}
+.mp-board .mp-tile{padding:6px;min-height:88px}.mp-board .mp-tile.revealed:disabled{opacity:1}.mp-board .mp-tile .game-picture{font-size:clamp(36px,62cqi,88px)}
+.new-game .bingo-card{container-type:inline-size;padding:8px}.new-game .bingo-card>.bingo-picture{font-size:inherit;width:100%;background:var(--game-art-paper)}.bingo-picture .game-picture{font-size:clamp(38px,68cqi,90px)}
+.new-game .bingo-card.marked{background:var(--game-art-paper);border:3px dashed #246a49;box-shadow:inset 0 0 0 2px #246a49}.new-game .bingo-card small{color:var(--game-art-ink)}
+.new-game .bingo-call>.bingo-picture{width:110px;flex:0 0 110px;font-size:inherit}.new-game .bingo-call{color:var(--game-art-ink)}
+.new-game .path-tile{background:var(--game-art-paper);color:var(--game-art-ink);border-color:var(--game-art-edge)}.new-game .path-tile span{background:var(--game-art-paper);color:var(--game-art-ink);border:1px solid var(--game-art-edge)}
+.new-game .domino{width:clamp(100px,calc(104px * var(--fs)),156px);height:clamp(54px,calc(56px * var(--fs)),84px);background:var(--game-art-paper);border-color:var(--game-art-ink)}.new-game .pip-grid i.dot{background:var(--game-art-ink)}
+.new-game .picture-piece{border-color:var(--game-art-edge)}.new-game .picture-piece.selected{outline:4px solid #173e37;box-shadow:inset 0 0 0 2px white}
+.game-tile .game-art{background:var(--game-art-paper)!important;color:var(--game-art-ink);border:2px solid var(--game-art-edge);width:clamp(76px,calc(80px * var(--fs)),112px);height:clamp(76px,calc(80px * var(--fs)),112px);font-size:clamp(44px,calc(48px * var(--fs)),76px);line-height:1.1}
+@media(max-width:640px){#mp .gridm,#box .gridm,#grid{--game-art-gap:8px}#mp .big:not(.txt),#box .big.picture-answer{min-height:84px;padding:5px}.mp-board{grid-template-columns:repeat(3,minmax(0,1fr))!important}.mp-board .mp-tile{min-height:80px}.new-game .picture-piece>span{font-size:clamp(12px,calc(14px * var(--fs)),18px);min-width:18px}}
+@media(forced-colors:active){.game-picture{filter:none}.picture-symbol,.inline-picture,#mp .big:not(.txt),#grid .f.a,.new-game .path-tile{border-color:ButtonText}}
+.new-game .bingo-card{position:relative}.new-game .bingo-card>.bingo-check{position:absolute;top:2px;right:4px;width:24px;background:#fffdf7;color:#173e37;font-size:22px;line-height:1.1;border-radius:50%}
+
+#mp .gridm:has(>.picture-answer),#box .gridm:has(>.picture-answer){max-width:760px}
+#mp .big.on{transform:none}
+html[data-hc="1"]{--game-art-paper:#fff;--game-art-ink:#000;--game-art-edge:#000}

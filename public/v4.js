@@ -1,0 +1,33 @@
+/* V4: persistent quiet play and concise, bilingual first-use help. */
+(function(){
+'use strict';
+const root=document.documentElement,media=matchMedia('(prefers-color-scheme: dark)'),T=(en,zh)=>save.lang==='zh'?zh:en;
+let online=false;
+function toolbar(){return '<span>'+T('Game background','游戏背景')+'</span><div role="group" aria-label="'+T('Game background','游戏背景')+'"><button type="button" class="btn" data-v4-view="quiet">'+T('Quiet','安静')+'</button><button type="button" class="btn" data-v4-view="garden">'+T('Garden','花园')+'</button></div>'}
+function bind(host){host.querySelectorAll('[data-v4-view]').forEach(b=>b.onclick=()=>{save.quietGames=b.dataset.v4View==='quiet';persist();sync()})}
+function sync(){
+ root.dataset.v4Mode=save.mode==='dark'||save.mode!=='light'&&media.matches?'dark':'light';
+ root.dataset.gameView=save.quietGames===false?'garden':'quiet';
+ root.dataset.gameActive=online||document.getElementById('home').classList.contains('hidden')?'1':'0';
+ document.querySelectorAll('[data-v4-view]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.v4View==='quiet')===(save.quietGames!==false))));
+ const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=root.dataset.v4Mode==='light'?'#E6EFE3':'#123A3D';
+}
+function mount(){
+ for(const id of ['game','mini']){const host=document.getElementById(id);let bar=host.querySelector('.v4-game-tools');if(!bar){bar=document.createElement('div');bar.className='v4-game-tools';host.querySelector('.hud').after(bar)}bar.innerHTML=toolbar();bind(bar)}sync();
+}
+const prefs=window.applyPrefs;window.applyPrefs=function(){const out=prefs.apply(this,arguments);sync();return out};
+const show=window.show;window.show=function(){const out=show.apply(this,arguments);online=false;sync();return out};
+const overlay=window.overlay;window.overlay=function(){const out=overlay.apply(this,arguments),box=document.getElementById('box');online=!!box.querySelector('.mp-board,[data-answer],#onlineBingo');box.classList.toggle('v4-online-game',online);if(online){const bar=document.createElement('div');bar.className='v4-game-tools';bar.innerHTML=toolbar();const board=box.querySelector('.mp-board,.gridm,#onlineBingo');board.before(bar);bind(bar)}sync();return out};
+const close=window.closeOv;window.closeOv=function(){const out=close.apply(this,arguments);online=false;sync();return out};
+const settings=window.openSet;window.openSet=function(){const out=settings.apply(this,arguments);const box=document.getElementById('box');if(box.querySelector('#v4GameSetting'))return out;const group=document.createElement('fieldset');group.id='v4GameSetting';group.className='v4-game-settings';group.innerHTML='<legend>'+T('A comfortable game view','舒适的游戏视图')+'</legend><p>'+T('Quiet uses a plain background while you play. Garden keeps your scenery. Your welcome garden stays visible in either mode.','安静模式在游戏时使用纯色背景；花园模式保留风景。两种模式都保留欢迎页的花园。')+'</p><div class="v4-game-tools">'+toolbar()+'</div>';box.querySelector('#sd')?.parentElement.before(group);bind(group);sync();return out};
+document.getElementById('bSet').onclick=window.openSet;
+function openGuide(){
+ const active=document.activeElement,trigger=active?.closest('#navMenu')?document.getElementById('navMore'):active;
+ const rows=[['☰','Menu','菜单','Find every control here when the screen is small or text is large.','屏幕较窄或文字较大时，可在这里找到全部控件。'],['T− / T+','Text size','文字大小','Make text smaller or larger. Choose a percentage; ↺ restores 100%.','缩小或放大文字，或选择百分比；↺恢复至100%。'],['☀ / ☾','Appearance','外观','Choose light, dark or automatic display mode from the menu.','在菜单中选择浅色、深色或自动显示模式。'],['文 / A','Language','语言','Switch between English and Chinese.','切换英文或中文。'],['♫','Music','音乐','Choose sounds, adjust volume and use ▶ to play or Ⅱ to pause.','选择声音并调整音量，▶播放，Ⅱ暂停。'],['‹ / ›','Scenery','背景','Change your welcome scenery beside its caption below the main actions.','使用欢迎页主要操作下方、背景名称旁的箭头切换风景。']];
+ overlay('<section id="v4Guide" aria-labelledby="v4GuideTitle"><h2 id="v4GuideTitle">'+T('Make Mind Garden yours','让心灵花园更适合您')+'</h2><p>'+T('Begin with today’s three activities, or choose any game. There is no need to rush.','可从今天的三项活动开始，或自由选择游戏。无需着急。')+'</p><dl class="v4-icon-guide">'+rows.map(r=>'<div><dt><span aria-hidden="true">'+r[0]+'</span> '+T(r[1],r[2])+'</dt><dd>'+T(r[3],r[4])+'</dd></div>').join('')+'</dl><p>'+T('During a game, choose Quiet for a plain background or Garden for scenery. Pause or take a break at any time. About includes first-time setup, the full user guide, troubleshooting and privacy information.','游戏中可选择“安静”使用纯色背景，或选择“花园”保留风景。随时可以暂停或休息。“关于”包含首次设置、完整指南、问题排查与隐私信息。')+'</p><div class="row"><button type="button" class="btn main" id="v4GuideDone">'+T('Done','完成')+'</button></div></section>');
+ const panel=document.getElementById('v4Guide'),done=document.getElementById('v4GuideDone');
+ const finish=()=>{closeOv();if(trigger?.isConnected)trigger.focus()};done.onclick=finish;panel.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();finish()}if(e.key==='Tab'){e.preventDefault();done.focus()}};done.focus();
+}
+media.addEventListener('change',sync);window.addEventListener('gardenPlayerChange',mount);
+window.MindGardenV4={sync,mount,openGuide};mount();
+})();
