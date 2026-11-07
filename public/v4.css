@@ -78,11 +78,24 @@ html[data-v4-mode="light"]:not([data-hc="1"]) :is(.btn.main,#dashStart,.category
 html[data-v4-mode="light"]:not([data-hc="1"]) .category-pill.active::after{content:'✓';font-weight:800}
 #box .btn,.game-tile,.category-pill{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 @media(hover:none),(pointer:coarse){#home .welcome-feature:hover,.game-tile:hover,.btn:active{transform:none!important}#home .welcome-feature,.game-tile,#box .btn{transition:none!important}}
-.mp-board .mp-tile{position:relative;touch-action:manipulation;transition:background-color .1s,border-color .1s;user-select:none;-webkit-user-select:none;overflow:hidden}
-.mp-card-face{display:none;width:100%}.mp-card-back{display:block;font-size:44px;line-height:1.3}
-.mp-tile.revealed .mp-card-face{display:block}.mp-tile.revealed .mp-card-back{display:none}
+.mp-board .mp-tile{position:relative;display:grid;grid-template:"card" 1fr/1fr;place-items:center;aspect-ratio:1;touch-action:manipulation;transition:none;user-select:none;-webkit-user-select:none;overflow:hidden;opacity:1}
+/* Both faces keep their layout space, including before an SVG has decoded. */
+.mp-card-face,.mp-card-back{grid-area:card;display:block;width:100%}
+.mp-card-face{visibility:hidden}.mp-card-back{visibility:visible;font-size:44px;line-height:1.3}
+.mp-tile.revealed .mp-card-face{visibility:visible}.mp-tile.revealed .mp-card-back{visibility:hidden}
+.mp-card-face .game-picture{display:grid;grid-template:"picture" 1fr/1fr;place-items:center;filter:none;line-height:1.18}
+.mp-card-face .game-picture .game-illustration,.mp-card-face .game-picture .picture-text{grid-area:picture}
+.mp-card-face .game-picture.has-art .game-illustration{opacity:0;filter:none}
+.mp-card-face .game-picture.has-art.mp-art-ready .game-illustration{opacity:1}
+.mp-card-face .game-picture .picture-text{position:static;width:auto;height:auto;padding:0;margin:0;overflow:visible;clip:auto;white-space:nowrap;border:0;opacity:1}
+.mp-card-face .game-picture.has-art.mp-art-ready .picture-text{opacity:0}
 .mp-tile.matched{border-color:#246a49;box-shadow:inset 0 0 0 2px #246a49}.mp-tile.matched:after{content:'✓';position:absolute;right:3px;top:2px;background:#fffdf7;color:#173e37;border-radius:50%;font-size:22px;line-height:1.2}
-.mp-pair-preview{padding:12px;border:1px solid var(--line);border-radius:14px;margin:12px 0;text-align:center}.mp-pair-preview[hidden]{display:none!important}
+/* Reserve the tallest feedback at the current viewport/text scale, without clipping. */
+.mp-pair-status,.mp-pair-controls{display:grid;grid-template:"status" auto/1fr;text-align:center;align-items:center}
+.mp-pair-status>p,.mp-pair-controls>*{grid-area:status;margin:0;line-height:1.5;overflow-wrap:anywhere}
+.mp-pair-status{margin:12px 0}.mp-pair-controls{margin:12px 0;justify-items:center;min-width:0}
+.mp-pair-controls>*{max-width:100%}.mp-message-reserve,.mp-phase-reserve{visibility:hidden;pointer-events:none}
+.mp-pair-controls[data-phase="ready"] #mpPairPhase,.mp-pair-controls:not([data-phase="ready"]) #mpBeginPairs{visibility:hidden;pointer-events:none}
 #mpPairMessage{min-height:1.5em;text-align:center}#mpPairCount{text-align:center}
 
 /* One spacing rhythm for welcome sections and wrapped cards, at every text size. */

@@ -10,12 +10,13 @@ const read=k=>{try{return JSON.parse((volatileStorage.has(k)?volatileStorage.get
 function store(k,v){try{localStorage.setItem(k,v);volatileStorage.delete(k)}catch{volatileStorage.set(k,v);window.reportStorageFailure?.()}}
 function remove(k){try{localStorage.removeItem(k);volatileStorage.delete(k)}catch{volatileStorage.set(k,null);window.reportStorageFailure?.()}}
 const storedSession=read(SESSION),validSession=storedSession&&/^[0-9a-f]{48}$/.test(storedSession.token)&&/^[0-9a-f]{16}$/.test(storedSession.id)&&typeof storedSession.name==='string';
-let session=validSession&&!storedSession.offline?storedSession:null,room=null,game=null,shownRound=0,screen='',generation=0,busy=false,pollBusy=false,loungeBusy=false,last=null,loungeRooms=[],loungeTimer=null;
-const noticed=new Set();let view=null,checkpointTimer=null,mismatchTimer=null;
+let session=validSession&&!storedSession.offline?storedSession:null,room=null,game=null,shownRound=0,screen='',generation=0,membershipRevision=0,busy=false,pollRequest=null,loungeBusy=false,last=null,loungeRooms=[],loungeTimer=null;
+const noticed=new Set();let view=null,checkpointTimer=null,mismatchTimer=null,previewTimer=null;
 // Each response belongs to the screen that initiated it. Other dialogs may replace it.
 function overlay(html){window.overlay(html);view=$('box').firstElementChild}
 function current(gen=generation){return gen===generation&&!!view?.isConnected&&!$('ov').classList.contains('hidden')}
-function suspend(){checkpoint();generation++;room=null;game=null;shownRound=0;screen='';last=null;view=null}
+function clearPairTimers(){clearTimeout(mismatchTimer);clearInterval(previewTimer);mismatchTimer=previewTimer=null}
+function suspend(){checkpoint();clearPairTimers();generation++;room=null;game=null;shownRound=0;screen='';last=null;view=null}
 window.addEventListener('gardenPlayerChange',suspend);
 function api(action,data={}){return fetch('/api/room8?action='+action,{method:'POST',headers:{'content-type':'application/json'},cache:'no-store',body:JSON.stringify({...data,token:session?.token||data.token})}).then(async r=>{let j;try{j=await r.json()}catch{throw Error(T('Online service unavailable. Check the deployment.','在线服务不可用，请检查部署。'))}if(!r.ok)throw Object.assign(Error(j.error||'Connection failed'),{status:r.status});return j})}
 function error(e){const el=$('multiError');if(el)el.textContent=save.lang==='zh'&&window.tr?tr(e.message):e.message}
@@ -38,13 +39,20 @@ async function renameOnline(n){
  return n;
 }
 window.MindGardenMultiplayer={flushStorage(){for(const [k,v]of volatileStorage){try{v===null?localStorage.removeItem(k):localStorage.setItem(k,v);volatileStorage.delete(k)}catch{return false}}return true},rename:renameOnline,online:()=>!!session,active:()=>!!read(KEY),history:()=>action(()=>openHistory())};
-function cancelRoom(){if(confirm(T('Cancel this game and close the room for everyone? Completed scores are kept.','取消游戏并为所有人关闭房间？已完成的成绩会保留。')))action(async()=>{const c=room?.code;if(!c)return;await api('close',{code:c});accept({code:c,closed:true})})}
-$('box').addEventListener('click',e=>{if(e.target.closest('#mpCancelGame'))cancelRoom();if(e.target.closest('#mpLeaveRoom')&&confirm(T('Leave this room? Your unfinished round will stop. Other players can continue.','退出此房间？你的未完成回合将停止，其他玩家可以继续。')))action(async()=>{const state=await api('leave',room);accept(state)})});
+function releaseRoom(code,notice,gen=generation){
+ membershipRevision++;
+ if(read(KEY)?.code===code)remove(KEY);if(read(GAME)?.code===code)remove(GAME);
+ if(room?.code!==code)return;
+ const show=current(gen);clearPairTimers();clearTimeout(checkpointTimer);checkpointTimer=null;generation++;room=null;game=null;last=null;shownRound=0;screen='';clearInvite();
+ if(show)menu(notice);
+}
+function cancelRoom(){if(confirm(T('Cancel this game and close the room for everyone? Completed scores are kept.','取消游戏并为所有人关闭房间？已完成的成绩会保留。')))action(async()=>{const c=room?.code,gen=generation;if(!c)return;await api('close',{code:c});releaseRoom(c,T('Room closed. You can join or create another room.','房间已关闭。您可以加入或创建其他房间。'),gen)})}
+$('box').addEventListener('click',e=>{if(e.target.closest('#mpCancelGame'))cancelRoom();if(e.target.closest('#mpLeaveRoom')&&confirm(T('Leave this room? Your unfinished round will stop. Other players can continue.','退出此房间？你的未完成回合将停止，其他玩家可以继续。')))action(async()=>{const c=room?.code,gen=generation;if(!c)return;await api('leave',{code:c});releaseRoom(c,T('You have left the room. Enter another room code below. Other players can continue.','您已退出房间，可在下方输入其他房间码。其他玩家可以继续。'),gen)})});
 $('box').addEventListener('click',e=>{const button=e.target.closest('#mpSaveName');if(!button)return;const editor=button.closest('details'),input=$('mpRenameName'),profile=me();action(async()=>{button.disabled=true;try{const n=await renameOnline(input.value);if(Object.values(save.pr).includes(profile)){profile.name=n;persist()}if(me()!==profile)return;window.MindGardenDashboard?.refresh();document.querySelectorAll('.mp-self-name').forEach(el=>el.textContent=n);if(editor.isConnected){editor.open=false;editor.querySelector('summary')?.focus()}if($('mpConnection'))$('mpConnection').textContent=T('Name saved.','名称已保存。')}finally{button.disabled=false}})});
 function startLounge(){if(loungeTimer)clearInterval(loungeTimer);loungeTimer=setInterval(lounge,2500);lounge()}
 async function lounge(){
- if(!session||loungeBusy||document.hidden)return;loungeBusy=true;const identity=session;
- try{const s=await api('lounge');if(session!==identity)return;loungeRooms=s.rooms;
+ if(!session||loungeBusy||document.hidden)return;loungeBusy=true;const identity=session,revision=membershipRevision;
+ try{const s=await api('lounge');if(session!==identity||revision!==membershipRevision)return;loungeRooms=s.rooms;
   if(screen==='menu'&&current()){if(s.activeRoom){store(KEY,JSON.stringify({code:s.activeRoom}));if(!$('mpResume')){const b=document.createElement('button');b.id='mpResume';b.className='btn';b.textContent=T('Resume room','返回房间');$('mpClose').before(b);b.onclick=()=>action(()=>join(read(KEY).code))}}else{remove(KEY);$('mpResume')?.remove()}}
   if($('mpOnlineCount'))$('mpOnlineCount').textContent=s.online+' '+T('players online','位玩家在线');
   const list=$('mpOpenRooms');if(list){list.innerHTML=s.rooms.length?s.rooms.map(r=>'<div class="mp-open-room">'+user(r.host)+' · <strong translate="no">'+r.code+'</strong> · '+r.players+'/8 <button class="btn sm" data-join-room="'+r.code+'">'+T('Join','加入')+'</button></div>').join(''):'<p>'+T('No open rooms yet. Create one to invite everyone online.','暂无开放房间。创建房间即可邀请所有在线玩家。')+'</p>';list.querySelectorAll('[data-join-room]').forEach(b=>b.onclick=()=>action(()=>join(b.dataset.joinRoom)))}
@@ -57,7 +65,7 @@ async function lounge(){
   if(s.rooms.length){await api('ack',{codes:s.rooms.map(r=>r.code)});s.rooms.forEach(r=>noticed.add(r.code))}
  }catch(e){if(session!==identity)return;if($('mpOnlineCount'))$('mpOnlineCount').textContent=T('Reconnecting to the lobby…','正在重新连接大厅……');if(e.status===401){session=null;remove(SESSION);clearInterval(loungeTimer)}}finally{loungeBusy=false}
 }
-function menu(){checkpoint();generation++;room=null;game=null;shownRound=0;last=null;screen='menu';
+function menu(notice=''){checkpoint();clearPairTimers();generation++;room=null;game=null;shownRound=0;last=null;screen='menu';
  const prefill=(new URLSearchParams(location.search).get('room')||'').toUpperCase();
  overlay('<h2>'+T('Online lobby · 2–8 players','在线大厅 · 2至8人')+'</h2><p>'+T('Enter the lobby to receive room codes from hosts online. Joining a room shares your display name and game scores with its players.','进入大厅即可接收在线房主的房间码。加入房间后，其他玩家可看到你的显示名称和游戏积分。')+'</p>'+(!session?'<label class="lab">'+T('Your display name','你的显示名称')+'<input id="mpName" maxlength="20" value="'+esc(name())+'"></label><button class="btn main" id="mpLogin">'+T('Enter online lobby','进入在线大厅')+'</button>':'<p>'+T('Online as ','在线玩家：')+'<span class="mp-self-name">'+user(session.name)+'</span>'+' · <span id="mpOnlineCount" role="status"></span></p>'+nameControls()+'<button class="btn" id="mpHistory">'+T('Saved online rankings','已保存的在线排名')+'</button><button class="btn main" id="mpCreate">'+T('Create room & invite online players','创建房间并邀请在线玩家')+'</button><h3>'+T('Open rooms — room codes arrive here','开放房间——在此接收房间码')+'</h3><div id="mpOpenRooms" aria-live="polite"></div>')+'<label class="lab">'+T('Room code','房间码')+'<input id="mpCode" maxlength="6" value="'+(/^[A-Z2-9]{6}$/.test(prefill)?prefill:'')+'"></label><div class="row"><button class="btn" id="mpJoin">'+T('Join room','加入房间')+'</button>'+(session&&read(KEY)?'<button class="btn" id="mpResume">'+T('Resume room','返回房间')+'</button>':'')+'<button class="btn" id="mpClose">'+T('Close','关闭')+'</button>'+(session?'<button class="btn" id="mpLogout">'+T('Go offline','退出在线大厅')+'</button>':'')+'</div><p id="multiError" role="alert"></p>');
  if($('mpLogin'))$('mpLogin').onclick=()=>action(async()=>{if(await login())menu()});
@@ -66,12 +74,13 @@ function menu(){checkpoint();generation++;room=null;game=null;shownRound=0;last=
  $('mpJoin').onclick=()=>action(async()=>{const c=$('mpCode').value.trim().toUpperCase();if(!session&&!await login())return;await join(c)});
  if($('mpResume'))$('mpResume').onclick=()=>action(()=>join(read(KEY).code));
  if($('mpLogout'))$('mpLogout').onclick=()=>action(async()=>{const gen=generation;await api('logout');store(SESSION,JSON.stringify({...session,offline:true}));session=null;clearInterval(loungeTimer);noticed.clear();$('onlineInvitation')?.remove();if(current(gen))menu()});
+ if(typeof notice==='string'&&notice){const status=document.createElement('p');status.id='mpLobbyStatus';status.setAttribute('role','status');status.textContent=notice;$('box').firstElementChild.after(status)}
  $('mpClose').onclick=exitScreen;if(session)lounge();
  if(/^[A-Z2-9]{6}$/.test(prefill))action(async()=>{if(!session&&!await login())return;await join(prefill)});
 }
-function claim(code,gen){store(KEY,JSON.stringify({code}));if(current(gen))enter(code)}
+function claim(code,gen){membershipRevision++;store(KEY,JSON.stringify({code}));if(current(gen))enter(code)}
 async function join(code){const gen=generation;await api('join',{code});claim(code,gen);clearInvite()}
-function enter(code){generation++;room={code};store(KEY,JSON.stringify(room));shownRound=0;game=null;screen='loading';last=null;overlay(base()+'<p>'+T('Connecting…','正在连接……')+'</p><p id="multiError" role="alert"></p><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button>');$('mpExit').onclick=exitScreen;poll()}
+function enter(code){clearPairTimers();generation++;room={code};store(KEY,JSON.stringify(room));shownRound=0;game=null;screen='loading';last=null;overlay(base()+'<p>'+T('Connecting…','正在连接……')+'</p><p id="multiError" role="alert"></p><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button>');$('mpExit').onclick=exitScreen;poll()}
 function shareControls(){return '<label class="lab">'+T('Invitation link','邀请链接')+'<input id="mpVisibleLink" readonly aria-label="'+T('Invitation link','邀请链接')+'" value="'+esc(invite())+'"></label><div class="row"><button class="btn" id="mpCopy">'+T('Copy link','复制链接')+'</button><button class="btn" id="mpShare">'+T('Share','分享')+'</button><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button></div>'}
 function wireShare(){
  $('mpExit').onclick=exitScreen;$('mpVisibleLink').onclick=e=>e.target.select();
@@ -84,10 +93,10 @@ function renderLobby(s){screen='lobby';overlay(base(s)+'<h3 id="mpPlayerCount"><
 function updateLobby(s){if($('mpPlayerCount'))$('mpPlayerCount').textContent=s.players.filter(p=>!p.departed).length+'/8 '+T('players joined','位玩家已加入');if(s.players&&$('mpRoster'))$('mpRoster').innerHTML=people(s);if($('mpLaunch'))$('mpLaunch').disabled=s.players.filter(p=>!p.departed).length<2;
  if($('mpDelivery')&&s.host)$('mpDelivery').innerHTML='<p>'+T('Invitation delivery','邀请送达')+': '+s.invitations.filter(p=>p.receivedAt).length+'/'+s.invitations.length+'</p><ul class="mp-receipts">'+s.invitations.map(p=>'<li>'+user(p.name)+' — '+(p.receivedAt?T('Room code received','已收到房间码'):T('Awaiting connection','等待连接'))+'</li>').join('')+'</ul>';
 }
-async function poll(){if(!room||screen==='closed'||pollBusy||document.hidden||!current())return;pollBusy=true;const gen=generation,c=room.code;try{const s=await api('status',{...room,seenRound:shownRound});if(!current(gen)||room?.code!==c)return;accept(s);if($('mpConnection'))$('mpConnection').textContent=''}catch(e){if(current(gen)){if([401,403,404,410].includes(e.status)){room=null;game=null;screen='closed';generation++;remove(KEY);remove(GAME);if(e.status===401){session=null;remove(SESSION);clearInterval(loungeTimer);$('onlineInvitation')?.remove()}overlay('<h2>'+T('Room unavailable','房间不可用')+'</h2><p>'+esc(save.lang==='zh'&&window.tr?tr(e.message):e.message)+'</p><button class="btn" id="mpBackLobby">'+T('Back to lobby','返回大厅')+'</button>');$('mpBackLobby').onclick=menu;return}if($('mpConnection'))$('mpConnection').textContent=T('Connection interrupted. Reconnecting; your room and score are kept.','连接中断，正在重连；房间和积分已保留。');error(e)}}finally{pollBusy=false}}
+async function poll(){if(!room||screen==='closed'||pollRequest?.gen===generation||document.hidden||!current())return;const gen=generation,c=room.code,ticket={gen};pollRequest=ticket;try{const s=await api('status',{...room,seenRound:shownRound});if(!current(gen)||room?.code!==c)return;accept(s);if($('mpConnection'))$('mpConnection').textContent=''}catch(e){if(current(gen)){if([401,403,404,410].includes(e.status)){room=null;game=null;screen='closed';generation++;remove(KEY);remove(GAME);if(e.status===401){session=null;remove(SESSION);clearInterval(loungeTimer);$('onlineInvitation')?.remove()}overlay('<h2>'+T('Room unavailable','房间不可用')+'</h2><p>'+esc(save.lang==='zh'&&window.tr?tr(e.message):e.message)+'</p><button class="btn" id="mpBackLobby">'+T('Back to lobby','返回大厅')+'</button>');$('mpBackLobby').onclick=menu;return}if($('mpConnection'))$('mpConnection').textContent=T('Connection interrupted. Reconnecting; your room and score are kept.','连接中断，正在重连；房间和积分已保留。');error(e)}}finally{if(pollRequest===ticket)pollRequest=null}}
 function endRound(){if(confirm(T('End this round? Unfinished players receive no points.','结束本轮？未完成的玩家本轮不得分。')))action(async()=>accept(await api('finishRound',{...room,round:last.round})))}
 function livePanel(){if(!last)return;const panel=document.createElement('details');panel.className='mp-live';panel.innerHTML='<summary>'+T('Room players and launch status','房间玩家与开始状态')+'</summary><div id="mpRoster">'+people(last)+'</div>'+(last.host?'<button class="btn sm" id="mpEndRound">'+T('End current round','结束本轮')+'</button>':'');$('multiError').before(panel);if($('mpEndRound'))$('mpEndRound').onclick=endRound}
-function accept(s){if(!current()||!room||s.code!==room.code)return;last=s;if(s.players&&s.round)rememberResult(s);if(s.left){screen='closed';game=null;remove(KEY);remove(GAME);overlay('<h2>'+T('You have left the room','你已退出房间')+'</h2><p>'+T('Other players can continue. You can now join or create another room.','其他玩家可以继续。现在你可以加入或创建其他房间。')+'</p><button class="btn" id="mpBackLobby">'+T('Back to lobby','返回大厅')+'</button>');$('mpBackLobby').onclick=menu;return}if(s.players&&$('mpRoster'))$('mpRoster').innerHTML=people(s);if(s.closed){screen='closed';game=null;remove(GAME);overlay(base()+'<p>'+T('The host closed this room.','房主已关闭此房间。')+'</p><button id="mpExit" class="btn">'+T('Close','关闭')+'</button>');$('mpExit').onclick=exitScreen;remove(KEY);return}
+function accept(s){if(!current()||!room||s.code!==room.code)return;last=s;if(s.players&&s.round)rememberResult(s);if(s.left||s.closed){releaseRoom(s.code,s.left?T('You have left the room. Enter another room code below. Other players can continue.','您已退出房间，可在下方输入其他房间码。其他玩家可以继续。'):T('The host closed this room. You can join or create another room.','房主已关闭此房间。您可以加入或创建其他房间。'));return}if(s.players&&$('mpRoster'))$('mpRoster').innerHTML=people(s);
  if(!s.started){if(screen!=='lobby')renderLobby(s);else updateLobby(s);return}
  const mine=s.players.find(p=>p.id===s.me);if(s.finished){if(screen!=='results'||shownRound!==s.round)results(s);return}
  if(s.mode==='bingo9'&&!mine?.skipped){shownRound=s.round;game=null;drawBingoOnline(s);return}
@@ -116,37 +125,85 @@ setInterval(poll,1500);
   else{const groups=[['🍎','🍌','🍓','🍇'],['🐶','🐱','🐢','🐦'],['🚲','🚂','🚗','🚌'],['🌻','🌷','🌹','🌼']];let k=Math.floor(rand()*4),other=(k+1+Math.floor(rand()*3))%4;let choices=shuffle(groups[k].slice(0,3).concat(groups[other][Math.floor(rand()*4)]),rand);qs.push({title:'Which picture belongs to a different group?',answer:groups[other].find(e=>choices.includes(e)),options:choices})}
  }return qs}
  function start(s){const mode=s.mode||'pairs6',rand=randomizer((s.seed^Math.imul(s.round,0x9E3779B1))>>>0);
-  if(mode.startsWith('pairs')){const count=mode==='pairs10'?10:6,pool=['🌻','🍎','🐦','🐶','🌈','🚲','🌷','🍓','🐢','🎹','🏡','🦋','🍊','☕','🌹','🚂','🎨','🪁','🥕','🐞'];const values=shuffle(pool.slice(),rand).slice(0,count);game={mode,round:s.round,deck:shuffle(values.concat(values),rand),open:[],done:new Set(),moves:0,locked:false,started:Date.now(),submitted:false,saved:false,preview:true};draw(T('Take a moment to remember the pictures. Then select Begin matching.','先记住图片的位置，然后点击开始配对。'))}
+  if(mode.startsWith('pairs')){const count=mode==='pairs10'?10:6,pool=['🌻','🍎','🐦','🐶','🌈','🚲','🌷','🍓','🐢','🎹','🏡','🦋','🍊','☕','🌹','🚂','🎨','🪁','🥕','🐞'];const values=shuffle(pool.slice(),rand).slice(0,count);game={mode,round:s.round,deck:shuffle(values.concat(values),rand),open:[],done:new Set(),moves:0,locked:false,started:null,submitted:false,saved:false,phase:'ready'};draw()}
   else {game={mode,round:s.round,questions:EXTRA?.questions(mode,s.seed,s.round)?.map(q=>({...q,title:T(...q.prompt),labels:q.labels?Object.fromEntries(Object.entries(q.labels).map(([k,v])=>[k,T(...v)])):null}))||problems(mode,rand),answers:[],index:0,moves:0,correct:0,started:Date.now(),submitted:false,saved:false};drawQuiz('Choose the best answer. Take your time.')}
   checkpoint();
  }
  function progress(s){return '<p class="tip">Round '+s.round+' · '+(MODES.find(m=>m[0]===s.mode)?.[1]||s.mode)+'</p>'}
+ function pairSeconds(g){return g.mode==='pairs10'?8:5}
+ function pairMessages(g){return {
+  ready:T('Press Begin to see every picture for '+pairSeconds(g)+' seconds.','点击开始，所有图片将显示 '+pairSeconds(g)+' 秒。'),
+  preview:T('Remember the pictures. They close automatically.','记住图片的位置。倒计时结束后会自动翻回。'),
+  playing:T('Find the matching picture.','找出相同的图片。'),
+  match:T('Lovely match!','配对成功！'),
+  miss:T('Not a match. Try another pair.','这两张不同，再试一对。'),
+  saved:T('All pairs found. Saving your result…','已找到全部配对，正在保存成绩……')
+ }}
+ function settlePairPreview(g){
+  if(g.phase!=='preview'||Date.now()<g.previewEndsAt)return false;
+  g.phase='playing';g.started=g.previewEndsAt;delete g.previewEndsAt;clearInterval(previewTimer);previewTimer=null;return true;
+ }
+ function normalizePairs(g){
+  // Preserve ongoing V4.0.1 rounds; an unused unlimited preview becomes ready.
+  if(!['ready','preview','playing'].includes(g.phase))g.phase=g.preview?'ready':'playing';
+  delete g.preview;
+  if(g.phase==='preview'&&!Number.isFinite(g.previewEndsAt))g.phase='ready';
+  settlePairPreview(g);
+ }
+ function runPairClock(g){
+  clearInterval(previewTimer);previewTimer=null;if(g.phase!=='preview')return;
+  const tick=()=>{
+   if(game!==g||screen!=='game'||!current()||!document.querySelector('.mp-board')){clearInterval(previewTimer);previewTimer=null;return}
+   const ended=settlePairPreview(g);
+   if(ended){updatePairs(pairMessages(g).playing);checkpoint();const board=document.querySelector('.mp-board');if(document.activeElement===board)board.querySelector('[data-tile="0"]')?.focus({preventScroll:true})}
+   else updatePairControls(g);
+  };
+  previewTimer=setInterval(tick,100);tick();
+ }
+ function mountPairArtwork(board){
+  for(const image of board.querySelectorAll('.game-illustration')){
+   image.loading='eager';const picture=image.parentElement;
+   const ready=()=>{const show=()=>{if(image.isConnected&&image.naturalWidth>0)picture.classList.add('mp-art-ready')};if(image.decode)image.decode().then(show,show);else show()};
+   image.addEventListener('load',ready,{once:true});
+   image.addEventListener('error',()=>picture.classList.remove('has-art','mp-art-ready'),{once:true});
+   if(image.complete&&image.naturalWidth>0)ready();
+  }
+ }
  // Mount the card board once. Updating only its state preserves touch targets,
  // keyboard focus, scroll position and already-loaded artwork between taps.
  function draw(msg){
-  screen='game';checkpoint();const g=game;if(!g)return;clearTimeout(mismatchTimer);
+  screen='game';const g=game;if(!g)return;clearPairTimers();normalizePairs(g);checkpoint();const messages=pairMessages(g);
   const count=g.deck.length/2,cards=g.deck.map((x,i)=>'<button type="button" class="mp-tile" data-tile="'+i+'"><span class="mp-card-back" aria-hidden="true">❀</span><span class="mp-card-face" aria-hidden="true">'+gamePicture(x)+'</span></button>').join('');
-  overlay(base({round:g.round})+'<p id="mpPairMessage" role="status"></p><p id="mpPairCount"></p><div id="mpPairPreview" class="mp-pair-preview"'+(g.preview?'':' hidden')+'><p>'+T('All pictures are face up. Take your time; the round timer starts when you begin.','所有图片已翻开。慢慢看，点击开始后才会计时。')+'</p><button type="button" class="btn main" id="mpBeginPairs">'+T('Begin matching','开始配对')+'</button></div><div class="mp-board" style="grid-template-columns:repeat('+(count===10?5:4)+',minmax(0,1fr))">'+cards+'</div><div class="row"><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button></div><p id="multiError" role="alert"></p>');
+  overlay(base({round:g.round})+'<div class="mp-pair-status"><p id="mpPairMessage" role="status"></p>'+Object.values(messages).map(text=>'<p class="mp-message-reserve" aria-hidden="true">'+esc(text)+'</p>').join('')+'</div><p id="mpPairCount"></p><div id="mpPairPreview" class="mp-pair-controls"><button type="button" class="btn main" id="mpBeginPairs">'+T('Begin','开始')+'</button><p id="mpPairPhase" aria-live="off"></p><p class="mp-phase-reserve" aria-hidden="true">'+T('Remember: 8 seconds','记忆时间：8 秒')+'</p></div><div class="mp-board" tabindex="-1" role="group" aria-label="'+T('Matching cards','配对卡片')+'" style="grid-template-columns:repeat('+(count===10?5:4)+',minmax(0,1fr))">'+cards+'</div><div class="row"><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button></div><p id="multiError" role="alert"></p>');
   $('mpExit').onclick=exitScreen;
   document.querySelector('.mp-board').onclick=e=>{const b=e.target.closest('[data-tile]');if(b)flip(Number(b.dataset.tile))};
-  $('mpBeginPairs').onclick=()=>{if(game!==g||!g.preview)return;g.preview=false;g.started=Date.now();$('mpPairPreview').hidden=true;updatePairs(T('Find the matching picture.','找出相同的图片。'));checkpoint();document.querySelector('[data-tile="0"]')?.focus({preventScroll:true})};
-  updatePairs(g.preview?T('Remember the pictures, then select Begin matching.','记住图片的位置，然后点击开始配对。'):msg);livePanel();
+  $('mpBeginPairs').onclick=()=>{if(game!==g||!current()||g.phase!=='ready')return;g.phase='preview';g.previewEndsAt=Date.now()+pairSeconds(g)*1000;g.started=null;checkpoint();updatePairs(messages.preview);document.querySelector('.mp-board').focus({preventScroll:true});runPairClock(g)};
+  mountPairArtwork(document.querySelector('.mp-board'));
+  updatePairs(messages[g.phase]||msg||messages.playing);livePanel();runPairClock(g);
  }
  function updatePairs(msg){
   const g=game,board=document.querySelector('.mp-board');if(!g||!board)return;
   for(const button of board.querySelectorAll('[data-tile]')){
-   const i=Number(button.dataset.tile),matched=g.done.has(i),face=!!g.preview||matched||g.open.includes(i);
-   button.classList.toggle('revealed',face);button.classList.toggle('matched',matched);
-   button.disabled=!!g.preview||matched||g.submitted;
+   const i=Number(button.dataset.tile),matched=g.done.has(i),face=g.phase==='preview'||matched||g.open.includes(i);
+   if(button.classList.contains('revealed')!==face)button.classList.toggle('revealed',face);
+   if(button.classList.contains('matched')!==matched)button.classList.toggle('matched',matched);
+   const disabled=g.phase!=='playing'||matched||g.submitted;if(button.disabled!==disabled)button.disabled=disabled;
    const label=face?g.deck[i]:T('Hidden picture ','未翻开的图片 ')+(i+1);
    if(button.getAttribute('aria-label')!==label)button.setAttribute('aria-label',label);
-   button.setAttribute('aria-pressed',String(face));
+   if(button.getAttribute('aria-pressed')!==String(face))button.setAttribute('aria-pressed',String(face));
   }
   const message=$('mpPairMessage');if(message&&message.textContent!==msg)message.textContent=msg;
   const count=$('mpPairCount'),label=T(g.done.size/2+' of '+g.deck.length/2+' pairs · '+g.moves+' turns','已找到 '+g.done.size/2+'/'+g.deck.length/2+' 对 · '+g.moves+' 次');if(count&&count.textContent!==label)count.textContent=label;
+  updatePairControls(g);
+ }
+ function updatePairControls(g){
+  const controls=$('mpPairPreview');if(!controls)return;
+  if(controls.dataset.phase!==g.phase)controls.dataset.phase=g.phase;
+  const begin=$('mpBeginPairs'),disabled=g.phase!=='ready';if(begin.disabled!==disabled)begin.disabled=disabled;
+  const phase=$('mpPairPhase'),text=g.phase==='preview'?T('Remember: '+Math.max(0,Math.ceil((g.previewEndsAt-Date.now())/1000))+' seconds','记忆时间：'+Math.max(0,Math.ceil((g.previewEndsAt-Date.now())/1000))+' 秒'):T('Matching','配对中');if(phase.textContent!==text)phase.textContent=text;
  }
  function flip(i){
-  const g=game;if(!g||g.preview||g.submitted||!Number.isInteger(i)||i<0||i>=g.deck.length||g.open.includes(i)||g.done.has(i))return;
+  const g=game;if(!g)return;if(settlePairPreview(g))checkpoint();if(g.phase!=='playing'||g.submitted||!Number.isInteger(i)||i<0||i>=g.deck.length||g.open.includes(i)||g.done.has(i))return;
   // A new card tap can dismiss an unmatched pair immediately. It is never lost
   // behind a fixed lockout or delayed until another tap.
   if(g.locked){clearTimeout(mismatchTimer);g.open=[];g.locked=false}
@@ -158,8 +215,8 @@ setInterval(poll,1500);
    if(g.done.size===g.deck.length){g.submitted=true;updatePairs(T('All pairs found. Saving your result…','已找到全部配对，正在保存成绩……'));finish();return}
    updatePairs(T('Lovely match!','配对成功！'));queueCheckpoint();
   }else{
-   g.locked=true;updatePairs(T('Not a match. Tap another card when you are ready.','这两张不同。准备好后可以点击另一张。'));queueCheckpoint();
-   mismatchTimer=setTimeout(()=>{if(game===g&&g.locked){g.open=[];g.locked=false;checkpoint();if(current())updatePairs(T('Try another pair.','再试一对。'))}},950);
+   g.locked=true;updatePairs(pairMessages(g).miss);queueCheckpoint();
+   mismatchTimer=setTimeout(()=>{if(game===g&&g.locked){g.open=[];g.locked=false;checkpoint();if(current())updatePairs(pairMessages(g).playing)}},950);
   }
  }
  function drawQuiz(msg){screen='game';checkpoint();const g=game;if(!g)return;const q=g.questions[g.index];overlay(base({round:g.round})+'<p>'+esc(msg)+'</p><p>Question '+(g.index+1)+' of '+g.questions.length+'</p><div class="seqline">'+gamePrompt(q.title)+'</div><div class="gridm" style="--c:2">'+q.options.map((o,i)=>'<button class="big '+(isGamePicture(q.labels?.[o]||o)?'picture-answer':'txt')+'" data-answer="'+i+'">'+(isGamePicture(q.labels?.[o]||o)?gamePicture(q.labels?.[o]||o):esc(q.labels?.[o]||o))+'</button>').join('')+'</div><div class="row"><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button></div><p id="multiError" role="alert"></p>');$('mpExit').onclick=exitScreen;document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>answer(+b.dataset.answer));livePanel()}
@@ -177,7 +234,7 @@ function results(s){rememberResult(s);screen='results';game=null;shownRound=s.ro
 function activityName(id){const m=MODES.find(v=>v[0]===id);return m?(save.lang==='zh'?(m[2]||window.tr?.(m[1])||m[1]):m[1]):T('Earlier activity','较早的活动')}
 function historyFrame(html){overlay('<section class="online-history"><h2>'+T('Saved online rankings','已保存的在线排名')+'</h2>'+html+'<div class="row"><button class="btn" id="historyLobby">'+T('Online lobby','在线大厅')+'</button><button class="btn" id="historyClose">'+T('Close','关闭')+'</button></div><p id="multiError" role="alert"></p></section>');$('historyLobby').onclick=menu;$('historyClose').onclick=exitScreen}
 async function openHistory(offset=0){
- checkpoint();generation++;const gen=generation;room=null;game=null;last=null;screen='history';
+ checkpoint();clearPairTimers();generation++;const gen=generation;room=null;game=null;last=null;screen='history';
  if(!session){historyFrame('<p>'+T('Enter the online lobby to view rooms linked to this browser’s online identity.','进入在线大厅，查看与此浏览器在线身份关联的房间。')+'</p>');return}
  historyFrame('<p>'+T('Loading your rooms…','正在加载您的房间……')+'</p>');
  const data=await api('history',{offset});if(!current(gen))return;
@@ -194,7 +251,8 @@ async function openRoomHistory(code,offset=0,roomOffset=0){const gen=generation;
 const localLeaderboard=window.lbView;window.lbView=function(...args){localLeaderboard(...args);const tabs=document.createElement('div');tabs.className='ranking-tabs';tabs.innerHTML='<button class="btn" type="button" aria-pressed="true">'+T('On this device','此设备')+'</button><button class="btn" type="button" id="leaderboardOnline">'+T('Online room rankings','在线房间排名')+'</button>';$('box').querySelector('h2')?.after(tabs);$('leaderboardOnline').onclick=()=>action(()=>openHistory())};
 
 window.addEventListener('pagehide',checkpoint);
-window.addEventListener('focus',()=>{poll();lounge()});document.addEventListener('visibilitychange',()=>{if(document.hidden)checkpoint();else{poll();lounge()}});
+function refreshOnline(){if(current()&&game?.phase==='preview')runPairClock(game);poll();lounge()}
+window.addEventListener('focus',refreshOnline);document.addEventListener('visibilitychange',()=>{if(document.hidden)checkpoint();else refreshOnline()});
 $('bOnline').onclick=menu;
 if(session)startLounge();
 if(/^[A-Z2-9]{6}$/i.test(new URLSearchParams(location.search).get('room')||''))setTimeout(menu,350);
