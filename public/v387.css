@@ -1,0 +1,28 @@
+/* One row at every width. Optional controls are measured and moved to the menu. */
+#home #unifiedNav{display:grid!important;grid-template-columns:minmax(0,1fr) max-content minmax(0,1fr)!important;grid-template-areas:'brand items actions'!important;align-items:center;column-gap:12px!important;row-gap:0!important;flex-wrap:nowrap!important;padding:8px 12px!important;min-height:62px;height:auto!important}
+#home #unifiedNav .nav-brand{grid-area:brand;justify-self:start;width:max-content;max-width:none;min-width:0;flex:0 0 auto;white-space:nowrap!important;overflow-wrap:normal;line-height:1.2;margin:0!important}
+#home #unifiedNav .nav-brand span{white-space:nowrap!important}
+#home #unifiedNav .nav-items{grid-area:items;display:flex!important;flex-wrap:nowrap!important;align-items:center;justify-content:center;width:max-content!important;max-width:none;min-width:0!important;gap:5px;justify-self:center}
+#home #unifiedNav .nav-link{flex:0 0 auto;white-space:nowrap!important;overflow-wrap:normal!important;width:max-content}
+#home #unifiedNav .nav-link .nav-label{white-space:nowrap!important;overflow-wrap:normal}
+#home #unifiedNav .nav-actions{grid-area:actions;display:flex!important;flex-wrap:nowrap!important;justify-content:flex-end!important;align-items:center;justify-self:end;gap:6px!important;width:max-content;max-width:none;min-width:0;margin:0!important;order:initial}
+#home #unifiedNav .nav-actions>*{flex:0 0 auto!important;max-width:none;order:initial;white-space:nowrap!important}
+#home #unifiedNav .nav-text-size{display:flex!important;flex-wrap:nowrap!important;width:max-content!important;white-space:nowrap!important}
+#home #unifiedNav #navMore{display:inline-flex!important;align-items:center;justify-content:center;min-width:48px;min-height:48px!important;width:48px;padding:5px!important;font-size:calc(1.3rem * var(--fs))!important;line-height:1;border:1px solid #ffffff55;border-radius:12px;margin:0!important}
+#home #unifiedNav .nav-actions>[data-nav-hidden=true],#home #unifiedNav .nav-items>[data-nav-hidden=true]{display:none!important}
+#home #unifiedNav[data-nav-empty=true]{grid-template-columns:minmax(0,1fr) max-content!important;grid-template-areas:'brand actions'!important}
+#home #unifiedNav[data-nav-empty=true] .nav-items{display:none!important}
+#home #unifiedNav[data-nav-compact=true] .nav-brand>span:last-child{display:none!important}
+#home #unifiedNav[data-nav-compact=true] .nav-brand{padding:4px!important;min-width:44px;justify-content:center}
+#home #unifiedNav:not(.nav-overflow-ready):not(.nav-measuring){grid-template-columns:minmax(0,1fr) max-content!important;grid-template-areas:'brand actions'!important}
+#home #unifiedNav:not(.nav-overflow-ready):not(.nav-measuring) .nav-items,#home #unifiedNav:not(.nav-overflow-ready):not(.nav-measuring) .nav-actions>:not(#navMore){display:none!important}
+#home #unifiedNav #navMenu:not(.hidden){left:auto!important;right:0!important;top:calc(100% + 8px);width:min(390px,100%)!important;min-width:0!important;max-width:100%!important;max-height:calc(100dvh - var(--nav-clearance,90px) - 16px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;grid-template-columns:minmax(0,1fr);box-sizing:border-box;font-size:calc(1rem * var(--fs));text-align:center}
+#home #unifiedNav #navMenu button{white-space:normal!important;overflow-wrap:anywhere;min-width:0;max-width:100%;height:auto;font-size:inherit!important;line-height:1.3}
+#home #unifiedNav #navMenu .nav-text-settings{min-width:0;max-width:100%;margin:6px 0 0;border:0;border-top:1px solid #6d958d;padding:12px 0;color:#edf8f2}
+#home #unifiedNav #navMenu legend{font-weight:700;padding:6px;max-width:100%}
+#home #unifiedNav #navMenu .text-size-controls{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+#home #unifiedNav #navMenu .text-size-controls button{width:auto;min-width:44px;flex:0 1 auto;padding:8px;border:1px solid #719c90}
+#home #unifiedNav #navMenu .text-size-preset{font-size:inherit;min-width:4.8em;max-width:100%;flex:0 1 auto}
+#home #unifiedNav #navMenu .nav-theme-options{flex-wrap:wrap;justify-content:center}
+#home #unifiedNav #navMenu .nav-theme-options button{width:auto;flex:1 1 80px}
+@media(max-width:650px){#home #unifiedNav{column-gap:8px!important;padding:6px 8px!important}#home #unifiedNav .nav-brand{padding:3px 6px!important}}

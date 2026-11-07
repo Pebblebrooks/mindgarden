@@ -11,7 +11,7 @@ function store(k,v){try{localStorage.setItem(k,v);volatileStorage.delete(k)}catc
 function remove(k){try{localStorage.removeItem(k);volatileStorage.delete(k)}catch{volatileStorage.set(k,null);window.reportStorageFailure?.()}}
 const storedSession=read(SESSION),validSession=storedSession&&/^[0-9a-f]{48}$/.test(storedSession.token)&&/^[0-9a-f]{16}$/.test(storedSession.id)&&typeof storedSession.name==='string';
 let session=validSession&&!storedSession.offline?storedSession:null,room=null,game=null,shownRound=0,screen='',generation=0,busy=false,pollBusy=false,loungeBusy=false,last=null,loungeRooms=[],loungeTimer=null;
-const noticed=new Set();let view=null;
+const noticed=new Set();let view=null,checkpointTimer=null,mismatchTimer=null;
 // Each response belongs to the screen that initiated it. Other dialogs may replace it.
 function overlay(html){window.overlay(html);view=$('box').firstElementChild}
 function current(gen=generation){return gen===generation&&!!view?.isConnected&&!$('ov').classList.contains('hidden')}
@@ -24,7 +24,8 @@ function invite(c=room?.code){const u=new URL(location.pathname,location.origin)
 function user(n){return '<span translate="no">'+esc(n)+'</span>'}
 function roomControls(s){const state=s?.host!==undefined?s:last;if(!state||state.closed||state.left)return '';return '<div class="mp-room-actions row">'+(state.host?(state.started&&!state.finished?'<button class="btn" id="mpCancelGame">'+T('Cancel game & close room','取消游戏并关闭房间')+'</button>':''):'<button class="btn" id="mpLeaveRoom">'+T('Leave this room','退出此房间')+'</button>')+'</div>'}
 function base(s){return '<h2>'+T('Play Together','一起玩')+' · '+T('Up to 8 players','最多8人')+'</h2><p class="mp-room-code">'+T('Room code','房间码')+' <strong translate="no">'+esc(room.code)+'</strong>'+(s?.round?' · '+T('Round ','第 ')+s.round+T('',' 轮'):'')+'</p>'+nameControls()+roomControls(s)+'<p id="mpConnection" class="tip" role="status"></p>'}
-function checkpoint(){if(!game||!room)return;try{store(GAME,JSON.stringify({code:room.code,...game,done:game.done?[...game.done]:undefined}))}catch{}}
+function checkpoint(){clearTimeout(checkpointTimer);checkpointTimer=null;if(!game||!room)return;try{store(GAME,JSON.stringify({code:room.code,...game,done:game.done?[...game.done]:undefined}))}catch{}}
+function queueCheckpoint(){clearTimeout(checkpointTimer);checkpointTimer=setTimeout(checkpoint,80)}
 function exitScreen(){suspend();closeOv()}
 function clearInvite(){const u=new URL(location.href);u.searchParams.delete('room');history.replaceState(null,'',u.pathname+u.search+u.hash)}
 async function action(fn){if(busy)return;busy=true;const gen=generation;try{await fn()}catch(e){if(current(gen))error(e)}finally{busy=false}}
@@ -115,13 +116,52 @@ setInterval(poll,1500);
   else{const groups=[['🍎','🍌','🍓','🍇'],['🐶','🐱','🐢','🐦'],['🚲','🚂','🚗','🚌'],['🌻','🌷','🌹','🌼']];let k=Math.floor(rand()*4),other=(k+1+Math.floor(rand()*3))%4;let choices=shuffle(groups[k].slice(0,3).concat(groups[other][Math.floor(rand()*4)]),rand);qs.push({title:'Which picture belongs to a different group?',answer:groups[other].find(e=>choices.includes(e)),options:choices})}
  }return qs}
  function start(s){const mode=s.mode||'pairs6',rand=randomizer((s.seed^Math.imul(s.round,0x9E3779B1))>>>0);
-  if(mode.startsWith('pairs')){const count=mode==='pairs10'?10:6,pool=['🌻','🍎','🐦','🐶','🌈','🚲','🌷','🍓','🐢','🎹','🏡','🦋','🍊','☕','🌹','🚂','🎨','🪁','🥕','🐞'];const values=shuffle(pool.slice(),rand).slice(0,count);game={mode,round:s.round,deck:shuffle(values.concat(values),rand),open:[],done:new Set(),moves:0,locked:false,started:Date.now(),submitted:false,saved:false};draw('Find all '+count+' pairs. Take your time.')}
+  if(mode.startsWith('pairs')){const count=mode==='pairs10'?10:6,pool=['🌻','🍎','🐦','🐶','🌈','🚲','🌷','🍓','🐢','🎹','🏡','🦋','🍊','☕','🌹','🚂','🎨','🪁','🥕','🐞'];const values=shuffle(pool.slice(),rand).slice(0,count);game={mode,round:s.round,deck:shuffle(values.concat(values),rand),open:[],done:new Set(),moves:0,locked:false,started:Date.now(),submitted:false,saved:false,preview:true};draw(T('Take a moment to remember the pictures. Then select Begin matching.','先记住图片的位置，然后点击开始配对。'))}
   else {game={mode,round:s.round,questions:EXTRA?.questions(mode,s.seed,s.round)?.map(q=>({...q,title:T(...q.prompt),labels:q.labels?Object.fromEntries(Object.entries(q.labels).map(([k,v])=>[k,T(...v)])):null}))||problems(mode,rand),answers:[],index:0,moves:0,correct:0,started:Date.now(),submitted:false,saved:false};drawQuiz('Choose the best answer. Take your time.')}
   checkpoint();
  }
  function progress(s){return '<p class="tip">Round '+s.round+' · '+(MODES.find(m=>m[0]===s.mode)?.[1]||s.mode)+'</p>'}
- function draw(msg){screen='game';checkpoint();const g=game;if(!g)return;const count=g.deck.length/2,cards=g.deck.map((x,i)=>'<button class="mp-tile'+(g.open.includes(i)||g.done.has(i)?' revealed':'')+'" data-tile="'+i+'" '+(g.done.has(i)||g.locked?'disabled':'')+' aria-label="'+(g.open.includes(i)||g.done.has(i)?x:'Hidden picture')+'">'+(g.open.includes(i)||g.done.has(i)?gamePicture(x):'❀')+'</button>').join('');overlay(base({round:g.round})+'<p>'+esc(msg)+'</p><p>'+g.done.size/2+' of '+count+' pairs · '+g.moves+' turns</p><div class="mp-board" style="grid-template-columns:repeat('+(count===10?5:4)+',minmax(0,1fr))">'+cards+'</div><div class="row"><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button></div><p id="multiError" role="alert"></p>');$('mpExit').onclick=exitScreen;document.querySelectorAll('[data-tile]').forEach(b=>b.onclick=()=>flip(+b.dataset.tile));livePanel()}
- function flip(i){const g=game;if(!g||g.locked||g.submitted||g.open.includes(i)||g.done.has(i))return;g.open.push(i);if(g.open.length<2){draw('Find the matching picture.');return}g.moves++;const[a,b]=g.open;if(g.deck[a]===g.deck[b]){g.done.add(a);g.done.add(b);g.open=[];if(g.done.size===g.deck.length){g.submitted=true;finish();return}draw('Lovely match!')}else{g.locked=true;draw('Have another look.');setTimeout(()=>{if(game===g){g.open=[];g.locked=false;checkpoint();if(current())draw('Try another pair.')}},950)}}
+ // Mount the card board once. Updating only its state preserves touch targets,
+ // keyboard focus, scroll position and already-loaded artwork between taps.
+ function draw(msg){
+  screen='game';checkpoint();const g=game;if(!g)return;clearTimeout(mismatchTimer);
+  const count=g.deck.length/2,cards=g.deck.map((x,i)=>'<button type="button" class="mp-tile" data-tile="'+i+'"><span class="mp-card-back" aria-hidden="true">❀</span><span class="mp-card-face" aria-hidden="true">'+gamePicture(x)+'</span></button>').join('');
+  overlay(base({round:g.round})+'<p id="mpPairMessage" role="status"></p><p id="mpPairCount"></p><div id="mpPairPreview" class="mp-pair-preview"'+(g.preview?'':' hidden')+'><p>'+T('All pictures are face up. Take your time; the round timer starts when you begin.','所有图片已翻开。慢慢看，点击开始后才会计时。')+'</p><button type="button" class="btn main" id="mpBeginPairs">'+T('Begin matching','开始配对')+'</button></div><div class="mp-board" style="grid-template-columns:repeat('+(count===10?5:4)+',minmax(0,1fr))">'+cards+'</div><div class="row"><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button></div><p id="multiError" role="alert"></p>');
+  $('mpExit').onclick=exitScreen;
+  document.querySelector('.mp-board').onclick=e=>{const b=e.target.closest('[data-tile]');if(b)flip(Number(b.dataset.tile))};
+  $('mpBeginPairs').onclick=()=>{if(game!==g||!g.preview)return;g.preview=false;g.started=Date.now();$('mpPairPreview').hidden=true;updatePairs(T('Find the matching picture.','找出相同的图片。'));checkpoint();document.querySelector('[data-tile="0"]')?.focus({preventScroll:true})};
+  updatePairs(g.preview?T('Remember the pictures, then select Begin matching.','记住图片的位置，然后点击开始配对。'):msg);livePanel();
+ }
+ function updatePairs(msg){
+  const g=game,board=document.querySelector('.mp-board');if(!g||!board)return;
+  for(const button of board.querySelectorAll('[data-tile]')){
+   const i=Number(button.dataset.tile),matched=g.done.has(i),face=!!g.preview||matched||g.open.includes(i);
+   button.classList.toggle('revealed',face);button.classList.toggle('matched',matched);
+   button.disabled=!!g.preview||matched||g.submitted;
+   const label=face?g.deck[i]:T('Hidden picture ','未翻开的图片 ')+(i+1);
+   if(button.getAttribute('aria-label')!==label)button.setAttribute('aria-label',label);
+   button.setAttribute('aria-pressed',String(face));
+  }
+  const message=$('mpPairMessage');if(message&&message.textContent!==msg)message.textContent=msg;
+  const count=$('mpPairCount'),label=T(g.done.size/2+' of '+g.deck.length/2+' pairs · '+g.moves+' turns','已找到 '+g.done.size/2+'/'+g.deck.length/2+' 对 · '+g.moves+' 次');if(count&&count.textContent!==label)count.textContent=label;
+ }
+ function flip(i){
+  const g=game;if(!g||g.preview||g.submitted||!Number.isInteger(i)||i<0||i>=g.deck.length||g.open.includes(i)||g.done.has(i))return;
+  // A new card tap can dismiss an unmatched pair immediately. It is never lost
+  // behind a fixed lockout or delayed until another tap.
+  if(g.locked){clearTimeout(mismatchTimer);g.open=[];g.locked=false}
+  g.open.push(i);
+  if(g.open.length<2){updatePairs(T('Find the matching picture.','找出相同的图片。'));queueCheckpoint();return}
+  g.moves++;const[a,b]=g.open;
+  if(g.deck[a]===g.deck[b]){
+   g.done.add(a);g.done.add(b);g.open=[];
+   if(g.done.size===g.deck.length){g.submitted=true;updatePairs(T('All pairs found. Saving your result…','已找到全部配对，正在保存成绩……'));finish();return}
+   updatePairs(T('Lovely match!','配对成功！'));queueCheckpoint();
+  }else{
+   g.locked=true;updatePairs(T('Not a match. Tap another card when you are ready.','这两张不同。准备好后可以点击另一张。'));queueCheckpoint();
+   mismatchTimer=setTimeout(()=>{if(game===g&&g.locked){g.open=[];g.locked=false;checkpoint();if(current())updatePairs(T('Try another pair.','再试一对。'))}},950);
+  }
+ }
  function drawQuiz(msg){screen='game';checkpoint();const g=game;if(!g)return;const q=g.questions[g.index];overlay(base({round:g.round})+'<p>'+esc(msg)+'</p><p>Question '+(g.index+1)+' of '+g.questions.length+'</p><div class="seqline">'+gamePrompt(q.title)+'</div><div class="gridm" style="--c:2">'+q.options.map((o,i)=>'<button class="big '+(isGamePicture(q.labels?.[o]||o)?'picture-answer':'txt')+'" data-answer="'+i+'">'+(isGamePicture(q.labels?.[o]||o)?gamePicture(q.labels?.[o]||o):esc(q.labels?.[o]||o))+'</button>').join('')+'</div><div class="row"><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button></div><p id="multiError" role="alert"></p>');$('mpExit').onclick=exitScreen;document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>answer(+b.dataset.answer));livePanel()}
  function answer(i){const g=game;if(!g||g.submitted)return;const q=g.questions[g.index],good=q.options[i]===q.answer;(g.answers||(g.answers=[])).push(q.options[i]);g.moves+=good?1:2;if(good)g.correct++;g.index++;if(g.index===g.questions.length){g.submitted=true;finish()}else drawQuiz(good?'Well done!':'Good try! The answer was '+(q.labels?.[q.answer]||q.answer)+'.')}
 
@@ -153,7 +193,8 @@ async function openRoomHistory(code,offset=0,roomOffset=0){const gen=generation;
 }
 const localLeaderboard=window.lbView;window.lbView=function(...args){localLeaderboard(...args);const tabs=document.createElement('div');tabs.className='ranking-tabs';tabs.innerHTML='<button class="btn" type="button" aria-pressed="true">'+T('On this device','此设备')+'</button><button class="btn" type="button" id="leaderboardOnline">'+T('Online room rankings','在线房间排名')+'</button>';$('box').querySelector('h2')?.after(tabs);$('leaderboardOnline').onclick=()=>action(()=>openHistory())};
 
-window.addEventListener('focus',()=>{poll();lounge()});document.addEventListener('visibilitychange',()=>{if(!document.hidden){poll();lounge()}});
+window.addEventListener('pagehide',checkpoint);
+window.addEventListener('focus',()=>{poll();lounge()});document.addEventListener('visibilitychange',()=>{if(document.hidden)checkpoint();else{poll();lounge()}});
 $('bOnline').onclick=menu;
 if(session)startLounge();
 if(/^[A-Z2-9]{6}$/i.test(new URLSearchParams(location.search).get('room')||''))setTimeout(menu,350);

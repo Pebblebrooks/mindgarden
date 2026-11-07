@@ -48,10 +48,10 @@ html[data-motion="gentle"] #gardenLife .animal-cat .wildlife-facing,html[data-mo
 html[data-motion="gentle"] .wf-leg,html[data-motion="gentle"] .wf-knee{animation-duration:1.2s}
 html[data-motion="off"] #gardenLife *,html[data-ambient-paused="true"] #gardenLife *{animation-play-state:paused!important}
 html[data-motion="off"] .animal-cat{left:8%!important}html[data-motion="off"] .animal-dog{left:75%!important}html[data-motion="off"] .animal-rabbit{left:40%!important}
-@media(prefers-reduced-motion:reduce){#gardenLife *{animation:none!important}.animal-cat{left:8%!important}.animal-dog{left:75%!important}.animal-rabbit{left:40%!important}}
+@media(prefers-reduced-motion:reduce){html:not([data-motion-explicit="true"]) #gardenLife *{animation:none!important}.animal-cat{left:8%!important}.animal-dog{left:75%!important}.animal-rabbit{left:40%!important}}
 /* Lobby and room status. */
-#onlineInvitation{position:fixed;z-index:12;bottom:12px;left:12px;right:12px;max-width:850px;margin:auto;display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--panel);color:var(--ink);border:2px solid var(--back);border-radius:16px;box-shadow:0 4px 24px #1234;font-size:.85rem}
-#onlineInvitation>span{flex:1}#onlineInvitation .btn{font-size:.85rem;min-height:40px;padding:6px 10px}
+#onlineInvitation{position:fixed;z-index:12;bottom:12px;left:12px;right:12px;max-width:850px;margin:auto;display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--panel);color:var(--ink);border:2px solid var(--back);border-radius:16px;box-shadow:0 4px 24px #1234;font-size:calc(.85rem * var(--fs))}
+#onlineInvitation>span{flex:1}#onlineInvitation .btn{font-size:calc(.85rem * var(--fs));min-height:40px;padding:6px 10px}
 .mp-room-code{background:var(--bg);border:2px dashed var(--back);border-radius:12px;padding:10px;letter-spacing:.04em}.mp-room-code strong{font-size:1.3em;letter-spacing:.14em}
 .mp-roster,.mp-receipts{list-style:none;padding:0;margin:10px 0}.mp-roster li{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border-bottom:1px solid var(--line);font-size:.85em}.mp-roster li>span:last-child{margin-left:auto;font-size:.8em}.mp-roster small{border-radius:9px;padding:2px 7px;background:var(--sun);color:var(--sunink)}
 .mp-receipts{font-size:.75em;max-height:130px;overflow-y:auto}.mp-receipts li{padding:3px 0}.mp-open-room{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px;border-bottom:1px solid var(--line);font-size:.85em}.mp-open-room button{margin-left:auto}

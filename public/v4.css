@@ -72,3 +72,26 @@ html[data-hc="1"] :is(.btn.main,.btn[aria-pressed="true"]){background:#000!impor
 @media(prefers-reduced-motion:reduce){.btn:active{transform:none}}
 
 #home .welcome-name{flex-wrap:wrap;gap:4px 8px}#home .welcome-name .welcome-greeting{white-space:nowrap}#home .welcome-name span[translate]{min-width:0;max-width:100%;overflow-wrap:anywhere}#home .welcome-name>span[aria-hidden]{flex-shrink:0}
+
+/* v4.0.1: light actions and stable, inexpensive touch targets. */
+html[data-v4-mode="light"]:not([data-hc="1"]) :is(.btn.main,#dashStart,.category-pill.active,.btn[aria-pressed="true"]){background:#cfe2ce!important;background-image:linear-gradient(145deg,#ffffff50,transparent)!important;color:#173e37!important;border:2px solid #52725f!important;box-shadow:inset 0 1px 0 #fffdf7,0 3px 0 #52725f,0 7px 14px #173e371a!important}
+html[data-v4-mode="light"]:not([data-hc="1"]) .category-pill.active::after{content:'✓';font-weight:800}
+#box .btn,.game-tile,.category-pill{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+@media(hover:none),(pointer:coarse){#home .welcome-feature:hover,.game-tile:hover,.btn:active{transform:none!important}#home .welcome-feature,.game-tile,#box .btn{transition:none!important}}
+.mp-board .mp-tile{position:relative;touch-action:manipulation;transition:background-color .1s,border-color .1s;user-select:none;-webkit-user-select:none;overflow:hidden}
+.mp-card-face{display:none;width:100%}.mp-card-back{display:block;font-size:44px;line-height:1.3}
+.mp-tile.revealed .mp-card-face{display:block}.mp-tile.revealed .mp-card-back{display:none}
+.mp-tile.matched{border-color:#246a49;box-shadow:inset 0 0 0 2px #246a49}.mp-tile.matched:after{content:'✓';position:absolute;right:3px;top:2px;background:#fffdf7;color:#173e37;border-radius:50%;font-size:22px;line-height:1.2}
+.mp-pair-preview{padding:12px;border:1px solid var(--line);border-radius:14px;margin:12px 0;text-align:center}.mp-pair-preview[hidden]{display:none!important}
+#mpPairMessage{min-height:1.5em;text-align:center}#mpPairCount{text-align:center}
+
+/* One spacing rhythm for welcome sections and wrapped cards, at every text size. */
+#home .welcome-scene{--welcome-gap:clamp(20px,calc(24px * var(--fs)),34px);gap:var(--welcome-gap)!important}
+#home .welcome-scene>:is(.welcome-heading,.welcome-name,#welcomeControls,.welcome-extra,.welcome-ctas,.welcome-links,.v4-first-use){margin:0!important;flex-shrink:0}
+#home .welcome-heading{display:flex;flex-direction:column;align-items:center;gap:var(--welcome-gap)}
+#home .welcome-heading p{margin:0!important}
+#home .welcome-extra{gap:var(--welcome-gap)!important}
+#home .welcome-ctas{gap:var(--welcome-gap)!important}
+#home .welcome-links{row-gap:var(--welcome-gap);column-gap:clamp(12px,calc(16px * var(--fs)),24px)}
+#home .welcome-feature{gap:clamp(8px,calc(8px * var(--fs)),14px)}
+.game-card-grid{gap:clamp(16px,calc(20px * var(--fs)),32px)!important}

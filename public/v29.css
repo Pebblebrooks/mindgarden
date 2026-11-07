@@ -33,4 +33,4 @@ html[data-motion="gentle"] .sea-rock{animation-duration:7s}
 html[data-motion="off"] #gardenLife *,html[data-motion="off"] #seaScene *,html[data-ambient-paused="true"] #gardenLife *,html[data-ambient-paused="true"] #seaScene *{animation-play-state:paused!important}
 .motion-options{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0;border:1px solid var(--line);border-radius:12px;padding:12px}
 .motion-options .btn[aria-pressed="true"]{outline:3px solid var(--back);outline-offset:1px}
-@media(prefers-reduced-motion:reduce){#gardenLife *,#seaScene *{animation:none!important}}
+@media(prefers-reduced-motion:reduce){html:not([data-motion-explicit="true"]) #gardenLife *,#seaScene *{animation:none!important}}
