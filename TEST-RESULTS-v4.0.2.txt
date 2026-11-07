@@ -1,0 +1,21 @@
+MIND GARDEN V4.0.2 — CHECKS AND LIMITS
+
+PASS — multiplayer-taps.test.mjs: both board sizes and English/Chinese; closed initial cards; full 5/8-second preview; double Begin cannot extend it; automatic closure; matching timer excludes preview; stable card nodes/focus; first-tap mismatch continuation; saved checkpoints/resume; four persisted scores.
+PASS — multiplayer-round-flow.test.mjs: resume keeps preview deadline; expiry while away closes cards on return; pending, loaded and failed image fallback CSS states; leave returns directly to code entry; join another room while old polling remains pending; stale old lobby/status responses ignored; host closure releases membership; departed result retained.
+PASS — multiplayer-lifecycle.test.mjs: late join/create, expired rooms, navigation during polling, logout during invitation delivery, clipboard rejection after closure, and rename/profile-switch races.
+PASS — multiplayer-ui.test.mjs: eight English/Chinese clients, invitations and receipts, host launch, reconnect, submission, rankings, next round, host ending/closing, direct lobby return, participant leave and host cancellation.
+PASS — room8.test.mjs: SQL-backed room capacity, permissions, host-only actions, repeatable migration and scores, rounds and closure.
+PASS — bingo-ui.test.mjs: two clients, Chinese, host-paced calls, marks, reload/rejoin, results and retained history.
+PASS — v4-design.test.cjs: existing appearance modes, guide, quiet-game view, user preferences, library illustrations and safe picture fallback remain functional.
+PASS — release-cache.test.cjs: cohesive 402 assets, failed-install handling, offline response, scoped cache cleanup and no API caching.
+PASS — storage-failure.test.cjs: storage-full recovery, blocked-storage lobby, malformed-save preservation and safe boot.
+PASS — npm run check plus generated bundle syntax check.
+
+The release was rebuilt from source. Package checks verify archive integrity, checksums, all referenced cache assets, and application to the supplied GitHub ZIP. No API/Functions, SQL, or production database changes are included.
+
+NOT VERIFIED HERE
+- Browser layout at mobile/tablet widths and enlarged text. The local preview was rejected by the browser URL security policy; no alternate browser route was used.
+- Physical iPhone/Android paint behaviour, touch latency, or a live Cloudflare deployment.
+- The exact device-specific cause of the intermittent blank cards. This release addresses two concrete rendering risks: hiding the fallback before an image is ready, and changing face layout with display:none.
+
+DOM/CSS-state tests verify intended behaviour, not pixel rendering. Please confirm the blank-card and dialog-jump reports on an affected device. The report does not claim every possible defect has been eliminated.

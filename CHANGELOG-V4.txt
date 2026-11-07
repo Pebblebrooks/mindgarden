@@ -1,3 +1,24 @@
+Mind Garden v4.0.2 — 7 November 2026
+Developer: Pebblebrooks
+
+Multiplayer Matching Pairs
+- Cards start face down. Begin reveals every card for 5 seconds (6 pairs) or 8 seconds (10 pairs), then closes them automatically.
+- Matching time starts at the preview deadline. Returning to a round does not restart or extend that preview. Existing V4.0.1 games in progress remain resumable.
+- Card faces keep their layout space. A visible emoji stands in for an illustration while it loads or if loading fails. Loaded SVG artwork is displayed after decoding; no additional tap is needed for that transition.
+- Match feedback reserves space for the longest localized message at the current width and text size. Ready, countdown and matching controls also retain their space.
+- The countdown updates its label without rewriting every card on each tick. Single-tap play and immediate continuation after a mismatch remain available.
+
+Leaving and changing rooms
+- Leave this room clears active local room state and returns to the lobby with a room-code input. The other players can continue.
+- Old status and lobby responses cannot restore a room after leaving. A pending response from the old room does not block the new room's status request.
+- Hosts close their room before joining another. Completed results stay in the existing database.
+
+Documentation and deployment
+- About includes the new English/Chinese matching and room-exit instructions; release metadata is v4.0.2.
+- The update includes the earlier V4.0.1 GitHub folder repair, including missing/outdated source inputs. It contains affected files only, not a standalone app.
+- No Functions or SQL changes. Replacement animal animations are not part of this release.
+- Browser/device visual validation remains outstanding: the browser preview was blocked by the environment's URL security policy. Automated DOM, CSS-state, API and cache checks passed; these do not certify Safari/Android rendering or measured layout stability.
+
 MIND GARDEN v4.0.1 — 7 November 2026
 
 - Online Matching Pairs now opens with every picture revealed in both 6-pair and 10-pair modes. Begin matching hides the cards and starts that player's timer. The host can still end or cancel the round.
