@@ -1,0 +1,11 @@
+Mind Garden V4 picture artwork
+
+Twemoji 17.0.3
+Copyright Twitter, Inc. and other contributors.
+Source: https://github.com/jdecked/twemoji/tree/v17.0.3
+Graphics licensed under Creative Commons Attribution 4.0 International.
+https://creativecommons.org/licenses/by/4.0/
+See LICENSE-GRAPHICS for the licence.
+Selected SVG files are bundled unmodified and resized in the interface.
+The six shape-*.svg geometry drawings are by Pebblebrooks.
+Twemoji is not affiliated with or endorsing Mind Garden.
