@@ -1,0 +1,15 @@
+Mind Garden v4.0.3 — verification record
+
+PASS: room8, room lifecycle, malformed-request validation and multiplayer sessions API tests using in-memory SQLite.
+PASS: 1–20 round validation, persistent plan, per-player Begin and retry safety, bingo readiness barrier, final automatic completion, early Finish session, cancellation, membership release and saved rankings.
+PASS: active-room invitation delivery, refusal to join multiple rooms, guest leave/join, Go offline and retained legacy room behavior. New migration reruns without changing scores.
+PASS: eight independent English/Chinese clients through invitation, launch, Begin, play, scoring, next round, finish and cancellation.
+PASS: both matching board sizes through closed start, full 5/8-second preview, automatic closure, one-tap play, mismatch continuation, image load/error fallback, resume and delayed-response handling.
+PASS: all eight additional quiz modes in English/Chinese through actual DOM controls and the real SQL API; deterministic question/answer validation and saved history.
+PASS: two-client bingo DOM play, server-paced calls, reload with retained marks and full-card result persistence.
+PASS: quiz questions and timing stay inactive before Begin; Begin failure retries; leaving during a pending Begin does not reopen the game; final result screens release active room state.
+PASS: computed CSS scroll ownership and dialog lock/unlock at 100%, 140% and 200% text. No global wheel-event cancellation was added.
+PASS: V4 design regression checks, coherent versioned release/cache rules, JavaScript syntax and build checks.
+PASS: release ZIP checksums and repository-folder merge/rebuild verification.
+
+Limits: Tests use jsdom and local SQLite rather than production Cloudflare D1. They do not measure physical wheel/touch scrolling, real device painting/layout, real network latency, or browser performance. No production deployment or database mutation was performed. Complete the device checks in README-INSTALL.txt after installation.

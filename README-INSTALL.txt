@@ -1,55 +1,41 @@
-MIND GARDEN V4.0.2 — INSTALLATION
+MIND GARDEN V4.0.3 — INSTALLATION
 Developer: Pebblebrooks
 
-This download contains affected files for your existing Mind Garden project. It includes the V4.0.1 GitHub folder repairs as well as the new multiplayer fixes. You do not need to apply the separate V4.0.1 repair ZIP first. It is not a complete standalone project.
+Affected-files update for your existing project. Includes the V4.0.1 folder repair and V4.0.2 fixes. It is NOT a standalone app. Keep unchanged artwork, music, configuration and source files.
 
-Keep a backup of your existing project. Export any player data you want to back up through Settings > Backup and restore. Do not clear browser site data while updating.
+1. APPLY THE DATABASE MIGRATION FIRST
+Open the existing Cloudflare D1 database used by this Pages project's DB binding. Choose Console.
+Open migrate-v4.0.3.sql in a text editor. Copy its two CREATE TABLE statements to the console and Execute. If your console only accepts one statement, run each CREATE TABLE statement separately, including its final semicolon.
+This file contains no SQL comments, so it also works if the console collapses line breaks. It only adds two tables; do not delete tables or reset the database.
+Run check-database-v4.0.3.sql afterward. Expect 21 rows, all PRESENT. If an older V3/v3.8.5/v3.8.6 object is MISSING, complete the corresponding original migration before updating the app. The check verifies object names only; use the app checks below to verify behavior.
+It is safe to rerun the new migration. Existing scores remain intact. Keep a backup of your repository and export player data before updating; do not clear browser site data.
 
-GITHUB WEBSITE — THREE UPLOADS
-Extract the ZIP using Windows Extract All. Inside are public and tests folders plus six top-level files. Do not upload the ZIP itself.
+2. MERGE THE UPDATE INTO GITHUB
+Extract this ZIP first. Do not upload the ZIP itself. The ZIP has public/, functions/, shared/ and tests/ folders plus top-level files, with no wrapper folder.
+Recommended: merge these folders into a local copy of your existing repository, replacing matching files and retaining all other files. Commit and push the complete update in one commit.
 
-1. OPEN THE EXISTING public FOLDER IN YOUR GITHUB mindgarden REPOSITORY, ON main.
-   Choose Add file > Upload files. Select the 35 FILES INSIDE the extracted local public folder, then commit through your normal workflow.
-   Correct target: public/index.html
-   Wrong targets: index.html at repository root; public/public/index.html
-   Merge/replace matching files. Keep all other files in public, including artwork, audio and wildlife assets.
+If uploading using GitHub's website, use these EXACT destinations:
+- Inside the existing public folder: upload the 36 FILES INSIDE the extracted public folder.
+  Correct: public/index.html, public/garden-ui-403.js, public/garden-ui-403.css.
+  Wrong: index.html at repository root, or public/public/index.html.
+- Inside functions/api: upload room8.js from extracted functions/api.
+- Inside shared: upload online-activities.js from extracted shared.
+- Inside tests: upload the 27 files inside extracted tests.
+- At repository root: upload package.json, README.md, README-INSTALL.txt, CHANGELOG-V4.txt, TEST-RESULTS-v4.0.3.txt, SHA256SUMS-v4.0.3.txt, migrate-v4.0.3.sql and check-database-v4.0.3.sql.
+Finish EVERY upload before testing the final deployment. A partial upload can mix old server code with new controls. package.json must say 4.0.3.
 
-2. OPEN THE EXISTING tests FOLDER IN GITHUB.
-   Upload the 20 FILES INSIDE the extracted local tests folder and commit.
+3. CHECK CLOUDFLARE DEPLOYMENT
+Use the same Pages project, repository root, output directory public, Pages Functions, and DB binding. Prebuilt assets are included; if your existing build command rebuilds the app, use python3 scripts/build-release.py or npm run build.
+Wait for the successful production deployment whose commit matches the FINAL GitHub upload. Reload the same site; if needed, close all Mind Garden tabs and reopen it. Do not delete site storage.
+About must report v4.0.3. The page must load garden-ui-403.css and garden-ui-403.js.
 
-3. RETURN TO THE GITHUB REPOSITORY'S TOP LEVEL.
-   Upload the six top-level files from the extracted ZIP:
-     package.json
-     README.md
-     README-INSTALL.txt
-     CHANGELOG-V4.txt
-     TEST-RESULTS-v4.0.2.txt
-     SHA256SUMS-v4.0.2.txt
-   In particular, package.json must be the new file with version 4.0.2. Commit these changes.
+4. VERIFY ON YOUR DEVICES
+- Scroll the main page with the mouse wheel. Open Play Together, scroll inside it, and verify the page behind it stays still. Close it and confirm wheel scrolling resumes.
+- Repeat with text size 100%, 140% and 200%, and with a narrow browser window.
+- Create a NEW room and select 1 round. Join from a second device. The host prepares a quiz; neither player should see questions until pressing Begin individually.
+- For matching pairs, verify closed cards > Begin > full timed preview > automatic close > play. The preview is 5 seconds for 6 pairs and 8 seconds for 10 pairs.
+- For bingo, both players must press Begin before any pictures are shown or called.
+- Complete the final planned round: both players should see Session complete and final rankings, with no next-round button. Return to the lobby and join/create another room.
+- Test a multi-round session: Finish session between rounds ends normally; Cancel game & close room during a round stops play for everyone. Scores already completed remain in Saved online rankings.
 
-Complete ALL THREE uploads before checking the final Cloudflare deployment. If your build command rebuilds the app, it takes the version from package.json. An intermediate deployment may still report the old version until the last upload is committed.
-
-LOCAL CHECKOUT ALTERNATIVE
-Merge the extracted public and tests folders and the six top-level files into the root of your complete local project. Replace matching files, keep unchanged files, then commit/push the merged changes in one commit.
-
-CLOUDFLARE
-Use your existing Pages project and production address. The intended root is the repository root and build output is public. Preserve Pages Functions and the D1 binding DB.
-Prebuilt assets are included. If using a build command, use python3 scripts/build-release.py or npm run build. Do not change output to the repository root to serve the misplaced duplicate files.
-Wait for the successful production deployment whose commit matches the FINAL GitHub upload. Then reload the website. If necessary close every Mind Garden tab and reopen the same address.
-
-CONFIRM
-About must show v4.0.2. public/index.html must load garden-ui-402.css and garden-ui-402.js; public/sw.js uses mind-garden-v402.
-In a fresh matching round:
-- Cards are closed before Begin.
-- Begin opens them for 5 seconds (6 pairs) or 8 seconds (10 pairs).
-- They close automatically and matching begins, without another tap.
-- Card pictures show as SVG illustrations, or emoji while unavailable.
-- Match feedback has a reserved area so changing text does not move the board.
-- Leave this room returns to the lobby, ready for a new code. A new room must still be open, have a free place, and not already be launched.
-- Back to garden · stay joined deliberately retains membership. Use Leave this room when changing rooms. Hosts must close their room first.
-
-DATABASE
-There is NO NEW SQL migration and no API/schema change in V4.0.2. Do not reset or drop tables. Existing multiplayer requires the earlier V3, v3.8.5 and v3.8.6 migrations.
-
-VALIDATION LIMIT
-Automated multiplayer, cache, and artwork fallback checks passed. Browser visual testing was blocked by the current environment, so confirm picture rendering and feedback spacing on an affected mobile device after deployment. This package has not been deployed by the assistant.
+Browser/device visual verification was not available in this environment. Automated DOM/API/CSS tests are described in TEST-RESULTS-v4.0.3.txt; they are not a substitute for these device checks.

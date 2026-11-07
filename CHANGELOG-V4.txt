@@ -1,3 +1,27 @@
+Mind Garden v4.0.3 — 7 November 2026
+Developer: Pebblebrooks
+
+Scrolling
+- Remove the competing body scroller and its scroll-chain block. The document owns normal page scrolling.
+- Lock background scrolling while a shared dialog is open. The dialog keeps its own scroll, including at its edges. Its padding and height fit the viewport.
+- These rules passed computed CSS checks at 100%, 140% and 200% text. Physical mouse-wheel behavior and device rendering need a real browser check.
+
+Multiplayer sessions
+- Choose 1–20 rounds before creating a room (default 3). The number is saved in D1 and shown to participants.
+- Every quiz now waits for that player's Begin before revealing questions or starting timing. Matching keeps its closed board, Begin, full 5/8-second preview, automatic closure and matching timer. Network waiting for Begin does not shorten the initial preview.
+- Bingo waits for every remaining player to press Begin; the server blocks calls and marks until then.
+- Each new round requires Begin again. Returning to a begun round preserves progress and timing. Existing rooms created by earlier versions retain their original session behavior until closed; create a new room to use a fixed limit.
+- The final planned round finishes the session automatically, saves final rankings and releases all memberships.
+- Finish session is available between rounds to finish early. Cancel game & close room stops unfinished play; End current round marks unfinished players as not finished. Completed scores remain saved.
+- Invitations remain visible to online players in other rooms. Room options explains the exit rule and directs the player to the current room controls without silently dropping participation. Background/suspended tabs are not guaranteed immediate notices.
+- Back to garden keeps membership; Go offline is separate and requires leaving/finishing the active room.
+
+Database and deployment
+- Add repeatable migrate-v4.0.3.sql: mg_room_sessions and mg_round_starts. No existing table or result is deleted.
+- Include comment-free check-database-v4.0.3.sql; 21 PRESENT rows confirm object names, not complete schema definitions.
+- Updated English/Chinese About help and error messages, versioned 403 assets, and service-worker manifest.
+- Update both public/ and functions/api/room8.js; include shared/online-activities.js at its correct path. The package is affected files plus cumulative deployment repair, not a standalone app.
+
 Mind Garden v4.0.2 — 7 November 2026
 Developer: Pebblebrooks
 
