@@ -3,7 +3,7 @@
 'use strict';
 const nav=document.getElementById('unifiedNav');if(!nav)return;
 const T=(a,b)=>save.lang==='zh'?b:a;
-const removalOrder=['contact','about','language','music','appearance','text','leaderboard','progress','online','library'];
+const removalOrder=['contact','about','language','music','appearance','text','nature','motion','leaderboard','progress','online','library'];
 function fit({available,brand,compactBrand,main,tools,toggle,gap=12,mainGap=5,toolGap=6}){
  const hidden=new Set(),sum=(items,space)=>{const shown=items.filter(x=>!hidden.has(x.key));return shown.reduce((s,x)=>s+x.width,0)+Math.max(0,shown.length-1)*space};
  const required=(b)=>{const center=sum(main,mainGap),right=sum([...tools,{key:'toggle',width:toggle}],toolGap);return center?center+2*Math.max(b,right)+2*gap:b+right+gap};
@@ -34,7 +34,7 @@ function layout(){
  if(focus&&all.some(el=>el.dataset.navHidden==='true'&&el.contains(focus))){
   const menu=document.getElementById('navMenu');menu.classList.remove('hidden');more.setAttribute('aria-expanded','true');more.setAttribute('aria-label',T('Close menu','关闭菜单'));
   let selector=focus.hasAttribute('data-text-preset')?'[data-text-preset]':focus.hasAttribute('data-text-reset')?'[data-text-reset]':focus.hasAttribute('data-text-step')?'[data-text-step="'+focus.dataset.textStep+'"]':focus.dataset.go?'[data-go="'+focus.dataset.go+'"]':null;
-  (selector?menu.querySelector(selector)||more:more).focus({preventScroll:true});
+  const destination=selector?menu.querySelector(selector)||more:more;const group=destination.closest('details');if(group)group.open=true;destination.focus({preventScroll:true});
  }
 }
 const resize=window.ResizeObserver?new ResizeObserver(schedule):null;
