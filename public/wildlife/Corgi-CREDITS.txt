@@ -1,0 +1,4 @@
+Corgi skeletal model: Gobkit free assets by Ariescar, CC0 1.0.
+Source: https://github.com/Ariescar/gobkit-free-assets/blob/main/animal/Corgi.glb
+License: https://github.com/Ariescar/gobkit-free-assets/blob/main/LICENSE
+Idle frames 0-29; walk frames 90-119, 24 fps.
