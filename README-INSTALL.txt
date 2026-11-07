@@ -1,41 +1,87 @@
-MIND GARDEN V4.0.3 — INSTALLATION
-Developer: Pebblebrooks
+MIND GARDEN V4.0.4 — INSTALLATION
+8 November 2026 · Developer: Pebblebrooks
 
-Affected-files update for your existing project. Includes the V4.0.1 folder repair and V4.0.2 fixes. It is NOT a standalone app. Keep unchanged artwork, music, configuration and source files.
+CONTENTS
+Approved welcome layout, grouped navigation, centered popup controls,
+larger-text spacing fixes and updated English/Chinese help. Complete application
+assets, editable source, Pages Functions, build script and tests are included.
+Merge into your existing repository. public/, functions/, shared/, src/,
+scripts/ and tests/ are at the ZIP root, with no wrapper folder.
+Your Cloudflare account settings, database and player records are not in this ZIP.
+Animal illustration and motion studies remain prototypes; this release retains
+the existing production wildlife engine and assets.
 
-1. APPLY THE DATABASE MIGRATION FIRST
-Open the existing Cloudflare D1 database used by this Pages project's DB binding. Choose Console.
-Open migrate-v4.0.3.sql in a text editor. Copy its two CREATE TABLE statements to the console and Execute. If your console only accepts one statement, run each CREATE TABLE statement separately, including its final semicolon.
-This file contains no SQL comments, so it also works if the console collapses line breaks. It only adds two tables; do not delete tables or reset the database.
-Run check-database-v4.0.3.sql afterward. Expect 21 rows, all PRESENT. If an older V3/v3.8.5/v3.8.6 object is MISSING, complete the corresponding original migration before updating the app. The check verifies object names only; use the app checks below to verify behavior.
-It is safe to rerun the new migration. Existing scores remain intact. Keep a backup of your repository and export player data before updating; do not clear browser site data.
+1. DATABASE
+If the V4.0.3 database migration is installed, NO NEW SQL is required.
+V4.0.4 uses the same schema as V4.0.3.
 
-2. MERGE THE UPDATE INTO GITHUB
-Extract this ZIP first. Do not upload the ZIP itself. The ZIP has public/, functions/, shared/ and tests/ folders plus top-level files, with no wrapper folder.
-Recommended: merge these folders into a local copy of your existing repository, replacing matching files and retaining all other files. Commit and push the complete update in one commit.
+If upgrading from V4.0.2 or earlier, complete migrate-v4.0.3.sql first in the
+existing D1 database bound to this app as DB. Execute its two complete CREATE
+TABLE statements, including final semicolons: mg_room_sessions and mg_round_starts.
+It preserves scores. The older migrate-v3.sql, migrate-v3.8.5.sql and
+migrate-v3.8.6.sql prerequisites must already be complete.
+Do not use schema.sql to update an existing database or delete existing tables.
 
-If uploading using GitHub's website, use these EXACT destinations:
-- Inside the existing public folder: upload the 36 FILES INSIDE the extracted public folder.
-  Correct: public/index.html, public/garden-ui-403.js, public/garden-ui-403.css.
-  Wrong: index.html at repository root, or public/public/index.html.
-- Inside functions/api: upload room8.js from extracted functions/api.
-- Inside shared: upload online-activities.js from extracted shared.
-- Inside tests: upload the 27 files inside extracted tests.
-- At repository root: upload package.json, README.md, README-INSTALL.txt, CHANGELOG-V4.txt, TEST-RESULTS-v4.0.3.txt, SHA256SUMS-v4.0.3.txt, migrate-v4.0.3.sql and check-database-v4.0.3.sql.
-Finish EVERY upload before testing the final deployment. A partial upload can mix old server code with new controls. package.json must say 4.0.3.
+Optional check: run check-database-v4.0.4.sql in the D1 Console.
+Expected: 21 rows, all PRESENT. This checks object names, not their definitions.
+If an older object is MISSING, complete its corresponding original migration.
+For SQL containing comments, preserve line breaks, or omit lines beginning
+with -- before pasting into the Console.
 
-3. CHECK CLOUDFLARE DEPLOYMENT
-Use the same Pages project, repository root, output directory public, Pages Functions, and DB binding. Prebuilt assets are included; if your existing build command rebuilds the app, use python3 scripts/build-release.py or npm run build.
-Wait for the successful production deployment whose commit matches the FINAL GitHub upload. Reload the same site; if needed, close all Mind Garden tabs and reopen it. Do not delete site storage.
-About must report v4.0.3. The page must load garden-ui-403.css and garden-ui-403.js.
+2. MERGE THE EXTRACTED FILES
+Keep a backup of your repository. Extract this ZIP; do not upload the ZIP itself.
+Merge its contents into the existing repository root, replacing matching files
+and retaining project-specific configuration and unrelated files.
+Commit and push the complete update together where possible.
 
-4. VERIFY ON YOUR DEVICES
-- Scroll the main page with the mouse wheel. Open Play Together, scroll inside it, and verify the page behind it stays still. Close it and confirm wheel scrolling resumes.
-- Repeat with text size 100%, 140% and 200%, and with a narrow browser window.
-- Create a NEW room and select 1 round. Join from a second device. The host prepares a quiz; neither player should see questions until pressing Begin individually.
-- For matching pairs, verify closed cards > Begin > full timed preview > automatic close > play. The preview is 5 seconds for 6 pairs and 8 seconds for 10 pairs.
-- For bingo, both players must press Begin before any pictures are shown or called.
-- Complete the final planned round: both players should see Session complete and final rankings, with no next-round button. Return to the lobby and join/create another room.
-- Test a multi-round session: Finish session between rounds ends normally; Cancel game & close room during a round stops play for everyone. Scores already completed remain in Saved online rankings.
+Correct paths after merging:
+  package.json                     version 4.0.4
+  public/index.html
+  public/garden-ui-404.js
+  public/garden-ui-404.css
+  public/sw.js
+  public/welcome-media.js
+  public/dashboard.js
+  functions/api/room8.js
+  shared/online-activities.js
+  scripts/build-release.py
 
-Browser/device visual verification was not available in this environment. Automated DOM/API/CSS tests are described in TEST-RESULTS-v4.0.3.txt; they are not a substitute for these device checks.
+Do not flatten public/ into the root, create public/public/, or upload everything
+inside an extra Mind-Garden-v4.0.4-update/ folder.
+If using GitHub's website, preserve every folder's relative path and finish all
+uploads before testing the final deployment. Uploading only index.html or only
+the generated bundle can leave the build using older editable source.
+Old garden-ui-400/401/402/403 files may remain; the new page references 404 assets.
+
+3. CLOUDFLARE PAGES
+Keep the existing project, repository connection, Pages Functions and DB binding.
+Build output directory: public
+Prebuilt assets are included. If your deployment rebuilds the app, use
+npm run build (or python3 scripts/build-release.py).
+Do not change the output directory to the extracted ZIP folder.
+
+Wait for the successful deployment matching the final uploaded commit.
+Reload Mind Garden. If the older page remains, close all Mind Garden tabs and
+reopen the same production URL. Do not clear browser site data: local player
+progress and personal media are stored there.
+
+Open Menu > Help > About. It must show v4.0.4.
+The HTML must reference garden-ui-404.js and garden-ui-404.css.
+If the version remains older, check the deployed commit and folder paths above.
+
+4. QUICK CHECK
+- Welcome/name has no colored box or border and still opens the name editor.
+- Matching cards appear as Today's Games, All Games, Play Together, in that order.
+  They reflow on narrow screens or when text is enlarged.
+- Today's Games still opens the guided daily activities.
+- Progress, Leaderboard and Quick guide remain accessible from the menu.
+- Compact sound/animation icons appear in the navbar when space permits;
+  Menu > Preferences also contains them, text size and display mode.
+- Test 100%, 140% and 200% text in light/dark modes and a narrow viewport.
+- In Play Together, Activity and Prepare first round have visible separation.
+- In Music, volume labels and percentages appear above their sliders.
+- Information icons work by hover, keyboard or tap; Escape dismisses them.
+- Create a new multiplayer room and confirm each player can press Begin.
+
+No production deployment or D1 mutation was performed while preparing this ZIP.
+See TEST-RESULTS-v4.0.4.txt for completed checks and their limits.

@@ -1,0 +1,44 @@
+Mind Garden V4.0.4 — verification record
+8 November 2026
+
+PASS: build and JavaScript syntax checks.
+PASS: 35 automated suites using jsdom, Node and local SQLite.
+- Welcome card order and Today's Games action, removed welcome clutter,
+  compact sound/motion controls, grouped menu and no duplicate controls.
+- Tap/keyboard information controls and dismissal, navigation rebuilds,
+  bilingual menus, text-size synchronization and About return focus.
+- Full daily journeys, original and additional activity entry screens,
+  image fallbacks, quiet/garden view and per-player preferences.
+- Audio gestures, overlay audio suspension, photo/video completion after
+  navigation, player switching and export/import isolation.
+- Multiplayer invitations, membership, session limits, Begin readiness,
+  matching-card reveal/taps, bingo readiness, saved rankings and leaving rooms.
+- Cache installation/cleanup, no API caching and missing-asset handling;
+  CSS document/dialog scroll ownership at 100/140/200% text.
+
+Browser review of the approved layout:
+- At 140% text on desktop in dark mode, the three welcome cards had equal
+  width/height and appeared in Today's Games / All Games / Play Together order.
+  Welcome/name had a fully transparent background.
+- Today's Games opened the actual daily activity preparation screen.
+- Phone-width navigation and music popup checks at 200% text found no
+  horizontal overflow; volume labels had separation above the sliders.
+- The grouped menu, desktop light mode and dark-mode tagline were reviewed.
+
+Package validation:
+- ZIP integrity and per-file SHA-256 checksums verified.
+- Generated assets match editable source after extraction/rebuild.
+- Cache-manifest assets are present; version/bundle names are 4.0.4/404.
+- No live credentials, browser data or project-specific Cloudflare settings
+  are packaged. Server code and migrations match the V4.0.3 baseline.
+
+Limits:
+- Multiplayer automation uses local SQLite, not production Cloudflare D1.
+- Browser review uses a cloud browser, not physical phone/tablet touch hardware.
+  Real-device checks are listed in README-INSTALL.txt.
+- The optional wildlife mesh runtime suite was skipped because Three.js/esbuild
+  dependencies were unavailable here. Its temporary dependency paths were
+  corrected for normal local installation. Wildlife placement tests passed;
+  the production animal engine is unchanged.
+- The optional standalone Playwright suite was not rerun. UI checks used the
+  supplied cloud browser instead. No production deployment was performed.

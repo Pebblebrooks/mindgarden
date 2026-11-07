@@ -1,3 +1,31 @@
+Mind Garden v4.0.4 — 8 November 2026
+Developer: Pebblebrooks
+
+Welcome page
+- Text-only editable welcome/name; no background, border or box shadow.
+- Three matching cards: Today's Games, All Games, Play Together.
+- Remove the separate daily-start button, daily sentence, progress card,
+  Leaderboard button and Quick guide button from the welcome actions.
+- Short explanations behind accessible information icons.
+- Larger tagline without a background: white in dark mode, dark teal in light.
+
+Navigation and dialogs
+- Group the hamburger menu into Play, Your garden, Preferences and Help.
+- Preferences starts collapsed. Progress and rankings remain accessible.
+- Compact sound and animation navbar icons, with descriptive accessible
+  labels and matching menu controls. Preserve automatic navbar overflow.
+- Center popup headings, labels and controls; separate fields and action
+  buttons consistently. Hide empty status bars.
+- Music volume labels/percentages sit above sliders to prevent collisions.
+- Information works by hover, keyboard or tap; Escape dismisses it.
+- Updated English/Chinese About and Quick guide for the new control locations.
+
+Release
+- V4.0.4 metadata, 404 bundles and a new service-worker cache namespace.
+- Complete application assets, editable source, tests and build script.
+- No new SQL beyond V4.0.3; existing results and preferences are retained.
+- Animal art and motion mockups remain studies; existing animals are retained.
+
 Mind Garden v4.0.3 — 7 November 2026
 Developer: Pebblebrooks
 
