@@ -28,7 +28,7 @@ function validated(text){
   else if(typeof def==='boolean'){if(typeof v!=='boolean')bad();out.preferences[key]=v}
   else out.preferences[key]=str(v,40);
  }
- const enums={lang:['en','zh'],mode:['auto','light','dark'],th:['cream','sand'],motionMode:['off','gentle','standard'],motionPrevious:['off','gentle','standard'],sceneLight:['blossom','meadow','pond'],sceneDark:['blossom','meadow','pond']};for(const [key,values]of Object.entries(enums))if(!values.includes(out.preferences[key]))bad();}
+ const enums={lang:['en','zh'],mode:['auto','light','dark'],th:['cream','sand'],motionMode:['off','gentle','standard'],motionPrevious:['off','gentle','standard'],sceneLight:['blossom','meadow','pond','fjord','sakura','classical','alpine','pavilion'],sceneDark:['blossom','meadow','pond','fjord','sakura','classical','alpine','pavilion']};for(const [key,values]of Object.entries(enums))if(!values.includes(out.preferences[key]))bad();}
  out.share=0;return out;
 }
 function importBackup(text){const profile=validated(text);persist();const id='import-'+(typeof crypto.randomUUID==='function'?crypto.randomUUID():Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('')),next=copy(save);next.pr[id]=profile;localStorage.setItem('gardenMatch',JSON.stringify(next));save.pr[id]=profile;return {id,name:profile.name}}

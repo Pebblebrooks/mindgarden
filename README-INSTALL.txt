@@ -1,4 +1,4 @@
-MIND GARDEN V4.0.8 — APPROVED DEPLOYMENT PACKAGE
+MIND GARDEN V4.0.9 — APPROVED DEPLOYMENT PACKAGE
 Developer: Pebblebrooks | 8 November 2026
 
 This ZIP contains the approved preview, ready for your existing GitHub-connected
@@ -17,14 +17,14 @@ INSTALLATION
    (python3 scripts/build-release.py). The build script requires Python 3.
    Keep functions/ at the repository root so Pages deploys the multiplayer API.
 5. Wait for the successful deployment matching your final commit, then reload.
-   About should show v4.0.8. Page source should load garden-ui-408.js and
-   garden-ui-408.css. If an old page persists, close all app tabs and reopen.
+   About should show v4.0.9. Page source should load garden-ui-409.js and
+   garden-ui-409.css. If an old page persists, close all app tabs and reopen.
    Do NOT clear site data: player progress and personal media are stored there.
 
 DATABASE
 No new SQL is needed when upgrading from V4.0.3 or later.
 Keep the existing DB binding and database. Do not reset tables or run schema.sql
-against an existing installation. check-database-v4.0.8.sql is an optional
+against an existing installation. check-database-v4.0.9.sql is an optional
 read-only object-name check; it does not validate object definitions.
 Older installations require the existing migrate-v3.sql, migrate-v3.8.5.sql,
 migrate-v3.8.6.sql and migrate-v4.0.3.sql prerequisites in version order.
@@ -46,12 +46,15 @@ After expiry it refuses to start until editorial content is refreshed.
 Update the news object AND questions in public/everyday-games.js, verify the
 source/date, rebuild, and ship a new version. Never extend expiry without review.
 Today & Here uses the device clock and chosen time zone; it does not geolocate.
-The three new activities are single-player. The other proposed commercial game
-ideas are recommendations, not features included in this package.
+The Everyday Life activities are single-player. Six commercial game prototypes
+are included for review; they do not save scores or earn growth points.
 
-See RELEASE-v4.0.8.txt and TEST-RESULTS-v4.0.8.txt.
+See RELEASE-v4.0.9.txt and TEST-RESULTS-v4.0.9.txt.
 
-V4.0.8 adds six approved playable prototypes under New game previews, with no
+V4.0.9 adds six approved playable prototypes under New game previews, with no
 saved scores. Team Garden uses one shared device, not online rooms. My Life
 Album images stay in session memory and are cleared on leaving. Menu and Pause
 are distinct; Everyday Life Skip advances without credit. No new DB migration.
+
+V4.0.9: five new paired garden themes, eight total themes / sixteen views.
+Updated bilingual About/Help and scenery backup import. No new database migration.

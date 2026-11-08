@@ -1,0 +1,4 @@
+V4.0.9 approved release — five new pairs, eight total garden themes.
+New artwork generated for Mind Garden: Nordic Fjord, Japanese Cherry Garden, Classical Coastal Garden, Alpine Lake, Chinese Mountain Pavilion. Separate daylight and evening compositions. Artistic interpretations, not exact-location photographs. Prompts requested wide painterly realistic panoramas, calm open foreground for UI overlays, natural architecture and scenery, no text, people or logos. WebP assets bundled locally; no image service requests at runtime.
+Documentation audit: updated About features, FAQ controls, scenery guide, current pet interactions, multiplayer Begin flow, daily selection exclusions and temporary album privacy in English and Chinese. Existing PDPA legal description unchanged.
+Approved for packaging and deployment on 8 November 2026.

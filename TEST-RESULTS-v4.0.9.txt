@@ -1,0 +1,2 @@
+PASS: build; release UI, navbar overflow, offline cache and V4 design tests; player preference isolation; personal garden controls; all eight scene IDs in light/dark modes and JSON backup import; sixteen local scenery assets. Browser visually checked Nordic daylight and Japanese evening; preview at /review409/. Physical mobile devices not tested. Release approved for deployment; deployment status is verified separately.
+Final package checks: build, test:release, scenery409 and restore-accessibility passed.
