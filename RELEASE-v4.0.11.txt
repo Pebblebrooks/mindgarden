@@ -1,0 +1,9 @@
+Mind Garden V4.0.11 — 8 November 2026
+
+Navbar icon shows/hides the three welcome game cards; preference saved per player.
+Scene arrows and Garden Pets moved to Menu > Garden view.
+Backdrops and welcome videos fill available space using proportional cropping, without letterboxing.
+Pet panel stays above the navigation, with reachable close control and keyboard focus return.
+Pet toggle accessibility state updates when the panel opens or closes.
+Updated bilingual help and current release test references.
+No database migration required from V4.0.3 or later.

@@ -1,0 +1,18 @@
+/* Fill every viewport without borders; crop while preserving proportions. */
+#home #welcomeDashboard .welcome-scene{background-size:cover!important;background-color:var(--journey-bg)!important;min-height:calc(100svh - 12px)!important;padding-bottom:20px!important;box-sizing:border-box}
+#home .welcome-video{object-fit:cover!important}
+html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-ctas{display:none!important}
+#home .garden-breathing-space{min-height:0!important;height:0!important;flex:1}
+#navCards{flex-shrink:0}
+#gardenViewControls{border-bottom:1px solid var(--line);padding-bottom:16px}
+#gardenViewControls #menuScenery{display:block;width:100%}
+#navMenu .hero-media-controls{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;width:100%;max-width:100%;box-sizing:border-box;gap:8px;margin:10px 0}
+#navMenu .hero-arrow{position:static;transform:none;width:48px;height:48px;min-height:48px;margin:0;font-size:32px;line-height:1;display:flex;align-items:center;justify-content:center}
+#navMenu #heroMediaCaption{position:static;transform:none;min-width:0;max-width:none;margin:0;padding:4px;font-size:calc(.85rem * var(--fs));background:none;color:inherit}
+#navMenu #heroPrevious{grid-column:1;grid-row:1}#navMenu #heroMediaCaption{grid-column:2;grid-row:1}#navMenu #heroNext{grid-column:3;grid-row:1}#navMenu #heroVideoPlay{position:static;transform:none;grid-column:1/-1;grid-row:2}
+#gardenCat.mochi-collapsed{display:none!important}
+#gardenCat:not(.mochi-collapsed){position:fixed!important;z-index:1001!important;inset:auto!important;top:50%!important;left:50%!important;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 32px));max-height:calc(100svh - 32px);overflow:auto;margin:0!important;box-sizing:border-box;box-shadow:0 0 0 100vmax #0008}
+
+#gardenCat>.mochi-show{display:none!important}
+
+body:has(#home.hidden) #gardenCat{display:none!important}

@@ -1,0 +1,8 @@
+V4.0.11 validation — 8 November 2026
+All 47 non-browser test files passed. Wildlife runtime exercised 1,200 animation frames with GPU drawing stubbed.
+Release UI test corrected from six to sixteen scene thumbnails.
+All shipped JavaScript syntax checked. All 22 WebP images decoded successfully.
+Browser checked desktop and 390px mobile: cover backdrop, card toggle, reload persistence, menu relocation, pet panel opening/closing.
+Navbar width-budget checks cover 28 width/text-scale combinations including the card toggle.
+Standalone Playwright suite unavailable in this environment; browser checks performed through the available browser instead.
+No claim of exhaustive defect absence or testing on every physical device.

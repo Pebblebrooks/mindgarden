@@ -2,13 +2,13 @@ const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),errors=[];
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window;
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.addEventListener('error',e=>errors.push(e.message));
-w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4010.js','utf8'));
+w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4011.js','utf8'));
 const pause=()=>new Promise(r=>setTimeout(r,35));
 (async()=>{try{
  await pause();
  const fit=w.MindGardenNav.fit;
  for(const scale of [.8,1,1.4,2])for(const available of [280,350,730,980,1380,1840,2400]){
-  const spec={available,brand:160*scale,compactBrand:44,main:['library','online'].map(key=>({key,width:125*scale})),tools:[{key:'text',width:225*scale},...['music','language','appearance','nature','motion'].map(key=>({key,width:65*scale}))],toggle:48};
+  const spec={available,brand:160*scale,compactBrand:44,main:['library','online'].map(key=>({key,width:125*scale})),tools:[{key:'welcomeCards',width:48},{key:'text',width:225*scale},...['music','language','appearance','nature','motion'].map(key=>({key,width:65*scale}))],toggle:48};
   const result=fit(spec);assert(result.required<=available,result.required+' exceeds '+available);assert(!result.hidden.includes('toggle'));
  }
  for(const lang of ['en','zh']){
