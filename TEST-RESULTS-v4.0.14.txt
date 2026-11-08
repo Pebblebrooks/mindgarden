@@ -1,0 +1,5 @@
+V4.0.14 validation
+PASS: build, JavaScript syntax, release cache, review UI.
+PASS: animal-only control mounting, keyboard resize, synthetic two-pointer pinch, pin/unpin and reset.
+Browser preview verified mouse dragging, transparent background, pet switching and pinning.
+Physical touchscreen gesture testing remains a deployment follow-up.

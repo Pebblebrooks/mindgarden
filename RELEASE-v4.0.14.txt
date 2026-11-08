@@ -1,0 +1,7 @@
+Mind Garden V4.0.14
+Animal-only transparent companion. Tap to show temporary move, pin, hide and resize handles.
+Free proportional resizing with a 128px minimum and no preset maximum. Two-finger pinch supported.
+Pinned companions scroll with the page; unpinned companions float in the viewport.
+Garden View menu order: scenery, game cards, Garden Pets.
+Pet controls in menu: species, sound, pause, pin and reset size/position.
+No database migration.

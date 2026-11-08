@@ -26,3 +26,38 @@ body:has(#home.hidden) #gardenCat{display:none!important}
 #gardenCat .mochi-heading h2{touch-action:none;user-select:none;cursor:grab}
 #gardenCat[data-dragging="true"] .mochi-heading h2{cursor:grabbing}
 #gardenCat .mochi-heading h2:focus-visible{outline:2px solid currentColor;outline-offset:4px;border-radius:8px}
+
+#gardenViewControls #menuCards,#gardenViewControls #menuPetToggle{display:flex!important;align-items:center;justify-content:center!important;gap:10px;text-align:center!important;width:100%;border:1px solid var(--line);border-radius:14px;margin:6px 0;padding:12px;min-height:48px}
+#gardenViewControls #menuCards svg{flex:0 0 24px}
+#gardenViewControls #menuPets{width:100%}
+#gardenCat[data-panel-size="compact"]:not(.mochi-collapsed){width:min(360px,calc(100vw - 32px))}
+#gardenCat[data-panel-size="standard"]:not(.mochi-collapsed){width:min(480px,calc(100vw - 32px))}
+#gardenCat[data-panel-size="large"]:not(.mochi-collapsed){width:min(640px,calc(100vw - 32px))}
+#gardenCat .pet-panel-size{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;font-size:.85em}
+#gardenCat .pet-panel-size select{width:auto;min-width:0}
+#gardenCat[data-panel-size="compact"] .mochi-stage{width:min(180px,100%)}
+#gardenCat[data-panel-size="standard"] .mochi-stage{width:min(260px,100%)}
+#gardenCat[data-panel-size="large"] .mochi-stage{width:min(340px,100%)}
+#gardenCat[data-panel-size="compact"] .mochi-hint{display:none}
+#gardenCat[data-panel-size="compact"] .mochi-status{min-height:0;margin-bottom:8px}
+#gardenViewControls #menuCards,#gardenViewControls #menuPets,#gardenViewControls #menuScenery{grid-column:1/-1}
+#gardenViewControls #menuCards,#gardenViewControls #menuPetToggle{border:1px solid var(--line)!important;background:var(--mochi-button,rgba(128,160,140,.12))!important}
+#gardenViewControls #menuPets{display:block!important;grid-template-columns:none!important;margin-top:10px!important}
+
+#gardenCat[data-pinned="true"]:not(.mochi-collapsed){position:absolute!important}
+#gardenCat .pet-pin{display:block;margin:10px auto 0;font-size:.8em;min-height:44px}
+/* Animal only. Editing handles appear on selection and keyboard focus. */
+#gardenCat[data-free-pet="true"]:not(.mochi-collapsed){width:var(--pet-size,260px)!important;height:var(--pet-size,260px)!important;max-width:none!important;max-height:none!important;min-width:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;pointer-events:none}
+#gardenCat[data-free-pet="true"] .mochi-content{padding:0!important;margin:0!important}
+#gardenCat[data-free-pet="true"] .mochi-content>:not(.mochi-stage){display:none!important}
+#gardenCat[data-free-pet="true"] .mochi-stage{width:100%!important;height:100%!important;max-width:none!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;pointer-events:auto}
+#gardenCat[data-free-pet="true"] .mochi-sprite{width:100%;aspect-ratio:1}
+.pet-edit-tools{position:absolute;inset:0;pointer-events:none;opacity:0}
+#gardenCat[data-editing="true"] .pet-edit-tools,.pet-edit-tools:focus-within{opacity:1}
+#gardenCat .pet-edit-tools button{position:absolute;width:44px;height:44px;padding:4px;min-height:44px;background:var(--mochi-panel);pointer-events:auto;touch-action:none;visibility:hidden}
+#gardenCat[data-editing="true"] .pet-edit-tools button,.pet-edit-tools:focus-within button{visibility:visible}
+.pet-edit-tools [data-edit=move]{left:0;top:0;cursor:move}.pet-edit-tools [data-edit=pin]{left:48px;top:0}.pet-edit-tools [data-edit=hide]{right:0;top:0}.pet-edit-tools [data-edit=resize]{right:0;bottom:0;cursor:nwse-resize}
+#menuPets .free-pet-menu{display:block!important;margin-top:10px;text-align:center}
+#menuPets .free-pet-menu label{display:block;margin:10px 0}
+#menuPets .free-pet-menu button{display:block;width:100%;text-align:center;margin:6px 0}
+#menuPets .free-pet-menu p{font-size:.85em}
