@@ -1,0 +1,7 @@
+Mind Garden V4.0.12 — 8 November 2026
+Centered popup headings and subheadings, including About and menu sections.
+Garden Pets no longer dims the welcome or progress background.
+Drag the Meet Mochi/Toby heading with mouse or touch to move the pet panel.
+Keyboard users can focus its heading and use arrow keys. Position is bounded to the viewport and rechecked on resize.
+The pet panel is non-modal; background controls remain available.
+No new database migration.

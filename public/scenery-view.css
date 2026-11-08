@@ -11,8 +11,18 @@ html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-ctas{display:
 #navMenu #heroMediaCaption{position:static;transform:none;min-width:0;max-width:none;margin:0;padding:4px;font-size:calc(.85rem * var(--fs));background:none;color:inherit}
 #navMenu #heroPrevious{grid-column:1;grid-row:1}#navMenu #heroMediaCaption{grid-column:2;grid-row:1}#navMenu #heroNext{grid-column:3;grid-row:1}#navMenu #heroVideoPlay{position:static;transform:none;grid-column:1/-1;grid-row:2}
 #gardenCat.mochi-collapsed{display:none!important}
-#gardenCat:not(.mochi-collapsed){position:fixed!important;z-index:1001!important;inset:auto!important;top:50%!important;left:50%!important;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 32px));max-height:calc(100svh - 32px);overflow:auto;margin:0!important;box-sizing:border-box;box-shadow:0 0 0 100vmax #0008}
+#gardenCat:not(.mochi-collapsed){position:fixed!important;z-index:1001!important;inset:auto!important;top:50%!important;left:50%!important;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 32px));max-height:calc(100svh - 32px);overflow:auto;margin:0!important;box-sizing:border-box;box-shadow:0 12px 32px #0003}
 
 #gardenCat>.mochi-show{display:none!important}
 
 body:has(#home.hidden) #gardenCat{display:none!important}
+
+/* Popup titles stay centered independently of close buttons. */
+:is(#box,#navMenu,dialog,[role="dialog"],.mochi-widget) :is(h1,h2,h3,h4,h5,h6,legend,summary,.lab){text-align:center!important}
+#box .app-info>header{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;align-items:center;gap:8px}
+#box .app-info>header h2{grid-column:2;margin:0;text-align:center!important}
+#box .app-info>header button{grid-column:3;min-width:44px;padding:8px;justify-self:end}
+#gardenCat[data-positioned="true"]:not(.mochi-collapsed){left:var(--pet-left)!important;top:var(--pet-top)!important;transform:none!important}
+#gardenCat .mochi-heading h2{touch-action:none;user-select:none;cursor:grab}
+#gardenCat[data-dragging="true"] .mochi-heading h2{cursor:grabbing}
+#gardenCat .mochi-heading h2:focus-visible{outline:2px solid currentColor;outline-offset:4px;border-radius:8px}

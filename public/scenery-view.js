@@ -17,6 +17,6 @@ function mount(){
 let queued=false;const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;mount()})};
 new MutationObserver(schedule).observe(document.getElementById('unifiedNav'),{childList:true,subtree:true});
 new MutationObserver(schedule).observe(document.getElementById('welcomeDashboard'),{childList:true});
-document.addEventListener('keydown',e=>{const panel=document.getElementById('gardenCat');if(!panel||panel.classList.contains('mochi-collapsed'))return;if(e.key==='Escape'){e.preventDefault();panel.querySelector('[data-mochi="hide"]')?.click()}if(e.key==='Tab'){const items=[...panel.querySelectorAll('button,select')].filter(x=>!x.disabled&&x.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}});
+document.addEventListener('keydown',e=>{const panel=document.getElementById('gardenCat');if(e.key==='Escape'&&panel?.contains(document.activeElement)&&!panel.classList.contains('mochi-collapsed')){e.preventDefault();panel.querySelector('[data-mochi="hide"]')?.click()}});
 window.addEventListener('gardenPetsChange',schedule);window.addEventListener('gardenPlayerChange',schedule);window.addEventListener('gardenSceneChange',schedule);mount();
 })();

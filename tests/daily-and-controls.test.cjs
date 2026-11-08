@@ -1,7 +1,7 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),errors=[],scroll=[];
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window;
-w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=(...a)=>scroll.push(a);w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4011.js','utf8'));
+w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=(...a)=>scroll.push(a);w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4012.js','utf8'));
 const click=id=>{const b=w.document.getElementById(id);assert(b,id);b.click()},get=id=>w.document.getElementById(id),pending=[];w.pt=fn=>pending.push(fn);
 try{
  assert.equal(get('navMore').parentElement.className,'nav-actions');assert(get('navTextSize').querySelector('[data-text-preset]'));

@@ -1,0 +1,6 @@
+V4.0.12 checks
+PASS: release build and bundled JavaScript syntax.
+PASS: release cache and review UI regression tests.
+PASS: pet dragging, viewport bounds, pointer cancellation, keyboard movement and resize unit checks.
+Browser preview verified: actual mouse drag, no background dimming, all About h2/h3/h4 computed alignment centered.
+Touch event support implemented using Pointer Events; physical touch devices not tested in this release.
