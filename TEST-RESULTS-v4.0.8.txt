@@ -1,0 +1,1 @@
+Release build and release/cache/navigation tests passed. Commercial preview tests passed for six games, three difficulties and English/Chinese; no profile scoring; distinct menu/pause, immediate skip, hint credit and cleanup. Everyday Life regression tests passed. Physical iOS/Android audio and personal-photo handling still require device acceptance testing.

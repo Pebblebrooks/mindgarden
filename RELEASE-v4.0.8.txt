@@ -1,0 +1,16 @@
+V4.0.8 — APPROVED RELEASE, 8 November 2026
+Fixes shared menu/pause handler in Everyday Life and Garden Activities.
+Hamburger: game menu with resume and leave. Pause: resume only.
+Everyday Life Skip now advances immediately without credit; Next follows feedback.
+
+Six prototypes in New game previews: Hawker Memory, My Life Album,
+Neighbourhood Trail, Sound Detective, Team Garden, Melody Moments.
+English/Chinese; three challenge choices. Prototypes do not save scores or enter
+Today's Games. My Life Album photos are session-only and never uploaded.
+Team Garden is same-device cooperative play, not an online multiplayer room.
+Neighbourhood Trail uses a fictional neighbourhood rather than real navigation.
+Melody Moments uses original generated note patterns, not copyrighted songs.
+Sound Detective uses the already bundled recordings and their existing credits.
+
+The sound and photo prototypes require acceptance testing on real devices.
+These are reviewable gameplay concepts, not a claim of commercial readiness.

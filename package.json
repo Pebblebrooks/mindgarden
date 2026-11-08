@@ -1,6 +1,6 @@
 {
   "name": "mind-garden-cloudflare",
-  "version": "4.0.7",
+  "version": "4.0.8",
   "private": true,
   "scripts": {
     "dev": "wrangler pages dev public --local",
@@ -10,7 +10,8 @@
     "build:wildlife": "esbuild src/garden-wildlife.js --bundle --minify --format=iife --outfile=public/garden-wildlife.js",
     "build": "python3 scripts/build-release.py",
     "test:release": "node tests/review-ui.test.cjs && node tests/navbar-overflow.test.cjs && node tests/release-cache.test.cjs && node tests/v4-design.test.cjs",
-    "test:everyday": "node tests/everyday-games.test.cjs"
+    "test:everyday": "node tests/everyday-games.test.cjs",
+    "test:commercial": "node tests/commercial-preview.test.cjs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0",

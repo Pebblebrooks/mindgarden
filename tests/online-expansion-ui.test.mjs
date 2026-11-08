@@ -12,7 +12,7 @@ async function boot(lang,stored){
  w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.confirm=()=>true;w.addEventListener('error',e=>errors.push(e.message));
  w.fetch=(url,opts)=>onRequest({env:{DB},request:new Request(new URL(url,'https://garden.test'),opts)});
  w.localStorage.setItem('gardenMatch',JSON.stringify({lang}));if(stored)for(const [k,v]of Object.entries(stored))w.localStorage.setItem(k,v);
- w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(get('garden-ui-407.js'));
+ w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(get('garden-ui-408.js'));
  w.document.getElementById('bOnline').click();if(!stored){w.document.getElementById('mpName').value='Expansion '+lang;w.document.getElementById('mpLogin').click()}await pause(100);return w;
 }
 const click=(w,id)=>{const b=w.document.getElementById(id);assert(b,id);b.click()};
