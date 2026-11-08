@@ -1,0 +1,14 @@
+44 automated test files passed in the approved preview audit.
+See AUDIT-v4.0.7.json for individual results. Includes an eight-player simulated
+room flow, original/new game logic, pet audio state/buffer tests, release/cache
+checks, navigation/text-size checks, and bilingual everyday game completion.
+Everyday checks cover leap dates, time-zone/year boundaries, time-answer tolerance,
+hints, scoring once, typed answers, pause/cleanup and news study/recall/expiry.
+
+Desktop browser checks verified Today & Here answer feedback and visibility of
+Next only after answering. A 390px-wide browser frame checked Food & Kitchen.
+These are not physical iOS/Android tests. Live production D1/multiplayer and
+real-device audio output were not tested in the preview. Test success cannot
+prove the absence of all latent issues.
+
+Packaging validates ZIP integrity and includes a SHA256SUMS-v4.0.7.txt inventory.

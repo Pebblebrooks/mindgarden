@@ -1,7 +1,1 @@
-const {JSDOM}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
-(async()=>{const d=new JSDOM('<div id="root"></div>',{runScripts:'outside-only',pretendToBeVisual:true}),w=d.window;let player,now=100000;w.Date.now=()=>now;
-w.Audio=class {constructor(){player=this;this.paused=true;this.currentTime=0}play(){this.paused=false;return Promise.resolve()}pause(){this.paused=true}};
-w.eval(fs.readFileSync('public/pet-audio.js','utf8'));const root=w.document.getElementById('root'),a=w.createPetAudio(root);
-assert.equal(a.perform('cat','meow'),null,'silent until enabled');a.enable(true);await Promise.resolve();assert(player.paused);assert.equal(player.volume,.8);
-for(const [who,act] of [['cat','meow'],['cat','purr'],['dog','bark'],['dog','growl']]){now+=20000;const v=a.perform(who,act);assert(v);assert(player.src.endsWith(act+'.mp3'));assert.equal(a.perform('other','bark'),null,'no overlap');a.stop('other');assert(!player.paused);a.stop(who);assert(player.paused,'stops at owner action end');assert(!v.active)}
-now+=20000;a.pause(true);assert.equal(a.perform('dog','bark'),null);a.pause(false);assert(a.perform('dog','bark'));a.enable(false);assert(player.paused);assert.equal(a.perform('dog','bark'),null);a.destroy();d.window.close();console.log('PASS: gesture unlock, no test sample, action-matched clips, no overlapping voices, owner cancellation, pause/mute');})();
+require('./pet-audio-buffer.test.cjs');

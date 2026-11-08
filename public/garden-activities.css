@@ -36,3 +36,8 @@
 
 #mini #mmsg:empty{display:none!important}
 #box:has(.bloom-preview){width:min(860px,calc(100vw - 24px));max-width:860px}
+.ed-game h2{text-align:center}.ed-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.ed-choices .btn{min-height:64px;white-space:normal;overflow-wrap:anywhere}.ed-context{font-size:.85em}.ed-food-art{font-size:5rem;margin:16px auto}.ed-food-art img{width:110px;height:110px;object-fit:contain}.ed-game input{display:block;max-width:100%;margin:14px auto;padding:12px;font:inherit}.ed-game form{margin:20px 0}.ed-game .ga-actions{gap:16px;margin-top:20px}@media(max-width:450px){.ed-choices{grid-template-columns:1fr}}
+
+.ed-game [hidden]{display:none!important}
+
+.ed-game{padding-bottom:6rem}

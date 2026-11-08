@@ -1,0 +1,222 @@
+[
+  {
+    "test": "restore-accessibility.test.cjs",
+    "code": 0,
+    "log": "PASS: JSON round-trip into separate player, retained data/preferences, invalid/version/prototype rejection, storage failure rollback, 80\u2013200% text sizing/reset, navbar text controls, depth projection/manual bouquet rotation.\n"
+  },
+  {
+    "test": "home-nature-overlay.test.cjs",
+    "code": 0,
+    "log": "PASS: nature audio stops behind game/dialog overlays, resumes on welcome, and stays paused away from home.\n"
+  },
+  {
+    "test": "player-preferences.test.cjs",
+    "code": 0,
+    "log": "PASS: per-player scene, music, motion, nature and video preferences; no leakage; rename preserves preferences; profiles persisted.\n"
+  },
+  {
+    "test": "navbar-overflow.test.cjs",
+    "code": 0,
+    "log": "PASS: fitted width budget at 28 size combinations; English/Chinese menu destinations; percentage/reset synchronization; Escape focus; About/Contact; appearance rebuilds; no duplicated controls.\n"
+  },
+  {
+    "test": "release-ui.test.cjs",
+    "code": 0,
+    "log": "PASS: shipped bundle boots, animation hide/show, both arrows, six bounded thumbnails, photo/video inputs, menu accessibility state, Chinese controls.\n"
+  },
+  {
+    "test": "multiplayer-taps.test.mjs",
+    "code": 0,
+    "log": "PASS: both online matching sizes, EN/ZH closed start and automatic 5/8-second preview, timer excludes study, stable card nodes/focus, single-tap mismatch continuation without network, immediate-exit checkpoint, resume and four persisted results.\n"
+  },
+  {
+    "test": "progression-practice.test.cjs",
+    "code": 0,
+    "log": "PASS: 30 games at all 15 levels in English/Chinese; valid unique answers; numeric protection; stronger pattern families and memory loads; last-five weakest selection; mixed daily completion; cancel/keep; level-aware backups and new form link.\n"
+  },
+  {
+    "test": "multiplayer-round-flow.test.mjs",
+    "code": 0,
+    "log": "PASS: preview resumes without extension, expiry closes without input, artwork load/error fallback, leave-and-join during delayed polls, stale lobby response ignored, host close-and-join, departed result retained.\n"
+  },
+  {
+    "test": "room8.test.mjs",
+    "code": 0,
+    "log": "PASS: 8-player cap, delivery receipts, host-only launch, launch acknowledgements, rejoin, two rounds, totals, idempotent scores, skipped results, closure, authorization and repeatable migration.\n"
+  },
+  {
+    "test": "garden-activities.test.cjs",
+    "code": 0,
+    "log": "PASS: 150 solvable link grids; drawing similarity; bilingual activity launch; dot/difference completion; recall modes; recognition; pet care; read-only bloom previews; scenery toggle\n"
+  },
+  {
+    "test": "pet-ledge-preview.test.cjs",
+    "code": 0,
+    "log": "PASS 340px: continuous positions, complete gait, sitting/grooming/head turns, offscreen exits only, pause freezes\nPASS 640px: continuous positions, complete gait, sitting/grooming/head turns, offscreen exits only, pause freezes\n"
+  },
+  {
+    "test": "bingo-room.test.mjs",
+    "code": 0,
+    "log": "PASS: 8-player bingo; host-only calls; no future/fake marks; repeat-safe calls and scores; refresh state; leave/cancel; next-round reset; retained results; repeatable migration.\n"
+  },
+  {
+    "test": "wildlife-runtime.test.cjs",
+    "code": 0,
+    "log": "PASS: four real GLB models/rigs and all flyers; 1,200 animated pose frames with no envelope overlap (16 minimum visible), pause and disposal. GPU drawing stubbed.\n"
+  },
+  {
+    "test": "v405-fixes.test.cjs",
+    "code": 0,
+    "log": "PASS: stable search input/focus/results; bilingual narration despite hints off; varied stories at 1/8/15; next-level/replay/cap; pet/play/hide.\n"
+  },
+  {
+    "test": "personal-garden.test.cjs",
+    "code": 0,
+    "log": "PASS: separate progress/rankings; recorded activity totals; six backgrounds; independent light/dark preferences; theme switching; motion selection preserves scenes.\n"
+  },
+  {
+    "test": "online-expansion.test.mjs",
+    "code": 0,
+    "log": "PASS: 800 deterministic bilingual quiz sets, 8 new online modes, validated answers, retained closed/expired room history, tied ranks, participant privacy, legacy metadata and repeatable migration.\n"
+  },
+  {
+    "test": "wildlife-spacing.test.mjs",
+    "code": 0,
+    "log": "PASS: 9,000 dynamic collision frames across phone/tablet/desktop bounds; no visible envelope overlap, bounded placement and head-on avoidance.\n"
+  },
+  {
+    "test": "audio-gesture.test.cjs",
+    "code": 0,
+    "log": "PASS: personal audio receives click activation before delayed resume; pause cancels pending start; one-click retry works; rejection restores Play and shows feedback.\n"
+  },
+  {
+    "test": "multiplayer-lifecycle.test.mjs",
+    "code": 0,
+    "log": "PASS: late join/create responses, expired rooms, navigation during polling, logout during invitation delivery and clipboard failure after closure and player switching during renaming.\n"
+  },
+  {
+    "test": "media-lifecycle.test.cjs",
+    "code": 0,
+    "log": "PASS: photo/video completion and errors after Settings closes; deletion across player changes; no modal reopening or preference leakage.\n"
+  },
+  {
+    "test": "pet-audio-buffer.test.cjs",
+    "code": 0,
+    "log": "PASS predecode, silent unlock, no reload at pose changes, owner isolation, fade stop, shared status and blocked playback reporting\n"
+  },
+  {
+    "test": "multiplayer-sessions.test.mjs",
+    "code": 0,
+    "log": "PASS: bounded sessions, first/each-round Begin, retry-safe timing, bingo readiness barrier, automatic final completion, early finish versus cancel, release/history retention, in-room invitations, leave/join, offline, legacy room compatibility, repeatable migration and setup errors.\n"
+  },
+  {
+    "test": "pet-gestures-preview.test.cjs",
+    "code": 0,
+    "log": "PASS: no manual action controls; direct touch reaction; hide/show persistence; cleanup\n"
+  },
+  {
+    "test": "multiplayer-ready-ui.test.mjs",
+    "code": 0,
+    "log": "PASS: one-round UI setup, hidden questions/timer until Begin, failed Begin retry, independent readiness, resume without reset, in-room invitation guidance, final rankings/released memberships, late Begin after leave, offline notices cleared.\n"
+  },
+  {
+    "test": "bingo-ui.test.mjs",
+    "code": 0,
+    "log": "PASS: two bingo clients, Chinese labels, host pacing, actual mark buttons, reload/rejoin keeps three marks, full-card results and one saved history record.\n"
+  },
+  {
+    "test": "storage-failure.test.cjs",
+    "code": 0,
+    "log": "PASS: storage-full warning and recovery, blocked-storage lobby, malformed saves preserve original bytes, safe boot and atomic failure.\n"
+  },
+  {
+    "test": "online-expansion-ui.test.mjs",
+    "code": 0,
+    "log": "PASS: 17 host options, all 8 new activities completed through English/Chinese DOM controls, saved rankings from leaderboard/lobby, and closed-room history after reload.\n"
+  },
+  {
+    "test": "review-ui.test.cjs",
+    "code": 0,
+    "log": "PASS: simplified welcome, grouped menu, navbar sound/motion, keyboard/tap information, rebuild without duplicates and animation toggle.\n"
+  },
+  {
+    "test": "release-cache.test.cjs",
+    "code": 0,
+    "log": "PASS: atomic offline install, correct release assets, scoped cache cleanup, no API caching, no HTML fallback for CSS/JS, reject incomplete deployment.\n"
+  },
+  {
+    "test": "request-validation.test.mjs",
+    "code": 0,
+    "log": "PASS: malformed JSON, non-object bodies and invalid round values return 400 without mutating rooms; valid launches still work.\n"
+  },
+  {
+    "test": "five-games.test.cjs",
+    "code": 0,
+    "log": "PASS: 300 solvable path boards; 150 unique domino deals; legal ends; all five games complete; pause/leave/undo; bilingual sayings; progress and JSON round-trip; 45 game cards.\n"
+  },
+  {
+    "test": "mochi-widget.test.cjs",
+    "code": 0,
+    "log": "PASS: play frames, pause, rest, hide/show, reduced motion and controller disposal.\n"
+  },
+  {
+    "test": "game-visuals.test.cjs",
+    "code": 0,
+    "log": "PASS: all 36 game renderers; picture/text separation; 30 original + 5 added games in English/Chinese at low/high levels; memory clues; bingo; matching faces; all built-in emoji classified.\n"
+  },
+  {
+    "test": "daily-and-controls.test.cjs",
+    "code": 0,
+    "log": "PASS: all 30 original activities in English/Chinese at two difficulties; 16 full daily journeys; visible ready controls, viewport/focus reset, stale custom state, percentage/presets/exact 100% reset, icon labels and file picker.\n"
+  },
+  {
+    "test": "multiplayer-ui.test.mjs",
+    "code": 0,
+    "log": "PASS: 8 independent English/Chinese clients receive codes; receipts 7/7; host launches all; reconnect restores question; all submit via UI; 8-player leaderboard; second round; host ends round; close; GIF fallback and motion controls.\n"
+  },
+  {
+    "test": "new-features.test.cjs",
+    "code": 0,
+    "log": "PASS: compact sound controls with descriptive labels, quote card removed, export scope/content/preferences, no tokens/other profiles, CSV formula protection, export settings.\n"
+  },
+  {
+    "test": "room-lifecycle.test.mjs",
+    "code": 0,
+    "log": "PASS: host-only cancellation, guest withdrawal, retained completed scores, no late submissions, one active room including racing joins, release on cancellation, repeatable migration.\n"
+  },
+  {
+    "test": "everyday-games.test.cjs",
+    "code": 0,
+    "log": "PASS bilingual launches/completion, scoring once, hints, typing, pause/cleanup, 3 levels, timezone/year/leap-date boundaries, time tolerance, news expiry, category filter\n"
+  },
+  {
+    "test": "v4-design.test.cjs",
+    "code": 0,
+    "log": "PASS: V4 light/dark/auto, daily action hierarchy, uncluttered welcome, bilingual quick guide, quiet view without question reset, per-profile preferences and JSON round-trip, online view, safe illustration fallbacks, 42 illustrated library cards and independent scenery controls.\n"
+  },
+  {
+    "test": "motion-navigation.test.cjs",
+    "code": 0,
+    "log": "PASS: device motion defaults, explicit On/Off overrides, persistence, system changes, Settings/welcome/bouquet sync, legacy off recovery, streamlined navigation, dynamic version, About focus/close, bilingual guide, embedded Google form, safe Contact URLs, Chinese labels.\n"
+  },
+  {
+    "test": "pet-auto-audio.test.cjs",
+    "code": 0,
+    "log": "PASS predecode, silent unlock, no reload at pose changes, owner isolation, fade stop, shared status and blocked playback reporting\n"
+  },
+  {
+    "test": "scroll-policy.test.cjs",
+    "code": 0,
+    "log": "PASS: CSS scroll ownership, dialog background lock/unlock, scroll containment and viewport box sizing at 100/140/200% text. Physical mouse-wheel/device rendering still needs a browser check.\n"
+  },
+  {
+    "test": "bouquet-speed.test.cjs",
+    "code": 0,
+    "log": "PASS: 24-second standard and 36-second gentle rotation, pause and animation-off still stop motion.\n"
+  },
+  {
+    "test": "page-visibility.test.cjs",
+    "code": 0,
+    "log": "PASS: complete release CSS hides welcome during both original and daily game transitions.\n"
+  }
+]

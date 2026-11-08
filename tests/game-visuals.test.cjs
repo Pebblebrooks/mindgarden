@@ -18,5 +18,5 @@ try{
   coverage.push({id,lang,level,pictures:w.document.querySelectorAll('#mp .game-picture').length,memoryPreview:before.includes('picture-sequence')});w.eval('mg=null');
  }
  w.start(0);assert.equal(w.document.querySelectorAll('#grid .game-picture').length,w.document.querySelectorAll('#grid .card').length);w.eval('clearInterval(timer)');
- assert.deepEqual(errors,[]);fs.writeFileSync(__dirname+'/../audit-results/visual-coverage.json',JSON.stringify(coverage,null,2));console.log('PASS: all 36 game renderers; picture/text separation; 30 original + 5 added games in English/Chinese at low/high levels; memory clues; bingo; matching faces; all built-in emoji classified.');
+ assert.deepEqual(errors,[]);fs.mkdirSync(__dirname+'/../audit-results',{recursive:true});fs.writeFileSync(__dirname+'/../audit-results/visual-coverage.json',JSON.stringify(coverage,null,2));console.log('PASS: all 36 game renderers; picture/text separation; 30 original + 5 added games in English/Chinese at low/high levels; memory clues; bingo; matching faces; all built-in emoji classified.');
 }finally{dom.window.close()}

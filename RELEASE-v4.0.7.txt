@@ -1,0 +1,24 @@
+Mind Garden V4.0.7 — approved release, 8 November 2026
+
+NEW: Everyday Life category; Today & Here (date/day/month/year/time/selected
+country, typed or choice answers), Food & Kitchen (food groups, ingredients,
+utensils), Around Us (dated Singapore source-based recall pilot).
+All three support English/Chinese, three levels, hints, skip, replay and next
+level. Hinted answers do not earn independent-answer credit.
+
+FIXES: host room-closure responses lacking player lists no longer crash guest
+rankings rendering; hidden Next button is truly hidden until an answer; mobile
+activity spacing leaves clearance for the floating sound control.
+
+PETS: panel above background wildlife; centered titles; Cosy Corner category;
+predecoded real recordings, shared playback/status, gentle audio fades and
+species/action-matched sounds. Audio starts only after user interaction.
+
+LIMITS: no claim of a medical assessment or treatment. Country is user-selected,
+not detected. Date/time depends on the device clock. Around Us is a single
+editorial pilot with expiry, not a live feed. New activities are single-player.
+Pet visuals are frame-based, not fully rigged 3D. Physical-device audio and live
+Cloudflare multiplayer require post-deployment acceptance testing.
+
+Source: https://www.nparks.gov.sg/visit/parks/hortpark/activities/gardeners-day-out
+Reviewed 2026-11-08; expires 2026-11-22T00:00:00+08:00.
