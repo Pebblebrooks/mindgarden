@@ -8,14 +8,14 @@ assert re.fullmatch(r'\d+\.\d+\.\d+',version), 'Use a semantic release version'
 tag=version.replace('.','')
 shared=(root/'shared/online-activities.js').read_text().replace('export const ', 'const ').replace('export function ', 'function ')
 (p/'online-activities.js').write_text('(function(){\n'+shared+'\nwindow.MindGardenOnlineActivities={activities:onlineActivities,questions:makeOnlineQuestions};\n})();\n')
-styles=['v23.css','v24.css','v25.css','v28.css','v29.css','v30.css','v31.css','v32.css','v33.css','v35.css','v36.css','v37.css','v38.css','new-games.css','v386.css','v387.css','game-visuals.css','v4.css']
-scripts=['artwork.js','player-preferences.js','upgrade.js','new-games.js','progression.js','daily-plan.js','online-activities.js','multiplayer.js','i18n.js','dashboard.js','garden-wildlife.js','ambient.js','soundscape.js','identity.js','personal-progress.js','scenes.js','personal-photos.js','home-nature.js','welcome-media.js','data-export.js','text-size.js','bouquet-3d.js','responsive-nav.js','v4.js']
+styles=['v23.css','v24.css','v25.css','v28.css','v29.css','v30.css','v31.css','v32.css','v33.css','v35.css','v36.css','v37.css','v38.css','new-games.css','v386.css','v387.css','game-visuals.css','v4.css','mochi-widget.css','garden-activities.css']
+scripts=['artwork.js','player-preferences.js','upgrade.js','new-games.js','progression.js','daily-plan.js','online-activities.js','multiplayer.js','i18n.js','dashboard.js','garden-wildlife.js','ambient.js','soundscape.js','identity.js','personal-progress.js','scenes.js','personal-photos.js','home-nature.js','welcome-media.js','data-export.js','text-size.js','bouquet-3d.js','responsive-nav.js','v4.js','mochi-widget.js','garden-cat.js','garden-activities.js','bloom-preview.js','progress-pets.js']
 for dest,names,sep in [(f'garden-ui-{tag}.css',styles,'\n'),(f'garden-ui-{tag}.js',scripts,'\n;\n')]:
  (p/dest).write_text(sep.join('/* '+n+' */\n'+(p/n).read_text() for n in names))
 s=(p/'index.html').read_text()
-s=re.sub(r'<link rel="stylesheet" href="(?:v\d+\.css[^\"]*|garden-ui-\d+\.css)">','',s)
+s=re.sub(r'<link rel="stylesheet" href="(?:v\d+\.css[^\"]*|garden-ui-\d+\.css)">\n?','',s)
 s=s.replace('</head>',f'<link rel="stylesheet" href="garden-ui-{tag}.css">\n</head>')
-s=re.sub(r'<script src="(?:'+ '|'.join(re.escape(n) for n in scripts+['daily-quotes.js'])+r'|garden-ui-\d+\.js)(?:\?[^\"]*)?"></script>','',s)
+s=re.sub(r'<script src="(?:'+ '|'.join(re.escape(n) for n in scripts+['daily-quotes.js'])+r'|garden-ui-\d+\.js)(?:\?[^\"]*)?"></script>\n?','',s)
 s=s.replace('<script>if("serviceWorker"', f'<script src="garden-ui-{tag}.js"></script>\n<script>if("serviceWorker"')
 s=re.sub(r'(<meta name="mind-garden-release" content=")[^"]+',r'\g<1>v'+version,s)
 (p/'index.html').write_text(s)

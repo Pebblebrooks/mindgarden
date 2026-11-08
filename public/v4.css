@@ -186,3 +186,35 @@ html[data-v4-mode=light] #home #welcomeDashboard .welcome-name{color:#173e34!imp
 #navMenu .nav-theme-options{gap:8px}
 #home #unifiedNav .nav-symbol{min-width:44px;min-height:44px;font-size:calc(1.1rem * var(--fs));padding:.45em}
 @media(max-width:540px){#home #welcomeDashboard .welcome-ctas{grid-template-columns:minmax(0,1fr)!important;width:min(400px,100%)}#home #welcomeDashboard .welcome-heading>p{font-size:calc(1.15rem * var(--fs))!important}#home #welcomeDashboard .welcome-name{font-size:calc(1.25rem * var(--fs))!important}}
+
+/* Keep scrollable modal contents at their natural height, including iOS. */
+#box>*{flex-shrink:0}
+#box.mp-dialog .mp-live{display:grid;gap:1rem;margin:0;padding:1rem;border:1px solid var(--line);border-radius:18px;min-width:0}
+#box.mp-dialog .mp-live>*{margin:0}
+#box.mp-dialog #mpLaunch,#box.mp-dialog #mpNext{margin-block:clamp(18px,calc(1rem * var(--fs)),32px)!important}
+#box.mp-dialog .mp-table-wrap{overflow-x:auto;max-width:100%}
+#box .row>*{flex-shrink:0;max-width:100%}
+.story-copy{line-height:1.7;max-width:42em;margin:1em auto;text-align:start;padding-inline:1rem}
+#storySpeechStatus{min-height:1.6em;text-align:center}
+
+#libraryDisplay .search-field{box-sizing:border-box;min-width:0;background:var(--panel);color:var(--ink)}
+#libraryDisplay #gameSearch{appearance:none;-webkit-appearance:none;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;min-width:0;width:100%;margin:0;flex:1;color:inherit;padding:.65em .25em}
+#libraryDisplay .search-field:focus-within{outline:3px solid var(--ink);outline-offset:4px}
+.garden-cat{width:min(290px,90%);position:relative;z-index:6;text-align:center;color:var(--ink);border-radius:28px;background:var(--panel);padding:12px 16px;box-shadow:0 6px 22px #092c3320}
+.garden-cat .cat-name{font-size:.85em;margin:0}.cat-stage{display:block;width:100%;padding:0;background:transparent;border:0;cursor:pointer;touch-action:pan-y;color:inherit}.cat-stage svg{display:block;width:100%;height:180px;overflow:visible}.cat-response{font-size:.8em;min-height:2.8em;margin:0!important}.cat-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.cat-actions .btn{min-height:44px;padding:6px 12px;font-size:.8em}.cat-heart{opacity:0}.cat-head,.cat-tail,.cat-eyes,.cat-paw{transform-box:fill-box;transform-origin:center}.cat-tail{transform-origin:10% 90%}.garden-cat[data-mood=pet] .cat-heart{opacity:1}.garden-cat[data-mood=pet] .cat-head{animation:catNuzzle .7s ease-in-out infinite alternate}.garden-cat[data-mood=pet] .cat-eyes,.garden-cat[data-mood=rest] .cat-eyes{transform:scaleY(.15)}.garden-cat[data-mood=rest] .cat-head{transform:rotate(9deg)}.garden-cat[data-mood=play] .cat-ball{animation:catBall .8s ease-in-out infinite alternate}.garden-cat[data-mood=play] .cat-paw{animation:catPaw .8s ease-in-out infinite alternate}.garden-cat[data-mood=play] .cat-tail{animation:catNuzzle .5s ease-in-out infinite alternate}
+@keyframes catNuzzle{to{transform:rotate(-8deg) translateY(2px)}}@keyframes catBall{to{transform:translateX(-95px) rotate(20deg)}}@keyframes catPaw{to{transform:translate(35px,-15px) rotate(-15deg)}}
+@media(prefers-reduced-motion:reduce){.garden-cat *{animation:none!important}}
+#gardenCat [hidden]{display:none!important}
+
+#gardenCat.cat-still *{animation:none!important}
+#libraryDisplay{overflow-x:clip}
+@media(max-width:640px){#libraryDisplay .search-field{flex:1 1 100%;max-width:100%;width:100%}#libraryDisplay .round-select{white-space:normal;text-align:center}}
+
+/* V4.0.5: consistent icon geometry and centered, scalable toolbar controls. */
+#home #unifiedNav{--nav-control-size:max(48px,calc(48px * var(--fs)));--nav-icon-size:max(22px,calc(24px * var(--fs)));align-items:center!important}
+#home #unifiedNav :is(.nav-brand,.nav-link,.nav-actions,.nav-text-size){align-items:center!important;align-self:center!important}
+#home #unifiedNav :is(.nav-symbol,.nav-text-button,#navMore){box-sizing:border-box;width:var(--nav-control-size)!important;height:var(--nav-control-size)!important;min-width:var(--nav-control-size)!important;min-height:var(--nav-control-size)!important;padding:0!important;align-items:center!important;justify-content:center!important;line-height:1!important;margin:0!important}
+#home #unifiedNav .nav-actions button{align-items:center!important;justify-content:center!important}
+#home #unifiedNav #navTextSize .text-size-preset{box-sizing:border-box;height:var(--nav-control-size)!important;min-height:var(--nav-control-size)!important;margin:0!important;padding-block:0!important;align-self:center!important;line-height:normal}
+#home #unifiedNav :is(.nav-symbol,.nav-text-button,#navMore) .garden-icon{display:block!important;width:var(--nav-icon-size)!important;height:var(--nav-icon-size)!important;flex:none!important;margin:0!important;vertical-align:middle}
+#home #unifiedNav .nav-link .garden-icon{display:block;width:max(20px,calc(20px * var(--fs)))!important;height:max(20px,calc(20px * var(--fs)))!important;flex:none; margin:0!important}

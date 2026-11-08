@@ -1,5 +1,6 @@
 /* Downloaded skeletal animals + native 3D insects. Bundled locally; no CDN. */
 import * as THREE from 'three';
+import {placeSolids} from './wildlife-spacing.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),rand=(a,b)=>a+Math.random()*(b-a);
 const loader=new GLTFLoader();
@@ -12,7 +13,7 @@ window.createGardenWildlife=async function(host){
  scene.add(new THREE.HemisphereLight(0xfff5df,0x627047,2.1));
  const sun=new THREE.DirectionalLight(0xfff0d3,2.5);sun.position.set(-300,600,900);scene.add(sun);
  let width=1,height=1,lawnTop=0,paused=true,mode='gentle',last=0,time=0,frame=0,disposed=false;
- const actors=[],flyers=[];
+ const actors=[],flyers=[];let spacing=[];const previousPositions=new Map();const boundsBox=new THREE.Box3();const boundsSize=new THREE.Vector3();const boundsCenter=new THREE.Vector3();
  function resize(){
   const r=host.getBoundingClientRect();width=Math.max(1,r.width);height=Math.max(1,r.height);
   const extra=host.parentElement?.querySelector('.welcome-extra')?.getBoundingClientRect();
@@ -94,7 +95,7 @@ window.createGardenWildlife=async function(host){
    ellipsoid(color,side*.58,0,-.18,.28,.018,.08,wing);
    ellipsoid(color,side*.07,-.015,-.43,.055,.025,.23,body);
   }
-  const f={kind,group,body,wings,phase:rand(0,20),index,size:kind==='swallow'?28:24,baseX:rand(.1,.9),baseY:rand(.1,.28)};flyers.push(f);
+  const f={kind,group,body,wings,phase:rand(0,20),index,size:kind==='swallow'?28:24,baseX:rand(.1,.9),baseY:.11+index*.085};flyers.push(f);
  }
  [0xdca536,0xf0e6cb,0x8eb6cf,0xd48c46].forEach((c,i)=>insect('butterfly',c,i));
  insect('dragonfly',0,4);insect('bee',0,5);insect('bee',0,6);
@@ -140,7 +141,17 @@ window.createGardenWildlife=async function(host){
   }
   const dark=document.documentElement.dataset.theme==='dark'||(!['dark','light'].includes(document.documentElement.dataset.theme)&&matchMedia('(prefers-color-scheme:dark)').matches);
   sun.color.setHex(dark?0xffae71:0xfff0d3);sun.intensity=dark?1.7:2.5;
-  drawHen(dt);renderer.render(scene,camera);
+  drawHen(dt);
+  // Compute real projected bounds after limb/wing poses, including the hen.
+  scene.updateMatrixWorld(true);
+  const solidObjects=[...actors.map(a=>({id:'animal-'+a.kind,group:a.group,actor:a})),{id:'hen',group:hen},...flyers.filter((f,i)=>mode==='standard'||[0,1,4,5,7,9].includes(i)).map((f,i)=>({id:'flyer-'+f.kind+'-'+f.index,group:f.group}))];
+  const desired=solidObjects.map(o=>{o.group.visible=true;boundsBox.setFromObject(o.group,true);boundsBox.getSize(boundsSize);boundsBox.getCenter(boundsCenter);const radius=Math.hypot(boundsSize.x,boundsSize.y)/2+3;return {...o,x:boundsCenter.x,y:boundsCenter.y,r:radius,previous:previousPositions.get(o.id),maxStep:dt*(o.actor?45:55)}});
+  spacing=placeSolids(desired,width,height);
+  for(const item of spacing){const original=desired.find(o=>o.id===item.id),dx=item.x-original.x,dy=item.y-original.y;item.group.visible=item.visible;previousPositions.set(item.id,{x:item.x,y:item.y,visible:item.visible});if(!item.visible)continue;item.group.position.x+=dx;item.group.position.y+=dy;
+   if(item.actor){const a=item.actor;a.shadow.position.x+=dx;a.shadow.position.y+=dy;if(Math.hypot(dx,dy)>1){a.pos.x=clamp(a.pos.x+dx/width,.03,.97);a.pos.y=clamp(a.pos.y-dy/Math.max(1,height-lawnTop-14),.02,.98);if(a.state==='walk'||a.state==='fly'){change(a,'idle');a.duration=rand(1.8,3.6)}}}
+  }
+  for(const a of actors)a.shadow.visible=a.group.visible;
+  renderer.render(scene,camera);
  }
  function tick(now){
   if(disposed)return;frame=requestAnimationFrame(tick);
@@ -148,6 +159,6 @@ window.createGardenWildlife=async function(host){
  }
  renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();paused=true;host.classList.add('wildlife-fallback');});
  renderer.domElement.addEventListener('webglcontextrestored',()=>{host.classList.remove('wildlife-fallback');api.setMode(mode,false);});
- const api={setMode(value,shouldPause){mode=value;flyers.forEach((f,i)=>f.group.visible=value==='standard'||[0,1,4,5,7,9].includes(i));paused=shouldPause||value==='off';host.dataset.paused=String(paused);last=performance.now();draw(0)},snapshot(){return {time,paused,actors:actors.map(a=>({kind:a.kind,state:a.state,x:a.pos.x,y:a.pos.y,size:a.group.scale.x})),flyers:flyers.length}},dispose(){disposed=true;cancelAnimationFrame(frame);observer.disconnect();renderer.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose())})}};
+ const api={setMode(value,shouldPause){mode=value;flyers.forEach((f,i)=>f.group.visible=value==='standard'||[0,1,4,5,7,9].includes(i));paused=shouldPause||value==='off';host.dataset.paused=String(paused);last=performance.now();draw(0)},snapshot(){return {time,paused,actors:actors.map(a=>({kind:a.kind,state:a.state,x:a.pos.x,y:a.pos.y,size:a.group.scale.x})),flyers:flyers.length,spacing:spacing.map(o=>({id:o.id,x:o.x,y:o.y,r:o.r,visible:o.visible}))}},dispose(){disposed=true;cancelAnimationFrame(frame);observer.disconnect();renderer.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose())})}};
  host.dataset.ready=String(loaded.filter(Boolean).length);resize();frame=requestAnimationFrame(tick);return api;
 };

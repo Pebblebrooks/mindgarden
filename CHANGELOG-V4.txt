@@ -1,3 +1,21 @@
+Mind Garden V4.0.5 — Release notes
+8 November 2026 · Developer: Pebblebrooks
+
+Fixes: stable search input/results-only refresh and one focus ring; mobile search; nonshrinking modal children and launch spacing; expanded room status/rankings; next-level controls; narration independent of spoken hints; varied story questions; consistent SVG navbar icons.
+
+New: six single-player activities — Connect the Dots (number/letter modes), Garden Pets (Mochi cat and Toby dog, pet/feed/brush/play/rest), Spot the Difference · Garden, Colour Links, Remember & Draw, Number & Word Recall (number/word/mixed modes). Three challenge levels for scored activities. Memory viewing times 5/10/20/30 seconds, Ready gate, untimed response, pause, replay and next level. Shape recognition alternative and approximate drawing comparison. All activity text supports English/Chinese. New scored games participate in the daily plan; pets do not.
+
+UI: centered popup headings/subheadings; balanced About close button; compact icon-only garden-background toggle; full-bloom flower picker comparison (read-only, no progress mutations); alternating cat/dog peeks above the progress panel, paused offscreen/background/in dialogs and respecting motion settings. Optional pet sound is synthesized, not a recording.
+
+Validation: garden-activities test covers 150 generated solvable link grids, drawing similarity, six bilingual launches, dot/difference completion, recall modes, recognition, pet care, bloom immutability and scenery toggle. Existing 30 games ×15 levels ×2 languages, five relaxed games, navbar overflow and Mochi controller checks passed. Browser verified About centering, mobile single-tap dots with no horizontal overflow, compact scenery icon, picture differences, and progress peeking geometry/animation.
+
+Limits: pets use frame-based artwork and simple animated care overlays, not continuous rigged 3D. Drawing comparison is approximate and not an assessment. New games are single player only. Physical iOS/Android narration and touch hardware, production multiplayer services and Cloudflare D1 have not been tested for this release.
+
+Assets: original puppy sprite generated with built-in image generation; public/pets/toby-sprites.webp. Prompt: square transparent 4x4 sprite sheet, same fluffy golden cream puppy, four idle/blink poses, four petting reactions, four blue-ball play poses and four sleeping poses; consistent scale/camera, no text or scenery. Original cat sprite retained at public/pets/mochi-sprites.webp.
+
+
+PREVIOUS RELEASES
+
 Mind Garden v4.0.4 — 8 November 2026
 Developer: Pebblebrooks
 

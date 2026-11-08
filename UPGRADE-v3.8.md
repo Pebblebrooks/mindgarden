@@ -12,3 +12,6 @@ Deploy public/ and functions/ as before. No SQL migration is required.
 Music preferences are saved per player; personally selected music files still need to be reselected after reload or profile switch. Built-in music selections and volumes restore automatically; music starts only on user action. Uploaded welcome photos/videos do persist in browser storage.
 
 Validation: syntax checks; existing eight-player UI/API and garden tests; profile isolation, switching and rename tests; browser video upload/playback, native controls, arrows, animation toggle, profile media isolation and reload restoration.
+
+## V3.8 footer and animation fix
+Centered progress footer text and controls; compact raised flower button. Animation Off now hides decorative wildlife, clouds, and leaves, including GIF fallbacks. No database migration required.

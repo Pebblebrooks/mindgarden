@@ -50,7 +50,7 @@
   $('cancelExtra').onclick=closeOv;
  };
  const originalDone=mdone;
- mdone=function(){const g=mg,p=me();if(g&&g.ok>=Math.ceil(g.R*.75)){p.levels=p.levels||{};p.levels[g.t]=Math.min(15,Math.max(p.levels[g.t]||1,(g.difficulty||1)+1));persist()}originalDone()};
+ mdone=function(){const g=mg,p=me();if(g&&g.ok>=Math.ceil(g.R*.75)){p.levels=p.levels||{};p.levels[g.t]=Math.min(15,Math.max(p.levels[g.t]||1,(g.difficulty||1)+1));persist()}originalDone();if(g){const row=$('ma')?.parentElement;if(row&&(g.difficulty||1)<15){const next=document.createElement('button');next.className='btn main';next.id='miniNextLevel';next.textContent=save.lang==='zh'?'下一级':'Next level';next.onclick=()=>{window.mgDifficulty=(g.difficulty||1)+1;startMG(g.t)};row.prepend(next)}if($('ma'))$('ma').onclick=()=>{window.mgDifficulty=g.difficulty||1;startMG(g.t)}}};
  // Daily session: one round of each of three complementary games.
  const home=document.getElementById('home');
  const day=document.createElement('div');day.id='dailyStart';day.innerHTML='<button class="btn main" id="todayPlay" style="width:100%;font-size:1.2em;min-height:78px">🌻 Start today’s gentle activities</button><p class="tip" style="margin:5px auto 16px">Memory, attention and everyday thinking · Play at your own pace</p>';

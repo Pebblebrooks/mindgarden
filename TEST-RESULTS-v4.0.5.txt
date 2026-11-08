@@ -1,0 +1,10 @@
+Mind Garden V4.0.5 validation
+
+Passed during implementation:
+- garden-activities: 150 generated solvable link grids, drawing scoring, six bilingual launches, completion, recall modes, pet actions, read-only bloom preview and scenery toggle.
+- v405-fixes; progression-practice (30 original activities x 15 levels x 2 languages); five-games; navbar-overflow; mochi-widget; v4-design.
+- Browser checks: centered About headings, mobile single-tap dots and no horizontal overflow at 140%, compact scenery control, picture differences, pet artwork and progress peeks.
+
+Release checks: build, JavaScript syntax and atomic service-worker release-cache test.
+
+Limits: physical iOS/Android narration and touch hardware, production multiplayer services and Cloudflare D1 were not verified. No production deployment or database mutation was performed during package preparation. Deployment must be verified against the deployed commit and About version.

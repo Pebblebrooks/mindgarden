@@ -1,13 +1,11 @@
-# Mind Garden V4.0.4
+# Mind Garden V4.0.5
 
-Developed by Pebblebrooks. The welcome page now has a text-only player greeting and three matching cards: **Today's Games**, **All Games**, and **Play Together**. Navigation is grouped by purpose, sound and animation controls use compact icons, and popup spacing remains readable at enlarged text sizes.
+Developed by Pebblebrooks. This release adds six single-player activities, interactive cat and dog companions, full-bloom flower previews, compact game scenery controls, centered popup headings and fixes for search, multiplayer status, spacing, story narration and level progression.
 
-Read **README-INSTALL.txt** before updating. Merge the package's folders into the existing repository root; retain existing Cloudflare Pages settings and the `DB` binding. Output directory: `public`. Prebuilt assets and editable sources are both included.
+Read **README-INSTALL.txt** before updating. Merge the package folders into the existing repository root, retaining project-specific settings. Cloudflare Pages output directory: `public`. Build: `npm run build`. Prebuilt assets and editable sources are included.
 
-No new SQL migration is required after V4.0.3. For an earlier release, complete `migrate-v4.0.3.sql` and its prerequisites first. `check-database-v4.0.4.sql` checks the same 21 database objects. Do not reset the database or clear browser storage.
+No new SQL is required after V4.0.3. Do not reset the database or clear browser storage. Keep the existing `DB` binding. For older installations follow the migration prerequisites in the installation notes.
 
-Build: `npm run build`. Syntax: `npm run check`. After installing development dependencies, `npm run test:release` checks the release UI, navigation and cache. Use Node 24 or newer for SQLite API tests.
-
-About must show **v4.0.4**. See **CHANGELOG-V4.txt** and **TEST-RESULTS-v4.0.4.txt** for scope and verification. Animal artwork and motion proposals remain studies; this release retains the existing wildlife engine and assets.
+After deployment, About must show **v4.0.5** and HTML must reference `garden-ui-405.js` and `garden-ui-405.css`. See **RELEASE-v4.0.5.txt** and **TEST-RESULTS-v4.0.5.txt** for scope and verification limits. New activities are single-player; pets use frame-based animation, not rigged 3D.
 
 Copyright © 2026 Pebblebrooks. Existing third-party licences and attribution remain applicable.

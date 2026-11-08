@@ -2,7 +2,7 @@ const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),errors=[];
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window;
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.addEventListener('error',e=>errors.push(e.message));
-w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-404.js','utf8'));
+w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-405.js','utf8'));
 const pause=()=>new Promise(r=>setTimeout(r,35));
 (async()=>{try{
  await pause();
@@ -13,7 +13,7 @@ const pause=()=>new Promise(r=>setTimeout(r,35));
  }
  for(const lang of ['en','zh']){
   w.eval('save.lang='+JSON.stringify(lang)+';persist();load();renderHome()');await pause();
-  assert.equal(w.document.getElementById('navMore').textContent,'☰');
+  assert(w.document.querySelector('#navMore svg[aria-hidden="true"]'));assert.equal(w.document.getElementById('navMore').textContent,'');
   assert.equal(w.document.querySelectorAll('#navTextSize').length,1);assert.equal(w.document.querySelectorAll('#menuTextSize').length,1);
   for(const action of ['home','library','online','progress','leaderboard','family','profile','settings','music','nature','motion','language','about','contact'])assert(w.document.querySelector('#navMenu [data-go="'+action+'"]'),action);
   w.document.getElementById('navMore').click();assert.equal(w.document.getElementById('navMore').getAttribute('aria-expanded'),'true');

@@ -1,7 +1,7 @@
 const {readFileSync}=require('node:fs'),{JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),assert=require('node:assert/strict');
 const root=__dirname+'/../public/',html=readFileSync(root+'index.html','utf8'),d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{runScripts:'outside-only',pretendToBeVisual:true,url:'https://garden.test',virtualConsole:new VirtualConsole()}),w=d.window,errors=[];
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.confirm=()=>true;w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));
-w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(readFileSync(root+'garden-ui-404.js','utf8'));
+w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(readFileSync(root+'garden-ui-405.js','utf8'));
 setTimeout(()=>{try{
  const el=id=>w.document.getElementById(id);
  assert(!el('dashProgress')&&!el('dashLeaders')&&!el('dashGuide')&&!el('dailyCaption'));

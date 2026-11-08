@@ -1,4 +1,4 @@
-MIND GARDEN V4.0.4 — INSTALLATION
+MIND GARDEN V4.0.5 — INSTALLATION
 8 November 2026 · Developer: Pebblebrooks
 
 CONTENTS
@@ -8,12 +8,13 @@ assets, editable source, Pages Functions, build script and tests are included.
 Merge into your existing repository. public/, functions/, shared/, src/,
 scripts/ and tests/ are at the ZIP root, with no wrapper folder.
 Your Cloudflare account settings, database and player records are not in this ZIP.
-Animal illustration and motion studies remain prototypes; this release retains
-the existing production wildlife engine and assets.
+Includes six new single-player activities, interactive cat/dog companions,
+progress-panel peeks, full-bloom previews and compact scenery controls.
+See RELEASE-v4.0.5.txt for scope and limitations.
 
 1. DATABASE
 If the V4.0.3 database migration is installed, NO NEW SQL is required.
-V4.0.4 uses the same schema as V4.0.3.
+V4.0.5 uses the same schema as V4.0.3.
 
 If upgrading from V4.0.2 or earlier, complete migrate-v4.0.3.sql first in the
 existing D1 database bound to this app as DB. Execute its two complete CREATE
@@ -22,7 +23,7 @@ It preserves scores. The older migrate-v3.sql, migrate-v3.8.5.sql and
 migrate-v3.8.6.sql prerequisites must already be complete.
 Do not use schema.sql to update an existing database or delete existing tables.
 
-Optional check: run check-database-v4.0.4.sql in the D1 Console.
+Optional check: run check-database-v4.0.5.sql in the D1 Console.
 Expected: 21 rows, all PRESENT. This checks object names, not their definitions.
 If an older object is MISSING, complete its corresponding original migration.
 For SQL containing comments, preserve line breaks, or omit lines beginning
@@ -35,10 +36,10 @@ and retaining project-specific configuration and unrelated files.
 Commit and push the complete update together where possible.
 
 Correct paths after merging:
-  package.json                     version 4.0.4
+  package.json                     version 4.0.5
   public/index.html
-  public/garden-ui-404.js
-  public/garden-ui-404.css
+  public/garden-ui-405.js
+  public/garden-ui-405.css
   public/sw.js
   public/welcome-media.js
   public/dashboard.js
@@ -47,11 +48,11 @@ Correct paths after merging:
   scripts/build-release.py
 
 Do not flatten public/ into the root, create public/public/, or upload everything
-inside an extra Mind-Garden-v4.0.4-update/ folder.
+inside an extra Mind-Garden-v4.0.5-update/ folder.
 If using GitHub's website, preserve every folder's relative path and finish all
 uploads before testing the final deployment. Uploading only index.html or only
 the generated bundle can leave the build using older editable source.
-Old garden-ui-400/401/402/403 files may remain; the new page references 404 assets.
+Old garden-ui-400/401/402/403/404 files may remain; the new page references 405 assets.
 
 3. CLOUDFLARE PAGES
 Keep the existing project, repository connection, Pages Functions and DB binding.
@@ -65,8 +66,8 @@ Reload Mind Garden. If the older page remains, close all Mind Garden tabs and
 reopen the same production URL. Do not clear browser site data: local player
 progress and personal media are stored there.
 
-Open Menu > Help > About. It must show v4.0.4.
-The HTML must reference garden-ui-404.js and garden-ui-404.css.
+Open Menu > Help > About. It must show v4.0.5.
+The HTML must reference garden-ui-405.js and garden-ui-405.css.
 If the version remains older, check the deployed commit and folder paths above.
 
 4. QUICK CHECK
@@ -84,4 +85,4 @@ If the version remains older, check the deployed commit and folder paths above.
 - Create a new multiplayer room and confirm each player can press Begin.
 
 No production deployment or D1 mutation was performed while preparing this ZIP.
-See TEST-RESULTS-v4.0.4.txt for completed checks and their limits.
+See TEST-RESULTS-v4.0.5.txt for completed checks and their limits.
