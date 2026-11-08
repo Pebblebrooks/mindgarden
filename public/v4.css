@@ -218,3 +218,11 @@ html[data-v4-mode=light] #home #welcomeDashboard .welcome-name{color:#173e34!imp
 #home #unifiedNav #navTextSize .text-size-preset{box-sizing:border-box;height:var(--nav-control-size)!important;min-height:var(--nav-control-size)!important;margin:0!important;padding-block:0!important;align-self:center!important;line-height:normal}
 #home #unifiedNav :is(.nav-symbol,.nav-text-button,#navMore) .garden-icon{display:block!important;width:var(--nav-icon-size)!important;height:var(--nav-icon-size)!important;flex:none!important;margin:0!important;vertical-align:middle}
 #home #unifiedNav .nav-link .garden-icon{display:block;width:max(20px,calc(20px * var(--fs)))!important;height:max(20px,calc(20px * var(--fs)))!important;flex:none; margin:0!important}
+
+/* Keep scenery arrows beside the caption at every text size. */
+#home .hero-media-controls{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;width:fit-content;max-width:calc(100% - 24px);box-sizing:border-box;align-items:center}
+#home .hero-media-controls #heroPrevious{grid-column:1;grid-row:1}
+#home .hero-media-controls #heroMediaCaption{grid-column:2;grid-row:1;min-width:0;width:auto;max-width:350px;overflow-wrap:anywhere}
+#home .hero-media-controls #heroNext{grid-column:3;grid-row:1}
+#home .hero-media-controls #heroVideoPlay{grid-column:1 / -1;grid-row:2}
+html[data-garden-scene="fjord"] #gardenLife :is(.fallback-cat,.fallback-fox),html[data-garden-scene="sakura"] #gardenLife :is(.fallback-cat,.fallback-fox),html[data-garden-scene="classical"] #gardenLife :is(.fallback-cat,.fallback-fox),html[data-garden-scene="alpine"] #gardenLife :is(.fallback-cat,.fallback-fox),html[data-garden-scene="pavilion"] #gardenLife :is(.fallback-cat,.fallback-fox){display:none!important}

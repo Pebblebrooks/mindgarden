@@ -1,7 +1,7 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('node:fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8');
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,errors=[];
-w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-409.js','utf8'));
+w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4010.js','utf8'));
 const click=s=>{const b=w.document.querySelector(s);assert(b,'Missing '+s);assert(!b.disabled,'Disabled '+s);b.click()},kit=w.MindGardenNewGames,rule=kit.rules,logs=()=>w.eval('me().log'),games=()=>w.eval('me().gp||0');
 try{
  for(let seed=1;seed<=100;seed++)for(const n of [3,4,5]){const g=rule.pathPuzzle(n,rule.random(seed));assert(!rule.pathConnected(g.cells,n),'Starts unsolved');assert(rule.pathConnected(g.cells.map((v,i)=>g.answer[i]||v),n),'Guaranteed solvable');for(let m=1;m<16;m++)assert.equal(rule.rot(rule.rot(rule.rot(rule.rot(m)))),m)}

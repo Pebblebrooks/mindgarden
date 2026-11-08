@@ -44,6 +44,6 @@ window.openSet=function(){original();const group=document.createElement('fieldse
 document.getElementById('bSet').onclick=window.openSet;
 // Replace the old binary setting with the three explicit modes.
 const idx=SET.findIndex(x=>x[0]==='still');if(idx>=0)SET.splice(idx,1);
-window.MindGardenMotion={sync,effectiveMode,setMode};window.addEventListener('gardenPlayerChange',sync);
+window.MindGardenMotion={sync,effectiveMode,setMode};window.addEventListener('gardenPlayerChange',sync);window.addEventListener('gardenSceneChange',sync);
 sync();
 })();

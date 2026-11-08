@@ -3,6 +3,11 @@ from pathlib import Path
 import re,json
 root=Path(__file__).resolve().parents[1]
 p=root/'public'
+# Reject empty/truncated WebP scenery before emitting a deployable bundle.
+for image in p.glob('garden-*.webp'):
+ data=image.read_bytes()
+ if len(data)<20 or data[:4]!=b'RIFF' or data[8:12]!=b'WEBP' or int.from_bytes(data[4:8],'little')+8!=len(data):
+  raise ValueError('Invalid scenery image: '+image.name)
 version=json.loads((root/'package.json').read_text())['version']
 assert re.fullmatch(r'\d+\.\d+\.\d+',version), 'Use a semantic release version'
 tag=version.replace('.','')

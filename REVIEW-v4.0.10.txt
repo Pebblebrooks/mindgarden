@@ -1,0 +1,6 @@
+Approved release V4.0.10, 8 November 2026.
+Restores empty Classical Coastal daylight WebP from original generated PNG.
+Scenery controls use a three-column grid; browser verified at 390px / 200% text with arrow centres aligned.
+Five new scenes suppress ground actors and hen while retaining owl and flying insects/birds; original scenes restore wildlife.
+All scenery files decoded successfully using Pillow. Release build rejects empty/truncated WebP files.
+Resolution audit: five new scene sources are 1672 x 941; no artificial upscaling applied. Higher native-resolution artwork is needed for genuine 4K detail.

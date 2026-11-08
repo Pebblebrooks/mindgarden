@@ -144,7 +144,9 @@ window.createGardenWildlife=async function(host){
   drawHen(dt);
   // Compute real projected bounds after limb/wing poses, including the hen.
   scene.updateMatrixWorld(true);
-  const solidObjects=[...actors.map(a=>({id:'animal-'+a.kind,group:a.group,actor:a})),{id:'hen',group:hen},...flyers.filter((f,i)=>mode==='standard'||[0,1,4,5,7,9].includes(i)).map((f,i)=>({id:'flyer-'+f.kind+'-'+f.index,group:f.group}))];
+  const groundAllowed=!['fjord','sakura','classical','alpine','pavilion'].includes(document.documentElement.dataset.gardenScene);
+  for(const a of actors){a.group.visible=groundAllowed||a.kind==='owl';a.shadow.visible=a.group.visible;}hen.visible=groundAllowed;
+  const solidObjects=[...actors.filter(a=>groundAllowed||a.kind==='owl').map(a=>({id:'animal-'+a.kind,group:a.group,actor:a})),...(groundAllowed?[{id:'hen',group:hen}]:[]),...flyers.filter((f,i)=>mode==='standard'||[0,1,4,5,7,9].includes(i)).map((f,i)=>({id:'flyer-'+f.kind+'-'+f.index,group:f.group}))];
   const desired=solidObjects.map(o=>{o.group.visible=true;boundsBox.setFromObject(o.group,true);boundsBox.getSize(boundsSize);boundsBox.getCenter(boundsCenter);const radius=Math.hypot(boundsSize.x,boundsSize.y)/2+3;return {...o,x:boundsCenter.x,y:boundsCenter.y,r:radius,previous:previousPositions.get(o.id),maxStep:dt*(o.actor?45:55)}});
   spacing=placeSolids(desired,width,height);
   for(const item of spacing){const original=desired.find(o=>o.id===item.id),dx=item.x-original.x,dy=item.y-original.y;item.group.visible=item.visible;previousPositions.set(item.id,{x:item.x,y:item.y,visible:item.visible});if(!item.visible)continue;item.group.position.x+=dx;item.group.position.y+=dy;
@@ -159,6 +161,6 @@ window.createGardenWildlife=async function(host){
  }
  renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();paused=true;host.classList.add('wildlife-fallback');});
  renderer.domElement.addEventListener('webglcontextrestored',()=>{host.classList.remove('wildlife-fallback');api.setMode(mode,false);});
- const api={setMode(value,shouldPause){mode=value;flyers.forEach((f,i)=>f.group.visible=value==='standard'||[0,1,4,5,7,9].includes(i));paused=shouldPause||value==='off';host.dataset.paused=String(paused);last=performance.now();draw(0)},snapshot(){return {time,paused,actors:actors.map(a=>({kind:a.kind,state:a.state,x:a.pos.x,y:a.pos.y,size:a.group.scale.x})),flyers:flyers.length,spacing:spacing.map(o=>({id:o.id,x:o.x,y:o.y,r:o.r,visible:o.visible}))}},dispose(){disposed=true;cancelAnimationFrame(frame);observer.disconnect();renderer.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose())})}};
+ const api={setMode(value,shouldPause){mode=value;flyers.forEach((f,i)=>f.group.visible=value==='standard'||[0,1,4,5,7,9].includes(i));paused=shouldPause||value==='off';host.dataset.paused=String(paused);last=performance.now();draw(0)},snapshot(){return {time,paused,actors:actors.map(a=>({kind:a.kind,visible:a.group.visible,state:a.state,x:a.pos.x,y:a.pos.y,size:a.group.scale.x})),flyers:flyers.length,spacing:spacing.map(o=>({id:o.id,x:o.x,y:o.y,r:o.r,visible:o.visible}))}},dispose(){disposed=true;cancelAnimationFrame(frame);observer.disconnect();renderer.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose())})}};
  host.dataset.ready=String(loaded.filter(Boolean).length);resize();frame=requestAnimationFrame(tick);return api;
 };
