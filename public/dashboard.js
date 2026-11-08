@@ -142,7 +142,7 @@
    ['Play Together','一起玩','Create or join an online room for up to 8 players. Share a room code, play the same activity, and see round scores and the room leaderboard.','创建或加入最多8人的在线房间。分享房间码，参与相同活动，查看本轮成绩与房间排行榜。'],
    ['Progress and local players','进度与本地玩家','My Progress shows your activity, streak and garden growth. Keep separate local players and use Family View, with everyone’s agreement, to review their activity on this device.','“我的进度”显示游戏活动、连续天数与花园成长。可建立独立的本地玩家；在所有人同意后，通过“家人视图”查看此设备上的活动。'],
    ['Comfortable controls','舒适的操作','Adjust text from 80% to 200%, choose light or dark appearance, switch English/Chinese, and control animation, contrast, spoken picture names and break reminders.','可将文字调整为80%至200%，选择浅色或深色外观、切换中英文，并控制动画、对比度、图片名称朗读与休息提醒。'],
-   ['A garden that feels like yours','个性化花园','Choose scenery, add your own photos or welcome videos, and enjoy music and nature sounds. Back up history, scores and preferences as JSON, or export activity as CSV.','选择背景、添加个人照片或欢迎页视频，享受音乐与自然音效。可将历史、成绩与偏好备份为JSON，或将活动导出为CSV。']
+   ['A garden that feels like yours','个性化花园','Choose scenery, add your own photos or welcome videos, and enjoy music and nature sounds. In Garden View, keep a fixed scene or rotate garden scenes at a preset or custom interval, in order or randomly. Rotation pauses away from the welcome page. Back up history, scores and preferences as JSON, or export activity as CSV.','选择背景、添加个人照片或欢迎页视频，享受音乐与自然音效。在花园景色中可固定背景，或按预设、自定义间隔依次或随机切换。离开欢迎页时自动暂停。可将历史、成绩与偏好备份为JSON，或将活动导出为CSV。']
   ];
   const guide=[
    ['Start your first game','开始第一局游戏',[

@@ -1,6 +1,6 @@
 /* Preferences belong to stable local profile IDs, so renaming keeps them. */
 (function(){
-const defaults={welcomeCardsHidden:false,lang:'en',timed:0,speak:0,mode:'auto',th:'cream',motionMode:'gentle',motionExplicit:false,still:0,homeNature:true,sceneLight:'blossom',sceneDark:'blossom',photolight:false,photodark:false,heroLight:null,heroDark:null,motionPrevious:'gentle',soundscape:{music:'strings',nature:'garden',master:45,musicVolume:55,natureVolume:35,horn:false},snd:1,fs:0,textScale:null,bouquetRotation:true,quietGames:true,v4IntroSeen:false,hc:0,cb:0,lh:0,brk:1,bn:15};
+const defaults={sceneryMinutes:0,sceneryOrder:"sequence",welcomeCardsHidden:false,lang:'en',timed:0,speak:0,mode:'auto',th:'cream',motionMode:'gentle',motionExplicit:false,still:0,homeNature:true,sceneLight:'blossom',sceneDark:'blossom',photolight:false,photodark:false,heroLight:null,heroDark:null,motionPrevious:'gentle',soundscape:{music:'strings',nature:'garden',master:45,musicVolume:55,natureVolume:35,horn:false},snd:1,fs:0,textScale:null,bouquetRotation:true,quietGames:true,v4IntroSeen:false,hc:0,cb:0,lh:0,brk:1,bn:15};
 const keys=Object.keys(defaults),copy=x=>JSON.parse(JSON.stringify(x));
 function capture(){const out={};for(const k of keys)out[k]=copy(save[k]===undefined?defaults[k]:save[k]);return out}
 if(!save.profilePrefsMigrated){me().preferences=capture();save.profilePhotoOwner=save.cp;save.profilePrefsMigrated=true}

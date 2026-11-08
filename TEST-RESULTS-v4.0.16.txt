@@ -1,0 +1,5 @@
+PASS timer elapsed/pause/resume, fixed mode, manual reset.
+PASS profile preferences persistence and cache release tests.
+Browser verified custom 2-minute/random preferences survive reload.
+Browser visually checked light-mode menu and two-tone raised Progress card.
+No physical mobile device test performed.

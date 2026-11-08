@@ -1,0 +1,24 @@
+/* Sage and mint surfaces; raised edges without moving layout or game artwork. */
+:root[data-v4-mode="light"]:not([data-hc="1"]){--bg:#dce8d5;--bg2:#dfebd8;--panel:#edf3e7;--ink:#193f35;--soft:#415e4d;--line:#a9bfa2;--journey-bg:#dce8d5;--journey-card:#edf3e7;--journey-ink:#193f35;--journey-muted:#415e4d;--journey-line:#a9bfa2}
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #gardenProgressStrip{background:linear-gradient(145deg,#e2ecdc,#dce8d5 50%,#d4e2cc)!important}
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #progressDisplay,
+html[data-v4-mode="light"]:not([data-hc="1"]) #home .welcome-feature,
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #gameCards>button,
+html[data-v4-mode="light"]:not([data-hc="1"]) #box,
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #unifiedNav #navMenu{background:linear-gradient(145deg,#f0f5ec,#edf3e7 50%,#e1ebda)!important;color:#193f35!important;border:1px solid #a9bfa2!important;box-shadow:inset 0 2px 1px #ffffffb3,inset 0 -2px 2px #819c7133,0 5px 0 #b6c9ac,0 12px 24px #284b2526!important}
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #unifiedNav{background:linear-gradient(145deg,#edf3e7,#dce8d5)!important;box-shadow:inset 0 2px 1px #ffffffb3,0 4px 0 #a9bfa2,0 8px 18px #284b2526!important}
+html[data-v4-mode="light"]:not([data-hc="1"]) #box :is(fieldset,.card,.panel),
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #unifiedNav #navMenu fieldset{background:#dce8d5!important;border-color:#a9bfa2!important;box-shadow:inset 0 1px 2px #66845e26,0 1px 0 #ffffffb3}
+html[data-v4-mode="light"]:not([data-hc="1"]) :is(#box,#navMenu) :is(input:not([type=range]):not([type=checkbox]),select,textarea){background:#edf3e7!important;color:#193f35!important;border-color:#819d78!important;box-shadow:inset 0 2px 4px #284b2514}
+html[data-v4-mode="light"]:not([data-hc="1"]) :is(#box,#navMenu) :is(.btn,button:not(.hero-arrow):not(.nav-link)),
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #progressDisplay button{background:linear-gradient(145deg,#edf3e7,#dce8d5)!important;color:#193f35!important;border-color:#91ab86!important;box-shadow:inset 0 1px 0 #ffffffb3,0 3px 0 #b6c9ac,0 5px 10px #284b2514}
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #unifiedNav #navMenu button[aria-pressed=true],
+html[data-v4-mode="light"]:not([data-hc="1"]) #box button[aria-pressed=true]{background:#c5dabd!important;outline:2px solid #426746;outline-offset:1px}
+html[data-v4-mode="light"]:not([data-hc="1"]) :is(#box,#navMenu) button:hover{background:#dfebd8!important}
+html[data-v4-mode="light"]:not([data-hc="1"]) :is(#box,#navMenu) button:focus-visible{outline:3px solid #193f35;outline-offset:3px}
+#sceneryRotation{margin:16px 0;padding:12px;border:1px solid var(--line);border-radius:16px;text-align:center}
+#sceneryRotation summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px}
+#sceneryRotation summary:before{content:'▸'}#sceneryRotation[open] summary:before{content:'▾'}
+#sceneryRotation label{display:grid;gap:8px;margin:12px 0}#sceneryRotation label[hidden]{display:none}
+#sceneryRotation :is(select,input){width:100%;min-width:0;box-sizing:border-box;min-height:44px;font:inherit;padding:10px;border:1px solid var(--line);border-radius:12px}
+#sceneryRotation p{font-size:.85em;line-height:1.5;margin:12px 0 0}

@@ -1,0 +1,17 @@
+/* Rotation counts welcome-page viewing time, never game or background-tab time. */
+(function(){
+window.createGardenRotationClock=function(o){let last=o.now(),left=o.minutes()*60000,was=o.active();return {reset(){last=o.now();left=o.minutes()*60000;was=o.active()},tick(){const now=o.now(),active=o.active();if(active&&was&&o.minutes()>0){left-=Math.max(0,now-last);if(left<=0){left=o.minutes()*60000;o.advance()}}last=now;was=active},get remaining(){return left}}};
+const T=(a,b)=>save.lang==='zh'?b:a;
+const minutes=()=>Number.isFinite(+save.sceneryMinutes)?Math.min(1440,Math.max(0,+save.sceneryMinutes)):0;
+let automatic=false;
+const active=()=>!document.hidden&&!document.getElementById('home').classList.contains('hidden')&&!document.getElementById('welcomeDashboard').classList.contains('hidden')&&document.getElementById('ov').classList.contains('hidden');
+const clock=window.createGardenRotationClock({now:()=>performance.now(),minutes,active,advance(){automatic=true;try{window.MindGardenWelcomeMedia.rotate(save.sceneryOrder==='random')}finally{automatic=false}}});
+function mount(){const host=document.getElementById('menuScenery');if(!host||document.getElementById('sceneryRotation'))return;const box=document.createElement('details');box.id='sceneryRotation';box.innerHTML='<summary>'+T('Scenery rotation','背景自动切换')+'</summary><label>'+T('Change scenery','切换背景')+'<select id="sceneryInterval"><option value="0">'+T('Fixed scenery','固定背景')+'</option>'+[5,10,15,30,60].map(n=>'<option value="'+n+'">'+T('Every '+n+' minutes','每 '+n+' 分钟')+'</option>').join('')+'<option value="custom">'+T('Custom interval','自定义间隔')+'</option></select></label><label id="sceneryCustomLabel">'+T('Minutes (1–1440)','分钟（1–1440）')+'<input id="sceneryCustom" type="number" required min="1" max="1440" step="1"></label><label>'+T('Order','顺序')+'<select id="sceneryOrder"><option value="sequence">'+T('In order','依次切换')+'</option><option value="random">'+T('Random · no repeats','随机 · 不连续重复')+'</option></select></label><p>'+T('Runs only while you view the welcome garden. Pauses during games, popups and when this tab is hidden.','仅在浏览欢迎花园时运行，游戏、弹窗或标签页隐藏时暂停。')+'</p>';host.append(box);
+const preset=box.querySelector('#sceneryInterval'),custom=box.querySelector('#sceneryCustom'),label=box.querySelector('#sceneryCustomLabel'),order=box.querySelector('#sceneryOrder');const n=minutes();preset.value=[0,5,10,15,30,60].includes(n)?String(n):'custom';custom.value=n||5;label.hidden=preset.value!=='custom';order.value=save.sceneryOrder==='random'?'random':'sequence';
+function update(){label.hidden=preset.value!=='custom';if(preset.value==='custom'&&!custom.checkValidity()){custom.reportValidity();return}save.sceneryMinutes=preset.value==='custom'?Number(custom.value):Number(preset.value);save.sceneryOrder=order.value;persist();clock.reset()}
+preset.onchange=custom.onchange=order.onchange=update;
+}
+new MutationObserver(mount).observe(document.getElementById('unifiedNav'),{subtree:true,childList:true});
+for(const id of ['home','welcomeDashboard','ov'])new MutationObserver(()=>clock.tick()).observe(document.getElementById(id),{attributes:true,attributeFilter:['class']});
+document.addEventListener('visibilitychange',()=>clock.tick());window.addEventListener('gardenSceneChange',()=>{if(!automatic)clock.reset()});window.addEventListener('gardenPlayerChange',()=>{document.getElementById('sceneryRotation')?.remove();mount();clock.reset()});setInterval(()=>clock.tick(),1000);mount();
+})();

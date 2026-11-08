@@ -1,22 +1,16 @@
-# Mind Garden V4.0.15
+# Mind Garden V4.0.16
 
-MIND GARDEN V4.0.15
+MIND GARDEN V4.0.16
+Sage and mint light-mode surfaces with raised borders, inset highlights and soft shadows.
+Two-tone Progress section, matching cards, menus, popups and input controls.
+Scenery rotation in Garden View: Fixed (default), 5/10/15/30/60 minutes, custom 1–1440 minutes.
+Sequential or random order without immediate repeats. Includes the eight bundled themes.
+Light/dark themes stay paired during automatic rotation. Manual photo/video choices remain available.
+Timer runs only on the visible welcome page, pauses for popups/games/background tabs, and restarts after manual scenery changes. Preferences are saved per local player.
+Dark mode and high-contrast styling retain their existing colours.
 
-Approved pet update
-- Garden pets appear only on the welcome page, including its Progress area.
-- All Games, gameplay and popups hide the pet and stop its audio/motion.
-- Returning to the garden restores pet visibility unless manually hidden.
-- Default position is centered above Progress and pinned to the scene.
-- Drag, resize, pin/unpin and reset remain available.
-- Friend is renamed Choose your pet.
-- Cat and dog audio are isolated; no growling or background dog interruptions.
-- Random sound variants avoid consecutive repeats; source credits included.
-
-INSTALLATION
-Upload the contents of this package to the repository root, replacing files.
-Cloudflare Pages serves public/ and uses functions/ for its existing API.
-No database migration, binding changes or data reset are required.
-Verify About says v4.0.15 and the page loads garden-ui-4015.js/.css.
-If a cached version persists, close all app tabs and reopen.
-
-Copyright © 2026 Pebblebrooks. Third-party credits accompany the assets.
+DEPLOYMENT
+Upload package contents to repository root. Pages output directory: public. Backend: functions/.
+No database migration or data reset. Confirm v4.0.16 and garden-ui-4016.js/.css.
+If an older release remains cached, close all app tabs and reopen. Do not clear site data.
+Copyright 2026 Pebblebrooks.
