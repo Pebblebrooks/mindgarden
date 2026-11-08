@@ -2,7 +2,7 @@ const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),errors=[];
 const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window;
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.addEventListener('error',e=>errors.push(e.message));
-w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-405.js','utf8'));
+w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-406.js','utf8'));
 (async()=>{try{
 await new Promise(r=>setTimeout(r,20));
 for(const id of ['homeAnimationToggle','homeNatureToggle','heroPrevious','heroNext'])assert(w.document.getElementById(id),id);

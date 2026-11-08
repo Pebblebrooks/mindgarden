@@ -1,0 +1,1 @@
+V4.0.6 validation: syntax, 340px/640px ledge movement/state/exits/pause, action-matched audio/no overlap/unlock, direct gestures and removed action buttons, release UI/navigation/cache checks passed. Physical mobile devices not tested. Database unchanged.

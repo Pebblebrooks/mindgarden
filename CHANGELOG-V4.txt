@@ -1,3 +1,14 @@
+Mind Garden V4.0.6 — 8 November 2026
+Developer: Pebblebrooks
+
+Approved pet update: recorded CC0 meow, purr, bark and growl; independent random visits; side-view crawl cycles; stopping, sitting, head turns, grooming and geometric exits. Vocal poses accompany species-appropriate sounds. Shared audio prevents overlapping voices. Direct touch/stroking remains; manual action buttons removed. Sound remains opt-in to respect browser playback requirements.
+
+No new database migration. Existing progress and Cloudflare bindings are preserved.
+Animation uses original frame-based artwork, not a fully rigged 3D model. Physical iOS/Android hardware has not been verified.
+Audio attribution: public/pets/audio-field/CREDITS.txt. Anime.js 4.2.2 MIT licence: public/vendor/anime-LICENSE.md.
+
+PREVIOUS RELEASES
+
 Mind Garden V4.0.5 — Release notes
 8 November 2026 · Developer: Pebblebrooks
 

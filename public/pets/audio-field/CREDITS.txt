@@ -1,0 +1,24 @@
+Replacement set 3 — downloaded 8 November 2026. All CC0.
+
+purr.mp3: Cat purr.wav by rareguy27; their cat Shu. Freesound #690620.
+https://freesound.org/people/rareguy27/sounds/690620/
+https://cdn.freesound.org/previews/690/690620_6763475-hq.mp3
+5.5-second excerpt from 10s with short edge fades, 128kbps; pitch/speed unchanged.
+
+meow.mp3: Meow 2 by PuzzlingGGG. Real cat recorded with phone, silence removed by contributor.
+https://freesound.org/people/PuzzlingGGG/sounds/859724/
+https://cdn.freesound.org/previews/859/859724_12537534-hq.mp3
+Complete HQ preview retained unchanged.
+
+bark.mp3: Dog bark 3 by Sadiquecat. Recorded outdoors, Aude, France, DJI MIC-3.
+https://freesound.org/people/Sadiquecat/sounds/850824/
+https://cdn.freesound.org/previews/850/850824_5287430-hq.mp3
+Complete HQ preview retained unchanged.
+
+growl.mp3: Dog Growl by bonebrah. Contributor's dog recorded with Pixel 4.
+https://opengameart.org/content/dog-growl
+https://opengameart.org/sites/default/files/dog-growl.ogg
+Complete recording converted from Ogg to 128kbps MP3, unchanged speed/pitch.
+
+These are different recordings from the earlier Kerzoven and BigSoundBank sets.
+Browser playback and file decoding checked. Subjective sound quality is awaiting user review.
