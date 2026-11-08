@@ -1,0 +1,6 @@
+PASS audio owner/species isolation, no growling, playback unlock and blocked reporting.
+PASS touch/petting hide/show and cleanup regression.
+PASS center position, resize, pinch and pin/reset regression.
+PASS release cache and syntax checks.
+Browser: All Games hides pet, display none, still true. Return home restores pinned pet. Play Together hides pet; closing restores it.
+Physical iOS/Android device listening not performed.

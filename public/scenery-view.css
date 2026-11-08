@@ -61,3 +61,6 @@ body:has(#home.hidden) #gardenCat{display:none!important}
 #menuPets .free-pet-menu label{display:block;margin:10px 0}
 #menuPets .free-pet-menu button{display:block;width:100%;text-align:center;margin:6px 0}
 #menuPets .free-pet-menu p{font-size:.85em}
+
+/* Pinning never overrides welcome-page visibility. */
+#gardenCat[data-scene-visible="false"]{display:none!important}

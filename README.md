@@ -1,19 +1,22 @@
-# Mind Garden V4.0.14
+# Mind Garden V4.0.15
 
-Approved deployment package. Read **README-INSTALL.txt** before merging into the existing repository. Cloudflare Pages output: `public`; build: `npm run build` (Python 3). Backend Functions remain in `functions/`.
+MIND GARDEN V4.0.15
 
-Adds Today & Here, Food & Kitchen and Around Us under Everyday Life. Includes the pet layering, centered headings, audio playback and Cosy Corner updates, plus the multiplayer room-closure fix. No new database migration after V4.0.3.
+Approved pet update
+- Garden pets appear only on the welcome page, including its Progress area.
+- All Games, gameplay and popups hide the pet and stop its audio/motion.
+- Returning to the garden restores pet visibility unless manually hidden.
+- Default position is centered above Progress and pinned to the scene.
+- Drag, resize, pin/unpin and reset remain available.
+- Friend is renamed Choose your pet.
+- Cat and dog audio are isolated; no growling or background dog interruptions.
+- Random sound variants avoid consecutive repeats; source credits included.
 
-See **RELEASE-v4.0.14.txt** for the current preview scope and **TEST-RESULTS-v4.0.14.txt** for validation. Earlier release notes remain historical. The news pilot requires editorial renewal after 21 November 2026. Preparing this package does not deploy it.
+INSTALLATION
+Upload the contents of this package to the repository root, replacing files.
+Cloudflare Pages serves public/ and uses functions/ for its existing API.
+No database migration, binding changes or data reset are required.
+Verify About says v4.0.15 and the page loads garden-ui-4015.js/.css.
+If a cached version persists, close all app tabs and reopen.
 
-Copyright © 2026 Pebblebrooks. Third-party licences and attribution are included with their assets.
-
-V4.0.8 adds six approved playable prototypes under New game previews, with no
-saved scores. Team Garden uses one shared device, not online rooms. My Life
-Album images stay in session memory and are cleared on leaving. Menu and Pause
-are distinct; Everyday Life Skip advances without credit. No new DB migration.
-
-## V4.0.14
-Adds five paired daytime/evening scenery themes (eight themes total), updates bilingual in-app guides and temporary album privacy, and allows the new scenery selections in JSON backup imports. Use Settings → Garden backgrounds or ☰ → Garden view. Approved for packaging and deployment.
-
-V4.0.14 repairs the coastal daylight image, keeps scene arrows aligned, and hides ground animals on the five panoramic themes. Birds and flying insects remain. No database changes.
+Copyright © 2026 Pebblebrooks. Third-party credits accompany the assets.

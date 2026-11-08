@@ -22,3 +22,14 @@ Complete recording converted from Ogg to 128kbps MP3, unchanged speed/pitch.
 
 These are different recordings from the earlier Kerzoven and BigSoundBank sets.
 Browser playback and file decoding checked. Subjective sound quality is awaiting user review.
+
+V4.0.15 replacements (8 November 2026):
+meow.mp3: Kitten Meow — Mike Koenig, SoundBible. CC BY 3.0.
+https://soundbible.com/1286-Kitten-Meow.html
+https://creativecommons.org/licenses/by/3.0/
+Downloaded MP3 unchanged; reduced playback gain in the app. Replaces Meow2 above.
+bark.mp3: DOGBARK1.mp3 — vialgames, Freesound. CC0.
+https://freesound.org/people/vialgames/sounds/588680/
+https://creativecommons.org/publicdomain/zero/1.0/
+Downloaded HQ preview unchanged; reduced playback gain in the app. Replaces Dog bark3 above.
+Growl is no longer loaded or played. Purr recording unchanged.

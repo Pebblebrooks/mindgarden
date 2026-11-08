@@ -1,0 +1,32 @@
+[
+  {
+    "name": "cat-purr-meow",
+    "page": "https://pixabay.com/sound-effects/nature-cat-purr-meow-8327/",
+    "audio": "https://cdn.pixabay.com/download/audio/2021/09/14/audio_5901c5c7d0.mp3?filename=edr-cat-purr-meow-8327.mp3",
+    "bytes": 17664
+  },
+  {
+    "name": "cat-little-meow",
+    "page": "https://pixabay.com/sound-effects/nature-little-cat-meow-38576/",
+    "audio": "https://cdn.pixabay.com/download/audio/2022/03/10/audio_a3789c471a.mp3?filename=freesound_community-little-cat-meow-38576.mp3",
+    "bytes": 48960
+  },
+  {
+    "name": "dog-small-bark",
+    "page": "https://pixabay.com/sound-effects/nature-small-bark-352865/",
+    "audio": "https://cdn.pixabay.com/download/audio/2025/06/02/audio_d43b9ed52b.mp3?filename=stu9-small-bark-352865.mp3",
+    "bytes": 42841
+  },
+  {
+    "name": "dog-playful",
+    "page": "https://pixabay.com/sound-effects/nature-dog-playing-in-a-sassy-wave-37895/",
+    "audio": "https://cdn.pixabay.com/download/audio/2022/03/10/audio_e938d4bdb3.mp3?filename=freesound_community-dog-playing-in-a-sassy-wave-37895.mp3",
+    "bytes": 120960
+  },
+  {
+    "name": "dog-poodle",
+    "page": "https://pixabay.com/sound-effects/nature-dog-barking-68780/",
+    "audio": "https://cdn.pixabay.com/download/audio/2022/03/14/audio_43289c4f82.mp3?filename=freesound_community-dog-barking-68780.mp3",
+    "bytes": 839040
+  }
+]
