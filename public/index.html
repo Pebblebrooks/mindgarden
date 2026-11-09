@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.17">
+<meta name="mind-garden-release" content="v4.0.18">
 
 
 
@@ -321,7 +321,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-4017.css">
+<link rel="stylesheet" href="garden-ui-4018.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -457,7 +457,8 @@ function start(i){
   g.innerHTML=deck.map(function(e,k){return '<button class="card up" data-k="'+k+'" data-e="'+(e.k||e.e)+'" data-n="'+e.n+'" aria-label="Card"><div class="in"><div class="f b"></div><div class="f a" aria-hidden="true">'+(e.h||gamePicture(e.e))+'</div></div></button>'}).join("");
   $("hLv").textContent="Level "+(i+1);
   $("hPairs").textContent="0 / "+L.p+" pairs";
-  $("hTime").textContent=fmt(left);
+  $("hTime").textContent=save.timed?fmt(left):(save.lang==='zh'?'不限时':'At your pace');
+  $("tb").parentElement.hidden=!save.timed;
   $("tb").style.transform="scaleX(1)";$("tb").classList.remove("low");
   $("bHint").textContent="Hint ("+hints+")";$("bPause").textContent="⏸";
   show("game");
@@ -473,10 +474,10 @@ function run(){
   timer=setInterval(function(){
     if(paused)return;
     left-=.25;
-    $("hTime").textContent=fmt(left);
+    $("hTime").textContent=save.timed?fmt(left):(save.lang==='zh'?'不限时':'At your pace');
     $("tb").style.transform="scaleX("+Math.max(0,left/total)+")";
     $("tb").classList.toggle("low",left/total<.25);
-    if(left<=0){clearInterval(timer);lock=true;end(false)}
+    if(save.timed&&left<=0){clearInterval(timer);lock=true;end(false)}
   },250);
 }
 $("grid").addEventListener("click",function(ev){
@@ -519,24 +520,29 @@ function toHome(){pairGeneration++;pairMismatch=null;paused=false;clearInterval(
 $("bHome").onclick=function(){if(!$("ov").classList.contains("hidden"))return;paused=true;overlay('<h2>Game menu</h2><p>Leaving ends this unfinished round.</p><div class="row"><button class="btn main" id="st">Resume</button><button class="btn" id="lv">Leave game</button></div>');$("st").onclick=function(){paused=false;closeOv()};$("lv").onclick=function(){paused=false;toHome();window.MindGardenDashboard?.library()}};
 
 function end(ok){
-  var L=LEVELS[cur],used=1-left/total,html;logPlay("pairs",ok?1:found/L.p,total-left,{level:cur+1,attempts:pairAttempts,mismatches:Math.max(0,pairAttempts-found),hints:3-hints,stars:ok&&save.timed?(used<.5?3:used<.8?2:1):null,timed:!!save.timed});award(found,ok?"p"+(cur+1):null,total-left);
+  var L=LEVELS[cur],used=1-left/total,T=function(en,zh){return save.lang==='zh'?zh:en};
+  var st=ok?(!save.timed?3:used<.5?3:used<.8?2:1):0,misses=Math.max(0,pairAttempts-found),usedHints=3-hints;
+  logPlay("pairs",ok?1:found/L.p,total-left,{level:cur+1,attempts:pairAttempts,mismatches:misses,hints:usedHints,stars:ok?st:null,timed:!!save.timed});award(found,ok?"p"+(cur+1):null,total-left);
   if(ok){
-    var st=!save.timed?1:used<.5?3:used<.8?2:1;
     save.stars[cur]=Math.max(save.stars[cur]||0,st);
     if(cur+2>save.unlocked&&cur+1<LEVELS.length)save.unlocked=cur+2;
     fails[cur]=0;persist();win();
-    var last=cur===LEVELS.length-1,s="";for(var k=0;k<3;k++)s+=k<st?"★":"☆";
-    html=(save.timed?'<div class="stars" aria-label="'+st+' speed stars">'+s+'</div>':'<p>'+ (save.lang==='zh'?'✓ 已完成不限时练习':'✓ Untimed practice completed')+'</p>')+'<h2>'+(last?"You finished the garden!":"Level complete!")+'</h2><p>You found all '+L.p+' pairs!</p><div class="row">'+(last?'':'<button class="btn main" id="nx">Next level</button>')+'<button class="btn" id="ag">Play again</button><button class="btn" id="mn">Menu</button></div>';
-    var T=function(a,b){return save.lang==='zh'?b:a};html+='<section class="pair-rating-explanation"><h3>'+T('Your matching result','您的配对结果')+'</h3><p>'+T('Pair attempts: ','配对尝试：')+pairAttempts+' · '+T('Mismatches: ','错误配对：')+Math.max(0,pairAttempts-found)+' · '+T('Hints used: ','使用提示：')+(3-hints)+'</p><p>'+T('Time: ','用时：')+fmt(total-left)+'</p><p>'+T(save.timed?'Speed award: '+st+' / 3':'Untimed practice — no speed rating',save.timed?'速度星级：'+st+' / 3':'不限时练习，无速度星级')+' '+(window.MindGardenInfo?window.MindGardenInfo.html(T('3 speed stars: less than 50% of the time allowance; 2: less than 80%; otherwise 1 for completion. Mistakes and hints do not change the speed award. Untimed practice saves completion and level without a speed rating.','3颗速度星：用时少于限时的50%；2颗：少于80%；其余完成得1颗。错误和提示不影响速度星级。不限时练习保存完成情况和难度，不设速度星级。'),T('How matching awards work','配对奖励说明')):'')+'</p></section>';overlay(html);
+    var last=cur===LEVELS.length-1,stars="";for(var k=0;k<3;k++)stars+='<span aria-hidden="true">'+(k<st?'★':'☆')+'</span>';
+    var label=T(save.timed?'Speed award':'Completion award',save.timed?'速度奖励':'完成奖励');
+    var help=T('Untimed games: three stars celebrate finding every pair at your own pace. Timed games: 3 speed stars for using less than 50% of the time allowance; 2 for less than 80%; otherwise 1 for completing the board. Mistakes and hints do not reduce these awards.','不限时游戏：找到全部配对即可获得三颗完成星，无须赶时间。限时游戏：用时少于限时的50%得3颗速度星，少于80%得2颗，其余完成得1颗。错误和提示不扣星。');
+    var stats=[[T('Pair attempts','配对尝试'),pairAttempts],[T('Mismatches','错误配对'),misses],[T('Hints used','使用提示'),usedHints],[T('Time','用时'),fmt(total-left)]];
+    overlay('<div class="stars pair-result-stars" role="img" aria-label="'+label+': '+st+' / 3">'+stars+'</div><h2>'+T(last?'You finished the garden!':'Level complete!',last?'您完成了整个花园！':'关卡完成！')+'</h2><p>'+T('You found all '+L.p+' pairs!','您找到了全部 '+L.p+' 对！')+'</p><section class="pair-rating-explanation"><p class="pair-award-label">'+label+' · '+st+' / 3 '+(window.MindGardenInfo?window.MindGardenInfo.html(help,T('How matching awards work','配对奖励说明')):'')+'</p><dl class="pair-result-stats">'+stats.map(function(v){return '<div><dt>'+v[0]+'</dt><dd>'+v[1]+'</dd></div>'}).join('')+'</dl></section><div class="row">'+(last?'':'<button class="btn main" id="nx">'+T('Next level','下一关')+'</button>')+'<button class="btn" id="ag">'+T('Play again','再玩一次')+'</button><button class="btn" id="mn">'+T('Menu','菜单')+'</button></div>');
     if($("nx"))$("nx").onclick=function(){start(cur+1)};
   }else{
     fails[cur]=(fails[cur]||0)+1;beep(300,.4,"triangle");
-    overlay('<h2>Time’s up – well tried!</h2><p>You found '+found+' of '+L.p+' pairs. Try again with 15 extra seconds.</p><div class="row"><button class="btn main" id="ag">Try again</button><button class="btn" id="mn">Menu</button></div>');
+    overlay('<h2>'+T('Time’s up – well tried!','时间到了，做得不错！')+'</h2><p>'+T('You found '+found+' of '+L.p+' pairs. Try again with 15 extra seconds.','您找到了 '+found+' / '+L.p+' 对。再试一次，可多用15秒。')+'</p><div class="row"><button class="btn main" id="ag">'+T('Try again','再试一次')+'</button><button class="btn" id="mn">'+T('Menu','菜单')+'</button></div>');
   }
   $("ag").onclick=function(){start(cur)};
   $("mn").onclick=toHome;
+  ($("nx")||$("ag")).focus({preventScroll:true});
   window.MindGardenDaily?.complete('pairs');
 }
+
 $("levels").addEventListener("click",function(e){var b=e.target.closest(".lv");if(b&&!b.disabled){try{ac&&ac.resume()}catch(x){}start(+b.dataset.i)}});
 /* ---------- helpers ---------- */
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -556,7 +562,7 @@ function renderExtra(){
 }
 ["acts","acts2","acts3","acts4","acts5","acts6"].forEach(function(id){$(id).addEventListener("click",function(e){var b=e.target.closest(".lv");if(b)window.chooseMiniLevel(b.dataset.g)})});
 /* ---------- settings & players ---------- */
-var SET=[["timed","Timed matching challenges"],["snd","Sound"],["speak","Spoken picture names"],["fs","Larger text"],["hc","Large high-contrast mode"],["cb","Colour-blind-safe colours"],["lh","Left-handed layout"],["brk","Break reminders"],["still","Stop moving pictures"]];
+var SET=[["timed","Timed matching challenges"],["snd","Game sounds"],["speak","Spoken picture names"],["fs","Larger text"],["hc","Large high-contrast mode"],["cb","Colour-blind-safe colours"],["lh","Left-handed layout"],["brk","Break reminders"],["still","Stop moving pictures"]];
 function openSet(){
   overlay('<h2>Settings</h2><div class="list">'+SET.map(function(s){return '<button class="btn tg" data-k="'+s[0]+'" aria-pressed="'+!!save[s[0]]+'">'+s[1]+': <b>'+(save[s[0]]?"On":"Off")+'</b></button>'}).join("")+'</div><b>Appearance</b><div class="prow">'+[["auto","Match device"],["light","Light"],["dark","Dark"]].map(function(t){return '<button class="btn tg" data-m="'+t[0]+'" aria-pressed="'+((save.mode||"auto")===t[0])+'">'+t[1]+'</button>'}).join("")+'</div><b>Colour theme</b><div class="prow">'+[["cream","Cream and teal"],["sand","Warm sand"]].map(function(t){return '<button class="btn tg" data-th="'+t[0]+'" aria-pressed="'+((save.th||"cream")===t[0])+'">'+t[1]+'</button>'}).join("")+'</div>'+breakHtml()+photosHtml()+'<div class="row"><button class="btn main" id="sd">Done</button></div>');
   $("sd").onclick=closeOv;$("pha").onclick=function(){$("phf").click()};$("phf").onchange=function(){addPhotos(this.files)};
@@ -579,7 +585,7 @@ $("box").addEventListener("click",function(e){
   if(d.fc){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to clear";return}var q=save.pr[d.fc];q.log=[];q.streak=0;q.last="";q.gp=0;q.bt={};persist();renderHome();famView();return}
   if(d.m){save.mode=d.m;persist();applyPrefs();openSet();return}
   if(d.th){save.th=d.th;persist();applyPrefs();openSet();return}
-  if(d.k){if(d.k==="fs"||d.k==="hc")save.textScale=null;save[d.k]=save[d.k]?0:1;persist();applyPrefs();openSet();if(d.k==="snd")beep(600,.1);return}
+  if(d.k){if(d.k==="fs"||d.k==="hc")save.textScale=null;save[d.k]=save[d.k]?0:1;persist();applyPrefs();openSet();if(d.k==="snd"){if(!save.snd&&ac)ac.suspend().catch(function(){});window.dispatchEvent(new Event("gardenGameSoundChange"));beep(600,.1);}return}
   if(d.d){save.deck=d.d;persist();renderHome();openSet();return}
   if(d.p){persist();save.cp=d.p;load();persist();renderHome();window.MindGardenIdentity?.syncSelected();openPl();return}
   if(d.x){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to remove";return}delete save.pr[d.x];if(d.x===save.cp){save.cp=Object.keys(save.pr)[0];load()}persist();renderHome();openPl()}
@@ -755,10 +761,11 @@ function res(good,note){
   var T=function(en,zh){return save.lang==="zh"?zh:en},panel=document.createElement("section");panel.id="roundReview";panel.className="round-review";panel.setAttribute("role","status");
   $("mp").querySelectorAll(".big").forEach(function(b){b.classList.remove("on");if(b.tagName==="BUTTON")b.disabled=true});
   var details="";
-  if(g.reviewExpected){var row=function(title,values,entered){return '<tr><th scope="row">'+title+'</th>'+g.reviewExpected.map(function(expected,i){var value=values[i],same=value===expected;return '<td'+(entered?' class="'+(value==null?'':same?'cg-match':'cg-mismatch')+'"':'')+'><small>'+(i+1)+'</small>'+esc(value==null?T("Not entered","未输入"):value)+(entered&&value!=null?(same?' ✓':' ✗'):'')+'</td>'}).join("")+'</tr>'};details='<div class="cg-comparison" tabindex="0" role="region" aria-label="'+T("Compare sequences","比较顺序")+'"><table><tbody>'+row(T("Correct sequence","正确顺序"),g.reviewExpected,false)+row(T("Your sequence","您的顺序"),g.reviewEntered||[],true)+'</tbody></table></div>'}
-  else if(g.ans!=null){var answer=Array.from($("mp").querySelectorAll("[data-a]")).find(function(b){return b.dataset.a===String(g.ans)}),label=function(b,fallback){return b?(b.getAttribute("aria-label")||b.textContent.trim()):String(fallback)};details='<p><strong>'+T("Correct answer: ","正确答案：")+'</strong>'+esc(label(answer,g.ans))+'</p>'+(g.last?'<p><strong>'+T("Your answer: ","您的答案：")+'</strong>'+esc(label(g.last,""))+'</p>':'')}
-  panel.innerHTML='<h3>'+T(good?"Correct!":"Let’s review",good?"正确！":"一起回顾")+'</h3><p>'+esc(note)+'</p>'+details+'<p>'+T("Continue when you are ready.","准备好后再继续。")+'</p><div class="row"><button class="btn main" id="roundContinue">'+T(g.r>=g.R?"See results":"Next round",g.r>=g.R?"查看结果":"下一轮")+'</button></div>';
-  $("mp").append(panel);$("roundContinue").onclick=function(){if(mg!==g||paused)return;this.disabled=true;nextR()};panel.tabIndex=-1;panel.focus({preventScroll:true});
+  if(g.reviewExpected){details=window.MindGardenFeedback.compare(g.reviewExpected,g.reviewEntered||[])}
+  else if(g.ans!=null){var answer=Array.from($("mp").querySelectorAll("[data-a]")).find(function(b){return b.dataset.a===String(g.ans)}),label=function(b,fallback){return b?(b.getAttribute("aria-label")||b.textContent.trim()):String(fallback)};details=window.MindGardenFeedback.compare([label(answer,g.ans)],[g.last?label(g.last,""):null],{sequence:false,correct:good})}
+
+  panel.innerHTML='<h3>'+T(good?"Correct!":"Let’s review",good?"正确！":"一起回顾")+'</h3><p>'+esc(note)+'</p>'+details+'<div class="row"><button class="btn main" id="roundContinue">'+T(g.r>=g.R?"See results":"Next round",g.r>=g.R?"查看结果":"下一轮")+'</button></div>';
+  $("mmsg").textContent="";$("mp").replaceChildren(panel);$("roundContinue").onclick=function(){if(mg!==g||paused)return;this.disabled=true;nextR()};panel.tabIndex=-1;panel.focus({preventScroll:true});
 
 }
 function rSeq(){
@@ -1039,7 +1046,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4017.js"></script>
+<script src="garden-ui-4018.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

@@ -1,24 +1,15 @@
-# Mind Garden v4.0.17
+# Mind Garden v4.0.18 — release
 
-MIND GARDEN V4.0.17
-Approved gameplay reliability and feedback update.
+Approved feedback, sound and play-mode update for Cloudflare Pages.
 
-- Immediate touch/keyboard press feedback across game controls.
-- Rapid matching-pair input, isolated delayed callbacks, and artwork fallback.
-- Results remain visible until Next; memory sequences wait for Begin.
-- Clear correct/input sequence comparison, sound feedback and ready-state cues.
-- Melody final note, Skip round, Team Garden turns and drawing touch fixes.
-- Separate local player progress and game/difficulty score charts.
-- Clear matching award explanations and top-three multiplayer trophies.
-- Optional detail in accessible information icons.
+- Matching pairs again shows stars in untimed play: three completion stars. Timed games retain speed stars. The information icon explains both awards; attempts, mismatches, hints and time appear as separate compact cards.
+- Centered game instructions and feedback use shorter lines and separate sentences. Answer controls and input values retain their original content.
+- The navbar speaker mutes/restores both music and automatic garden audio, preserving mix and volumes. Game sounds now also controls Sound Detective and Melody Moments, including immediate muting of active audio.
+- Sequence and single-answer reviews use compact, side-by-side correct/player values with match symbols and unentered states. Longer sequences show one answer at a time with Previous/Next controls; the duplicate game board is hidden during review.
 
-DEPLOYMENT
-Upload package contents to repository root. Cloudflare Pages output: public.
-Keep the existing functions/ API and D1 binding. No database migration or data reset.
-Verify About v4.0.17 and garden-ui-4017.js/.css after deployment.
-If an old version remains, close app tabs and reopen. Do not clear site data.
+- Matching setup now offers Standard (no time limit) and Timed challenge. Standard genuinely has no timeout; the countdown is hidden.
+- Selected menu buttons use amber fill plus a check mark in light/dark themes, including music and settings.
 
-VALIDATION
-See tests/AUDIT-2026-11-09.md for automated coverage and limitations.
-Physical iPad/iPhone touch and audio testing remains recommended.
-Copyright 2026 Pebblebrooks.
+English and Chinese, light and dark appearance, keyboard access and larger text are supported. No database changes. Existing player history is retained.
+
+Validation: syntax checks; home nature toggle; listening/melody mute; matching star boundaries; bilingual answer review; paced rounds; cache tests; release UI checks. Physical iPhone/iPad audio verification remains necessary.

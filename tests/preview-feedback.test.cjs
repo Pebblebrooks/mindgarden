@@ -14,7 +14,7 @@ for(const id of ['hawker','trail','album','sounds','teamgarden','melody'])for(co
  if(id==='melody'){for(const n of g.sequence)w.document.querySelector('[data-cg-note="'+(correct?n:(n+1)%5)+'"]').click();await new Promise(r=>setTimeout(r,470))}
  assert(g.answered,id);assert.deepEqual(cues,enabled?[correct?'correct':'different']:[],id);
  const panel=el('mp').querySelector('.cg-game'),feedback=el('cgFeedback'),nav=el('cgNext').parentElement;assert.equal(feedback.nextElementSibling,nav);assert(!el('cgSkip'));assert(!el('cgAgainStudy'));
- if(['hawker','trail','melody'].includes(id)){const rows=feedback.querySelectorAll('tr');assert.equal(rows.length,2);assert.equal(rows[0].querySelector('th').textContent,'Correct sequence');assert.equal(rows[1].querySelector('th').textContent,'Your sequence');assert.equal(rows[0].querySelectorAll('td').length,g.sequence.length);assert.equal(feedback.querySelectorAll('.cg-mismatch').length,correct?0:1)}
+ if(['hawker','trail','melody'].includes(id)){const cards=feedback.querySelectorAll('.answer-card');assert.equal(cards.length,g.sequence.length);assert.equal(feedback.querySelectorAll('table').length,0);assert.equal(feedback.querySelectorAll('.answer-different').length,correct?0:1);assert(feedback.textContent.includes('Correct answer'));assert(feedback.textContent.includes('Your answer'));}
  w.toHome();
 }
 assert.deepEqual(errors,[]);console.log('PASS all six previews: correct/incorrect cues, muted feedback, adjacent sequence comparison, mismatch markers, single navigation row.');

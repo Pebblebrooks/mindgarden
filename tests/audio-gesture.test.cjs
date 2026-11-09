@@ -12,7 +12,7 @@ w.save={lang:'en',soundscape:{music:'personal',nature:'none'}};w.persist=()=>{};
 const click=id=>{gesture=true;w.document.getElementById(id).click();gesture=false};
 (async()=>{try{
  w.openMu();const input=w.document.getElementById('soundFiles');input.onchange({target:{files:[new w.File(['test'],'song.mp3',{type:'audio/mpeg'})]}});
- holdResume=true;click('soundPlay');assert.equal(playCalls,1,'Personal audio must be started synchronously during the click');assert.deepEqual(permissionChecks,[true]);assert.match(w.document.getElementById('soundMessage').textContent,/Loading sound/);
+ w.save.backgroundMuted=true;holdResume=true;click('soundPlay');assert.equal(w.save.backgroundMuted,false,'Explicit Play restores background audio');assert.equal(playCalls,1,'Personal audio must be started synchronously during the click');assert.deepEqual(permissionChecks,[true]);assert.match(w.document.getElementById('soundMessage').textContent,/Loading sound/);
  click('soundPlay');assert.equal(w.MindGardenSound.status().playing,false);const afterStop=nodes;resumeResolve();await pause();assert.equal(nodes,afterStop,'An old pending start must not build an engine after Pause');assert(media.paused);
  holdResume=false;click('soundPlay');await pause();assert.equal(w.MindGardenSound.status().playing,true);assert(!media.paused);assert.deepEqual(permissionChecks,[true,true]);
  click('soundPlay');assert(media.paused);assert.equal(w.MindGardenSound.status().playing,false);
