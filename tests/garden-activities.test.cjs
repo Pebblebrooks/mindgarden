@@ -1,7 +1,7 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
 const root=__dirname+'/../public/',html=fs.readFileSync(root+'index.html','utf8');const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{runScripts:'outside-only',pretendToBeVisual:true,url:'https://garden.test',virtualConsole:new VirtualConsole()}),w=d.window;
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.confirm=()=>true;
-w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(root+'garden-ui-4016.js','utf8'));
+w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(root+'garden-ui-4017.js','utf8'));
 const el=id=>w.document.getElementById(id);let spoken=[];w.SpeechSynthesisUtterance=function(t){this.text=t};w.speechSynthesis={cancel(){},resume(){},getVoices(){return [{lang:'en-GB'}]},speak(u){spoken.push(u);u.onstart?.()}};
 
 const api=w.MindGardenActivities;
@@ -18,4 +18,4 @@ api.start('pets');let pet=el('gaPet');pet.querySelector('select').value='dog';pe
 const before=w.eval('JSON.stringify(me())');w.openFlw();assert(el('bloomType'));el('bloomType').value='rose';el('bloomType').dispatchEvent(new w.Event('change'));assert.equal(w.eval('JSON.stringify(me())'),before);assert.equal(el('bloomComparison').querySelectorAll('svg').length,2);
 w.closeOv();const toggle=w.document.querySelector('[data-v4-toggle]');const on=toggle.getAttribute('aria-pressed');toggle.click();assert.notEqual(toggle.getAttribute('aria-pressed'),on);
 console.log('PASS: 150 solvable link grids; drawing similarity; bilingual activity launch; dot/difference completion; recall modes; recognition; pet care; read-only bloom previews; scenery toggle');
-}finally{w.close()}
+}finally{setImmediate(()=>w.close())}

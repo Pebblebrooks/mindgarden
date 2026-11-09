@@ -1,5 +1,5 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
-const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=fs.readFileSync(p+'garden-ui-4016.js','utf8');
+const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=fs.readFileSync(p+'garden-ui-4017.js','utf8');
 function boot(lang){const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window;w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.localStorage.setItem('gardenMatch',JSON.stringify({lang}));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(bundle);return d}
 for(const lang of ['en','zh']){const d=boot(lang),w=d.window,errors=[],pending=[];w.addEventListener('error',e=>errors.push(e.message));w.pt=fn=>pending.push(fn);
  try{
@@ -7,7 +7,7 @@ for(const lang of ['en','zh']){const d=boot(lang),w=d.window,errors=[],pending=[
   const snapshots={};
   for(let level=1;level<=15;level++)for(const id of ids){
    pending.length=0;w.mgDifficulty=level;w.startMG(id);
-   for(const ready of ['shoppingReady','storyReady','memoryReady'])if(w.document.getElementById(ready))click(ready);
+   for(const ready of ['shoppingReady','storyReady','memoryReady','memoryBegin'])if(w.document.getElementById(ready))click(ready);
    let guard=0;while(!w.eval('mg.h')&&pending.length&&guard++<30)pending.shift()();
    assert(w.document.getElementById('mp').children.length,id+' at '+level);
    const buttons=[...w.document.querySelectorAll('#mp [data-a]')];assert(buttons.length,id+' answers at '+level);
@@ -29,6 +29,6 @@ for(const lang of ['en','zh']){const d=boot(lang),w=d.window,errors=[],pending=[
   assert(w.document.getElementById('dailyHome'));click('dailyHome');assert.equal(w.MindGardenDaily.plan.length,0);assert.equal(w.eval('me().log.at(-1).level'),1);
   const backup=w.MindGardenExport.backup(),restored=w.MindGardenExport.validated(JSON.stringify(backup));assert.equal(restored.log.at(-1).level,1);
   assert.equal(w.document.querySelector('meta[name="mind-garden-feedback"]').content,'https://forms.gle/TizHdrEgGxHGZV5q7');assert.deepEqual(errors,[]);
- }finally{d.window.close()}
+ }finally{setImmediate(()=>d.window.close())}
 }
 console.log('PASS: 30 games at all 15 levels in English/Chinese; valid unique answers; numeric protection; stronger pattern families and memory loads; last-five weakest selection; mixed daily completion; cancel/keep; level-aware backups and new form link.');

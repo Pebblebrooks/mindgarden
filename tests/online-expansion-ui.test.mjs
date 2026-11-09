@@ -12,7 +12,7 @@ async function boot(lang,stored){
  w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.confirm=()=>true;w.addEventListener('error',e=>errors.push(e.message));
  w.fetch=(url,opts)=>onRequest({env:{DB},request:new Request(new URL(url,'https://garden.test'),opts)});
  w.localStorage.setItem('gardenMatch',JSON.stringify({lang}));if(stored)for(const [k,v]of Object.entries(stored))w.localStorage.setItem(k,v);
- w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(get('garden-ui-4016.js'));
+ w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(get('garden-ui-4017.js'));
  w.document.getElementById('bOnline').click();if(!stored){w.document.getElementById('mpName').value='Expansion '+lang;w.document.getElementById('mpLogin').click()}await pause(100);return w;
 }
 const click=(w,id)=>{const b=w.document.getElementById(id);assert(b,id);b.click()};
@@ -27,7 +27,7 @@ try{
   sqlite.prepare('UPDATE mg_rooms SET started_at=? WHERE code=?').run(Date.now()-5000,code);
   for(const [lang,w]of [['en',host],['zh',guest]])for(const q of qs){
    assert.equal(w.document.querySelector('.seqline').textContent,q.prompt[lang==='zh'?1:0]);
-   const b=w.document.querySelector('[data-answer="'+q.options.indexOf(q.answer)+'"]');assert(b);b.click();await pause(5);
+   const b=w.document.querySelector('[data-answer="'+q.options.indexOf(q.answer)+'"]');assert(b);b.click();await pause(5);assert(w.document.getElementById('mpQuizContinue'));click(w,'mpQuizContinue');await pause(5);
   }
   await pause(1650);for(const w of [host,guest]){assert.equal(w.document.querySelectorAll('.mp-table tbody tr').length,2,w.document.getElementById('multiError')?.textContent);}
  }

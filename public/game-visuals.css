@@ -38,3 +38,38 @@
 #mp .gridm:has(>.picture-answer),#box .gridm:has(>.picture-answer){max-width:760px}
 #mp .big.on{transform:none}
 html[data-hc="1"]{--game-art-paper:#fff;--game-art-ink:#000;--game-art-edge:#000}
+
+/* High-contrast demonstration and answer states override neutral artwork planes. */
+#mp .big.on{background:#ffdf79!important;color:#183e35!important;border-color:#755000!important;outline:5px solid #e6a800;outline-offset:3px;box-shadow:0 0 0 8px #fff5c5!important}
+#mp .big.right,#box .big.right{background:#d3efd4!important;border-color:#246a49!important;color:#163f28!important}
+#mp .big.wrong,#box .big.wrong{background:#f7d9d3!important;border-color:#a0322b!important;color:#681e19!important}
+#mp .big.on:disabled{opacity:1;filter:none}
+[data-v4-mode="dark"] #mp .big.on{background:#eac15c!important;outline-color:#fff0a8;box-shadow:0 0 0 8px #533f17!important}
+
+#mini #mp .gridm.memory-order-grid{max-width:780px;margin:24px auto;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),180px))!important;justify-content:center;gap:18px}
+#mp .memory-order-grid .big{width:100%;aspect-ratio:1;min-height:120px;max-height:180px}
+#mp .memory-order-grid .game-picture{font-size:clamp(48px,10vw,100px)}
+.round-review{max-width:900px;margin:24px auto;padding:20px;border:2px solid var(--ink);border-radius:20px;text-align:center}
+.round-review h3{text-align:center}.round-review p{margin:12px 0}
+
+/* Score comparisons keep every difficulty separate and remain usable when enlarged. */
+.level-progress{margin-block:1.5em;padding:1em;border:1px solid currentColor;border-radius:1em;min-width:0}
+.level-filters{display:flex;flex-wrap:wrap;justify-content:center;gap:1em}
+.level-filters label{display:grid;gap:.5em;min-width:0;max-width:100%}
+.level-filters select{max-width:100%;width:100%}
+.level-score-bars{display:flex;align-items:flex-end;gap:.75em;overflow-x:auto;padding:1em;min-height:150px}
+.level-score-bars>div{display:grid;justify-items:center;gap:.4em;min-width:2.8em}
+.level-score-bars i{display:block;width:1.8em;background:var(--ink);border-radius:.3em .3em 0 0}
+.level-score-table{overflow-x:auto}.level-score-table table{width:100%;border-collapse:collapse}.level-score-table th,.level-score-table td{padding:.6em;text-align:center}
+#mp .cg-game,#mp .ga-game,#mp .ed-game{min-width:0;max-width:100%}
+#mp .ga-actions,#mp .cg-notes{flex-wrap:wrap;gap:1em}
+@media(max-width:600px){#mp .seqline{overflow-wrap:anywhere}#mp .round-review{padding:.75em;margin-inline:0}.level-progress{padding:.75em}}
+
+.rank-award .tro{width:1.5em;height:1.5em;vertical-align:middle}.pair-rating-explanation{max-width:42em;margin:1em auto;padding:1em;border:1px solid currentColor;border-radius:1em;text-align:center}
+
+.mg-info-button{display:inline-grid;place-items:center;vertical-align:middle;min-width:44px;min-height:44px;padding:.25em;border:1px solid currentColor;border-radius:50%;background:transparent;color:inherit;font:inherit;line-height:1;cursor:pointer;margin:.35em}.mg-info-button:focus-visible{outline:3px solid #bd8700;outline-offset:3px}.mg-info-tooltip{position:fixed;z-index:2147483500;box-sizing:border-box;max-height:calc(100dvh - 32px);overflow:auto;padding:1em;border:2px solid #b0cbb2;border-radius:1em;background:#173e37;color:#fffdf5;box-shadow:0 8px 24px #0005;text-align:center;font-size:1rem;line-height:1.5}.mg-info-tooltip[hidden]{display:none!important}
+
+/* Show contact immediately; never wait for a flip or decorative transition. */
+#game button,#mini button,#box button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#game button.quick-pressed,#mini button.quick-pressed,#box button.quick-pressed,
+#game button:active:not(:disabled),#mini button:active:not(:disabled),#box button:active:not(:disabled){outline:3px solid #d4a21f;outline-offset:2px;transition:none!important}

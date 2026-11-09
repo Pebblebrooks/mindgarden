@@ -16,7 +16,10 @@ const click=id=>{gesture=true;w.document.getElementById(id).click();gesture=fals
  click('soundPlay');assert.equal(w.MindGardenSound.status().playing,false);const afterStop=nodes;resumeResolve();await pause();assert.equal(nodes,afterStop,'An old pending start must not build an engine after Pause');assert(media.paused);
  holdResume=false;click('soundPlay');await pause();assert.equal(w.MindGardenSound.status().playing,true);assert(!media.paused);assert.deepEqual(permissionChecks,[true,true]);
  click('soundPlay');assert(media.paused);assert.equal(w.MindGardenSound.status().playing,false);
+ // Floating control toggles the selected mix directly, without opening settings.
+ w.document.getElementById('box').innerHTML='';click('mFab');await pause();assert(w.MindGardenSound.status().playing);assert.equal(w.document.getElementById('box').innerHTML,'');click('mFab');assert(!w.MindGardenSound.status().playing);w.openMu();
  // A rejected media request returns to Play and presents a clear error.
  media.play=()=>Promise.reject(Object.assign(Error('blocked'),{name:'NotAllowedError'}));click('soundPlay');await pause();assert.equal(w.MindGardenSound.status().playing,false);assert.equal(w.document.getElementById('soundPlay').textContent,'▶');assert.match(w.document.getElementById('soundMessage').textContent,/Unable to play/);
+ w.openMu();w.document.querySelector('[data-sound-music=none]').click();w.document.querySelector('[data-sound-nature=none]').click();click('mFab');await pause();assert.equal(w.document.getElementById('mFab').getAttribute('aria-pressed'),'false');assert.equal(w.MindGardenSound.status().playing,false);
  console.log('PASS: personal audio receives click activation before delayed resume; pause cancels pending start; one-click retry works; rejection restores Play and shows feedback.');
 }finally{w.MindGardenSound.stop();dom.window.close()}})().catch(e=>{console.error(e);process.exitCode=1});

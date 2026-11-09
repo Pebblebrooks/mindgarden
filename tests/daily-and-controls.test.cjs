@@ -1,7 +1,7 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),errors=[],scroll=[];
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window;
-w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=(...a)=>scroll.push(a);w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4016.js','utf8'));
+w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=(...a)=>scroll.push(a);w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4017.js','utf8'));
 const click=id=>{const b=w.document.getElementById(id);assert(b,id);b.click()},get=id=>w.document.getElementById(id),pending=[];w.pt=fn=>pending.push(fn);
 try{
  assert.equal(get('navMore').parentElement.className,'nav-actions');assert(get('navTextSize').querySelector('[data-text-preset]'));
@@ -12,6 +12,6 @@ try{
  // Full three-activity daily navigation on different dates in both languages.
  for(const lang of ['en','zh'])for(let day=1;day<=8;day++){w.eval('save.lang="'+lang+'"');w.today=()=>`2026-11-${String(day).padStart(2,'0')}`;const types=w.eval('Object.keys(MG)').filter(k=>!w.MindGardenNewGames.has(k)&&!w.MindGardenActivities.has(k)).slice((day-1)*3%24,(day-1)*3%24+3);w.eval('me().log='+JSON.stringify(types.map((g,i)=>({d:'2026-11-01',g,r:.1+i*.1,s:15}))));w.toHome();w.MindGardenDashboard.home();click('dashStart');for(let n=0;n<3;n++){const before=scroll.length;click('dailyGo');assert(get('mp').children.length);assert(scroll.length>before);assert.equal(w.document.activeElement.id,'hLv2');if(get('storyReady')){click('storyReady');assert(get('mp').querySelector('[data-a]'))}if(get('shoppingReady')){click('shoppingReady');assert(get('mp').querySelector('[data-a]'))}w.eval('mg.r=mg.R;mg.ok=mg.R;nextR()');if(n<2)click('dailyNext')}assert(get('dailyHome'));click('dailyHome')}
  // A custom activity left through other navigation must not own the next game's pause/menu.
- w.MindGardenNewGames.start('bingo',1);w.startMG('sum');click('bPause2');assert(get('rs2'));click('rs2');click('bMn');assert(get('mini').classList.contains('hidden'));
+ w.MindGardenNewGames.start('bingo',1);w.startMG('sum');click('bPause2');assert(get('rs2'));click('rs2');click('bMn');assert(get('miniResume'));assert(get('miniLeave'));click('miniLeave');assert(get('mini').classList.contains('hidden'));
  assert.equal(errors.length,0,errors.join('\n'));console.log('PASS: all 30 original activities in English/Chinese at two difficulties; 16 full daily journeys; visible ready controls, viewport/focus reset, stale custom state, percentage/presets/exact 100% reset, icon labels and file picker.');
-}finally{dom.window.close()}
+}finally{setImmediate(()=>dom.window.close())}

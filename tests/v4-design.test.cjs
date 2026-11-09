@@ -19,4 +19,4 @@ try{
  w.MindGardenDashboard.library();assert.equal(w.document.querySelectorAll('.game-tile .game-illustration').length,51);const image=w.document.querySelector('.game-illustration');image.dispatchEvent(new w.Event('error'));assert(!image.parentElement.classList.contains('has-art'),'Fallback survives a missing image');
  w.eval("save.lang='zh';persist();load();renderHome()");assert.equal(w.document.querySelector('#mini [data-v4-toggle]').getAttribute('aria-label'),'花园背景');w.MindGardenV4.openGuide();assert(w.document.getElementById('v4GuideTitle').textContent.includes('心灵花园'));
  assert.deepEqual(errors,[]);console.log('PASS: V4 light/dark/auto, daily action hierarchy, uncluttered welcome, bilingual quick guide, quiet view without question reset, per-profile preferences and JSON round-trip, online view, safe illustration fallbacks, 51 illustrated library cards and independent scenery controls.');
-}finally{dom.window.close()}
+}finally{setImmediate(()=>dom.window.close())}

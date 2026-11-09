@@ -226,3 +226,12 @@ html[data-v4-mode=light] #home #welcomeDashboard .welcome-name{color:#173e34!imp
 #home .hero-media-controls #heroNext{grid-column:3;grid-row:1}
 #home .hero-media-controls #heroVideoPlay{grid-column:1 / -1;grid-row:2}
 html[data-garden-scene="fjord"] #gardenLife :is(.fallback-cat,.fallback-fox),html[data-garden-scene="sakura"] #gardenLife :is(.fallback-cat,.fallback-fox),html[data-garden-scene="classical"] #gardenLife :is(.fallback-cat,.fallback-fox),html[data-garden-scene="alpine"] #gardenLife :is(.fallback-cat,.fallback-fox),html[data-garden-scene="pavilion"] #gardenLife :is(.fallback-cat,.fallback-fox){display:none!important}
+
+/* Single-player pairs use explicit faces, avoiding mobile backface repaint gaps. */
+#grid .card .in{transform:none;transition:none;transform-style:flat}
+#grid .card .f{transform:none;backface-visibility:visible;-webkit-backface-visibility:visible}
+#grid .card .f.a{visibility:hidden}
+#grid .card.up .f.a,#grid .card.ok .f.a{visibility:visible}
+#grid .card.up .f.b,#grid .card.ok .f.b{visibility:hidden}
+.game-picture.art-pending .game-illustration{display:block;position:absolute;width:1em;height:1em;opacity:0;pointer-events:none}
+.game-picture.art-pending .picture-text{position:static;width:auto;height:auto;clip:auto;overflow:visible}

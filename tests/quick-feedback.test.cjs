@@ -1,0 +1,13 @@
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=html.match(/src="(garden-ui-\d+\.js)"/)[1];const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window,errors=[];w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+bundle,'utf8'));const api=w.MindGardenCommercial,el=id=>w.document.getElementById(id);
+
+const click=id=>{assert(el(id),'Missing '+id);el(id).click()};
+
+
+(async()=>{try{
+w.pt=()=>{};w.beep=()=>{};w.chime=()=>{};w.say=()=>{};
+function pointer(target,type,props={}){const e=new w.Event(type,{bubbles:true,cancelable:true});Object.assign(e,{pointerId:1,isPrimary:true,button:0,clientX:10,clientY:10,...props});target.dispatchEvent(e);return e}
+let tested=0;
+for(const id of Object.keys(w.MG)){w.startMG(id);const b=el('mp').querySelector('button:not(:disabled)')||el('box').querySelector('button:not(:disabled)');if(!b){w.toHome();continue}let clicks=0;b.addEventListener('click',()=>clicks++);const before=w.me().log.length,e=pointer(b,'pointerdown');assert(b.classList.contains('quick-pressed'),id);assert(!e.defaultPrevented,'scroll remains native');assert.equal(clicks,0,'contact does not submit');assert.equal(w.me().log.length,before);pointer(b,'pointercancel');assert(!b.classList.contains('quick-pressed'));pointer(b,'pointerdown');pointer(b,'pointermove',{clientX:40});assert(!b.classList.contains('quick-pressed'),'scroll gesture cancels highlight');b.disabled=true;pointer(b,'pointerdown');assert(!b.classList.contains('quick-pressed'));b.disabled=false;pointer(b,'pointerdown');pointer(b,'pointerup');assert(!b.classList.contains('quick-pressed'));tested++;w.toHome()}
+w.startMG('sum');const b=el('mp').querySelector('button');b.dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));assert(b.classList.contains('quick-pressed'));b.dispatchEvent(new w.KeyboardEvent('keyup',{key:' ',bubbles:true}));assert(!b.classList.contains('quick-pressed'));assert.deepEqual(errors,[]);console.log('PASS immediate non-scoring press feedback across '+tested+' game entry flows, pointer cancellation, scrolling, disabled controls and keyboard press/release.');
+}finally{await new Promise(r=>setImmediate(r));d.window.close()}})().catch(e=>{console.error(e);process.exitCode=1});

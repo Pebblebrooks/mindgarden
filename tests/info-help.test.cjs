@@ -1,0 +1,9 @@
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=html.match(/src="(garden-ui-\d+\.js)"/)[1];const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window,errors=[];w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+bundle,'utf8'));const api=w.MindGardenCommercial,el=id=>w.document.getElementById(id);
+
+const click=id=>{assert(el(id),'Missing '+id);el(id).click()};
+
+
+(async()=>{try{
+w.me().log=[{d:'2026-11-09',g:'sum',level:1,r:.5,s:10}];w.openMyProgress();const b=el('box').querySelector('.mg-info-button');assert(b);assert(!el('box').textContent.includes('health assessments'));b.focus();assert(!el('mgInfoTooltip').hidden);assert(el('mgInfoTooltip').textContent.includes('health assessments'));b.click();assert.equal(b.getAttribute('aria-expanded'),'true');b.click();assert(el('mgInfoTooltip').hidden);b.click();assert(!el('mgInfoTooltip').hidden);w.document.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert(el('mgInfoTooltip').hidden);b.dispatchEvent(new w.Event('pointerover',{bubbles:true}));assert(!el('mgInfoTooltip').hidden);w.dispatchEvent(new w.Event('resize'));assert(el('mgInfoTooltip').hidden);assert.deepEqual(errors,[]);console.log('PASS optional help hidden by default, keyboard focus, touch/click toggle, hover, Escape and resize dismissal.');
+}finally{await new Promise(r=>setImmediate(r));d.window.close()}})().catch(e=>{console.error(e);process.exitCode=1});

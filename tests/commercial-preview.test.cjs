@@ -3,7 +3,7 @@ const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bund
 
 const click=id=>{assert(el(id),'Missing '+id);el(id).click()};
 try{
-const logBefore=w.eval('me().log.length');
+let logBefore=w.eval('me().log.length');
 for(const lang of ['en','zh']){w.eval(`save.lang='${lang}'`);for(const id of ['hawker','trail','album','sounds','teamgarden','melody'])for(let level=1;level<=3;level++){
  api.start(id,level,2);if(id==='album')click('cgDemo');const g=api.current;let guard=0;
  while(!g.finished&&guard++<20){
@@ -14,10 +14,10 @@ for(const lang of ['en','zh']){w.eval(`save.lang='${lang}'`);for(const id of ['h
   if(id==='melody')for(const n of g.sequence)w.document.querySelector('[data-cg-note="'+n+'"]').click();
   assert(g.answered);click('cgNext');
  }
- assert(g.finished,id);assert.equal(g.correct,g.total,id);assert.equal(w.eval('me().log.length'),logBefore);click('cgExit');assert.equal(api.current,null);
+ assert(g.finished,id);assert.equal(g.correct,g.total,id);assert.equal(w.eval('me().log.length'),++logBefore);assert.equal(w.me().log.at(-1).level,level);assert.equal(w.me().log.at(-1).shared,id==='teamgarden');click('cgExit');assert.equal(api.current,null);
 }}
 api.start('hawker',1);click('cgRecall');click('bPause2');assert(api.current.paused);assert(!el('cgLeave'));click('cgResume');click('bMn');assert(el('cgLeave'));click('cgResume');click('cgSkip');assert.equal(api.current.round,1);assert.equal(api.current.correct,0);click('cgRecall');click('cgAgainStudy');click('cgRecall');for(const n of api.current.sequence)w.document.querySelector('[data-cg-item="'+n+'"]').click();assert.equal(api.current.correct,0,'Hint removes credit');click('bMn');click('cgLeave');assert.equal(api.current,null);
-const e=w.MindGardenEveryday;e.start('today',1,{country:'Singapore',zone:'Asia/Singapore',style:'choices'});click('bMn');assert(el('edLeave'));click('edResume');click('bPause2');assert(!el('edLeave'));click('edResume');click('edSkip');assert.equal(e.current.index,1);assert.equal(e.current.correct,0);assert(el('edNext').hidden);click('edHint');assert(!el('edNext').hidden);click('edNext');assert.equal(e.current.index,2);
+const e=w.MindGardenEveryday;e.start('today',1,{country:'Singapore',zone:'Asia/Singapore',style:'choices'});click('bMn');assert(el('edLeave'));click('edResume');click('bPause2');assert(!el('edLeave'));click('edResume');click('edSkip');assert.equal(e.current.index,0);click('edNext');assert.equal(e.current.index,1);assert.equal(e.current.correct,0);assert(el('edNext').hidden);click('edHint');assert(!el('edNext').hidden);click('edNext');assert.equal(e.current.index,2);
 w.toHome();w.MindGardenDashboard.library();w.document.querySelector('[data-filter="studio"]').click();assert.equal(w.document.querySelectorAll('#gameCards [data-game]').length,6);
-assert.deepEqual(errors,[]);console.log('PASS six prototypes × three levels × two languages, completion, no profile scoring, distinct menu/pause, immediate skip, hint credit, exit cleanup, six preview cards');
-}finally{d.window.close()}
+assert.deepEqual(errors,[]);console.log('PASS six prototypes × three levels × two languages, completion, level-specific practice scores, distinct menu/pause, immediate skip, hint credit, exit cleanup, six preview cards');
+}finally{setImmediate(()=>d.window.close())}

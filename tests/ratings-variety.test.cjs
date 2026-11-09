@@ -1,0 +1,13 @@
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=html.match(/src="(garden-ui-\d+\.js)"/)[1];const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window,errors=[];w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+bundle,'utf8'));const api=w.MindGardenCommercial,el=id=>w.document.getElementById(id);
+
+const click=id=>{assert(el(id),'Missing '+id);el(id).click()};
+
+
+(async()=>{try{
+w.pt=()=>{};w.win=()=>{};w.chime=()=>{};w.beep=()=>{};
+for(const [timed,used,stars] of [[false,.1,null],[true,.49,3],[true,.5,2],[true,.79,2],[true,.8,1],[true,.99,1]]){w.save.timed=timed;w.start(0);w.total=100;w.left=100-used*100;w.found=w.LEVELS[0].p;w.pairAttempts=w.found+2;w.hints=2;w.end(true);const record=w.me().log.at(-1);assert.equal(record.stars,stars);assert.equal(record.mismatches,2);assert.equal(record.hints,1);const text=el('box').textContent;assert(text.includes('Mismatches: 2'));assert(text.includes(timed?'Speed award':'no speed rating'));assert.equal(!!el('box').querySelector('.stars'),timed);w.toHome()}
+const keys=new Set();w.mgDifficulty=5;for(let i=0;i<25;i++){w.startMG('sum');assert(!keys.has(w.mg.questionKey));keys.add(w.mg.questionKey);w.toHome()}
+for(const id of ['sounds','teamgarden','album']){api.start(id,3,4);if(id==='album')click('cgDemo');const g=api.current,seen=new Set();while(!g.finished){if(id==='teamgarden')click('cgReady');if(id==='album')click('cgRecall');const key=id==='sounds'?g.soundIndex:id==='teamgarden'?g.teamAnswer:g.target.label;assert(!seen.has(key),id+' repeats');seen.add(key);const b=[...el('mp').querySelectorAll('[data-cg-answer]')].find(b=>b.dataset.cgAnswer===String(key));assert(b);b.click();click('cgNext')}assert(w.me().log.at(-1).preview);assert.equal(w.me().log.at(-1).shared,id==='teamgarden');w.toHome()}
+assert.deepEqual(errors,[]);console.log('PASS speed-star boundaries/untimed explanation, actual mismatches/hints saved, 25 fresh arithmetic questions, nonrepeating sound/photo/team sessions, preview/shared level scoring.');
+}finally{await new Promise(r=>setImmediate(r));d.window.close()}})().catch(e=>{console.error(e);process.exitCode=1});
