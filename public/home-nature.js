@@ -9,6 +9,7 @@ function ui(){
  if(b.innerHTML!==symbol)b.innerHTML=symbol;b.setAttribute('aria-label',label);b.setAttribute('aria-pressed',String(enabled));b.dataset.playing=String(active||window.MindGardenSound?.status().playing);b.dataset.soundscape=lastMode;b.title=enabled?T('Mute music and garden sounds','关闭音乐和花园声音'):T('Restore music and garden sounds','恢复音乐和花园声音');
  document.querySelectorAll('#navMenu [data-go="nature"]').forEach(el=>el.setAttribute('aria-pressed',String(enabled)));
  const fab=document.getElementById('mFab');if(fab){fab.textContent=(enabled?'🔊 ':'🔇 ')+T('Background: ','背景：')+(enabled?T('On','开'):T('Off','关'));fab.setAttribute('aria-pressed',String(enabled));fab.setAttribute('aria-label',b.title);fab.title=b.title;fab.onclick=()=>setMuted(!save.backgroundMuted)}
+ document.querySelectorAll('[data-background-audio]').forEach(el=>{if(el.innerHTML!==symbol)el.innerHTML=symbol;el.setAttribute('aria-label',label);el.setAttribute('aria-pressed',String(enabled));el.title=b.title});
  const master=document.getElementById('backgroundAudioToggle');if(master){master.textContent=label;master.setAttribute('aria-pressed',String(enabled));master.onclick=()=>setMuted(!save.backgroundMuted)}
 }
 function setMuted(muted){

@@ -3,8 +3,8 @@
 'use strict';
 const root=document.documentElement,media=matchMedia('(prefers-color-scheme: dark)'),T=(en,zh)=>save.lang==='zh'?zh:en;
 let online=false;
-function toolbar(){return '<button type="button" class="btn v4-scenery-toggle" data-v4-toggle aria-label="'+T('Garden background','花园背景')+'" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="16" cy="8" r="2"/><path d="m4 18 6-7 5 5 3-3 3 4"/></svg></button>'}
-function bind(host){host.querySelectorAll('[data-v4-toggle]').forEach(b=>b.onclick=()=>{save.quietGames=save.quietGames===false;persist();sync()})}
+function toolbar(){return '<button type="button" class="btn game-audio-toggle" data-background-audio aria-label="'+T('Mute background audio','关闭背景声音')+'"></button>'+ '<button type="button" class="btn v4-scenery-toggle" data-v4-toggle aria-label="'+T('Garden background','花园背景')+'" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="16" cy="8" r="2"/><path d="m4 18 6-7 5 5 3-3 3 4"/></svg></button>'}
+function bind(host){host.querySelectorAll('[data-background-audio]').forEach(b=>b.onclick=()=>window.MindGardenBackground?.toggle());window.MindGardenBackground?.syncControls();host.querySelectorAll('[data-v4-toggle]').forEach(b=>b.onclick=()=>{save.quietGames=save.quietGames===false;persist();sync()})}
 function sync(){
  root.dataset.v4Mode=save.mode==='dark'||save.mode!=='light'&&media.matches?'dark':'light';
  root.dataset.gameView=save.quietGames===false?'garden':'quiet';
@@ -13,7 +13,7 @@ function sync(){
  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=root.dataset.v4Mode==='light'?'#E6EFE3':'#123A3D';
 }
 function mount(){
- for(const id of ['game','mini']){const host=document.getElementById(id);let bar=host.querySelector('.v4-game-tools');if(!bar){bar=document.createElement('div');bar.className='v4-game-tools';host.querySelector('.hud').after(bar)}bar.innerHTML=toolbar();bind(bar)}sync();
+ for(const id of ['game','mini']){const host=document.getElementById(id);let bar=host.querySelector('.v4-game-tools');if(!bar){bar=document.createElement('div');bar.className='v4-game-tools';host.querySelector('.hud').append(bar)}const pause=document.getElementById(id==='game'?'bPause':'bPause2');bar.replaceChildren();bar.innerHTML=toolbar();bar.prepend(pause);bind(bar)}sync();
 }
 const prefs=window.applyPrefs;window.applyPrefs=function(){const out=prefs.apply(this,arguments);sync();return out};
 const show=window.show;window.show=function(){const out=show.apply(this,arguments);online=false;sync();return out};

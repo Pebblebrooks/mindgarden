@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.18">
+<meta name="mind-garden-release" content="v4.0.19">
 
 
 
@@ -321,7 +321,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-4018.css">
+<link rel="stylesheet" href="garden-ui-4019.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -420,7 +420,18 @@ var cur=0,left=0,total=0,first=null,lock=true,found=0,timer=null,paused=false,hi
 
 // sound
 var ac=null;
-function beep(f,d,type){if(!save.snd)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();var o=ac.createOscillator(),g=ac.createGain();o.type=type||"sine";o.frequency.value=f;g.gain.setValueAtTime(.12,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function resumeGameAudio(){
+ if(!save.snd)return Promise.resolve(null);
+ try{if(!ac||ac.state==='closed')ac=new(window.AudioContext||window.webkitAudioContext)();const context=ac;
+ return context.state==='running'?Promise.resolve(context):Promise.resolve(context.resume()).then(function(){return context.state==='running'?context:null}).catch(function(){return null});
+ }catch(e){return Promise.resolve(null)}
+}
+function beep(f,d,type){if(!save.snd)return;const requestedAt=Date.now();
+ function play(context){if(!context||!save.snd||document.hidden||Date.now()-requestedAt>500)return;try{const o=context.createOscillator(),g=context.createGain(),now=context.currentTime;o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.12,now);g.gain.exponentialRampToValueAtTime(.001,now+d);o.connect(g);g.connect(context.destination);o.onended=function(){o.disconnect();g.disconnect()};o.start(now);o.stop(now+d)}catch(e){}}
+ if(ac&&ac.state==='running')play(ac);else resumeGameAudio().then(play);
+}
+document.addEventListener('pointerdown',function(e){if(e.target.closest('#game,#mini,#box')&&save.snd)resumeGameAudio()},{capture:true,passive:true});
+document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.closest('#game,#mini,#box')&&save.snd)resumeGameAudio()},{capture:true});
 function pt(fn,ms){setTimeout(function w(){if(paused)setTimeout(w,150);else fn()},ms)}
 function chime(){beep(660,.18);setTimeout(function(){beep(880,.28)},120)}
 function win(){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){beep(f,.35)},i*150)})}
@@ -1046,7 +1057,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4018.js"></script>
+<script src="garden-ui-4019.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

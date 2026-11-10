@@ -73,7 +73,7 @@ const associations=[['bird','小鸟','nest','鸟巢'],['dog','狗','kennel','狗
 function related(){const n=L(),pool=n<6?associations:n<11?associations.slice(0,8):associations.slice(4),p=choose(pool),ans=T(p[2],p[3]),others=associations.filter(x=>x!==p);let prompt=T('Which word goes with “'+p[0]+'”?','哪个词语与“'+p[1]+'”相关？');if(n>=6){const family=associations.slice(Math.floor(associations.indexOf(p)/4)*4,Math.floor(associations.indexOf(p)/4)*4+4),ref=choose(family.filter(x=>x!==p));prompt=T(ref[0]+' → '+ref[2]+'; '+p[0]+' → ?' ,ref[1]+' → '+ref[3]+'；'+p[1]+' → ?');}question(prompt,answers(ans,others.map(x=>T(x[2],x[3]))),ans)}
 const rooms=[['Kitchen','厨房','🍳','🥣'],['Bedroom','卧室','🛏️','🛌'],['Bathroom','浴室','🪥','🛁'],['Garage','车库','🚗','🛞'],['Garden','花园','🌷','🌲'],['Study','书房','🖥️','📚']];
 function place(){const n=L(),p=choose(rooms),ans=T(p[0],p[1]);question(T('Which place best matches these objects?','这些物品最适合哪个地方？'),answers(ans,rooms.filter(x=>x!==p).map(x=>T(x[0],x[1]))),ans,gamePictureLine(p.slice(2,n>=8?4:3)))}
-let storyQuestionCycle=0,storyUtterance=null,storySpeechTimer=null;
+let storyUtterance=null,storySpeechTimer=null;
 function stopStory(){clearTimeout(storySpeechTimer);if(!storyUtterance)return;storyUtterance.onend=storyUtterance.onerror=null;storyUtterance=null;window.speechSynthesis?.cancel()}
 new MutationObserver(()=>{if(!$('readStory'))stopStory()}).observe($('mp'),{childList:true});
 new MutationObserver(()=>{if($('mini').classList.contains('hidden'))stopStory()}).observe($('mini'),{attributes:true,attributeFilter:['class']});
@@ -92,9 +92,19 @@ const facts=[
 [T(person+' travelled by '+ride[0]+'.',person+'乘坐的交通工具是'+ride[1]+'。'),T('How did '+person+' travel?',person+'使用了什么交通工具？'),T(...ride),other(travel,ride),'travel'],
 [T('After returning home, '+person+' phoned a '+who[0]+'.','回家后，'+person+'给'+who[1]+'打了电话。'),T('Who received the phone call?','电话打给了谁？'),T(...who),other(people,who),'person'],
 [T('Finally, '+person+' drank '+drink[0]+'.','最后，'+person+'喝了'+drink[1]+'。'),T('What happened last?','最后做了什么？'),T('Drank '+drink[0],'喝'+drink[1]),[T('Packed the bag','整理袋子'),T('Travelled to the '+place[0],'前往'+place[1]),T('Phoned the '+who[0],'给'+who[1]+'打电话')],'sequence']
-].slice(0,Math.min(8,3+Math.ceil((n-1)/3)));
-const q=facts[storyQuestionCycle++%facts.length],g=mg,text=facts.map(x=>x[0]).filter(Boolean).join(' ');g.storyQuestionKind=q[4];g.storyFactCount=facts.filter(x=>x[0]).length;
-$('mmsg').textContent=T('Read or listen to the story.','阅读或聆听故事。');$('mp').innerHTML='<div class="story-copy">'+esc(text)+'</div><div class="row"><button class="btn" id="readStory">'+T('Read aloud','朗读')+'</button><button class="btn main" id="storyReady">'+T('Answer the question','回答问题')+'</button></div><p id="storySpeechStatus" role="status"></p>';$('readStory').onclick=()=>readStory(text);$('storyReady').onclick=()=>{window.speechSynthesis?.cancel();if(mg===g&&!paused)question(q[1],answers(q[2],q[3]),q[2])};
+].slice(0,Math.min(8,2+Math.ceil((n-1)/2)));
+const g=mg,text=facts.map(x=>x[0]).filter(Boolean).join(' ');g.storyFactCount=facts.length;g.storyQuestions=shuffle(facts.slice());g.storyAnswers=[];g.storyIndex=0;g.storyQuestionKind=g.storyQuestions[0][4];
+function askFact(){
+ if(mg!==g)return;const q=g.storyQuestions[g.storyIndex];g.storyQuestionKind=q[4];g.ans=q[2];g.last=null;let answered=false;
+ $('mmsg').textContent=T('Detail ','细节 ')+(g.storyIndex+1)+' / '+facts.length+' · '+q[1];
+ $('mp').innerHTML='<div class="gridm" style="--c:2">'+answers(q[2],q[3]).map(x=>'<button class="big" data-a="'+esc(x.v)+'">'+x.h+'</button>').join('')+'</div>';
+ g.h=button=>{if(answered||paused||mg!==g)return;answered=true;g.h=null;const ok=button.dataset.a===q[2];g.storyAnswers.push(button.dataset.a);button.classList.add(ok?'right':'wrong');$('mp').querySelectorAll('[data-a]').forEach(b=>{b.disabled=true;if(b.dataset.a===q[2])b.classList.add('right')});ok?chime():beep(300,.2,'triangle');
+ const last=g.storyIndex+1===facts.length,feedback=document.createElement('div');feedback.className='story-detail-feedback';feedback.innerHTML='<p role="status">'+(ok?T('Correct!','答对了！'):T('Correct answer: ','正确答案：')+esc(q[2]))+'</p><button class="btn main" id="storyNextDetail">'+T(last?'Review story':'Next detail',last?'回顾故事':'下一项细节')+'</button>';$('mp').append(feedback);
+ $('storyNextDetail').onclick=()=>{if(paused||mg!==g)return;g.storyIndex++;if(!last)return askFact();g.reviewExpected=g.storyQuestions.map(f=>f[2]);g.reviewEntered=g.storyAnswers.slice();const correct=g.reviewExpected.filter((v,i)=>v===g.reviewEntered[i]).length;g.ans=null;g.last=null;res(correct===facts.length,T(correct+' of '+facts.length+' story details recalled.','记住了 '+facts.length+' 项细节中的 '+correct+' 项。'));};
+ };
+}
+$('mmsg').textContent=T('Read or listen. Recall '+facts.length+' details afterwards.','阅读或聆听，然后回忆 '+facts.length+' 项细节。');$('mp').innerHTML='<div class="story-copy">'+esc(text)+'</div><div class="row"><button class="btn" id="readStory">'+T('Read aloud','朗读')+'</button><button class="btn main" id="storyReady">'+T('Answer the questions','回答问题')+'</button></div><p id="storySpeechStatus" role="status"></p>';$('readStory').onclick=()=>readStory(text);$('storyReady').onclick=()=>{stopStory();if(mg===g&&!paused)askFact()};
+
 }
 
 function visual(){const n=5+L()*2,icons=['🌷','🌻','🌹','🌼','🌺','🌸'],a=choose(icons),d=choose(icons.filter(x=>x!==a)),index=rnd(0,n-1),list=Array.from({length:n},(_,i)=>({v:String(i),h:i===index?a:d}));question(T('Find the different flower.','找出不同的花朵。'),list,String(index));$('mp').querySelector('.gridm').style.setProperty('--c',Math.min(5,Math.ceil(Math.sqrt(n))))}

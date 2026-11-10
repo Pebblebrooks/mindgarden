@@ -235,3 +235,9 @@ html[data-garden-scene="fjord"] #gardenLife :is(.fallback-cat,.fallback-fox),htm
 #grid .card.up .f.b,#grid .card.ok .f.b{visibility:hidden}
 .game-picture.art-pending .game-illustration{display:block;position:absolute;width:1em;height:1em;opacity:0;pointer-events:none}
 .game-picture.art-pending .picture-text{position:static;width:auto;height:auto;clip:auto;overflow:visible}
+
+/* Three game cards, then two centered progress cards with equal widths. */
+#home #welcomeDashboard .welcome-ctas{--card-gap:clamp(18px,calc(1.25rem * var(--fs)),36px);width:min(1100px,100%);display:flex!important;flex-wrap:wrap;justify-content:center;gap:var(--card-gap)!important;}
+#home #welcomeDashboard .welcome-ctas>.welcome-choice{flex:0 1 calc((100% - 2 * var(--card-gap))/3);min-width:min(100%,calc(220px * var(--fs)));max-width:100%;box-sizing:border-box;}
+#home #welcomeDashboard .welcome-feature{text-align:center;}
+@media(max-width:540px){#home #welcomeDashboard .welcome-ctas>.welcome-choice{flex-basis:100%;}}

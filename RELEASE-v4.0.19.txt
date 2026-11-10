@@ -1,0 +1,12 @@
+Mind Garden v4.0.19
+
+- My Progress and Leaderboard navbar links appear when space permits; welcome cards sit in a centered second row.
+- File chooser uses separate button and wrapping filename for mobile layouts.
+- Flower preview has an explicit Use these flowers action; Progress shows selected flower type, preserving growth points.
+- Compact background audio, pause and scenery controls share the game toolbar.
+- Story memory asks every selected detail, progressing from 2 to 8, one question at a time.
+- Feedback audio waits for resume and recovers interrupted/closed contexts without overriding mute.
+- Stronger, repeating floral borders in light and dark All Games backgrounds.
+
+No database migration. Existing player data is retained.
+Physical iOS audio recovery still needs device verification.

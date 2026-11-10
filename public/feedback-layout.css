@@ -61,3 +61,25 @@ html[data-v4-mode]:not([data-hc="1"]) #ov #box button[aria-pressed="true"]:focus
 @media(max-height:500px){#mini #mp .round-review,#mini #cgFeedback{margin:0 auto;padding:8px;} .answer-card{padding:8px;gap:4px;} .answer-comparison{margin:4px auto;} }
 
 .cg-game>[hidden]{display:none!important;}
+/* Keep file buttons and long names on separate lines, including native iOS pickers. */
+#box .file-picker{display:flex;flex-direction:column;align-items:stretch;gap:10px;position:relative;width:100%;min-width:0;margin-block:10px;}
+#box .file-picker .file-picker-input{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:0!important;border:0!important;overflow:hidden!important;clip-path:inset(50%);white-space:nowrap;}
+#box .file-picker-button{width:100%;min-width:0;white-space:normal;text-align:center;line-height:1.35;}
+#box .file-picker-name{display:block;max-width:100%;overflow-wrap:anywhere;white-space:normal;font-size:.85em;line-height:1.4;font-weight:400;text-align:center;}
+/* Audio, pause and scenery share a compact toolbar; never cover the game board. */
+#mFab{display:none!important;}
+#game .hud>.v4-game-tools,#mini .hud>.v4-game-tools{display:flex;flex:0 0 auto;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:6px;margin:0 0 0 auto!important;}
+#game .hud>.v4-game-tools .btn,#mini .hud>.v4-game-tools .btn,#box .game-audio-toggle{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;min-width:44px;height:44px;min-height:44px;padding:8px!important;margin:0!important;font-size:20px;line-height:1;}
+.v4-game-tools .game-audio-toggle svg{width:24px;height:24px;}
+#game .v4-game-tools .btn::before,#mini .v4-game-tools .btn::before,#box .game-audio-toggle::before{content:none!important;}
+#game>.v4-game-tools,#mini>.v4-game-tools{display:none;}
+.bouquet-selection{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-weight:650;}
+.bouquet-selection-icon svg{width:36px;height:36px;display:block;}
+.story-detail-feedback{text-align:center;margin:10px auto;}
+
+/* Repeating floral borders stay behind opaque cards and readable content. */
+#libraryDisplay::before,#libraryDisplay::after{top:40px;bottom:0;height:auto;width:clamp(120px,17vw,230px);opacity:.25;background:#a9cfb0;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20180%20360%22%3E%3Cg%20fill%3D%22black%22%3E%3Cpath%20d%3D%22M84%20340Q135%20210%2080%2050%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20d%3D%22M103%20275Q20%20276%2028%20220Q88%20219%20103%20275M110%20225Q168%20220%20161%20170Q113%20171%20110%20225M104%20167Q33%20159%2040%20109Q98%20119%20104%20167M91%20105Q145%2091%20139%2051Q93%2056%2091%20105%22%2F%3E%3Cg%20transform%3D%22translate%2865%2046%29%22%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%2F%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%20transform%3D%22rotate%2872%29%22%2F%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%20transform%3D%22rotate%28144%29%22%2F%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%20transform%3D%22rotate%28216%29%22%2F%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%20transform%3D%22rotate%28288%29%22%2F%3E%3Ccircle%20r%3D%229%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28144%20310%29%20scale%28.7%29%22%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%2F%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%20transform%3D%22rotate%2872%29%22%2F%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%20transform%3D%22rotate%28144%29%22%2F%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%20transform%3D%22rotate%28216%29%22%2F%3E%3Cellipse%20cy%3D%22-16%22%20rx%3D%229%22%20ry%3D%2217%22%20transform%3D%22rotate%28288%29%22%2F%3E%3Ccircle%20r%3D%229%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E") center top/100% auto repeat-y;animation:none;transform:none}
+#libraryDisplay::before{left:-20px}
+#libraryDisplay::after{right:-20px;top:210px;transform:scaleX(-1)}
+html[data-v4-mode="light"]:not([data-hc="1"]) #libraryDisplay::before,html[data-v4-mode="light"]:not([data-hc="1"]) #libraryDisplay::after{background:#356e4e;opacity:.25}
+html[data-hc="1"] #libraryDisplay::before,html[data-hc="1"] #libraryDisplay::after{display:none}

@@ -7,7 +7,7 @@
   related:{n:'Word connections',d:'Find a word with a related meaning.',ic:'🔗',g:5},
   calendar:{n:'Calendar day',d:'Work out the next day of the week.',ic:'📅',g:3},
   money:{n:'Market change',d:'Practise everyday shopping calculations.',ic:'🪙',g:1},
-  story:{n:'Short story memory',d:'Listen or read, then remember a detail.',ic:'📖',g:0},
+  story:{n:'Short story memory',d:'Read or listen, then recall more details as levels increase.',ic:'📖',g:0},
   visual:{n:'Garden detective',d:'Find a special flower in the garden.',ic:'🌺',g:4},
   order:{n:'Picture order',d:'Which picture completes the pattern?',ic:'🧩',g:3},
   place:{n:'Where does it belong?',d:'Match everyday objects to a place.',ic:'🏠',g:2}
