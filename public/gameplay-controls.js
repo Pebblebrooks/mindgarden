@@ -10,8 +10,8 @@ window.rSeq=function(){ready(()=>{
  const buttons=$('mp').querySelectorAll('.big');
  function cue(j,ms){lit(buttons[j],ms);beep(440+j*90,.24);say(items[j].n)}
  function go(){if(mg!==g)return;if(index===sequence.length){buttons.forEach(b=>b.disabled=false);$('mmsg').textContent=T('Your turn — tap the pictures in the same order.','轮到您了，请按相同顺序点击图片。');g.h=b=>{const j=+b.dataset.a;g.reviewEntered.push(items[j].n);cue(j,350);if(j!==sequence[position])return res(false,T('At position '+(position+1)+', choose '+items[sequence[position]].n+'. You chose '+items[j].n+'.','第 '+(position+1)+' 项应为 '+items[sequence[position]].n+'，您选择了 '+items[j].n+'。'));position++;if(position===sequence.length)res(true,T('Correct — you remembered the order!','正确，您记住了顺序！'))};return;}
- const j=sequence[index++];$('mmsg').textContent=T('Watch: ','观察：')+index+' / '+n+' · '+items[j].n;cue(j,750);pt(go,1100);
- }go();
+ const j=sequence[index++];$('mmsg').textContent=T('Watch: ','观察：')+index+' / '+n+' · '+items[j].n;cue(j,1000);pt(go,1350);
+ }$('mmsg').textContent=T('Get ready — watch the pictures.','准备好，观察图片。');pt(go,GAME_SETTLE_MS);
 })};
 window.rMiss=function(){const g=mg;ready(()=>originalMissing());$('mp').querySelector('p').textContent=T('Remember the pictures. Afterwards, choose the one that disappeared.','记住图片，然后选出消失的那张。');};
 // Keep icons and labels consistent without changing each game's own pause state.

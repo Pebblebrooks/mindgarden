@@ -110,19 +110,33 @@ function tr(s){var k=String(s).trim();if(!k)return s;var z=ZH[k]||ZN[norm(k)];if
  var kk=k.replace(/'/g,"’");for(var i=0;i<RX.length;i++){var m=kk.match(RX[i][0]);if(m)return s.replace(k,RX[i][1].apply(null,m.slice(1)))}return s}
 window.tr=tr;
 if(!save.lang)save.lang=/^zh/i.test(navigator.language||"")?"zh":"en";
-var zh=save.lang==="zh",btn=document.getElementById("bLang");
-document.documentElement.lang=zh?"zh-Hans":"en";
-btn.textContent=zh?"English":"Chinese 中文";btn.setAttribute("lang",zh?"en":"zh-Hans");
-btn.onclick=function(){save.lang=zh?"en":"zh";persist();location.reload()};
-if(!zh)return;
-document.title="心灵花园 – 大脑游戏";
-var origSay=window.say;
-window.say=function(t){if(!save.speak||!t||!window.speechSynthesis)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(/^[A-Z]+$|^[a-z]{3,8}$/.test(t)&&mg&&mg.t==="wrd"?t:tr(t));u.lang=mg&&mg.t==="wrd"?"en-GB":"zh-CN";u.rate=.85;speechSynthesis.speak(u)}catch(e){}};
-function walk(n){if(n.nodeType===3){var v=tr(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v;return}
- if(n.nodeType!==1)return;if(n.id==="bLang"||/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.tagName)||n.closest("[translate=no]"))return;
- ["aria-label","title","placeholder","alt"].forEach(function(key){var a=n.getAttribute(key);if(a){var t=tr(a);if(t!==a)n.setAttribute(key,t)}});
- for(var c=n.firstChild;c;c=c.nextSibling)walk(c)}
-new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==="attributes")walk(m.target);else if(m.type==="characterData")walk(m.target);else m.addedNodes.forEach(walk)})}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["aria-label","title","placeholder","alt"]});
-walk(document.body);
+var btn=document.getElementById("bLang"), originalTitle=document.title;
+var originals=new WeakMap(), reverse=new Map(Object.entries(ZH).map(function(e){return [e[1],e[0]]}));
+function translateValue(n,key,value){
+ var record=originals.get(n)||{}, old=record[key], english;
+ if(old&&value===old.output)english=old.english;
+ else english=reverse.get(value.trim())||value;
+ var pairs=Array.from(window.MindGardenPhrases||[]).sort(function(a,b){return b[0].length-a[0].length});
+ pairs.forEach(function(pair){if(pair[1]&&english.includes(pair[1]))english=english.split(pair[1]).join(pair[0])});
+ var output=save.lang==='zh'?tr(english):english;
+ if(save.lang==='zh')pairs.forEach(function(pair){if(pair[0]&&output.includes(pair[0]))output=output.split(pair[0]).join(pair[1])});
+ if(output!==english)reverse.set(output,english);
+ record[key]={english:english,output:output};originals.set(n,record);return output;
+}
+function walk(n){
+ if(n.nodeType===3){var value=translateValue(n,'text',n.nodeValue);if(value!==n.nodeValue)n.nodeValue=value;return}
+ if(n.nodeType!==1||n.id==='bLang'||/^(SCRIPT|STYLE|TEXTAREA|INPUT)$/.test(n.tagName)||n.closest('[translate=no]'))return;
+ ['aria-label','title','placeholder','alt'].forEach(function(key){var value=n.getAttribute(key);if(value){var output=translateValue(n,key,value);if(output!==value)n.setAttribute(key,output)}});
+ for(var c=n.firstChild;c;c=c.nextSibling)walk(c);
+}
+var observer=new MutationObserver(function(records){observer.disconnect();records.forEach(function(m){if(m.type==='childList')m.addedNodes.forEach(walk);else walk(m.target)});observe()});
+function observe(){observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['aria-label','title','placeholder','alt']})}
+function applyLanguage(){
+ observer.disconnect();document.documentElement.lang=save.lang==='zh'?'zh-Hans':'en';
+ btn.textContent=save.lang==='zh'?'English':'Chinese 中文';btn.setAttribute('lang',save.lang==='zh'?'en':'zh-Hans');
+ document.title=save.lang==='zh'?'心灵花园 – 大脑游戏':originalTitle;
+ walk(document.body);observe();
+}
+window.MindGardenLanguage={toggle:function(){save.lang=save.lang==='zh'?'en':'zh';persist();window.speechSynthesis?.cancel();applyLanguage();window.dispatchEvent(new Event('gardenLanguageChange'))}};
+btn.onclick=window.MindGardenLanguage.toggle;applyLanguage();
 })();
-

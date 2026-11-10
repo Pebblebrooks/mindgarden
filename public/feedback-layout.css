@@ -91,3 +91,5 @@ html[data-hc="1"] #libraryDisplay::before,html[data-hc="1"] #libraryDisplay::aft
 #mp .story-answer-grid .big{aspect-ratio:auto!important;min-height:64px;max-height:none;height:auto;padding:14px 18px;font-size:calc(1.15rem * var(--fs))!important;line-height:1.35;overflow-wrap:normal;word-break:normal;border-width:2px;border-radius:16px}
 .story-voice-options{max-width:520px;margin:12px auto;font-size:calc(.9rem * var(--fs))}
 @media(max-width:420px){#mp .story-answer-grid .big{padding:12px 8px;font-size:calc(1rem * var(--fs))!important}.story-voice-options select{max-width:100%}}
+
+.game-language-toggle span{font-size:14px!important;white-space:nowrap;line-height:1;font-weight:800}

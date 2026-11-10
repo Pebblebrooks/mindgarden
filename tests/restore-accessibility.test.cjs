@@ -1,6 +1,6 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window;
-w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4020.js','utf8'));
+w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4021.js','utf8'));
 try{
  w.eval("save.textScale=1.6;me().log=[{d:'2026-11-06',g:'sum',r:1,s:82}];me().bt={sum:82};me().levels={sum:4};me().gr=32;persist();applyPrefs()");
  const exported=w.MindGardenExport.backup(),oldId=w.eval('save.cp'),oldCount=w.eval('Object.keys(save.pr).length');exported.profile.token='malicious';exported.profile.preferences.heroDark='a-private-video';
@@ -14,6 +14,6 @@ try{
  assert.equal(w.document.getElementById('dailyQuote'),null);assert(w.document.querySelector('#unifiedNav #navTextSize'));assert.equal(w.document.getElementById('homeTextSize'),null);
  const svg=w.document.querySelector('.bouquet-3d'),angle=svg.dataset.angle;w.document.querySelector('[data-bouquet-turn="1"]').click();assert.notEqual(svg.dataset.angle,angle);assert(svg.innerHTML.includes('path'));w.eval("save.still=1;applyPrefs()");
  const p1=w.MindGardenBouquet.project({x:40,y:70,z:20},0),p2=w.MindGardenBouquet.project({x:40,y:70,z:20},Math.PI/2);assert.notEqual(p1.x,p2.x);assert.notEqual(p1.z,p2.z);
- w.MindGardenMotion.setMode('off');w.renderHero();assert(w.document.getElementById('bouquetRotate').disabled);assert.equal(w.document.querySelector('.bouquet-3d').dataset.paused,'true');
+ w.MindGardenMotion.setMode('off');w.renderHero();assert(!w.document.getElementById('bouquetRotate').disabled);assert.equal(w.document.querySelector('.bouquet-3d').dataset.paused,'true');
  console.log('PASS: JSON round-trip into separate player, retained data/preferences, invalid/version/prototype rejection, storage failure rollback, 80–200% text sizing/reset, navbar text controls, depth projection/manual bouquet rotation.');
 }finally{d.window.close()}

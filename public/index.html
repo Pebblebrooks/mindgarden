@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.20">
+<meta name="mind-garden-release" content="v4.0.21">
 
 
 
@@ -321,7 +321,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-4020.css">
+<link rel="stylesheet" href="garden-ui-4021.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -432,6 +432,7 @@ function beep(f,d,type){if(!save.snd)return;const requestedAt=Date.now();
 }
 document.addEventListener('pointerdown',function(e){if(e.target.closest('#game,#mini,#box')&&save.snd)resumeGameAudio()},{capture:true,passive:true});
 document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.closest('#game,#mini,#box')&&save.snd)resumeGameAudio()},{capture:true});
+var GAME_SETTLE_MS=1200;
 function pt(fn,ms){setTimeout(function w(){if(paused)setTimeout(w,150);else fn()},ms)}
 function chime(){beep(660,.18);setTimeout(function(){beep(880,.28)},120)}
 function win(){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){beep(f,.35)},i*150)})}
@@ -473,12 +474,12 @@ function start(i){
   $("tb").style.transform="scaleX(1)";$("tb").classList.remove("low");
   $("bHint").textContent="Hint ("+hints+")";$("bPause").textContent="⏸";
   show("game");
-  var n=L.peek;
-  (function tick(){
+  var n=L.peek;$("msg").textContent=save.lang==='zh'?'准备好，看看卡片。':'Get ready — look at the cards.';
+  pt(function tick(){
     if(generation!==pairGeneration||$("game").classList.contains("hidden"))return;
     if(n>0){$("msg").textContent="Look carefully… cards turn over in "+n;n--;pt(tick,1000)}
     else{[].forEach.call(g.children,function(c){c.classList.remove("up")});$("msg").textContent=bonus?"Extra "+bonus+" seconds added. Tap a card to begin.":"Tap a card to begin.";lock=false;run()}
-  })();
+  },GAME_SETTLE_MS);
 }
 function run(){
   clearInterval(timer);
@@ -794,14 +795,14 @@ function rMiss(){
   var g=mg,n=g.n,it=pick(allItems(),n),m=Math.floor(Math.random()*n),c=n+3,cols=n>6?4:3;
   var cell=function(x){return '<div class="big st">'+gamePicture(x.e)+'</div>'};
   $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(cell).join("")+'</div>';
-  (function tick(){
+  pt(function tick(){
     if(mg!==g)return;
     if(c>0){$("mmsg").textContent="Remember these… "+c;c--;pt(tick,1000);return}
     var shown=it.map(function(x){return x.e}),opts=shuffle([it[m]].concat(pick(allItems().filter(function(x){return shown.indexOf(x.e)<0}),Math.min(5,2+Math.floor((g.difficulty||1)/3)))));
     $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(function(x,i){return i===m?'<div class="big st q">?</div>':cell(x)}).join("")+'</div><div class="gridm" style="--c:'+Math.min(3,opts.length)+'">'+opts.map(function(x){return '<button class="big" data-a="'+x.e+'" aria-label="'+x.n+'">'+gamePicture(x.e)+'</button>'}).join("")+'</div>';
     $("mmsg").textContent="One has disappeared. Which one was it?";
     g.ans=it[m].e;g.h=function(x){var ok=x.dataset.a===it[m].e;say(it[m].n);res(ok,ok?"Yes – the "+it[m].n+"!":"It was the "+it[m].n+". Well tried!")};
-  })();
+  },GAME_SETTLE_MS);
 }
 function rSort(){
   var ks=pick(Object.keys(CATS),mg.r<4?2:3),a=ks[Math.floor(Math.random()*ks.length)],x=P(CATS[a][Math.floor(Math.random()*5)]);
@@ -1057,7 +1058,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4020.js"></script>
+<script src="garden-ui-4021.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

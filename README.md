@@ -1,6 +1,6 @@
-# Mind Garden v4.0.20
+# Mind Garden v4.0.21
 
-See RELEASE-v4.0.20.txt for the latest approved changes and validation.
+See RELEASE-v4.0.21.txt for the latest approved changes and validation.
 
 
 Approved feedback, sound and play-mode update for Cloudflare Pages.

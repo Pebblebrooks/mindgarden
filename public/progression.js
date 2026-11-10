@@ -1,7 +1,7 @@
 /* Level-based challenges. Difficulty changes content, not the session's round number. */
 (function(){
 'use strict';
-const T=(en,zh)=>save.lang==='zh'?zh:en,$=id=>document.getElementById(id);
+const T=(en,zh)=>{const phrases=window.MindGardenPhrases||(window.MindGardenPhrases=new Map());for(const [e,z] of phrases)if(z)en=en.split(z).join(e);phrases.set(en,zh);return save.lang==='zh'?zh:en},$=id=>document.getElementById(id);
 const level=n=>Math.max(1,Math.min(15,Math.round(Number(n)||1))),L=()=>level(mg?.difficulty),options=n=>Math.min(6,3+Math.floor((n-1)/3));
 const choose=a=>a[rnd(0,a.length-1)],value=x=>({v:String(x),h:esc(x)});
 const label=x=>typeof tr==='function'&&save.lang==='zh'?tr(x):x;

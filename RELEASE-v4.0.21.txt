@@ -1,0 +1,8 @@
+Mind Garden v4.0.21
+
+Bouquet Play works even with garden animation off; explicit play affects the bouquet only. Pause and rotation controls remain accessible on narrow screens.
+Memory cues allow a 1.2-second settling period after the board appears. Remember the Order cues remain highlighted for one second. Automatic viewing countdowns and melody playback receive the same settling time; manually paced screens remain user-controlled.
+A compact English/Chinese language toggle is available in game toolbars without navigation or round restart. Live translation preserves answer values and game state.
+
+Validation: bouquet rotation and stop/start logic; responsive browser checks at 320, 390, 768 and 1280 px; live story language round trips; release UI/cache checks; gameplay regression suite.
+No database migration or player progress reset required.

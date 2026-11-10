@@ -151,7 +151,7 @@ setInterval(poll,1500);
   else{const groups=[['🍎','🍌','🍓','🍇'],['🐶','🐱','🐢','🐦'],['🚲','🚂','🚗','🚌'],['🌻','🌷','🌹','🌼']];let k=Math.floor(rand()*4),other=(k+1+Math.floor(rand()*3))%4;let choices=shuffle(groups[k].slice(0,3).concat(groups[other][Math.floor(rand()*4)]),rand);qs.push({title:'Which picture belongs to a different group?',answer:groups[other].find(e=>choices.includes(e)),options:choices})}
  }return qs}
  function start(s){const began=s.players.find(p=>p.id===s.me)?.beganAt,started=began?Date.now()-(s.serverTime-began):null;const mode=s.mode||'pairs6',rand=randomizer((s.seed^Math.imul(s.round,0x9E3779B1))>>>0);
-  if(mode.startsWith('pairs')){const count=mode==='pairs10'?10:6,pool=['🌻','🍎','🐦','🐶','🌈','🚲','🌷','🍓','🐢','🎹','🏡','🦋','🍊','☕','🌹','🚂','🎨','🪁','🥕','🐞'];const values=shuffle(pool.slice(),rand).slice(0,count);game={mode,round:s.round,deck:shuffle(values.concat(values),rand),open:[],done:new Set(),moves:0,locked:false,started:null,submitted:false,saved:false,phase:began?'preview':'ready'};if(began)game.previewEndsAt=started+pairSeconds(game)*1000;draw()}
+  if(mode.startsWith('pairs')){const count=mode==='pairs10'?10:6,pool=['🌻','🍎','🐦','🐶','🌈','🚲','🌷','🍓','🐢','🎹','🏡','🦋','🍊','☕','🌹','🚂','🎨','🪁','🥕','🐞'];const values=shuffle(pool.slice(),rand).slice(0,count);game={mode,round:s.round,deck:shuffle(values.concat(values),rand),open:[],done:new Set(),moves:0,locked:false,started:null,submitted:false,saved:false,phase:began?'preview':'ready'};if(began)game.previewEndsAt=started+GAME_SETTLE_MS+pairSeconds(game)*1000;draw()}
   else {game={mode,round:s.round,questions:EXTRA?.questions(mode,s.seed,s.round)?.map(q=>({...q,title:T(...q.prompt),labels:q.labels?Object.fromEntries(Object.entries(q.labels).map(([k,v])=>[k,T(...v)])):null}))||problems(mode,rand),answers:[],index:0,moves:0,correct:0,started,phase:began?'playing':'ready',submitted:false,saved:false};if(began)drawQuiz('Choose the best answer. Take your time.');else drawQuizReady()}
   checkpoint();
  }
@@ -206,7 +206,7 @@ setInterval(poll,1500);
   $('mpBeginPairs').onclick=()=>beginRound($('mpBeginPairs'),state=>{
    if(game!==g||g.phase!=='ready')return;
    // Grant the full study period after the Begin response arrives.
-   g.phase='preview';g.previewEndsAt=Date.now()+pairSeconds(g)*1000;g.started=null;
+   g.phase='preview';g.previewEndsAt=Date.now()+GAME_SETTLE_MS+pairSeconds(g)*1000;g.started=null;
    settlePairPreview(g);checkpoint();updatePairs(messages[g.phase]);document.querySelector('.mp-board').focus({preventScroll:true});runPairClock(g);
   });
   mountPairArtwork(document.querySelector('.mp-board'));
