@@ -1,9 +1,13 @@
-# Mind Garden v4.0.22
+# Mind Garden v4.0.23
 
-See RELEASE-v4.0.22.txt for the latest approved changes and validation.
+See RELEASE-v4.0.23.txt for the latest approved changes and validation.
 
 
-Approved feedback, sound and play-mode update for Cloudflare Pages.
+Language consistency update for Cloudflare Pages.
+
+- Instructions retain complete translations when formatted on separate lines.
+- English/Chinese switching covers later gameplay stages and generated feedback.
+- Expanded checks cover 1,864 language-and-stage combinations.
 
 - Matching pairs again shows stars in untimed play: three completion stars. Timed games retain speed stars. The information icon explains both awards; attempts, mismatches, hints and time appear as separate compact cards.
 - Centered game instructions and feedback use shorter lines and separate sentences. Answer controls and input values retain their original content.

@@ -1,0 +1,18 @@
+Mind Garden v4.0.23 — release
+
+Fixes
+- Preserve complete bilingual instruction mappings when formatting sentences onto separate lines.
+- Register generated feedback translations for reliable English/Chinese switching during play.
+- Translate result prompts, answer explanations, matching-pair readiness/untimed labels and the local-news source label.
+- Request browsers leave translation to the app language control; preserve explicit user-content translation exclusions.
+
+Validation
+- 1,200 original-game language/stage checks; 592 extended-game checks; 72 matching-pair checks: no detected mixed-language UI in tested states.
+- Dedicated sequence post-playback prompt test in both initial languages and both toggle directions passed.
+- Live language round-trip tests preserve active story state, controls and answer values.
+- Feedback/sound regression and release UI, navbar, cache and design suites passed.
+- Browser verified the complete Chinese sequence turn prompt after playback.
+
+Scope
+These are tested paths, not a guarantee of every randomly generated phrase or third-party browser translation behavior. The exact English sentence in the reported screenshot was absent from the deployed v4.0.22 source; the formatting defect and additional later-stage translation omissions were independently reproduced and fixed.
+No database migration required.

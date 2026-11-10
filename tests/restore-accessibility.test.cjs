@@ -1,6 +1,6 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window;
-w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4022.js','utf8'));
+w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4023.js','utf8'));
 try{
  w.eval("save.textScale=1.6;me().log=[{d:'2026-11-06',g:'sum',r:1,s:82}];me().bt={sum:82};me().levels={sum:4};me().gr=32;persist();applyPrefs()");
  const exported=w.MindGardenExport.backup(),oldId=w.eval('save.cp'),oldCount=w.eval('Object.keys(save.pr).length');exported.profile.token='malicious';exported.profile.preferences.heroDark='a-private-video';

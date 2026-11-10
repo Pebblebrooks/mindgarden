@@ -117,12 +117,13 @@ function translateValue(n,key,value){
  var record=originals.get(n)||{},old=record[key];
  var english=old&&value===old.output?old.english:locale.convert(value,'en');
  var output=save.lang==='zh'?locale.convert(locale.has(english)?english:tr(english),'zh'):english;
+ if(save.lang==='zh'&&output!==english&&!/[\u3400-\u9fff]/.test(english))locale.add(english,output);
  record[key]={english:english,output:output};originals.set(n,record);return output;
 }
 
 function walk(n){
  if(n.nodeType===3){var value=translateValue(n,'text',n.nodeValue);if(value!==n.nodeValue)n.nodeValue=value;return}
- if(n.nodeType!==1||n.id==='bLang'||/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.tagName)||n.closest('[translate=no]'))return;
+ if(n.nodeType!==1||n.id==='bLang'||/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.tagName)||n.closest('[translate=no]:not(html)'))return;
  ['aria-label','title','placeholder','alt'].forEach(function(key){var value=n.getAttribute(key);if(value){var output=translateValue(n,key,value);if(output!==value)n.setAttribute(key,output)}});
  for(var c=n.firstChild;c;c=c.nextSibling)walk(c);
 }

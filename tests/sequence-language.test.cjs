@@ -1,0 +1,7 @@
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8');
+const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window;
+w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'garden-ui-4023.js','utf8'));
+const flush=()=>new Promise(r=>setTimeout(r,15));
+function check(lang){const t=w.document.getElementById('mmsg').textContent;if(lang==='zh'){assert.match(t,/轮到/);assert.doesNotMatch(t,/[A-Za-z]{3}/);}else{assert.match(t,/Your turn/);assert.doesNotMatch(t,/[\u3400-\u9fff]/);}}
+(async()=>{try{let queue=[];w.pt=fn=>queue.push(fn);w.beep=()=>{};for(const initial of ['en','zh']){w.toHome();if(w.save.lang!==initial)w.MindGardenLanguage.toggle();w.startMG('seq');w.document.getElementById('memoryBegin').click();while(queue.length)queue.shift()();await flush();check(initial);w.MindGardenLanguage.toggle();await flush();check(initial==='en'?'zh':'en');w.MindGardenLanguage.toggle();await flush();check(initial);}}finally{w.close()}})().then(()=>console.log('PASS: post-playback sequence prompt translates in both directions.')).catch(e=>{console.error(e);process.exitCode=1});

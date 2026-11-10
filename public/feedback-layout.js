@@ -33,9 +33,13 @@ function readable(root){
   const text=p.textContent.trim();
   const lines=text.split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*|\n+/u).filter(Boolean);
   if(lines.length<2)continue;
-  const fragment=document.createDocumentFragment();
-  lines.forEach((line,i)=>{if(i)fragment.append(document.createTextNode(' '));const span=document.createElement('span');span.className='game-copy-line';span.textContent=line;fragment.append(span)});
-  p.replaceChildren(fragment);
+  const locale=window.MindGardenLocale,english=locale.convert(text,'en');
+  const chinese=locale.convert(locale.has(english)?english:tr(english),'zh');
+  const format=value=>value.split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*|\n+/u).filter(Boolean).join('\n');
+  locale.add(format(english),format(chinese));
+  p.classList.add('game-copy-lines');
+  const formatted=format(save.lang==='zh'?chinese:english);
+  if(p.textContent!==formatted)p.textContent=formatted;
  }
 }
 const roots=['mp','mmsg','box'].map(id=>document.getElementById(id)).filter(Boolean);

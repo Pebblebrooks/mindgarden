@@ -25,8 +25,10 @@ w.AudioContext=class{constructor(){this.state='running';this.currentTime=0;this.
   assert.equal(el('mp').querySelectorAll('.answer-match').length,1);assert.equal(el('mp').querySelectorAll('.answer-different').length,1);assert.equal(el('mp').querySelectorAll('.answer-pending').length,1);
   assert.match(el('mp').textContent,lang==='zh'?/未输入/:/Not entered/);
  }
+ w.MindGardenLocale.add('Read this first. Then choose an answer. Continue when ready.','先读说明。然后选择答案。准备好后继续。');
+ w.MindGardenLocale.add('New instruction. New second sentence.','新说明。新的第二句话。');
  el('mp').innerHTML='<p>Read this first. Then choose an answer. Continue when ready.</p><button>Keep this. Button unchanged.</button><input value="Do not split. Input value."><p>先观察。再选择。准备好后继续。</p>';
- await tick();assert.equal(el('mp').querySelectorAll('p .game-copy-line').length,6);assert.equal(el('mp').querySelector('button').textContent,'Keep this. Button unchanged.');assert.equal(el('mp').querySelector('input').value,'Do not split. Input value.');
- el('mp').querySelector('p').textContent='New instruction. New second sentence.';await tick();assert.equal(el('mp').querySelector('p').querySelectorAll('.game-copy-line').length,2);
+ await tick();assert.equal([...el('mp').querySelectorAll('p')].reduce((n,p)=>n+p.textContent.split('\n').length,0),6);assert.equal(el('mp').querySelector('button').textContent,'Keep this. Button unchanged.');assert.equal(el('mp').querySelector('input').value,'Do not split. Input value.');
+ el('mp').querySelector('p').textContent='New instruction. New second sentence.';await tick();assert.equal(el('mp').querySelector('p').textContent.split('\n').length,2);
  assert.deepEqual(errors,[]);console.log('PASS muted listening/melody, immediate playback stop, bilingual comparison cards, missing answers, HTML escaping and dynamic readable instructions.');
 }finally{w.toHome();await tick();d.window.close()}})().catch(e=>{console.error(e);process.exitCode=1});

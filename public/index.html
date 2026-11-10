@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no" class="notranslate">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.22">
+<meta name="mind-garden-release" content="v4.0.23">
 
 
 
@@ -321,7 +321,8 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-4022.css">
+<meta name="google" content="notranslate">
+<link rel="stylesheet" href="garden-ui-4023.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -469,12 +470,12 @@ function start(i){
   g.innerHTML=deck.map(function(e,k){return '<button class="card up" data-k="'+k+'" data-e="'+(e.k||e.e)+'" data-n="'+e.n+'" aria-label="Card"><div class="in"><div class="f b"></div><div class="f a" aria-hidden="true">'+(e.h||gamePicture(e.e))+'</div></div></button>'}).join("");
   $("hLv").textContent="Level "+(i+1);
   $("hPairs").textContent="0 / "+L.p+" pairs";
-  $("hTime").textContent=save.timed?fmt(left):(save.lang==='zh'?'不限时':'At your pace');
+  $("hTime").textContent=save.timed?fmt(left):(window.MindGardenLocale.pair('At your pace','不限时'));
   $("tb").parentElement.hidden=!save.timed;
   $("tb").style.transform="scaleX(1)";$("tb").classList.remove("low");
   $("bHint").textContent="Hint ("+hints+")";$("bPause").textContent="⏸";
   show("game");
-  var n=L.peek;$("msg").textContent=save.lang==='zh'?'准备好，看看卡片。':'Get ready — look at the cards.';
+  var n=L.peek;$("msg").textContent=window.MindGardenLocale.pair('Get ready — look at the cards.','准备好，看看卡片。');
   pt(function tick(){
     if(generation!==pairGeneration||$("game").classList.contains("hidden"))return;
     if(n>0){$("msg").textContent="Look carefully… cards turn over in "+n;n--;pt(tick,1000)}
@@ -486,7 +487,7 @@ function run(){
   timer=setInterval(function(){
     if(paused)return;
     left-=.25;
-    $("hTime").textContent=save.timed?fmt(left):(save.lang==='zh'?'不限时':'At your pace');
+    $("hTime").textContent=save.timed?fmt(left):(window.MindGardenLocale.pair('At your pace','不限时'));
     $("tb").style.transform="scaleX("+Math.max(0,left/total)+")";
     $("tb").classList.toggle("low",left/total<.25);
     if(save.timed&&left<=0){clearInterval(timer);lock=true;end(false)}
@@ -532,7 +533,7 @@ function toHome(){pairGeneration++;pairMismatch=null;paused=false;clearInterval(
 $("bHome").onclick=function(){if(!$("ov").classList.contains("hidden"))return;paused=true;overlay('<h2>Game menu</h2><p>Leaving ends this unfinished round.</p><div class="row"><button class="btn main" id="st">Resume</button><button class="btn" id="lv">Leave game</button></div>');$("st").onclick=function(){paused=false;closeOv()};$("lv").onclick=function(){paused=false;toHome();window.MindGardenDashboard?.library()}};
 
 function end(ok){
-  var L=LEVELS[cur],used=1-left/total,T=function(en,zh){return save.lang==='zh'?zh:en};
+  var L=LEVELS[cur],used=1-left/total,T=function(en,zh){return window.MindGardenLocale?window.MindGardenLocale.pair(en,zh):(save.lang==='zh'?zh:en)};
   var st=ok?(!save.timed?3:used<.5?3:used<.8?2:1):0,misses=Math.max(0,pairAttempts-found),usedHints=3-hints;
   logPlay("pairs",ok?1:found/L.p,total-left,{level:cur+1,attempts:pairAttempts,mismatches:misses,hints:usedHints,stars:ok?st:null,timed:!!save.timed});award(found,ok?"p"+(cur+1):null,total-left);
   if(ok){
@@ -770,7 +771,7 @@ function res(good,note){
   var ch=g.last;if(g.t==="wrd")ch=null;
   if(ch&&ch.isConnected){ch.classList.add(good?"right":"wrong");if(!good&&g.ans!=null)[].forEach.call($("mp").querySelectorAll("[data-a]"),function(x){if(x.dataset.a===g.ans)x.classList.add("right")})}
   good?chime():beep(300,.3,"triangle");$("mmsg").textContent=note;
-  var T=function(en,zh){return save.lang==="zh"?zh:en},panel=document.createElement("section");panel.id="roundReview";panel.className="round-review";panel.setAttribute("role","status");
+  var T=function(en,zh){return window.MindGardenLocale?window.MindGardenLocale.pair(en,zh):(save.lang==="zh"?zh:en)},panel=document.createElement("section");panel.id="roundReview";panel.className="round-review";panel.setAttribute("role","status");
   $("mp").querySelectorAll(".big").forEach(function(b){b.classList.remove("on");if(b.tagName==="BUTTON")b.disabled=true});
   var details="";
   if(g.reviewExpected){details=window.MindGardenFeedback.compare(g.reviewExpected,g.reviewEntered||[])}
@@ -1058,7 +1059,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4022.js"></script>
+<script src="garden-ui-4023.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>
