@@ -1,7 +1,7 @@
 /* Rotation counts welcome-page viewing time, never game or background-tab time. */
 (function(){
 window.createGardenRotationClock=function(o){let last=o.now(),left=o.minutes()*60000,was=o.active();return {reset(){last=o.now();left=o.minutes()*60000;was=o.active()},tick(){const now=o.now(),active=o.active();if(active&&was&&o.minutes()>0){left-=Math.max(0,now-last);if(left<=0){left=o.minutes()*60000;o.advance()}}last=now;was=active},get remaining(){return left}}};
-const T=(a,b)=>save.lang==='zh'?b:a;
+const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const minutes=()=>Number.isFinite(+save.sceneryMinutes)?Math.min(1440,Math.max(0,+save.sceneryMinutes)):0;
 let automatic=false;
 const active=()=>!document.hidden&&!document.getElementById('home').classList.contains('hidden')&&!document.getElementById('welcomeDashboard').classList.contains('hidden')&&document.getElementById('ov').classList.contains('hidden');

@@ -1,7 +1,7 @@
 /* One device's active profile remains selected after leaving multiplayer. */
 (function(){
 'use strict';
-const T=(en,zh)=>save.lang==='zh'?zh:en;
+const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 async function rename(n){
  n=n.trim();if(!/^[\p{L}\p{N} ._'-]{1,20}$/u.test(n))throw Error(T('Use 1–20 letters or numbers; spaces are allowed.','请使用1至20个字母或数字，可含空格。'));
  const profile=me();await window.MindGardenMultiplayer?.rename(n);if(Object.values(save.pr).includes(profile)){profile.name=n;persist()}if(me()===profile)renderHome();return n;

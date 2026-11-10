@@ -1,6 +1,6 @@
 /* Review-only commercial activity prototypes. No uploads, tracking or paid features. */
 (function(){'use strict';
-const $=id=>document.getElementById(id),T=(a,b)=>save.lang==='zh'?b:a;
+const $=id=>document.getElementById(id),T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const specs={hawker:['Hawker Memory','小贩美食记忆','Remember and serve a food order in sequence.','记住并按顺序准备餐点。','🍚'],album:['My Life Album','我的生活相册','Match familiar photos to names you provide.','将熟悉的照片与您提供的名字配对。','🌻'],trail:['Neighbourhood Trail','邻里小径','Remember a route around a fictional neighbourhood.','记住虚构社区内的路线。','🏠'],sounds:['Sound Detective','声音侦探','Listen to real animal and instrument recordings.','听真实动物和乐器录音并辨认。','🐶'],teamgarden:['Team Garden','合作花园','Take turns on one device to grow a shared garden.','在同一设备轮流游戏，共同种植花园。','🌱'],melody:['Melody Moments','旋律时刻','Listen, then repeat an original note pattern.','聆听并重复原创音符序列。','🎵']};

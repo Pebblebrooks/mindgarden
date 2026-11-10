@@ -1,7 +1,7 @@
 /* v2.9: decorative motion with persistent settings and lifecycle pausing. */
 (function(){
 'use strict';
-const T=(a,b)=>save.lang==='zh'?b:a;
+const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const dash=document.getElementById('welcomeDashboard');
 if(!dash)return;
 const assetUrl=name=>window.MindGardenAssets?.[name]||name;

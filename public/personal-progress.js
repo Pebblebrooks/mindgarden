@@ -1,5 +1,5 @@
 (function(){
-const T=(en,zh)=>save.lang==='zh'?zh:en;
+const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 function scoreRows(player,game,level){return (player.log||[]).filter(x=>x.g===game&&(level==='all'||(level==='unknown'?!x.level:String(x.level)===String(level)))&&Number.isFinite(x.r));}
 function renderLevelProgress(player){
  const games=[...new Set((player.log||[]).map(x=>x.g))],name=k=>MG[k]?.n||T('Matching pairs','配对游戏');

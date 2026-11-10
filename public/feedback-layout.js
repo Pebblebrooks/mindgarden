@@ -1,7 +1,7 @@
 /* Readable, bilingual answer feedback shared by original and practice games. */
 (function(){
 'use strict';
-const T=(en,zh)=>save.lang==='zh'?zh:en;
+const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function compare(expected,entered=[],options={}){
  const sequence=options.sequence!==false;

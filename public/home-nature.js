@@ -1,5 +1,5 @@
 (function(){
-const T=(a,b)=>save.lang==='zh'?b:a;let ctx,bus,engine,timer,unlocked=false,active=false,lastMode='',generation=0;
+const T=(a,b)=>window.MindGardenLocale.pair(a,b);let ctx,bus,engine,timer,unlocked=false,active=false,lastMode='',generation=0;
 if(save.homeNature===undefined)save.homeNature=true;
 function visible(){return !document.hidden&&document.getElementById('ov').classList.contains('hidden')&&!document.getElementById('home').classList.contains('hidden')&&!document.getElementById('welcomeDashboard').classList.contains('hidden')}
 function ui(){

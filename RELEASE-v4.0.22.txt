@@ -1,0 +1,8 @@
+Mind Garden v4.0.22
+
+English/Chinese switching now shares complete phrases across the welcome page, game library, game instructions and controls. Runtime bilingual phrases and split sentences restore correctly in both directions. Search placeholders translate without changing typed search text. Story readout uses the current language.
+
+The language icon stays directly visible in the welcome and All Games navbars, including narrow phone layouts. Existing in-game language controls remain available without resetting the round.
+
+Validation: bilingual initial-language and round-trip screen audits, active-story state/answer retention, search value preservation, responsive navbar width tests, release UI/cache tests, and phone browser inspection.
+No database migration or player progress reset.

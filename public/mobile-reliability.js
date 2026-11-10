@@ -1,6 +1,6 @@
 /* Replace native filename chrome with separate, wrapping controls on small screens. */
 (function(){
-'use strict';const T=(en,zh)=>save.lang==='zh'?zh:en;
+'use strict';const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 function enhance(){
  for(const input of document.querySelectorAll('#box input[type="file"]')){
   if(input.classList.contains('hidden')||input.closest('.file-picker'))continue;

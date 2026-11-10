@@ -1,7 +1,7 @@
 /* Prefer enhanced voices when available; retain browser fallback and user choice. */
 (function(){
 'use strict';
-const T=(a,b)=>save.lang==='zh'?b:a,language=()=>save.lang==='zh'?'zh':'en';
+const T=(a,b)=>window.MindGardenLocale.pair(a,b),language=()=>save.lang==='zh'?'zh':'en';
 function voices(){return (window.speechSynthesis?.getVoices()||[]).filter(v=>{
  const lang=v.lang.toLowerCase().replaceAll('_','-');
  return language()==='zh'?/^(zh(?:-(?:cn|sg|tw|hans|hant))?|cmn(?:-.*)?)$/.test(lang):lang.startsWith('en');

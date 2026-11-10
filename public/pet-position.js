@@ -1,7 +1,7 @@
 /* Transparent companion with separate editing and petting gestures. */
 (function(){
 'use strict';
-const T=(en,zh)=>save.lang==='zh'?zh:en;
+const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 let current=null;
 function mount(){
  const p=document.getElementById('gardenCat'),host=document.getElementById('menuPets');if(!p||!host)return;

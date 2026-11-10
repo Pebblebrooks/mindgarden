@@ -1,7 +1,7 @@
 /* Separate original chamber/harp scores using locally bundled acoustic samples. */
 (function(){
 'use strict';
-const T=(en,zh)=>save.lang==='zh'?zh:en;
+const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 const prefs=Object.assign({music:'strings',nature:'garden',master:45,musicVolume:55,natureVolume:35,horn:false},save.soundscape||{});
 const clamp=n=>Math.max(0,Math.min(100,Number(n)||0));
 for(const key of ['master','musicVolume','natureVolume'])prefs[key]=clamp(prefs[key]);

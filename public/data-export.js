@@ -1,6 +1,6 @@
 /* User-initiated export of the current local profile. No network calls. */
 (function(){
-'use strict';const T=(a,b)=>save.lang==='zh'?b:a;
+'use strict';const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const fields=['name','unlocked','stars','streak','last','log','share','gr','gp','fl','levels','preferences','multiplayerHistory','bt','gs','ok'];
 const copy=v=>JSON.parse(JSON.stringify(v));
 function backup(){persist();const profile={};for(const k of fields)if(me()[k]!==undefined)profile[k]=copy(me()[k]);return {format:'mind-garden-player-backup',schemaVersion:1,appVersion:(document.querySelector('meta[name="mind-garden-release"]')?.content||'').replace(/^v/,''),exportedAt:new Date().toISOString(),profileId:save.cp,profile,notes:{scope:'Current player on this device',history:'Only retained local activity (up to 300 games) and multiplayer results received since v3.8.4 are available.',excluded:['photos','videos','personal music files','online authentication tokens','other players'],restore:'Import this JSON in Settings > Backup and restore. It creates a separate player.'}}}

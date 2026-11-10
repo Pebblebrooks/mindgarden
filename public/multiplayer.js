@@ -4,7 +4,7 @@
 const KEY='mindGardenRoom8',SESSION='mindGardenLobby',GAME='mindGardenRound8';
 const MODES=[['pairs6','Matching pairs · 6 pairs'],['pairs10','Matching pairs · 10 pairs'],['sums','Mental sums · 8 questions'],['patterns','Number patterns · 8 questions'],['odd','Odd one out · 8 questions'],['sums12','Mental sums · 12 questions'],['patterns12','Number patterns · 12 questions'],['odd12','Odd one out · 12 questions'],['bingo9','Picture bingo · host-paced']];
 const EXTRA=window.MindGardenOnlineActivities;for(const activity of EXTRA?.activities||[])MODES.push([activity.id,activity.en,activity.zh]);
-const $=id=>document.getElementById(id),T=(a,b)=>save.lang==='zh'?b:a;
+const $=id=>document.getElementById(id),T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const volatileStorage=new Map();
 const read=k=>{try{return JSON.parse((volatileStorage.has(k)?volatileStorage.get(k):localStorage.getItem(k))||'null')}catch{return null}};
 function store(k,v){try{localStorage.setItem(k,v);volatileStorage.delete(k)}catch{volatileStorage.set(k,v);window.reportStorageFailure?.()}}

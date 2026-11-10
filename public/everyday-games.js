@@ -1,6 +1,6 @@
 /* Everyday knowledge activities: local clock, chosen location, dated editorial news. */
 (function(){'use strict';
-const $=id=>document.getElementById(id),T=(a,b)=>save.lang==='zh'?b:a,shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const $=id=>document.getElementById(id),T=(a,b)=>window.MindGardenLocale.pair(a,b),shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const specs={today:['Today & Here','今日此地','Recall the date, time and your chosen country.','回忆日期、时间和所选国家。','📅'],foodknow:['Food & Kitchen','食物与厨房','Recognise food groups, ingredients and kitchen knowledge.','认识食物类别、食材和厨房常识。','🍎'],localnews:['Around Us','身边新鲜事','Read a verified local update, then recall its details.','阅读有来源的本地资讯，再回忆细节。','📚']};
 const countries=[['Singapore','新加坡'],['Malaysia','马来西亚'],['China','中国'],['India','印度'],['Australia','澳大利亚'],['United Kingdom','英国']];
 const zones=['Asia/Singapore','Asia/Kuala_Lumpur','Asia/Shanghai','Asia/Kolkata','Australia/Sydney','Europe/London','America/New_York'];

@@ -1,5 +1,5 @@
 (function(){
-const T=(a,b)=>save.lang==='zh'?b:a;
+const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const current=()=>Number(document.documentElement.style.getPropertyValue('--fs'))||1;
 const presets=[80,90,100,110,120,125,130,140,150,160,170,175,180,190,200];
 function controls(id,compact=false){const cls=compact?'nav-quiet nav-text-button':'btn';return '<div class="text-size-controls'+(compact?' nav-text-size':'')+'" id="'+id+'" role="group" aria-label="'+T('Text size','文字大小')+'"><button type="button" class="'+cls+'" data-text-step="-1" aria-label="'+T('Smaller text','缩小文字')+'">T−</button><select class="text-size-preset" data-text-preset aria-label="'+T('Text size percentage','文字大小百分比')+'">'+presets.map(n=>'<option value="'+n+'">'+n+'%</option>').join('')+'</select><button type="button" class="'+cls+'" data-text-step="1" aria-label="'+T('Larger text','放大文字')+'">T+</button><button type="button" class="'+cls+'" data-text-reset aria-label="'+T('Reset text size to 100%','将文字大小恢复为100%')+'" title="'+T('Reset to 100%','恢复100%')+'">'+(compact?window.MindGardenIcon('reset'):'↺')+'</button><output class="sr text-size-value" aria-live="polite"></output></div>'}

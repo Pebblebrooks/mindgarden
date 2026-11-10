@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-const T=(a,b)=>save.lang==='zh'?b:a;
+const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const icon='<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="5" height="14" rx="1"/><rect x="10" y="5" width="5" height="14" rx="1"/><rect x="17" y="5" width="4" height="14" rx="1"/></svg>';
 function toggle(){save.welcomeCardsHidden=!save.welcomeCardsHidden;persist();mount()}
 function mount(){

@@ -1,7 +1,7 @@
 /* Level-based challenges. Difficulty changes content, not the session's round number. */
 (function(){
 'use strict';
-const T=(en,zh)=>{const phrases=window.MindGardenPhrases||(window.MindGardenPhrases=new Map());for(const [e,z] of phrases)if(z)en=en.split(z).join(e);phrases.set(en,zh);return save.lang==='zh'?zh:en},$=id=>document.getElementById(id);
+const T=(en,zh)=>window.MindGardenLocale.pair(en,zh),$=id=>document.getElementById(id);
 const level=n=>Math.max(1,Math.min(15,Math.round(Number(n)||1))),L=()=>level(mg?.difficulty),options=n=>Math.min(6,3+Math.floor((n-1)/3));
 const choose=a=>a[rnd(0,a.length-1)],value=x=>({v:String(x),h:esc(x)});
 const label=x=>typeof tr==='function'&&save.lang==='zh'?tr(x):x;
@@ -61,7 +61,7 @@ window.rSame=function(){const gs=groups(),a=gs[0],items=pick(a[2],L()<8?2:3),ans
 const days=[['Sunday','星期日'],['Monday','星期一'],['Tuesday','星期二'],['Wednesday','星期三'],['Thursday','星期四'],['Friday','星期五'],['Saturday','星期六']];
 function calendar(){const n=L();if(n<=5){const day=rnd(0,6),offset=rnd(1,n+1),sign=n>2&&rnd(0,1)?-1:1,idx=(day+offset*sign+14)%7;question(T('If today is '+days[day][0]+', what day is '+offset+' days '+(sign>0?'later?':'earlier?'),'如果今天是'+days[day][1]+'，'+offset+'天'+(sign>0?'后':'前')+'是星期几？'),shuffle([{v:String(idx),h:T(...days[idx])},...pick(days.map((d,i)=>({v:String(i),h:T(...d)})).filter(x=>x.v!==String(idx)),options(n)-1)]),String(idx));return}
  const date=new Date(Date.UTC(rnd(2024,2032),rnd(0,11),rnd(20,28))),a=rnd(3,n*2),b=n<11?0:rnd(1,n),target=new Date(date.getTime()+(a-b)*86400000),iso=d=>d.toISOString().slice(0,10),answer=iso(target);question(T('Date: '+iso(date)+'. Move '+a+' days forward'+(b?', then '+b+' days back':'')+'. Which date? Use year-month-day.','日期：'+iso(date)+'。向后推'+a+'天'+(b?'，再往前推'+b+'天':'')+'。是几月几日？格式为年-月-日。'),answers(answer,[-7,-2,-1,1,2,7].map(x=>iso(new Date(target.getTime()+x*86400000)))),answer,'',true)}
-function money(){const n=L(),cents=n>=8,prices=Array.from({length:n<5?1:n<10?2:3},()=>cents?rnd(100,300+n*80):rnd(1,4+n*3)*100),sum=prices.reduce((a,b)=>a+b,0),paid=Math.ceil((sum+100)/1000)*1000,answer=((paid-sum)/100).toFixed(2),cash=x=>'$'+(x/100).toFixed(2);question(T('Prices: '+prices.map(cash).join(' + ')+'. You pay '+cash(paid)+'. How much change?','价格：'+prices.map(cash).join(' + ')+'。支付'+cash(paid)+'，应找回多少？'),answers(answer,[-100,100,-10,10,50,200].map(d=>((paid-sum+d)/100).toFixed(2)).filter(x=>Number(x)>=0)),answer,'',true)}
+function money(){const n=L(),cents=n>=8,prices=Array.from({length:n<5?1:n<10?2:3},()=>cents?rnd(100,300+n*80):rnd(1,4+n*3)*100),sum=prices.reduce((a,b)=>a+b,0),paid=Math.ceil((sum+100)/1000)*1000,answer=((paid-sum)/100).toFixed(2),cash=x=>'$'+(x/100).toFixed(2);question(T('Prices: '+prices.map(cash).join(' + ')+'. You pay '+cash(paid)+' — how much change?','价格：'+prices.map(cash).join(' + ')+'。支付'+cash(paid)+'，应找回多少？'),answers(answer,[-100,100,-10,10,50,200].map(d=>((paid-sum+d)/100).toFixed(2)).filter(x=>Number(x)>=0)),answer,'',true)}
 function shopping(){const n=L(),count=2+Math.floor((n-1)/2),items=pick(allItems(),count+6),target=items.slice(0,count),at=rnd(0,count-1),a=target[at];ready(gamePictureLine(target.map(x=>x.e)),'shoppingReady',()=>question(n<8?T('Which item was on your list?','哪件物品在购物清单上？'):T('Which item was number '+(at+1)+' on your list?','购物清单上第'+(at+1)+'件是什么？'),shuffle([a,...(n<8?items.slice(count):items.filter(x=>x!==a)).slice(0,options(n)-1)]).map(x=>({v:x.e,h:x.e,l:label(x.n)})),a.e))}
 const routines=[
  [['Prepare soil','准备土壤'],['Plant seeds','播种'],['Water the soil','浇水'],['Watch sprouts grow','等待发芽'],['Move plants to bigger pots','移入大花盆'],['Enjoy the flowers','欣赏花朵']],
@@ -103,7 +103,7 @@ function askFact(){
  $('storyNextDetail').onclick=()=>{if(paused||mg!==g)return;g.storyIndex++;if(!last)return askFact();g.reviewExpected=g.storyQuestions.map(f=>f[2]);g.reviewEntered=g.storyAnswers.slice();const correct=g.reviewExpected.filter((v,i)=>v===g.reviewEntered[i]).length;g.ans=null;g.last=null;res(correct===facts.length,T(correct+' of '+facts.length+' story details recalled.','记住了 '+facts.length+' 项细节中的 '+correct+' 项。'));};
  };
 }
-$('mmsg').textContent=T('Read or listen. Recall '+facts.length+' details afterwards.','阅读或聆听，然后回忆 '+facts.length+' 项细节。');$('mp').innerHTML='<div class="story-copy">'+esc(text)+'</div><div class="row"><button class="btn" id="readStory">'+T('Read aloud','朗读')+'</button><button class="btn main" id="storyReady">'+T('Answer the questions','回答问题')+'</button></div><p id="storySpeechStatus" role="status"></p>';window.MindGardenNarration?.mount($('readStory'));$('readStory').onclick=()=>readStory(text);$('storyReady').onclick=()=>{stopStory();if(mg===g&&!paused)askFact()};
+$('mmsg').textContent=T('Read or listen. Recall '+facts.length+' details afterwards.','阅读或聆听，然后回忆 '+facts.length+' 项细节。');$('mp').innerHTML='<div class="story-copy">'+esc(text)+'</div><div class="row"><button class="btn" id="readStory">'+T('Read aloud','朗读')+'</button><button class="btn main" id="storyReady">'+T('Answer the questions','回答问题')+'</button></div><p id="storySpeechStatus" role="status"></p>';window.MindGardenNarration?.mount($('readStory'));$('readStory').onclick=()=>readStory(window.MindGardenLocale.convert(text,save.lang));$('storyReady').onclick=()=>{stopStory();if(mg===g&&!paused)askFact()};
 
 }
 

@@ -1,5 +1,5 @@
 (function(){
-const T=(en,zh)=>save.lang==='zh'?zh:en;
+const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 const scenes=[{id:'blossom',en:'Blossom garden',zh:'繁花花园',light:'garden-day.webp',dark:'garden-sunset.webp'},{id:'meadow',en:'Lavender meadow',zh:'薰衣草草甸',light:'garden-meadow-day.webp',dark:'garden-meadow-dusk.webp'},{id:'pond',en:'Lily pond garden',zh:'睡莲花园',light:'garden-pond-day.webp',dark:'garden-pond-dusk.webp'},{"id": "fjord", "en": "Nordic Fjord", "zh": "北欧峡湾", "light": "garden-fjord-day.webp", "dark": "garden-fjord-night.webp"},{"id": "sakura", "en": "Japanese Cherry Garden", "zh": "日本樱花园", "light": "garden-sakura-day.webp", "dark": "garden-sakura-night.webp"},{"id": "classical", "en": "Classical Coastal Garden", "zh": "古典海滨花园", "light": "garden-classical-day.webp", "dark": "garden-classical-night.webp"},{"id": "alpine", "en": "Alpine Lake", "zh": "阿尔卑斯湖畔", "light": "garden-alpine-day.webp", "dark": "garden-alpine-night.webp"},{"id": "pavilion", "en": "Chinese Mountain Pavilion", "zh": "山水亭园", "light": "garden-pavilion-day.webp", "dark": "garden-pavilion-night.webp"}];
 const asset=n=>window.MindGardenAssets?.[n]||n,media=matchMedia('(prefers-color-scheme: dark)');
 function selected(mode){return scenes.find(x=>x.id===save['scene'+(mode==='light'?'Light':'Dark')])||scenes[0]}

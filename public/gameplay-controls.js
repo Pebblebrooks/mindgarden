@@ -1,7 +1,7 @@
 /* Shared memory demonstration and navigation affordances. */
 (function(){
 'use strict';
-const T=(en,zh)=>save.lang==='zh'?zh:en;
+const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 const originalSequence=window.rSeq,originalMissing=window.rMiss;
 function ready(run){const g=mg;if(!g)return;g.h=null;$('mmsg').textContent=T('Ready to remember? Nothing starts until you press Begin.','准备好记忆了吗？点击开始后才会播放。');$('mp').innerHTML='<p>'+T('Watch the highlighted pictures, then tap them in the same order. Sound cues follow your game-sound setting.','观察高亮图片，然后按相同顺序点击。提示音遵循游戏音效设置。')+'</p><div class="row"><button class="btn main" id="memoryBegin">'+T('Begin','开始')+'</button></div>';$('memoryBegin').onclick=()=>{if(mg!==g||paused)return;run()};}
 window.rSeq=function(){ready(()=>{

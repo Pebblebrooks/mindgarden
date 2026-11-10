@@ -1,7 +1,7 @@
 /* Mind Garden: five untimed activities, accessible by tap or keyboard. */
 (function(){
 'use strict';
-const $=id=>document.getElementById(id),T=(en,zh)=>save.lang==='zh'?zh:en;
+const $=id=>document.getElementById(id),T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 const specs={
  jigsaw:['Garden picture puzzles','花园拼图','Swap large picture pieces to complete a garden scene.','交换大图块，完成花园图片。','🖼️',3],
  dominoes:['Gentle dominoes','轻松多米诺','Match the dots and take turns with a garden friend.','匹配点数，与花园伙伴轮流出牌。','🎲',2],

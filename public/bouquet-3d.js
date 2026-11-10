@@ -1,7 +1,7 @@
 /* A lightweight 3D arrangement projected into SVG; works without WebGL. */
 (function(){
 'use strict';let controller,angle=.3;
-const NS='http://www.w3.org/2000/svg',T=(a,b)=>save.lang==='zh'?b:a;
+const NS='http://www.w3.org/2000/svg',T=(a,b)=>window.MindGardenLocale.pair(a,b);
 function project(p,a){const c=Math.cos(a),s=Math.sin(a),x=p.x*c+p.z*s,z=p.z*c-p.x*s,y=p.y*.987-z*.16,depth=z*.987+p.y*.16,k=600/(600-depth);return {x:150+x*k,y:222-y*k,z:depth,k}}
 function attach(bed,points,type){
  controller?.dispose();bed?.querySelector('.bouquet-controls')?.remove();const svg=bed?.querySelector('svg');if(!svg)return;svg.classList.add('bouquet-3d');svg.setAttribute('aria-label',T('Rotating bouquet, ','旋转花束，')+points+'/60');

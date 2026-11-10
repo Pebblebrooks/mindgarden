@@ -17,7 +17,7 @@
  document.addEventListener('click',e=>{if(!nav.contains(e.target))closeNavMenu()});
  const progressStrip=document.createElement('section');progressStrip.id='gardenProgressStrip';progressStrip.setAttribute('aria-label','My garden progress');home.insertBefore(progressStrip,library);progressStrip.appendChild(hero);
  const progressDisplay=document.createElement('div');progressDisplay.id='progressDisplay';progressDisplay.className='progress-summary';progressStrip.appendChild(progressDisplay);
- const T=(a,b)=>save.lang==='zh'?b:a;
+ const T=(a,b)=>window.MindGardenLocale.pair(a,b);
  function icon(kind){
   const parts={
    seed:'<ellipse cx="16" cy="20" rx="6" ry="8" fill="#bd8c55" stroke="#754a29"/><path d="M15 22Q12 11 21 7" fill="none" stroke="#638f48" stroke-width="2"/><path d="M18 11Q19 3 27 4Q27 11 18 11" fill="#9bc967"/>',
@@ -227,7 +227,7 @@
 
  const prettyCat=c=>T(...(LABELS[c]||LABELS.all));
  function gameCard(k){const m=MG[k],cat=META[k]||'logic',lvl=(me().levels||{})[k]||1,minutes=GAME_TIME[k]||3;
-  return '<button class="game-tile" data-game="'+esc(k)+'" data-category="'+cat+'" aria-label="'+esc(m.n)+'"><span class="game-art" aria-hidden="true">'+gamePicture(m.ic)+'</span><span class="game-info"><strong>'+esc(m.n)+'</strong><span class="game-desc">'+esc(m.d)+'</span><span class="game-meta">'+(window.MindGardenCommercial?.has(k)?'':prettyCat(cat)+' · '+minutes+' '+T('min','分钟')+' · ')+(window.MindGardenCommercial?.has(k)?T('Practice preview · scores by level','练习预览 · 按难度保存成绩'):k==='pets'?T('Relaxed play · no scores','轻松互动 · 不计分'):(window.MindGardenActivities?.has(k)||window.MindGardenNewGames?.has(k))?T('3 relaxed choices','3种轻松难度'):T('Level','第')+' '+lvl+(save.lang==='zh'?' 关':' / 15'))+'</span></span><span class="game-play" aria-hidden="true">▶</span></button>'}
+  return '<button class="game-tile" data-game="'+esc(k)+'" data-category="'+cat+'" aria-label="'+esc(m.n)+'"><span class="game-art" aria-hidden="true">'+gamePicture(m.ic)+'</span><span class="game-info"><strong>'+esc(m.n)+'</strong><span class="game-desc">'+esc(m.d)+'</span><span class="game-meta">'+(window.MindGardenCommercial?.has(k)?'':prettyCat(cat)+' · '+minutes+' '+T('min','分钟')+' · ')+(window.MindGardenCommercial?.has(k)?T('Practice preview · scores by level','练习预览 · 按难度保存成绩'):k==='pets'?T('Relaxed play · no scores','轻松互动 · 不计分'):(window.MindGardenActivities?.has(k)||window.MindGardenNewGames?.has(k))?T('3 relaxed choices','3种轻松难度'):T('Level '+lvl+' / 15','第 '+lvl+' / 15 关'))+'</span></span><span class="game-play" aria-hidden="true">▶</span></button>'}
  function renderLibrary(searchOnly=false){
   library.querySelectorAll('.zw,.decks,.levels,.garden,.sub,h2.sec,.tip').forEach(el=>{if(el.closest('#libraryDisplay'))return;el.classList.add('legacy-library')});
   let panel=document.getElementById('libraryDisplay');if(!panel){panel=document.createElement('div');panel.id='libraryDisplay';library.insertBefore(panel,library.firstChild)}

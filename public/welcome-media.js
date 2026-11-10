@@ -1,5 +1,5 @@
 (function(){
-const T=(a,b)=>save.lang==='zh'?b:a;let records=[],dbPromise,loadGeneration=0,currentVideo=null,currentId='',currentHost=null;
+const T=(a,b)=>window.MindGardenLocale.pair(a,b);let records=[],dbPromise,loadGeneration=0,currentVideo=null,currentId='',currentHost=null;
 const mode=()=>document.documentElement.dataset.gardenSceneMode||'light',key=()=>mode()==='light'?'heroLight':'heroDark';
 function db(){return dbPromise||(dbPromise=new Promise((resolve,reject)=>{if(!window.indexedDB)return reject(Error('Video storage unavailable'));const r=indexedDB.open('mindGardenVideos',1);r.onupgradeneeded=()=>r.result.createObjectStore('videos',{keyPath:'id'});r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)}))}
 async function mutate(record,remove=false){const d=await db();await new Promise((resolve,reject)=>{const tx=d.transaction('videos','readwrite');remove?tx.objectStore('videos').delete(record.id):tx.objectStore('videos').put(record);tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(tx.error||Error(T('Not enough browser storage.','浏览器存储空间不足。')))})}
