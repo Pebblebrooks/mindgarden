@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.19">
+<meta name="mind-garden-release" content="v4.0.20">
 
 
 
@@ -321,7 +321,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-4019.css">
+<link rel="stylesheet" href="garden-ui-4020.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -557,7 +557,7 @@ function end(ok){
 $("levels").addEventListener("click",function(e){var b=e.target.closest(".lv");if(b&&!b.disabled){try{ac&&ac.resume()}catch(x){}start(+b.dataset.i)}});
 /* ---------- helpers ---------- */
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-function say(t){if(!save.speak||!t||!window.speechSynthesis)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function say(t){if(!save.speak||!t||!window.speechSynthesis)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.rate=.96;u.lang=save.lang==="zh"?"zh-CN":"en-GB";var voice=window.MindGardenNarration?.selectedVoice();if(window.MindGardenNarration&&!voice)return;if(voice){u.voice=voice;u.lang=voice.lang}speechSynthesis.speak(u)}catch(e){}}
 function dstr(d){d=d||new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
 function ystr(){var y=new Date();y.setDate(y.getDate()-1);return dstr(y)}
 function age(d){return Math.round((new Date(dstr())-new Date(d))/864e5)}
@@ -586,7 +586,7 @@ function openPl(){
 }
 $("box").addEventListener("click",function(e){
   var b=e.target.closest("button[data-k],button[data-d],button[data-p],button[data-x],button[data-th],button[data-m],button[data-ph],button[data-fc],button[data-pha],button[data-bn],button[data-av],button[data-avx],button[data-ae],button[data-fl]");if(!b)return;var d=b.dataset;
-  if(d.fl){me().fl=d.fl;persist();renderHero();openFlw();return}
+  if(d.fl){me().fl=d.fl;persist();renderHero();if(window.MindGardenBloomPreview)window.MindGardenBloomPreview.select(d.fl);else openFlw();return}
   if(d.av){openAv(d.av);return}
   if(d.ae){var q=save.pr[avT];q.ae=d.ae;delete q.av;persist();renderHome();openPl();return}
   if(d.avx){var q2=d.avx==="me"?me():save.pr[avT];delete q2.av;delete q2.ae;persist();renderHome();openPl();return}
@@ -761,7 +761,7 @@ function startMG(t){
 function nextR(){
   if(!mg)return;
   if(mg.r>=mg.R)return mdone();
-  mg.r++;mg.h=null;mg.ans=null;mg.last=null;mg.reviewed=false;mg.reviewExpected=null;mg.reviewEntered=null;$("hRound").innerHTML='<span class="sr">Round '+mg.r+' of '+mg.R+'</span><span class="dots" aria-hidden="true">'+mg.hist.concat(new Array(mg.R-mg.hist.length).fill(null)).map(function(x,i){return"<i class=\""+(x===true?"d":x===false?"m":i===mg.r-1?"c":"")+"\"></i>"}).join("")+"</span>";$("mp").innerHTML="";
+  $("mp").classList.remove("story-answer-panel");mg.r++;mg.h=null;mg.ans=null;mg.last=null;mg.reviewed=false;mg.reviewExpected=null;mg.reviewEntered=null;$("hRound").innerHTML='<span class="sr">Round '+mg.r+' of '+mg.R+'</span><span class="dots" aria-hidden="true">'+mg.hist.concat(new Array(mg.R-mg.hist.length).fill(null)).map(function(x,i){return"<i class=\""+(x===true?"d":x===false?"m":i===mg.r-1?"c":"")+"\"></i>"}).join("")+"</span>";$("mp").innerHTML="";
   var generate=({seq:rSeq,miss:rMiss,sort:rSort,num:rNum,sum:rSum,odd:rOdd,shp:rShp,tbl:rTbl,clk:rClk,diff:rDiff,wrd:rWrd,wm:rWm,sub:rSub,rem:rRem,cnt:rCnt,add:rAdd,same:rSame,time:rTime,count:rCount,find:rFind,pic:rPic,...(window.MindGardenExtras||{})})[mg.t];if(window.MindGardenQuestions)window.MindGardenQuestions.generate(generate);else generate();
 }
 function res(good,note){
@@ -1057,7 +1057,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4019.js"></script>
+<script src="garden-ui-4020.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

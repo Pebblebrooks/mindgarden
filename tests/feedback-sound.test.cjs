@@ -16,7 +16,6 @@ w.AudioContext=class{constructor(){this.state='running';this.currentTime=0;this.
   el('mp').innerHTML=w.MindGardenFeedback.compare(['Tea','<img src=x onerror=alert(1)>','Rice'],['Tea','Coffee']);
   assert.equal(el('mp').querySelectorAll('table,img').length,0);assert.equal(el('mp').querySelectorAll('.answer-card').length,3);
   assert.equal(el('mp').querySelectorAll('.answer-card:not([hidden])').length,1);
-  el('mp').querySelector('[data-review-step="1"]').click();
   assert(el('mp').querySelector('.answer-different:not([hidden])'));
   el('mp').querySelector('[data-review-step="1"]').click();
   assert(el('mp').querySelector('.answer-pending:not([hidden])'));

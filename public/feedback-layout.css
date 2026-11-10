@@ -83,3 +83,11 @@ html[data-v4-mode]:not([data-hc="1"]) #ov #box button[aria-pressed="true"]:focus
 #libraryDisplay::after{right:-20px;top:210px;transform:scaleX(-1)}
 html[data-v4-mode="light"]:not([data-hc="1"]) #libraryDisplay::before,html[data-v4-mode="light"]:not([data-hc="1"]) #libraryDisplay::after{background:#356e4e;opacity:.25}
 html[data-hc="1"] #libraryDisplay::before,html[data-hc="1"] #libraryDisplay::after{display:none}
+
+/* Keep decorative selected-flower samples independent of the main bouquet SVG. */
+#livingGarden .bouquet-selection .bouquet-selection-icon{display:block;flex:0 0 52px;width:52px;height:52px}
+#livingGarden .bouquet-selection .bouquet-selection-icon svg{width:52px!important;height:52px!important;max-height:52px!important;margin:0!important;aspect-ratio:1;filter:none}
+#mp .story-answer-grid{width:min(100%,760px);margin:16px auto;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#mp .story-answer-grid .big{aspect-ratio:auto!important;min-height:64px;max-height:none;height:auto;padding:14px 18px;font-size:calc(1.15rem * var(--fs))!important;line-height:1.35;overflow-wrap:normal;word-break:normal;border-width:2px;border-radius:16px}
+.story-voice-options{max-width:520px;margin:12px auto;font-size:calc(.9rem * var(--fs))}
+@media(max-width:420px){#mp .story-answer-grid .big{padding:12px 8px;font-size:calc(1rem * var(--fs))!important}.story-voice-options select{max-width:100%}}

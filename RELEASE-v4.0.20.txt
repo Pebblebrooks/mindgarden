@@ -1,0 +1,11 @@
+Mind Garden v4.0.20
+
+- Sequence review opens on the first incorrect entry, preserving actual answers and navigation to other steps; missing answers remain marked Not entered.
+- Flower choices update in place and retain the expanded preview until the player closes it.
+- Mixed selection shows all six flower varieties in a compact indicator.
+- Story answer cards use bounded, responsive text sizing instead of oversized picture-card dimensions.
+- Male/Female/Automatic choices use known voice names, with unavailable options marked. Mandarin excludes Cantonese voices and does not fall back to English. Preferences are saved separately by language.
+- Narration prefers available enhanced/natural voices, supports per-player English/Chinese voice selection and uses a less slowed reading pace. Quality depends on device voices; no external TTS engine or API was added.
+
+Validation: release tests; 25 original single-answer wrong-choice checks; Hawker/Trail/Melody incorrect-second-step checks; flower preview persistence; voice ranking/language/preferences; story detail tests; browser desktop and phone layout inspection.
+No database migration.
