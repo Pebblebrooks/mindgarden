@@ -1,9 +1,14 @@
-# Mind Garden v4.0.23
+# Mind Garden v4.0.24
 
-See RELEASE-v4.0.23.txt for the latest approved changes and validation.
+See RELEASE-v4.0.24.txt for the latest approved changes and validation.
 
 
-Language consistency update for Cloudflare Pages.
+Personal games, varied progression and centered responsive layouts for Cloudflare Pages.
+
+- My Games questionnaire, starting level and per-game settings.
+- 5/10/15 progression steps with Gentle/Balanced/Challenging ranges.
+- Unscored practice, optional game information and easier/next-level choices.
+- Related-object matching, reverse recall and optional delayed recall.
 
 - Instructions retain complete translations when formatted on separate lines.
 - English/Chinese switching covers later gameplay stages and generated feedback.

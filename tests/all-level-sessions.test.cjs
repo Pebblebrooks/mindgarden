@@ -16,6 +16,7 @@ for(const lang of ['en','zh'])for(const mode of ['light','dark'])for(let level=N
   let count=0;while(pending.length&&count++<80)pending.shift()();assert(g.h,`${id} L${level} answer handler`);assert(el('mmsg').textContent.trim());
   let buttons=[...el('mp').querySelectorAll('[data-a]')];assert(buttons.length,id);
   if(id==='seq'){for(const name of g.reviewExpected){const b=buttons.find(b=>b.getAttribute('aria-label')===name);assert(b);b.click()}}
+  else if(id==='story'){while(!g.reviewed){const b=el('mp').querySelector('[data-a="'+String(g.ans).replaceAll('"','\\"')+'"]');assert(b);b.click();click('storyNextDetail')}}
   else if(id==='wrd'){
    const icon=el('mp').querySelector('.one .picture-text')?.textContent,word=w.allItems().find(x=>x.e===icon)?.n.toUpperCase();assert(word,id+' word');
    for(const c of word){const b=buttons.find(b=>!b.disabled&&b.textContent===c);assert(b,c);b.click()}

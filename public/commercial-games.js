@@ -31,10 +31,10 @@ function actions(){return '<div class="ga-actions">'+button('cgSkip','Skip round
 function wireSkip(){if($('cgSkip'))$('cgSkip').onclick=()=>{if(g&&!g.paused){g.skipped=true;g.round++;round()}}}
 function freshSequence(make){let result;for(let i=0;i<100;i++){result=make();if(!g.seen.includes(result.join(',')))break}g.seen.push(result.join(','));return result}
 function round(){if(!g)return;stopSound();if(g.round>=g.total)return finish();g.entry=[];g.userAnswer=null;g.answered=false;g.helped=false;g.phase='study';
- if(g.id==='hawker'||g.id==='trail'){const data=g.id==='hawker'?food:places;g.sequence=freshSequence(()=>shuffle(data.map((_,i)=>i)).slice(0,g.level+1));return studySequence()}
+ if(g.id==='hawker'||g.id==='trail'){const data=g.id==='hawker'?food:places;g.sequence=freshSequence(()=>shuffle(data.map((_,i)=>i)).slice(0,window.MindGardenPersonal?.challenge(g.id)?Math.min(6,2+Math.floor(window.MindGardenPersonal.challenge(g.id).difficulty/3)):g.level+1));return studySequence()}
  if(g.id==='album'){g.total=Math.min(album.length,[3,4,6][g.level-1]);g.albumOrder=g.albumOrder||shuffle(album);g.target=g.albumOrder[g.round];return studyAlbum()}
  if(g.id==='sounds'){g.soundIndex=g.soundDeck[g.round];return soundRound()}
- if(g.id==='melody'){g.sequence=freshSequence(()=>Array.from({length:g.level+2},()=>Math.floor(Math.random()*notes.length)));return melodyRound()}
+ if(g.id==='melody'){g.sequence=freshSequence(()=>Array.from({length:window.MindGardenPersonal?.challenge(g.id)?Math.min(8,2+Math.ceil(window.MindGardenPersonal.challenge(g.id).difficulty/3)):g.level+2},()=>Math.floor(Math.random()*notes.length)));return melodyRound()}
  if(g.id==='teamgarden')return teamReady();
 }
 function studySequence(){const data=g.id==='hawker'?food:places;g.phase='study';shell(status()+'<h2>'+T(g.id==='hawker'?'Remember this order':'Remember this route',g.id==='hawker'?'记住这份餐单':'记住这条路线')+'</h2><p>'+T(g.id==='hawker'?'Serve each item in the same order.':'Fictional map. Visit the places in the same order.',g.id==='hawker'?'请按相同顺序准备餐点。':'虚构地图。请按相同顺序访问地点。')+'</p><ol class="cg-sequence">'+g.sequence.map(i=>'<li><span class="cg-art">'+picture(data[i][2])+'</span>'+esc(T(data[i][0],data[i][1]))+'</li>').join('')+'</ol>'+button('cgRecall','Hide & recall','隐藏并回忆'));$('cgRecall').onclick=answerSequence}

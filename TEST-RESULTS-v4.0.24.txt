@@ -1,0 +1,58 @@
+Mind Garden v4.0.24 test evidence (preview/source only)
+
+personal-games.test.cjs
+PASS 118 bilingual setups/launches; 5/10/15 mappings; range caps; overrides; start level; score identity; unscored question, board and matching practice; questionnaire persistence and player isolation.
+
+progression-practice.test.cjs
+PASS: 30 games at all 15 levels in English/Chinese; valid unique answers; numeric protection; stronger pattern families and memory loads; last-five weakest selection; mixed daily completion; cancel/keep; level-aware backups and new form link.
+
+custom-level-sessions.test.cjs
+PASS 72 full sessions: six matching sizes and ten board/garden games at all three levels, English/Chinese, with level-scored completion.
+
+full-level-5
+PASS 120 full original-game sessions, 728 correct rounds, selected levels × EN/ZH × light/dark state; persistent review, level-scored records, isolated level chart. DOM simulation does not verify rendered layout or physical-device audio.
+
+full-level-10
+PASS 120 full original-game sessions, 728 correct rounds, selected levels × EN/ZH × light/dark state; persistent review, level-scored records, isolated level chart. DOM simulation does not verify rendered layout or physical-device audio.
+
+full-level-15
+PASS 120 full original-game sessions, 728 correct rounds, selected levels × EN/ZH × light/dark state; persistent review, level-scored records, isolated level chart. DOM simulation does not verify rendered layout or physical-device audio.
+
+daily-and-controls.test.cjs
+PASS: all 30 original activities in English/Chinese at two difficulties; 16 full daily journeys; visible ready controls, viewport/focus reset, stale custom state, percentage/presets/exact 100% reset, icon labels and file picker.
+
+info-help.test.cjs
+PASS optional help hidden by default, keyboard focus, touch/click toggle, hover, Escape and resize dismissal.
+
+quick-feedback.test.cjs
+PASS immediate non-scoring press feedback across 50 game entry flows, pointer cancellation, scrolling, disabled controls and keyboard press/release.
+
+single-pair-fast-taps.test.cjs
+PASS six matching sizes: immediate third tap, stable nodes, same-card double tap, old mismatch callback isolation, new-game study lock and pause protection.
+
+matching-mode.test.cjs
+PASS explicit Standard/Timed selection, persisted state, no untimed deadline, preserved pause and timed expiry.
+
+storage-failure.test.cjs
+PASS: storage-full warning and recovery, blocked-storage lobby, malformed saves preserve original bytes, safe boot and atomic failure.
+
+new-features.test.cjs
+PASS: compact sound controls with descriptive labels, quote card removed, export scope/content/preferences, no tokens/other profiles, CSV formula protection, export settings.
+
+live-language.test.cjs
+PASS: live en language round trip preserves active story, buttons and answer values.
+PASS: live zh language round trip preserves active story, buttons and answer values.
+
+room8.test.mjs
+PASS: 8-player cap, delivery receipts, host-only launch, launch acknowledgements, rejoin, two rounds, totals, idempotent scores, skipped results, closure, authorization and repeatable migration.
+
+multiplayer-sessions.test.mjs
+PASS: bounded sessions, first/each-round Begin, retry-safe timing, bingo readiness barrier, automatic final completion, early finish versus cancel, release/history retention, in-room invitations, leave/join, offline, legacy room compatibility, repeatable migration and setup errors.
+
+online-expansion.test.mjs
+PASS: 800 deterministic bilingual quiz sets, 8 new online modes, validated answers, retained closed/expired room history, tied ranks, participant privacy, legacy metadata and repeatable migration.
+
+Browser: 72 scenarios across 360/768/1280px, English/Chinese, 100/140/200% text and My Games/All Games/number setup/matching setup. No visible card text or controls outside the viewport.
+Six targeted document-scroll checks after immediate navbar refitting: 360px EN 100% matching; 360px EN 200% number setup; 360px ZH 100%/140% matching; 360px ZH 200% library; 768px ZH 200% library. All returned zero horizontal scroll.
+Navbar automated fit: 28 combinations passed.
+WebGL fallback used by the test browser; real hardware audio/graphics and live remote-player testing are outside this local verification.

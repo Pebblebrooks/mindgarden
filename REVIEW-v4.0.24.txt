@@ -1,0 +1,40 @@
+Mind Garden v4.0.24 — approved source review
+Base: Mind-Garden-v4.0.23-update.zip
+
+Implemented
+- My Games questionnaire: selected games, starting level, short/standard/long question sessions, time preference, 5/10/15 progression steps, Gentle/Balanced/Challenging ranges and per-game overrides.
+- My Games welcome card placed in the card grid; direct browser click verified after resolving welcome-scene overlap.
+- Individual profile persistence, backup/import support, input validation, and stable underlying challenge metadata. Existing scores are retained.
+- Individual game information buttons: descriptions and skills practised; mouse hover, keyboard focus, tap, Escape and outside-click support.
+- Optional unscored practice, next/easier level choices, repeat-success/difficulty suggestions, and navigation through the selected games.
+- More varied missing-number positions, story settings, reverse sequence recall, picture deck sampling, related-object matching, graded puzzle/recall sizes, subtle spot-the-difference changes, and optional delayed recall.
+- Timed matching retains its existing countdown; other personal games use an optional three-minute time goal without forced failure. Garden Pets remains unscored.
+- Centered text, responsive preference cards, accessible large controls, contained decorative overflow, and immediate navbar fitting after resize/rebuild.
+- About/user-guide progression description updated. App build/cache identifiers set to 4.0.24.
+
+Design details
+- Five or ten visible steps sample the selected challenge range. Underlying difficulty is saved separately from the visible step number.
+- Some progression steps share a board size or difficulty family and generate varied content. They are not fifteen different board sizes.
+- Personal settings apply to solo/daily play. Online room rules and host-selected difficulty remain shared across participants.
+- Question session lengths apply to question games; a board game ends when its board is completed. Commercial previews retain their existing game-specific session structure.
+
+Automated verification completed
+- 118 English/Chinese setup/launch combinations and count/range settings.
+- Related-object matching completion, delayed recall and pause handling, selected-game navigation.
+- Unscored question, board and matching practice; no score/level/star/growth changes.
+- Per-player isolation, questionnaire persistence and backup/import of preferences/challenge metadata.
+- 30 original games across all 15 native difficulty levels in both languages: question validity, patterns, memory load and daily progression.
+- Full original-game sessions at native levels 1–4, 5, 10 and 15, plus 72 full matching/board/garden sessions.
+- Existing info controls, quick input feedback, storage failures, language switching, standard/timed matching, daily sessions and export checks.
+- Existing 8-player room, multiplayer-session and online-activity suites; no live production data used.
+- 72 browser layout scenarios (360/768/1280px, English/Chinese, 100/140/200% text, four screens): no card text or controls outside the viewport.
+- Six targeted follow-up cases after the navbar fix: zero horizontal page scroll.
+- Navbar fit tests at 28 size combinations.
+- JavaScript syntax and local release build.
+
+Verification limits
+- Browser layout testing is a preview, not a deployment. Real-device audio/WebGL and a live multi-device multiplayer session have not been retested. The browser used the existing graphics fallback because WebGL is unavailable there.
+- Source review preceded release approval. Packaging and deployment were approved on 12 November 2026 (Singapore). Deployment status is verified separately.
+
+Continuation
+Apply the accompanying review patch to the unchanged v4.0.23 source. Run the local build from app/ with python3 scripts/build-release.py. Once the user approves, generate the release package and deployment manifest/checksums, mirror the package's root/static layout consistently, then use the authorized deployment destination.

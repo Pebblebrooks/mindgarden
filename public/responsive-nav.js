@@ -13,7 +13,7 @@ function fit({available,brand,compactBrand,main,tools,toggle,gap=12,mainGap=5,to
  return {hidden:[...hidden],compact,required:required(compact?compactBrand:brand)};
 }
 let scheduled=false;
-function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;layout()})}
+function schedule(){if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;layout()})}
 function layout(){
  if(!nav.isConnected||!nav.clientWidth)return;
  const brand=nav.querySelector('.nav-brand'),main=nav.querySelector('.nav-items'),actions=nav.querySelector('.nav-actions'),more=document.getElementById('navMore');

@@ -1,7 +1,7 @@
 /* A lightweight 3D arrangement projected into SVG; works without WebGL. */
 (function(){
 'use strict';let controller,angle=.3;
-const NS='http://www.w3.org/2000/svg',T=(a,b)=>save.lang==='zh'?b:a;
+const NS='http://www.w3.org/2000/svg',T=(a,b)=>window.MindGardenLocale.pair(a,b);
 function project(p,a){const c=Math.cos(a),s=Math.sin(a),x=p.x*c+p.z*s,z=p.z*c-p.x*s,y=p.y*.987-z*.16,depth=z*.987+p.y*.16,k=600/(600-depth);return {x:150+x*k,y:222-y*k,z:depth,k}}
 function attach(bed,points,type){
  controller?.dispose();bed?.querySelector('.bouquet-controls')?.remove();const svg=bed?.querySelector('svg');if(!svg)return;svg.classList.add('bouquet-3d');svg.setAttribute('aria-label',T('Rotating bouquet, ','旋转花束，')+points+'/60');
@@ -24,9 +24,10 @@ function attach(bed,points,type){
  }
  const controls=document.createElement('div');controls.className='bouquet-controls';controls.innerHTML='<button class="btn" type="button" data-bouquet-turn="-1" aria-label="'+T('Turn bouquet left','向左转动花束')+'">↶</button><button class="btn" type="button" id="bouquetRotate"></button><button class="btn" type="button" data-bouquet-turn="1" aria-label="'+T('Turn bouquet right','向右转动花束')+'">↷</button>';svg.after(controls);
  const button=controls.querySelector('#bouquetRotate'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
- const allowed=()=>window.MindGardenMotion.effectiveMode()!=='off';
- function sync(){button.disabled=!allowed();const label=!allowed()?T('Rotation off','旋转已关闭'):save.bouquetRotation===false?T('Rotate bouquet','旋转花束'):T('Pause rotation','暂停旋转');button.textContent=allowed()&&save.bouquetRotation!==false?'||':'▶';button.setAttribute('aria-label',label);button.title=label;button.setAttribute('aria-pressed',String(allowed()&&save.bouquetRotation!==false));svg.dataset.paused=String(!allowed()||save.bouquetRotation===false)}
- button.onclick=()=>{save.bouquetRotation=save.bouquetRotation===false;persist();sync()};controls.querySelectorAll('[data-bouquet-turn]').forEach(b=>b.onclick=()=>{angle+=Number(b.dataset.bouquetTurn)*Math.PI/6;draw()});
+ let manualRotation=false,lastMode=window.MindGardenMotion.effectiveMode();
+ const allowed=()=>{const mode=window.MindGardenMotion.effectiveMode();if(mode!==lastMode){manualRotation=false;lastMode=mode}return mode!=='off'||manualRotation};
+ function sync(){button.disabled=false;const label=!allowed()?T('Rotate bouquet','旋转花束'):save.bouquetRotation===false?T('Rotate bouquet','旋转花束'):T('Pause rotation','暂停旋转');button.textContent=allowed()&&save.bouquetRotation!==false?'||':'▶';button.setAttribute('aria-label',label);button.title=label;button.setAttribute('aria-pressed',String(allowed()&&save.bouquetRotation!==false));svg.dataset.paused=String(!allowed()||save.bouquetRotation===false)}
+ button.onclick=()=>{if(!allowed()){manualRotation=true;save.bouquetRotation=true}else save.bouquetRotation=save.bouquetRotation===false;persist();sync()};controls.querySelectorAll('[data-bouquet-turn]').forEach(b=>b.onclick=()=>{angle+=Number(b.dataset.bouquetTurn)*Math.PI/6;draw()});
  function tick(now){if(disposed)return;frame=requestAnimationFrame(tick);const dt=Math.min((now-last)/1000,.1);if(now-last<33)return;last=now;if(!document.hidden&&document.getElementById('ov').classList.contains('hidden')&&!document.getElementById('home').classList.contains('hidden')&&visible&&allowed()&&save.bouquetRotation!==false){angle=(angle+dt*Math.PI*2/(window.MindGardenMotion.effectiveMode()==='gentle'?36:24))%(Math.PI*2);draw()}}
  const observer=new MutationObserver(sync);observer.observe(document.documentElement,{attributes:true,attributeFilter:['data-motion','data-still']});let intersection;if(window.IntersectionObserver){intersection=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting});intersection.observe(bed)}reduced.addEventListener?.('change',sync);draw();sync();frame=requestAnimationFrame(tick);
  controller={dispose(){disposed=true;cancelAnimationFrame(frame);observer.disconnect();intersection?.disconnect();reduced.removeEventListener?.('change',sync)}};

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no" class="notranslate">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.1">
+<meta name="mind-garden-release" content="v4.0.24">
 
 
 
@@ -304,7 +304,25 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<link rel="stylesheet" href="garden-ui-401.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="google" content="notranslate">
+<link rel="stylesheet" href="garden-ui-4024.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -403,7 +421,19 @@ var cur=0,left=0,total=0,first=null,lock=true,found=0,timer=null,paused=false,hi
 
 // sound
 var ac=null;
-function beep(f,d,type){if(!save.snd)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();var o=ac.createOscillator(),g=ac.createGain();o.type=type||"sine";o.frequency.value=f;g.gain.setValueAtTime(.12,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function resumeGameAudio(){
+ if(!save.snd)return Promise.resolve(null);
+ try{if(!ac||ac.state==='closed')ac=new(window.AudioContext||window.webkitAudioContext)();const context=ac;
+ return context.state==='running'?Promise.resolve(context):Promise.resolve(context.resume()).then(function(){return context.state==='running'?context:null}).catch(function(){return null});
+ }catch(e){return Promise.resolve(null)}
+}
+function beep(f,d,type){if(!save.snd)return;const requestedAt=Date.now();
+ function play(context){if(!context||!save.snd||document.hidden||Date.now()-requestedAt>500)return;try{const o=context.createOscillator(),g=context.createGain(),now=context.currentTime;o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.12,now);g.gain.exponentialRampToValueAtTime(.001,now+d);o.connect(g);g.connect(context.destination);o.onended=function(){o.disconnect();g.disconnect()};o.start(now);o.stop(now+d)}catch(e){}}
+ if(ac&&ac.state==='running')play(ac);else resumeGameAudio().then(play);
+}
+document.addEventListener('pointerdown',function(e){if(e.target.closest('#game,#mini,#box')&&save.snd)resumeGameAudio()},{capture:true,passive:true});
+document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.closest('#game,#mini,#box')&&save.snd)resumeGameAudio()},{capture:true});
+var GAME_SETTLE_MS=1200;
 function pt(fn,ms){setTimeout(function w(){if(paused)setTimeout(w,150);else fn()},ms)}
 function chime(){beep(660,.18);setTimeout(function(){beep(880,.28)},120)}
 function win(){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){beep(f,.35)},i*150)})}
@@ -426,52 +456,60 @@ function closeOv(){$("ov").classList.add("hidden")}
 
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 
+var pairAttempts=0,pairGeneration=0,pairMismatch=null;
+function settlePairMismatch(pending){if(!pending||pairMismatch!==pending)return;pairMismatch=null;pending.a.classList.remove("up");pending.b.classList.remove("up");lock=false;}
 function start(i){
+  pairAttempts=0;pairMismatch=null;var generation=++pairGeneration;
   clearInterval(timer);closeOv();cur=i;me().lg={k:"p",i:i};persist();var L=LEVELS[i];
   var bonus=(fails[i]||0)>=1?15*Math.min(fails[i],3):0; // extra time after a miss
   total=L.t+bonus;left=total;found=0;first=null;lock=true;paused=false;hints=3;streak=0;
-  var D=icons().slice(0,L.p),deck=shuffle(D.concat(D));
+  var personalPair=window.MindGardenPersonal?.challenge('pairs'),pool=icons();if(personalPair&&personalPair.difficulty<9)pool=shuffle(pool);else if(personalPair)pool=pool.slice(personalPair.rank%Math.max(1,pool.length-L.p+1)).concat(pool);var D=personalPair?.pairMode==='related'?window.MindGardenPersonal.pairDeck(L.p):pool.slice(0,L.p),deck=shuffle(D.concat(D.map(function(e){return e.partner?Object.assign({},e,e.partner):e})));
   var g=$("grid");g.style.setProperty("--c",COLS[L.p]);
   var rows=Math.ceil(deck.length/COLS[L.p]);
   g.style.setProperty("--mw",Math.min(1050,COLS[L.p]*190)+"px");
   g.innerHTML=deck.map(function(e,k){return '<button class="card up" data-k="'+k+'" data-e="'+(e.k||e.e)+'" data-n="'+e.n+'" aria-label="Card"><div class="in"><div class="f b"></div><div class="f a" aria-hidden="true">'+(e.h||gamePicture(e.e))+'</div></div></button>'}).join("");
   $("hLv").textContent="Level "+(i+1);
   $("hPairs").textContent="0 / "+L.p+" pairs";
-  $("hTime").textContent=fmt(left);
+  $("hTime").textContent=save.timed?fmt(left):(window.MindGardenLocale.pair('At your pace','不限时'));
+  $("tb").parentElement.hidden=!save.timed;
   $("tb").style.transform="scaleX(1)";$("tb").classList.remove("low");
   $("bHint").textContent="Hint ("+hints+")";$("bPause").textContent="⏸";
   show("game");
-  var n=L.peek;
-  (function tick(){
+  var n=L.peek;$("msg").textContent=window.MindGardenLocale.pair('Get ready — look at the cards.','准备好，看看卡片。');
+  pt(function tick(){
+    if(generation!==pairGeneration||$("game").classList.contains("hidden"))return;
     if(n>0){$("msg").textContent="Look carefully… cards turn over in "+n;n--;pt(tick,1000)}
     else{[].forEach.call(g.children,function(c){c.classList.remove("up")});$("msg").textContent=bonus?"Extra "+bonus+" seconds added. Tap a card to begin.":"Tap a card to begin.";lock=false;run()}
-  })();
+  },GAME_SETTLE_MS);
 }
 function run(){
   clearInterval(timer);
   timer=setInterval(function(){
     if(paused)return;
     left-=.25;
-    $("hTime").textContent=fmt(left);
+    $("hTime").textContent=save.timed?fmt(left):(window.MindGardenLocale.pair('At your pace','不限时'));
     $("tb").style.transform="scaleX("+Math.max(0,left/total)+")";
     $("tb").classList.toggle("low",left/total<.25);
-    if(left<=0){clearInterval(timer);lock=true;end(false)}
+    if(save.timed&&left<=0){clearInterval(timer);lock=true;end(false)}
   },250);
 }
 $("grid").addEventListener("click",function(ev){
   var c=ev.target.closest(".card");
-  if(!c||lock||paused||c.classList.contains("up")||c.classList.contains("ok"))return;
+  if(!c||paused||c.classList.contains("ok"))return;
+  if(pairMismatch)settlePairMismatch(pairMismatch);
+  if(lock||c.classList.contains("up"))return;
   c.classList.add("up");beep(440,.08);say(c.dataset.n);
   if(!first){first=c;return}
-  var a=first,b=c;first=null;
+  var a=first,b=c;first=null;pairAttempts++;
   if(a.dataset.e===b.dataset.e){
     a.classList.add("ok");b.classList.add("ok");found++;streak++;chime();
     $("hPairs").textContent=found+" / "+LEVELS[cur].p+" pairs";
     $("msg").textContent=PRAISE[Math.floor(Math.random()*PRAISE.length)]+(streak>=3?" "+streak+" in a row!":"");
-    if(found===LEVELS[cur].p){lock=true;clearInterval(timer);pt(function(){end(true)},800)}
+    if(found===LEVELS[cur].p){lock=true;clearInterval(timer);pt((function(generation){return function(){if(generation===pairGeneration&&!$("game").classList.contains("hidden"))end(true)}})(pairGeneration),800)}
   }else{
     lock=true;streak=0;$("msg").textContent="Not quite – have another look.";
-    pt(function(){a.classList.remove("up");b.classList.remove("up");lock=false},1100);
+    var pending={a:a,b:b};pairMismatch=pending;
+    pt(function(){settlePairMismatch(pending)},1100);
   }
 });
 $("bHint").onclick=function(){
@@ -479,49 +517,54 @@ $("bHint").onclick=function(){
   var cs=[].filter.call($("grid").children,function(c){return!c.classList.contains("ok")&&!c.classList.contains("up")});
   if(cs.length<2)return;
   var e=cs[0].dataset.e,pair=cs.filter(function(c){return c.dataset.e===e});
-  hints--;this.textContent="Hint ("+hints+")";lock=true;
+  var hintGeneration=pairGeneration;hints--;this.textContent="Hint ("+hints+")";lock=true;
   pair.forEach(function(c){c.classList.add("up")});
   $("msg").textContent="Remember where this pair is…";
-  pt(function(){pair.forEach(function(c){c.classList.remove("up")});lock=false;$("msg").textContent=""},1800);
+  pt(function(){if(hintGeneration!==pairGeneration||$("game").classList.contains("hidden"))return;pair.forEach(function(c){c.classList.remove("up")});lock=false;$("msg").textContent=""},1800);
 };
 $("bPause").onclick=function(){
   if(paused||!$("ov").classList.contains("hidden"))return;
   paused=true;
-  overlay('<h2>Paused</h2><p>Your time is stopped. Rest as long as you like.</p><div class="row"><button class="btn main" id="rs">Keep playing</button><button class="btn" id="mn">Back to menu</button></div>');
+  overlay('<h2>Paused</h2><p>Your time is stopped. Rest as long as you like.</p><div class="row"><button class="btn main" id="rs">Keep playing</button></div>');
   $("rs").onclick=function(){paused=false;closeOv()};
-  $("mn").onclick=function(){paused=false;clearInterval(timer);closeOv();toHome()};
+
 };
-function toHome(){paused=false;clearInterval(timer);closeOv();renderHome();show("home")}
-$("bHome").onclick=function(){if(!$("ov").classList.contains("hidden"))return;paused=true;overlay('<h2>Leave this game?</h2><p>Your progress in this round will be lost.</p><div class="row"><button class="btn main" id="st">Stay</button><button class="btn" id="lv">Leave</button></div>');$("st").onclick=function(){paused=false;closeOv()};$("lv").onclick=function(){paused=false;toHome()}};
+function toHome(){pairGeneration++;pairMismatch=null;paused=false;clearInterval(timer);closeOv();renderHome();show("home")}
+$("bHome").onclick=function(){if(!$("ov").classList.contains("hidden"))return;paused=true;overlay('<h2>Game menu</h2><p>Leaving ends this unfinished round.</p><div class="row"><button class="btn main" id="st">Resume</button><button class="btn" id="lv">Leave game</button></div>');$("st").onclick=function(){paused=false;closeOv()};$("lv").onclick=function(){paused=false;toHome();window.MindGardenDashboard?.library()}};
 
 function end(ok){
-  var L=LEVELS[cur],used=1-left/total,html;logPlay("pairs",ok?1:found/L.p,total-left);award(found,ok?"p"+(cur+1):null,total-left);
+  var L=LEVELS[cur],used=1-left/total,T=function(en,zh){return window.MindGardenLocale?window.MindGardenLocale.pair(en,zh):(save.lang==='zh'?zh:en)};
+  var st=ok?(!save.timed?3:used<.5?3:used<.8?2:1):0,misses=Math.max(0,pairAttempts-found),usedHints=3-hints;
+  logPlay("pairs",ok?1:found/L.p,total-left,{level:cur+1,attempts:pairAttempts,mismatches:misses,hints:usedHints,stars:ok?st:null,timed:!!save.timed});award(found,ok?"p"+(cur+1):null,total-left);
   if(ok){
-    var st=!save.timed?1:used<.5?3:used<.8?2:1;
     save.stars[cur]=Math.max(save.stars[cur]||0,st);
     if(cur+2>save.unlocked&&cur+1<LEVELS.length)save.unlocked=cur+2;
     fails[cur]=0;persist();win();
-    var last=cur===LEVELS.length-1,s="";for(var k=0;k<3;k++)s+=k<st?"★":"☆";
-    html='<div class="stars" aria-label="'+st+' stars">'+s+'</div><h2>'+(last?"You finished the garden!":"Level complete!")+'</h2><p>You found all '+L.p+' pairs!</p><div class="row">'+(last?'':'<button class="btn main" id="nx">Next level</button>')+'<button class="btn" id="ag">Play again</button><button class="btn" id="mn">Menu</button></div>';
-    overlay(html);
+    var last=cur===LEVELS.length-1,stars="";for(var k=0;k<3;k++)stars+='<span aria-hidden="true">'+(k<st?'★':'☆')+'</span>';
+    var label=T(save.timed?'Speed award':'Completion award',save.timed?'速度奖励':'完成奖励');
+    var help=T('Untimed games: three stars celebrate finding every pair at your own pace. Timed games: 3 speed stars for using less than 50% of the time allowance; 2 for less than 80%; otherwise 1 for completing the board. Mistakes and hints do not reduce these awards.','不限时游戏：找到全部配对即可获得三颗完成星，无须赶时间。限时游戏：用时少于限时的50%得3颗速度星，少于80%得2颗，其余完成得1颗。错误和提示不扣星。');
+    var stats=[[T('Pair attempts','配对尝试'),pairAttempts],[T('Mismatches','错误配对'),misses],[T('Hints used','使用提示'),usedHints],[T('Time','用时'),fmt(total-left)]];
+    overlay('<div class="stars pair-result-stars" role="img" aria-label="'+label+': '+st+' / 3">'+stars+'</div><h2>'+T(last?'You finished the garden!':'Level complete!',last?'您完成了整个花园！':'关卡完成！')+'</h2><p>'+T('You found all '+L.p+' pairs!','您找到了全部 '+L.p+' 对！')+'</p><section class="pair-rating-explanation"><p class="pair-award-label">'+label+' · '+st+' / 3 '+(window.MindGardenInfo?window.MindGardenInfo.html(help,T('How matching awards work','配对奖励说明')):'')+'</p><dl class="pair-result-stats">'+stats.map(function(v){return '<div><dt>'+v[0]+'</dt><dd>'+v[1]+'</dd></div>'}).join('')+'</dl></section><div class="row">'+(last?'':'<button class="btn main" id="nx">'+T('Next level','下一关')+'</button>')+'<button class="btn" id="ag">'+T('Play again','再玩一次')+'</button><button class="btn" id="mn">'+T('Menu','菜单')+'</button></div>');
     if($("nx"))$("nx").onclick=function(){start(cur+1)};
   }else{
     fails[cur]=(fails[cur]||0)+1;beep(300,.4,"triangle");
-    overlay('<h2>Time’s up – well tried!</h2><p>You found '+found+' of '+L.p+' pairs. Try again with 15 extra seconds.</p><div class="row"><button class="btn main" id="ag">Try again</button><button class="btn" id="mn">Menu</button></div>');
+    overlay('<h2>'+T('Time’s up – well tried!','时间到了，做得不错！')+'</h2><p>'+T('You found '+found+' of '+L.p+' pairs. Try again with 15 extra seconds.','您找到了 '+found+' / '+L.p+' 对。再试一次，可多用15秒。')+'</p><div class="row"><button class="btn main" id="ag">'+T('Try again','再试一次')+'</button><button class="btn" id="mn">'+T('Menu','菜单')+'</button></div>');
   }
   $("ag").onclick=function(){start(cur)};
   $("mn").onclick=toHome;
+  ($("nx")||$("ag")).focus({preventScroll:true});
   window.MindGardenDaily?.complete('pairs');
 }
+
 $("levels").addEventListener("click",function(e){var b=e.target.closest(".lv");if(b&&!b.disabled){try{ac&&ac.resume()}catch(x){}start(+b.dataset.i)}});
 /* ---------- helpers ---------- */
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-function say(t){if(!save.speak||!t||!window.speechSynthesis)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function say(t){if(!save.speak||!t||!window.speechSynthesis)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.rate=.96;u.lang=save.lang==="zh"?"zh-CN":"en-GB";var voice=window.MindGardenNarration?.selectedVoice();if(window.MindGardenNarration&&!voice)return;if(voice){u.voice=voice;u.lang=voice.lang}speechSynthesis.speak(u)}catch(e){}}
 function dstr(d){d=d||new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
 function ystr(){var y=new Date();y.setDate(y.getDate()-1);return dstr(y)}
 function age(d){return Math.round((new Date(dstr())-new Date(d))/864e5)}
 function curStreak(p){return p.last===dstr()||p.last===ystr()?(p.streak||0):0}
-function logPlay(g,r,s,details){var p=me(),t=dstr();if(p.last!==t){p.streak=p.last===ystr()?(p.streak||0)+1:1;p.last=t}var record={d:t,g:g,r:Math.round(r*100)/100,s:Math.max(1,s|0)};var lev=details&&details.level||((mg&&mg.t===g)?mg.difficulty:g==="pairs"?cur+1:null);if(lev)record.level=lev;p.log.push(record);if(p.log.length>300)p.log.shift();persist()}
+function logPlay(g,r,s,details){var p=me(),t=dstr();if(p.last!==t){p.streak=p.last===ystr()?(p.streak||0)+1:1;p.last=t}var record={d:t,g:g,r:Math.round(r*100)/100,s:Math.max(1,s|0)};var lev=details&&details.level||((mg&&mg.t===g)?mg.difficulty:g==="pairs"?cur+1:null);if(lev)record.level=lev;if(details)for(var key of ["attempts","mismatches","hints","stars","timed","preview","shared"])if(details[key]!==undefined)record[key]=details[key];p.log.push(record);if(p.log.length>300)p.log.shift();persist()}
 /* ---------- home extras ---------- */
 var MG={seq:{n:"Remember the order",d:"Watch the pictures light up, then repeat them.",ic:"🔔"},miss:{n:"What’s missing?",d:"One picture disappears. Which one was it?",ic:"🧺"},sort:{n:"Sort it",d:"Put each picture in the right group.",ic:"🗂️"}};
 function renderExtra(){
@@ -532,7 +575,7 @@ function renderExtra(){
 }
 ["acts","acts2","acts3","acts4","acts5","acts6"].forEach(function(id){$(id).addEventListener("click",function(e){var b=e.target.closest(".lv");if(b)window.chooseMiniLevel(b.dataset.g)})});
 /* ---------- settings & players ---------- */
-var SET=[["timed","Timed matching challenges"],["snd","Sound"],["speak","Spoken picture names"],["fs","Larger text"],["hc","Large high-contrast mode"],["cb","Colour-blind-safe colours"],["lh","Left-handed layout"],["brk","Break reminders"],["still","Stop moving pictures"]];
+var SET=[["timed","Timed matching challenges"],["snd","Game sounds"],["speak","Spoken picture names"],["fs","Larger text"],["hc","Large high-contrast mode"],["cb","Colour-blind-safe colours"],["lh","Left-handed layout"],["brk","Break reminders"],["still","Stop moving pictures"]];
 function openSet(){
   overlay('<h2>Settings</h2><div class="list">'+SET.map(function(s){return '<button class="btn tg" data-k="'+s[0]+'" aria-pressed="'+!!save[s[0]]+'">'+s[1]+': <b>'+(save[s[0]]?"On":"Off")+'</b></button>'}).join("")+'</div><b>Appearance</b><div class="prow">'+[["auto","Match device"],["light","Light"],["dark","Dark"]].map(function(t){return '<button class="btn tg" data-m="'+t[0]+'" aria-pressed="'+((save.mode||"auto")===t[0])+'">'+t[1]+'</button>'}).join("")+'</div><b>Colour theme</b><div class="prow">'+[["cream","Cream and teal"],["sand","Warm sand"]].map(function(t){return '<button class="btn tg" data-th="'+t[0]+'" aria-pressed="'+((save.th||"cream")===t[0])+'">'+t[1]+'</button>'}).join("")+'</div>'+breakHtml()+photosHtml()+'<div class="row"><button class="btn main" id="sd">Done</button></div>');
   $("sd").onclick=closeOv;$("pha").onclick=function(){$("phf").click()};$("phf").onchange=function(){addPhotos(this.files)};
@@ -545,7 +588,7 @@ function openPl(){
 }
 $("box").addEventListener("click",function(e){
   var b=e.target.closest("button[data-k],button[data-d],button[data-p],button[data-x],button[data-th],button[data-m],button[data-ph],button[data-fc],button[data-pha],button[data-bn],button[data-av],button[data-avx],button[data-ae],button[data-fl]");if(!b)return;var d=b.dataset;
-  if(d.fl){me().fl=d.fl;persist();renderHero();openFlw();return}
+  if(d.fl){me().fl=d.fl;persist();renderHero();if(window.MindGardenBloomPreview)window.MindGardenBloomPreview.select(d.fl);else openFlw();return}
   if(d.av){openAv(d.av);return}
   if(d.ae){var q=save.pr[avT];q.ae=d.ae;delete q.av;persist();renderHome();openPl();return}
   if(d.avx){var q2=d.avx==="me"?me():save.pr[avT];delete q2.av;delete q2.ae;persist();renderHome();openPl();return}
@@ -555,7 +598,7 @@ $("box").addEventListener("click",function(e){
   if(d.fc){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to clear";return}var q=save.pr[d.fc];q.log=[];q.streak=0;q.last="";q.gp=0;q.bt={};persist();renderHome();famView();return}
   if(d.m){save.mode=d.m;persist();applyPrefs();openSet();return}
   if(d.th){save.th=d.th;persist();applyPrefs();openSet();return}
-  if(d.k){if(d.k==="fs"||d.k==="hc")save.textScale=null;save[d.k]=save[d.k]?0:1;persist();applyPrefs();openSet();if(d.k==="snd")beep(600,.1);return}
+  if(d.k){if(d.k==="fs"||d.k==="hc")save.textScale=null;save[d.k]=save[d.k]?0:1;persist();applyPrefs();openSet();if(d.k==="snd"){if(!save.snd&&ac)ac.suspend().catch(function(){});window.dispatchEvent(new Event("gardenGameSoundChange"));beep(600,.1);}return}
   if(d.d){save.deck=d.d;persist();renderHome();openSet();return}
   if(d.p){persist();save.cp=d.p;load();persist();renderHome();window.MindGardenIdentity?.syncSelected();openPl();return}
   if(d.x){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to remove";return}delete save.pr[d.x];if(d.x===save.cp){save.cp=Object.keys(save.pr)[0];load()}persist();renderHome();openPl()}
@@ -591,6 +634,7 @@ function gamePicture(value){return window.MindGardenArt?window.MindGardenArt.htm
 function gamePictureLine(values){return '<div class="picture-sequence" translate="no">'+values.map(function(v){return '<span class="picture-symbol">'+gamePicture(v)+'</span>'}).join('')+'</div>'}
 function gamePrompt(value){return esc(value).replace(/\p{Extended_Pictographic}(?:[\uFE0F\u200D]|\p{Extended_Pictographic})*/gu,function(v){return '<span class="inline-picture">'+gamePicture(v)+'</span>'})}
 function ask(top,opts,ans,okm,badm,txt){
+  mg.questionKey=$("mmsg").textContent+"|"+top+"|"+String(ans);
   $("mp").innerHTML=top+'<div class="gridm" style="--c:'+opts.length+'">'+opts.map(function(o){return '<button class="big'+(isGamePicture(o.h)?' picture-answer':txt?' txt'+(txt===2?' nm':''):'')+'" data-a="'+esc(o.v)+'"'+(/^[-+]?\d+(?:\.\d+)?$/.test(String(o.h))?' translate="no"':'')+' aria-label="'+esc(o.l||o.v)+'">'+(isGamePicture(o.h)?gamePicture(o.h):o.h)+'</button>'}).join("")+'</div>';
   mg.ans=String(ans);mg.h=function(b){var ok=b.dataset.a===String(ans);res(ok,ok?okm:badm)};
 }
@@ -719,15 +763,23 @@ function startMG(t){
 function nextR(){
   if(!mg)return;
   if(mg.r>=mg.R)return mdone();
-  mg.r++;mg.h=null;mg.ans=null;mg.last=null;$("hRound").innerHTML='<span class="sr">Round '+mg.r+' of '+mg.R+'</span><span class="dots" aria-hidden="true">'+mg.hist.concat(new Array(mg.R-mg.hist.length).fill(null)).map(function(x,i){return"<i class=\""+(x===true?"d":x===false?"m":i===mg.r-1?"c":"")+"\"></i>"}).join("")+"</span>";$("mp").innerHTML="";
-  ({seq:rSeq,miss:rMiss,sort:rSort,num:rNum,sum:rSum,odd:rOdd,shp:rShp,tbl:rTbl,clk:rClk,diff:rDiff,wrd:rWrd,wm:rWm,sub:rSub,rem:rRem,cnt:rCnt,add:rAdd,same:rSame,time:rTime,count:rCount,find:rFind,pic:rPic,...(window.MindGardenExtras||{})})[mg.t]();
+  $("mp").classList.remove("story-answer-panel");mg.r++;mg.h=null;mg.ans=null;mg.last=null;mg.reviewed=false;mg.reviewExpected=null;mg.reviewEntered=null;$("hRound").innerHTML='<span class="sr">Round '+mg.r+' of '+mg.R+'</span><span class="dots" aria-hidden="true">'+mg.hist.concat(new Array(mg.R-mg.hist.length).fill(null)).map(function(x,i){return"<i class=\""+(x===true?"d":x===false?"m":i===mg.r-1?"c":"")+"\"></i>"}).join("")+"</span>";$("mp").innerHTML="";
+  var generate=({seq:rSeq,miss:rMiss,sort:rSort,num:rNum,sum:rSum,odd:rOdd,shp:rShp,tbl:rTbl,clk:rClk,diff:rDiff,wrd:rWrd,wm:rWm,sub:rSub,rem:rRem,cnt:rCnt,add:rAdd,same:rSame,time:rTime,count:rCount,find:rFind,pic:rPic,...(window.MindGardenExtras||{})})[mg.t];if(window.MindGardenQuestions)window.MindGardenQuestions.generate(generate);else generate();
 }
 function res(good,note){
-  var g=mg;g.h=null;g.hist.push(!!good);if(good)g.ok++;if(g.t==="seq"||g.t==="miss")g.n=Math.max(g.lo,Math.min(g.hi||8,g.n+(good?1:-1)));
+  var g=mg;if(!g||g.reviewed)return;g.reviewed=true;g.h=null;g.hist.push(!!good);if(good)g.ok++;if(g.t==="seq"||g.t==="miss")g.n=Math.max(g.lo,Math.min(g.hi||8,g.n+(good?1:-1)));
   var ch=g.last;if(g.t==="wrd")ch=null;
   if(ch&&ch.isConnected){ch.classList.add(good?"right":"wrong");if(!good&&g.ans!=null)[].forEach.call($("mp").querySelectorAll("[data-a]"),function(x){if(x.dataset.a===g.ans)x.classList.add("right")})}
   good?chime():beep(300,.3,"triangle");$("mmsg").textContent=note;
-  pt(function(){if(mg===g)nextR()},1900);
+  var T=function(en,zh){return window.MindGardenLocale?window.MindGardenLocale.pair(en,zh):(save.lang==="zh"?zh:en)},panel=document.createElement("section");panel.id="roundReview";panel.className="round-review";panel.setAttribute("role","status");
+  $("mp").querySelectorAll(".big").forEach(function(b){b.classList.remove("on");if(b.tagName==="BUTTON")b.disabled=true});
+  var details="";
+  if(g.reviewExpected){details=window.MindGardenFeedback.compare(g.reviewExpected,g.reviewEntered||[])}
+  else if(g.ans!=null){var answer=Array.from($("mp").querySelectorAll("[data-a]")).find(function(b){return b.dataset.a===String(g.ans)}),label=function(b,fallback){return b?(b.getAttribute("aria-label")||b.textContent.trim()):String(fallback)};details=window.MindGardenFeedback.compare([label(answer,g.ans)],[g.last?label(g.last,""):null],{sequence:false,correct:good})}
+
+  panel.innerHTML='<h3>'+T(good?"Correct!":"Let’s review",good?"正确！":"一起回顾")+'</h3><p>'+esc(note)+'</p>'+details+'<div class="row"><button class="btn main" id="roundContinue">'+T(g.r>=g.R?"See results":"Next round",g.r>=g.R?"查看结果":"下一轮")+'</button></div>';
+  $("mmsg").textContent="";$("mp").replaceChildren(panel);$("roundContinue").onclick=function(){if(mg!==g||paused)return;this.disabled=true;nextR()};panel.tabIndex=-1;panel.focus({preventScroll:true});
+
 }
 function rSeq(){
   var g=mg,n=g.n,k=Math.min(8,3+Math.floor((g.difficulty||1)/3)),it=pick(allItems(),k),s=[],pos=0,i=0;
@@ -744,14 +796,14 @@ function rMiss(){
   var g=mg,n=g.n,it=pick(allItems(),n),m=Math.floor(Math.random()*n),c=n+3,cols=n>6?4:3;
   var cell=function(x){return '<div class="big st">'+gamePicture(x.e)+'</div>'};
   $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(cell).join("")+'</div>';
-  (function tick(){
+  pt(function tick(){
     if(mg!==g)return;
     if(c>0){$("mmsg").textContent="Remember these… "+c;c--;pt(tick,1000);return}
     var shown=it.map(function(x){return x.e}),opts=shuffle([it[m]].concat(pick(allItems().filter(function(x){return shown.indexOf(x.e)<0}),Math.min(5,2+Math.floor((g.difficulty||1)/3)))));
     $("mp").innerHTML='<div class="gridm" style="--c:'+cols+'">'+it.map(function(x,i){return i===m?'<div class="big st q">?</div>':cell(x)}).join("")+'</div><div class="gridm" style="--c:'+Math.min(3,opts.length)+'">'+opts.map(function(x){return '<button class="big" data-a="'+x.e+'" aria-label="'+x.n+'">'+gamePicture(x.e)+'</button>'}).join("")+'</div>';
     $("mmsg").textContent="One has disappeared. Which one was it?";
     g.ans=it[m].e;g.h=function(x){var ok=x.dataset.a===it[m].e;say(it[m].n);res(ok,ok?"Yes – the "+it[m].n+"!":"It was the "+it[m].n+". Well tried!")};
-  })();
+  },GAME_SETTLE_MS);
 }
 function rSort(){
   var ks=pick(Object.keys(CATS),mg.r<4?2:3),a=ks[Math.floor(Math.random()*ks.length)],x=P(CATS[a][Math.floor(Math.random()*5)]);
@@ -760,11 +812,11 @@ function rSort(){
   mg.ans=a;mg.h=function(b){var ok=b.dataset.a===a;res(ok,ok?"Yes – well done!":"It goes with “"+a+"”. Well tried!")};
 }
 $("mp").addEventListener("click",function(e){var b=e.target.closest("[data-a]");if(b&&!b.disabled&&b.classList.contains("big"))lit(b,450);if(b&&mg&&mg.h&&!paused){mg.last=b;mg.h(b)}});
-$("bMn").onclick=function(){mg=null;toHome()};
+$("bMn").onclick=function(){if(!mg||!$("ov").classList.contains("hidden"))return;paused=true;var ps=Date.now();overlay('<h2>Game menu</h2><p>Leaving ends this unfinished round.</p><div class="row"><button class="btn main" id="miniResume">Resume</button><button class="btn" id="miniLeave">Leave game</button></div>');$("miniResume").onclick=function(){mt0+=Date.now()-ps;paused=false;closeOv()};$("miniLeave").onclick=function(){mg=null;toHome();window.MindGardenDashboard?.library()}};
 $("bPause2").onclick=function(){if(!mg||paused||!$("ov").classList.contains("hidden"))return;paused=true;var ps=Date.now();
-  overlay('<h2>Paused</h2><p>Your time is stopped. Rest as long as you like.</p><div class="row"><button class="btn main" id="rs2">Keep playing</button><button class="btn" id="mn2">Back to menu</button></div>');
+  overlay('<h2>Paused</h2><p>Your time is stopped. Rest as long as you like.</p><div class="row"><button class="btn main" id="rs2">Keep playing</button></div>');
   $("rs2").onclick=function(){mt0+=Date.now()-ps;paused=false;closeOv()};
-  $("mn2").onclick=function(){mg=null;toHome()}};
+};
 function mdone(){
   var g=mg,secs=Math.round((Date.now()-mt0)/1000);logPlay(g.t,g.ok/g.R,secs);award(g.ok,g.ok===g.R?g.t:null,secs);win();
   overlay('<h2>Well done!</h2><p>You got '+g.ok+' of '+g.R+' right.</p><div class="row"><button class="btn main" id="ma">Play again</button><button class="btn" id="mm">Menu</button></div>');
@@ -990,7 +1042,24 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-401.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="garden-ui-4024.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

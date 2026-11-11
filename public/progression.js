@@ -32,7 +32,7 @@ function pattern(n,random=Math.random){
  }
  return{family,shown:q.slice(0,-1),answer:q.at(-1),level:n};
 }
-window.rNum=function(){const p=pattern(L());mg.patternFamily=p.family;numberQuestion(p.shown.join(' , ')+' , ?',p.answer)};
+window.rNum=function(){const p=pattern(L());mg.patternFamily=p.family;const sequence=[...p.shown,p.answer],at=L()>=4?rnd(1,sequence.length-1):sequence.length-1,answer=sequence[at];sequence[at]='?';numberQuestion(sequence.join(' , '),answer)};
 window.rSum=function(){const n=L(),a=rnd(2+n*2,10+n*n),b=rnd(1,4+n*3),c=rnd(1,n*2),subtract=n>2&&rnd(0,1);if(n>=11){const first=a+b;numberQuestion(a+' + '+b+' − '+c+' = ?',first-c)}else if(n>=7){numberQuestion(a+' + '+b+' + '+c+' = ?',a+b+c)}else if(subtract){numberQuestion((a+b)+' − '+b+' = ?',a)}else numberQuestion(a+' + '+b+' = ?',a+b)};
 window.rTbl=function(){const n=L(),a=rnd(2,3+n),b=rnd(2,Math.min(12,3+n)),c=rnd(1,n);if(n>=11)numberQuestion(a+' × '+b+' + '+c+' = ?',a*b+c);else if(n>=7)numberQuestion(a+' × ? = '+a*b,b);else numberQuestion(a+' × '+b+' = ?',a*b)};
 window.rAdd=function(){const n=L(),a=rnd(n,10+n*8),b=rnd(1,3+n*3),c=rnd(1,n+1);numberQuestion(n<8?a+' + ? = '+(a+b):a+' + ? + '+c+' = '+(a+b+c),b)};
@@ -93,7 +93,7 @@ const facts=[
 [T('After returning home, '+person+' phoned a '+who[0]+'.','回家后，'+person+'给'+who[1]+'打了电话。'),T('Who received the phone call?','电话打给了谁？'),T(...who),other(people,who),'person'],
 [T('Finally, '+person+' drank '+drink[0]+'.','最后，'+person+'喝了'+drink[1]+'。'),T('What happened last?','最后做了什么？'),T('Drank '+drink[0],'喝'+drink[1]),[T('Packed the bag','整理袋子'),T('Travelled to the '+place[0],'前往'+place[1]),T('Phoned the '+who[0],'给'+who[1]+'打电话')],'sequence']
 ].slice(0,Math.min(8,2+Math.ceil((n-1)/2)));
-const g=mg,text=facts.map(x=>x[0]).filter(Boolean).join(' ');g.storyFactCount=facts.length;g.storyQuestions=shuffle(facts.slice());g.storyAnswers=[];g.storyIndex=0;g.storyQuestionKind=g.storyQuestions[0][4];
+const g=mg,settings=[T('During a morning outing, ','一次早晨出行时，'),T('On a family visit, ','一次探访家人时，'),T('After a community activity, ','一次社区活动后，'),T('On a quiet afternoon, ','一个宁静的下午，')],text=choose(settings)+facts.map(x=>x[0]).filter(Boolean).join(' ');g.storyFactCount=facts.length;g.storyQuestions=shuffle(facts.slice());g.storyAnswers=[];g.storyIndex=0;g.storyQuestionKind=g.storyQuestions[0][4];
 function askFact(){
  if(mg!==g)return;const q=g.storyQuestions[g.storyIndex];g.storyQuestionKind=q[4];g.ans=q[2];g.last=null;let answered=false;
  $('mmsg').textContent=T('Detail ','细节 ')+(g.storyIndex+1)+' / '+facts.length+' · '+q[1];
