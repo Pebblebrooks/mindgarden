@@ -1611,3 +1611,7 @@ html[data-layout="modern"] #home #welcomeDashboard .welcome-name{font-size:calc(
 .layout-switch legend{text-align:center;padding:0 8px;font-size:.9em}
 .layout-switch button[aria-pressed="true"]{background:#315d43!important;color:white!important;outline:2px solid #81945b}
 html[data-layout="classic"] .pilot-home-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:18px}
+/* Compact secondary actions keep their icons inside the button. */
+html[data-layout="modern"] #home #welcomeDashboard .pilot-home-actions .feature-icon{font-size:20px!important;line-height:1;width:26px!important;height:26px;display:flex;align-items:center;justify-content:center;flex:0 0 26px}
+html[data-layout="modern"] #home #welcomeDashboard .pilot-home-actions .feature-icon svg{width:24px;height:24px}
+html[data-layout="modern"] #home #welcomeDashboard .pilot-home-actions strong{width:auto;flex:0 1 auto}
