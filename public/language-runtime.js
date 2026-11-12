@@ -19,5 +19,5 @@ function register(en,zh){
  if(a.length===b.length&&a.length>1)a.forEach((part,i)=>add(part.trim(),b[i].trim()));
 }
 for(const [en,zh] of [...forward])register(en,zh);
-window.MindGardenLocale={add:register,has:text=>forward.has(text),convert,pair(en,zh){en=convert(String(en),'en');zh=convert(String(zh),'zh');register(en,zh);return save.lang==='zh'?zh:en}};
+window.MindGardenLocale={add:register,has:text=>forward.has(text),convert,pair(en,zh){en=convert(String(en),'en');zh=convert(String(zh),'zh');register(en,zh);const display=window.MindGardenGrammar?.text(en)||en;register(display,zh);return save.lang==='zh'?zh:display}};
 })();

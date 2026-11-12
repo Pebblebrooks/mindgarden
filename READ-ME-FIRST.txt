@@ -1,29 +1,13 @@
-MIND GARDEN v4.0.26
-Move & Remember combined movement and memory update
+Mind Garden v5.0.0
 
-INSTALL / UPDATE
-1. Upload these package contents to the existing Pebblebrooks/mindgarden repository root on main.
-2. Keep the existing Cloudflare Pages project and production branch main.
-3. Build command: leave empty. Build output directory: public.
-4. Keep the existing functions/ API and DB binding. No migration or data reset is required.
-5. Verify https://mindgarden-bk1.pages.dev/ shows v4.0.26 in About and loads garden-ui-4026.js and garden-ui-4026.css.
-6. If an old version remains, close app tabs and reopen. Do not clear site data; it contains local player history.
+Production deployment authorized by the user. The user confirmed that mg_pilot_rooms and mg_request_limits exist in the production D1 database after the additive migration.
 
-FEATURES
-- Two compact welcome card groups with centered text and accessible help.
-- Simplified My Games with automatic saving and expandable options.
-- Move & Remember: one combined seated follow-along, rest and memory activity.
-- Eight illustrated movements, optional higher reaches, advanced memory challenge and adjustable pace.
-- Old movement selections preserved; per-player movement settings included in backups.
-- English/Mandarin voice instructions, repeat and mute controls. Device voices are required.
-- My Games selection, starting level, 5/10/15-step presets, challenge range and per-game overrides.
-- Individual player preferences and backup/import support.
-- Game descriptions and skills behind hover/focus/tap info icons.
-- More gameplay variety, related-object matching and optional delayed recall.
-- Unscored practice, next/easier-level choices and selected-game progression.
-- Centered responsive cards and immediate navbar fitting.
+Source: develop/v5 at 23e9dfd606076368485cd801c5097881a63c4233.
+Deploy through the existing Cloudflare Pages project from main; output directory public. Prebuilt assets are included. Preserve functions/ and the DB binding.
 
-TESTING
-See TEST-RESULTS-v4.0.26.txt and REVIEW-v4.0.26.txt for coverage and limits.
-SHA256SUMS-v4.0.26.txt verifies the release files.
-Copyright 2026 Pebblebrooks.
+Modern and Classic share games, scores and preferences. Classic v4.0.27 remains on release/v4-classic; the v4.0.26 rollback baseline remains on archive/v4.0.26.
+
+Validated: build and syntax, grammar, saved preferences, eight-client EN/ZH multiplayer, layout switching, facilitator backend/UI, and offline caching. Physical-device pilot testing remains outstanding.
+
+Verify About shows v5.0.0 and garden-ui-500.js and .css load. Do not clear site data; it holds local player history.
+Deployment success is reported separately after Cloudflare completes publication.

@@ -1,3 +1,4 @@
+import {roomRequestGuard,boundedJSON} from '../../shared/request-guard.js';
 // Mind Garden v2.2: private, two-player, multi-round friendly rooms (Cloudflare Pages + D1).
 const J=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
 const goodName=s=>typeof s==='string'&&s.trim().length>=1&&s.trim().length<=20&&/^[\p{L}\p{N} ._'-]+$/u.test(s.trim());
@@ -15,7 +16,8 @@ export async function onRequest({request,env}){
  try{
   const u=new URL(request.url),action=u.searchParams.get('action')==='health'?'health':request.method==='GET'?'status':u.searchParams.get('action');
   if(!['GET','POST'].includes(request.method))return J({error:'Method not allowed'},405);
-  const b=request.method==='POST'?await request.json():Object.fromEntries(u.searchParams);
+  const blocked=await roomRequestGuard(request,env.DB,action);if(blocked)return blocked;
+  const b=request.method==='POST'?await boundedJSON(request):Object.fromEntries(u.searchParams);
   if(action==='health'){const cols=await env.DB.prepare('PRAGMA table_info(rooms)').all();const found=new Set((cols.results||[]).map(x=>x.name));const required=['round_number','game_type','host_total','guest_total'];return J({ok:required.every(x=>found.has(x)),database:'connected',missingColumns:required.filter(x=>!found.has(x))})}
   if(action==='create'){
    if(!goodName(b.name))return J({error:'Enter a name (1–20 letters/numbers).'},400);
@@ -68,6 +70,7 @@ export async function onRequest({request,env}){
   }
   return J({error:'Unknown action.'},404);
  }catch(e){
+  if(e.status===413)return J({error:e.message},413);
   const message=String(e&&e.message||e);
   if(/no such column|has no column named|table rooms has no column/i.test(message))return J({error:'The multiplayer database schema is outdated. Open the D1 Console and apply only the missing columns from migrate-v2.2.sql.'},500);
   if(/no such table/i.test(message))return J({error:'Multiplayer tables are missing. Run schema.sql in the D1 Console.'},500);

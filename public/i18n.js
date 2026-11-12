@@ -128,7 +128,7 @@ function walk(n){
  for(var c=n.firstChild;c;c=c.nextSibling)walk(c);
 }
 var observer=new MutationObserver(function(records){observer.disconnect();records.forEach(function(m){if(m.type==='childList')m.addedNodes.forEach(walk);else walk(m.target)});observe()});
-function observe(){observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['aria-label','title','placeholder','alt']})}
+function observe(){if(!document?.body)return;observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['aria-label','title','placeholder','alt']})}
 function applyLanguage(){
  observer.disconnect();document.documentElement.lang=save.lang==='zh'?'zh-Hans':'en';
  btn.textContent=save.lang==='zh'?'English':'Chinese 中文';btn.setAttribute('lang',save.lang==='zh'?'en':'zh-Hans');

@@ -5,11 +5,11 @@ const T=(en,zh)=>window.MindGardenLocale.pair(en,zh);
 let current=null;
 function mount(){
  const p=document.getElementById('gardenCat'),host=document.getElementById('menuPets');if(!p||!host)return;
- if(current?.p===p){if(current.menu.parentElement!==host)host.append(current.menu);return}
+ if(current?.p===p){if(current.menu.parentElement!==host)host.append(current.menu);current.reposition?.();return}
  const stage=p.querySelector('.mochi-stage');p.dataset.freePet='true';p.dataset.positioned='true';p.style.setProperty('--pet-left','32px');p.style.setProperty('--pet-top','160px');p.style.setProperty('--pet-size','260px');
  let timer,drag=null,pinch=null,customPosition=false;const scene=document.querySelector('#welcomeDashboard .welcome-scene')||document.getElementById('welcomeDashboard');
- function defaultPosition(){if(customPosition||!scene)return;const r=scene.getBoundingClientRect(),n=parseFloat(p.style.getPropertyValue('--pet-size'))||260;if(!r.width||!r.height)return;p.dataset.pinned='true';place(r.left+(r.width-n)/2,Math.max(r.top,r.bottom-n-24));}
- const sceneObserver=typeof ResizeObserver==='function'?new ResizeObserver(defaultPosition):null;if(scene)sceneObserver?.observe(scene);window.addEventListener('resize',defaultPosition);const points=new Map();
+ function defaultPosition(){if(customPosition||!scene)return;const area=document.querySelector('#welcomeDashboard .garden-breathing-space')||scene;const r=area.getBoundingClientRect(),n=parseFloat(p.style.getPropertyValue('--pet-size'))||260;if(!r.width||!r.height)return;p.dataset.pinned='true';place(r.left+(r.width-n)/2,Math.max(r.top,r.bottom-n-24));}
+ const sceneObserver=typeof ResizeObserver==='function'?new ResizeObserver(defaultPosition):null;if(scene)sceneObserver?.observe(document.getElementById('welcomeDashboard'));window.addEventListener('resize',defaultPosition);const points=new Map();
  const toolbar=document.createElement('div');toolbar.className='pet-edit-tools';toolbar.innerHTML='<button type="button" data-edit="move" aria-label="'+T('Move pet. Drag or use arrow keys.','移动宠物。拖动或使用方向键。')+'">✥</button><button type="button" data-edit="pin">📌</button><button type="button" data-edit="hide" aria-label="'+T('Hide pet','隐藏宠物')+'">×</button><button type="button" data-edit="resize" aria-label="'+T('Resize pet. Drag or use arrow keys.','调整宠物大小。拖动或使用方向键。')+'">⤢</button>';p.append(toolbar);
  function select(){p.dataset.editing='true';clearTimeout(timer);timer=setTimeout(()=>{if(!drag&&!points.size&&!toolbar.contains(document.activeElement))delete p.dataset.editing},5000)}
  function place(x,y){const pinned=p.dataset.pinned==='true';p.style.setProperty('--pet-left',(x+(pinned?scrollX:0))+'px');p.style.setProperty('--pet-top',(y+(pinned?scrollY:0))+'px')}
@@ -27,7 +27,7 @@ function mount(){
  stage.addEventListener('pointermove',e=>{if(!points.has(e.pointerId))return;points.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pinch&&points.size===2){const a=[...points.values()];size(pinch.size*Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)/Math.max(1,pinch.distance));e.stopImmediatePropagation();e.preventDefault()}},true);
  for(const event of ['pointerup','pointercancel'])stage.addEventListener(event,e=>{points.delete(e.pointerId);if(pinch){e.stopImmediatePropagation();if(!points.size)pinch=null}select()},true);
  stage.addEventListener('click',select);stage.addEventListener('focus',select);toolbar.addEventListener('focusin',select);
- current?.dispose();current={p,menu,dispose(){observer.disconnect();sceneObserver?.disconnect();window.removeEventListener('resize',defaultPosition);clearTimeout(timer);menu.remove()}};defaultPosition();sync();
+ current?.dispose();current={p,menu,reposition:defaultPosition,dispose(){observer.disconnect();sceneObserver?.disconnect();window.removeEventListener('resize',defaultPosition);clearTimeout(timer);menu.remove()}};defaultPosition();sync();
 }
 const schedule=()=>queueMicrotask(mount);window.addEventListener('gardenPetsChange',schedule);window.addEventListener('gardenPlayerChange',schedule);new MutationObserver(schedule).observe(document.getElementById('navMenu'),{childList:true});mount();
 })();
