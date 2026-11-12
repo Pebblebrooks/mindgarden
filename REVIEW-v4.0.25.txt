@@ -1,0 +1,14 @@
+Mind Garden v4.0.25 — review build, not deployed
+
+Welcome: two purpose groups: Today’s Games / My Games / All Games, then Play Together / My Progress / Leaderboard. Bilingual centered headings, My Games info button and subtle Today’s Games emphasis. Six cards in one grid, three columns/two rows on desktop; two columns on tablets and one on narrow phones. Cards reduced to 112px minimum height; text stays centered.
+Setup: 620px maximum width, content-driven height, closer spacing, 48px controls. My Games now shows selected games, challenge and session length with automatic saving. Game selection and advanced settings expand on demand; multiplayer keeps a wider layout. Hidden native selectors stay hidden. Related-object help only appears when that mode is selected.
+
+Validation passed: release syntax; 118 bilingual setup/launch cases and personal preference/practice tests; 30 games at all 15 levels in English and Chinese; 16 daily journeys; live language switching; eight-player UI round progression and room API; personal progress and player preferences. Updated legacy test loaders and the test flow for manual question continuation. Browser: 90 layout combinations across 360/768/1280 widths, English/Chinese, 100/140/200% text, five screens; zero detected horizontal overflow. Verified six-card desktop grid and conditional matching hint.
+
+Scope: existing automated and browser checks, not a guarantee that every possible device/gameplay issue is eliminated. Real-device audio and live remote multiplayer were not retested. Awaiting user approval to package and deploy.
+
+Movement: Garden Rhythm and Follow the Gardener offer seated, untimed, self-reported activities, hands-only or hands-and-feet options, pause/skip/finish controls and no scored assessment. English/Mandarin instructions include repeat and voice toggle; speech cancels on pause/skip/exit. Preview browser has no installed language voice: speech lifecycle tested with mocks, text fallback verified in browser; actual device audio remains to be checked.
+
+Additional validation: 24 bilingual movement sessions and 118 setup/launch cases passed. Prior expanded browser matrix passed 162 layouts. Approved welcome grouping separately checked across 18 width/language/text-size combinations.
+
+Fixed viewport overflow from a manually positioned pet after screen resizing.
