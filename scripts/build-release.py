@@ -26,7 +26,7 @@ s=re.sub(r'<script src="(?:'+ '|'.join(re.escape(n) for n in scripts+['daily-quo
 s=s.replace('<script>if("serviceWorker"', f'<script src="garden-ui-{tag}.js"></script>\n<script>if("serviceWorker"')
 s=re.sub(r'(<meta name="mind-garden-release" content=")[^"]+',r'\g<1>v'+version,s)
 (p/'index.html').write_text(s)
-assets=['./','index.html',f'garden-ui-{tag}.css',f'garden-ui-{tag}.js']+[str(f.relative_to(p)) for f in sorted(p.rglob('*')) if f.is_file() and f.suffix in ('.webp','.gif','.jpg','.jpeg','.png','.glb','.mp3','.svg','.webmanifest')]
+assets=['./','index.html','move-remember/index.html','move-remember/app.js','move-remember/style.css',f'garden-ui-{tag}.css',f'garden-ui-{tag}.js']+[str(f.relative_to(p)) for f in sorted(p.rglob('*')) if f.is_file() and f.suffix in ('.webp','.gif','.jpg','.jpeg','.png','.glb','.mp3','.svg','.webmanifest')]
 (p/'sw.js').write_text('/* V'+version+': coherent UI release, no HTML fallback for missing scripts or styles. */\nconst V="mind-garden-v'+tag+'", F='+json.dumps(assets)+''';
 self.addEventListener('install',e=>{e.waitUntil((async()=>{const cache=await caches.open(V);for(const path of F){const response=await fetch(new Request(path,{cache:'reload'}));const type=response.headers.get('content-type')||'';if(!response.ok||(/\\.(css|js)$/.test(path)&&type.includes('text/html')))throw Error('Incomplete release: '+path);await cache.put(path,response)}await self.skipWaiting()})())});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('mind-garden-')&&key!==V)await caches.delete(key);await self.clients.claim()})())});

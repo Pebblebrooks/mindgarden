@@ -1,0 +1,10 @@
+Move & Remember working preview — 12 November 2026
+Standalone review prototype; not integrated into production or deployed.
+
+Approved sage/ivory look, older seated demonstrator, eight selectable movements, optional higher reaches, follow-along -> player-controlled rest -> watch -> untimed recall.
+English/Mandarin captions and device voice selection. Speech gate prevents timed progression while narration is pending; pause/skip/language change/exit cancel speech. Slow/Regular/At my pace controls. 5/10/15 level presets, four memory challenge ranges, optional reverse instruction for advanced sessions. Self-reported completion, no medical or movement assessment and no scores.
+
+Validated: 48 bilingual complete-flow tests across three level counts, four challenges and optional reaches; pause, skip, replay, speech gate/cancellation, language changes, empty choice, no-voice fallback. 48 browser layout checks across 360/768/1280 widths, normal/enlarged base text, English/Chinese and four stages: zero measured horizontal overflow. The overhead asset was subsequently corrected and the automated flow tests rerun. Portable HTML was opened and verified in the browser.
+Limits: four generated keyframes per movement, with some identity/posture drift; not video-smooth. Browser has no installed language voice; actual speech output needs testing on user's device. No sensor detects whether a movement was performed. Preset levels vary sequence selection and length; not every adjacent level increases length. Higher reach remains optional at every memory challenge.
+
+Assets generated with built-in image generator using approved More ways to move visual as reference. Prompt set: (1) strict 4x4 frame sheet, seated woman matching reference, neutral/halfway/full/return forward, sides, upward, head-touch poses; (2) same for shoulders, palm turn, open/close, alternating thigh taps; (3) corrected 4x1 overhead strip with extra headroom and hands visibly above crown. Fixed chair, clothes, feet and ivory backdrop requested throughout.

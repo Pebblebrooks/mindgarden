@@ -1,0 +1,17 @@
+Mind Garden v4.0.26 — Move & Remember integration
+Status: approved for packaging and deployment on 12 November 2026. Live deployment verification is reported separately.
+
+One combined, unscored seated activity replaces the two movement catalog entries. Existing gardenrhythm and followgardener selections route to the same activity and duplicate selections are removed. Follow-along, manual rest, watch, untimed recall and completion use the approved illustrated design. Eight movement choices include optional higher reaches; memory challenge, pace, 5/10/15 presets, next level, repeat, skip, pause and English/Chinese narration controls are included.
+
+Movement preferences save per player and are included in validated backups. Origin and frame-source checks protect the embedded activity messages. Closing, changing player, hiding the page and leaving cancel or pause narration. Completion returns to My Games or advances the chosen-game queue. No exercise correctness or score is inferred.
+
+Validation:
+- 118 bilingual personal-game setup/launch flows and settings tests.
+- Integration tests: legacy selection migration, single catalog item, queue navigation, message validation, settings persistence, backup round-trip, unscored history and close cleanup.
+- 48 bilingual movement flows, all challenge tiers, level presets, optional reaches, rest, recall, replay, narration gating, pause/cancellation, language changes, skip and missing-voice fallback.
+- Release cache tests and JavaScript syntax checks.
+- Desktop browser: actual catalog launch and image loading, English/Chinese activity/outer controls, pause, skip-to-rest, completion, return to My Games and persisted pace after reload.
+- Prior standalone preview responsive checks remain applicable to the embedded child layout; the full integrated modal has been visually checked on desktop, not on physical phones/tablets.
+
+Limits:
+The illustrated animation uses four generated keyframes per movement, not continuous video. Device voices were unavailable in the test browser; speech lifecycle is covered with mocked voices and fallback checked in-browser. Actual English/Mandarin pronunciation and timing require target-device validation. No physical movement is detected. No production deployment or database changes were made.
