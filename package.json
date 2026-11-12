@@ -1,6 +1,6 @@
 {
   "name": "mind-garden-cloudflare",
-  "version": "4.0.27",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "dev": "wrangler pages dev public --local",
@@ -12,7 +12,8 @@
     "test:release": "node tests/review-ui.test.cjs && node tests/navbar-overflow.test.cjs && node tests/release-cache.test.cjs && node tests/v4-design.test.cjs",
     "test:everyday": "node tests/everyday-games.test.cjs",
     "test:commercial": "node tests/commercial-preview.test.cjs",
-    "test:personal": "node tests/personal-games.test.cjs && node tests/movement-games.test.cjs && node tests/move-remember.test.cjs"
+    "test:personal": "node tests/personal-games.test.cjs && node tests/movement-games.test.cjs && node tests/move-remember.test.cjs",
+    "dev:review": "node scripts/preview-server.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0",
