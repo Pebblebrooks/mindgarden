@@ -14,7 +14,7 @@ function compare(expected,entered=[],options={}){
   return '<li class="answer-card answer-'+state+'"'+(i!==initial?' hidden':'')+'>'+(sequence?'<span class="answer-position">'+T('Step ','第 ')+(i+1)+(save.lang==='zh'?' 项':'')+'</span>':'')+
    '<div class="answer-value"><span class="answer-label">'+T('Correct answer','正确答案')+'</span><strong>'+escape(answer)+'</strong></div>'+
    '<div class="answer-value answer-player"><span class="answer-label">'+T('Your answer','您的答案')+'</span><strong>'+escape(missing?T('Not entered','未输入'):value)+'</strong></div>'+
-   '<span class="answer-outcome"><span aria-hidden="true">'+(missing?'—':match?'✓':'↻')+'</span> '+T(missing?'Not entered':match?'Matched':'Review this one',missing?'未输入':match?'答对了':'看看这一项')+'</span></li>';
+   '<span class="answer-outcome"><span aria-hidden="true">'+(missing?'—':match?'✓':'')+'</span> '+T(missing?'Not entered':match?'Matched':'Answer differs',missing?'未输入':match?'答对了':'答案不同')+'</span></li>';
  }).join('')+'</ol>'+(expected.length>1?'<div class="answer-pager"><button class="btn" data-review-step="-1"'+(initial===0?' disabled':'')+' aria-label="'+T('Previous answer','上一项答案')+'">‹</button><span class="answer-page" aria-live="polite">'+(initial+1)+' / '+expected.length+'</span><button class="btn" data-review-step="1"'+(initial===expected.length-1?' disabled':'')+' aria-label="'+T('Next answer','下一项答案')+'">›</button></div>':'')+'</section>';
 }
 document.addEventListener('click',e=>{

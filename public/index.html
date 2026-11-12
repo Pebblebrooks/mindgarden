@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.26">
+<meta name="mind-garden-release" content="v4.0.27">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4026.css">
+<link rel="stylesheet" href="garden-ui-4027.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -614,7 +614,7 @@ function famView(){
     var tr=A===null?"No games played this week yet.":B===null?"A good start – keep going.":A>B+.05?"Doing a little better than last week.":A<B-.05?"A little lower than last week. That is normal; a short game each day helps.":"Steady compared with last week.";
     var mx=Math.max.apply(null,m.concat([60])),st=0;for(var k in p.stars)st+=p.stars[k];
     var bars=m.map(function(s,i){var d=new Date();d.setDate(d.getDate()-(6-i));return '<div class="bc"><i style="height:'+Math.round(s/mx*70)+'px"></i><small>'+Math.round(s/60)+' min</small><span>'+dn[d.getDay()]+'</span></div>'}).join("");
-    return '<section class="fam"><h3>'+avHtml(p)+esc(p.name)+'’s week'+(id===save.cp?" ✓":"")+'</h3><div class="bars s">'+bars+'</div><p>'+g+' games, '+Math.round(tm/60)+' minutes this week<br>Matching level reached: '+Math.min(p.unlocked||1,6)+' of 6, with '+st+' stars<br>Garden: '+Math.min(60,p.gr||0)+' of 60<br>'+tr+'</p><button class="btn sm" data-fc="'+id+'">Clear history</button></section>'}).join("");
+    return '<section class="fam"><h3>'+avHtml(p)+esc(p.name)+'’s week'+(id===save.cp?" ✓":"")+'</h3><div class="bars s">'+bars+'</div><p>'+g+(g===1?' game, ':' games, ')+Math.round(tm/60)+(Math.round(tm/60)===1?' minute':' minutes')+' this week<br>Matching level reached: '+Math.min(p.unlocked||1,6)+' of 6, with '+st+(st===1?' star':' stars')+'<br>Garden: '+Math.min(60,p.gr||0)+' of 60<br>'+tr+'</p><button class="btn sm" data-fc="'+id+'">Clear history</button></section>'}).join("");
   overlay('<h2>Family view</h2>'+blocks+'<div class="row"><button class="btn main" id="fd">Done</button><button class="btn sm" id="fs2">Stop sharing</button></div>');
   $("fd").onclick=closeOv;$("fs2").onclick=function(){save.famOk=0;persist();closeOv()};
 }
@@ -903,7 +903,7 @@ function renderHero(){var p=me(),pts=Math.min(60,p.gr||0),ty=p.fl||"mixed",st=gs
  motion();$("bFlw").onclick=openFlw;if(full)$("bNewG").onclick=function(){p.gr=0;p.gs=(p.gs||0)+1;persist();renderHero()}}
 function openFlw(){var cur=me().fl||"mixed";overlay('<h2>Choose your flowers</h2><div class="flgrid">'+FLK.concat(["mixed"]).map(function(k){var m=k==="mixed",pv=m?FLK.slice(0,3).map(function(t,i){return head(t,12+i*18,18,.5)}).join(""):head(k,18,18,.85);return'<button class="btn tg" data-fl="'+k+'" aria-pressed="'+(cur===k)+'"><svg viewBox="0 0 '+(m?54:36)+' 36" width="'+(m?54:36)+'" height="36" aria-hidden="true">'+pv+'</svg><span>'+(m?"Mixed":FL[k].n)+'</span></button>'}).join("")+'</div><p class="tip">Full bloom takes about 60 growth points. Each finished game adds one, plus one for your first game each day: about four weeks at one game a day, three weeks at two, or two weeks at three. Missed days never harm your garden.</p><div class="row"><button class="btn main" id="fld">Done</button></div>');$("fld").onclick=closeOv}
 function breakHtml(){return '<b>Remind me to rest every</b><div class="prow">'+[10,15,20,30].map(function(m){return '<button class="btn tg" data-bn="'+m+'" aria-pressed="'+((save.bn||15)===m)+'">'+m+' min</button>'}).join("")+'</div>'}
-function addBreak(){if(!save.brk||$("ov").classList.contains("hidden"))return;var p=me(),t=dstr(),m=Math.floor(p.log.filter(function(x){return x.d===t}).reduce(function(a,x){return a+x.s},0)/60),n=Math.floor(m/(save.bn||15));if(!p.bk||p.bk.d!==t)p.bk={d:t,n:0};if(n>p.bk.n){p.bk.n=n;persist();var r=$("box").querySelector(".row");if(r)r.insertAdjacentHTML("beforebegin",'<p class="brk">You’ve played '+m+' minutes today – lovely! Time for a drink, a stretch or a rest.</p>')}}
+function addBreak(){if(!save.brk||$("ov").classList.contains("hidden"))return;var p=me(),t=dstr(),m=Math.floor(p.log.filter(function(x){return x.d===t}).reduce(function(a,x){return a+x.s},0)/60),n=Math.floor(m/(save.bn||15));if(!p.bk||p.bk.d!==t)p.bk={d:t,n:0};if(n>p.bk.n){p.bk.n=n;persist();var r=$("box").querySelector(".row");if(r)r.insertAdjacentHTML("beforebegin",'<p class="brk">You’ve played '+m+(m===1?' minute':' minutes')+' today – lovely! Time for a drink, a stretch or a rest.</p>')}}
 var _end=end;end=function(ok){_end(ok);addBreak();addGrow()};var _md=mdone;mdone=function(){_md();addBreak();addGrow()};
 function photosHtml(){var ph=save.photos||[];return '<b>My photos for Matching pairs</b><p class="tip">Photos stay on this device. Add at least 6, then choose “My photos” in Matching pairs.</p><div class="thumbs">'+ph.map(function(p,i){return '<span class="th"><img src="'+p.d+'" alt=""><button class="btn sm ic" data-ph="'+i+'" aria-label="Remove photo">✕</button></span>'}).join("")+'</div>'+(ph.length?'<button class="btn sm" data-pha="1">Remove all photos</button> ':'')+'<input type="file" id="phf" accept="image/*" multiple class="hidden"><button class="btn sm" id="pha">Add photos</button>'}
 function shrink(f,cb,z){z=z||192;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var m=Math.min(im.width,im.height),c=document.createElement("canvas");c.width=c.height=z;c.getContext("2d").drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,z,z);cb(c.toDataURL("image/jpeg",.78))};im.onerror=function(){cb(null)};im.src=r.result};r.onerror=function(){cb(null)};r.readAsDataURL(f)}
@@ -918,7 +918,7 @@ function lbView(key){
  function row(r,i,v,has){return'<div class="lbr'+(r.me?" me":"")+'"><span class="rk">'+(has&&i<3?trophy(i):i+1)+'</span><b>'+r.a+esc(r.n)+'</b><span>'+v+'</span></div>'}
  function list(rows,val,has){var h=rows.slice(0,10).map(function(r,i){return row(r,i,val(r),has(r))}).join(""),mi=rows.findIndex(function(r){return r.me});if(mi>=10)h+=row(rows[mi],mi,val(rows[mi]),false);return h}
  var opts=[["all","Overall – fastest all-correct times"]].concat(Object.keys(MG).map(function(k){return[k,MG[k].n]})).concat([1,2,3,4,5,6].map(function(n){return["p"+n,"Matching pairs – Level "+n]}));
- overlay('<h2>Leaderboard</h2><h3>Most games played</h3><p class="tip">Ranked by the number of games finished.</p><div class="list">'+list(byG,function(r){return r.gp+" games"},function(r){return r.gp>0})+'</div><h3>Best timings</h3><p class="tip">Ranked by fastest games with every answer correct. “Overall” adds points from each game.</p><label class="lab">Ranking<select id="lbs">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(o[0]===key?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></label><div class="list">'+list(byT,function(r){return key==="all"?r.pts+" pts"+(r.m?"<br><small>Best time: "+fmt(r.m)+"</small>":""):(r.t?fmt(r.t):"—")},function(r){return key==="all"?r.pts>0:!!r.t})+'</div><div class="row"><button class="btn main" id="lbd">Done</button></div>');
+ overlay('<h2>Leaderboard</h2><h3>Most games played</h3><p class="tip">Ranked by the number of games finished.</p><div class="list">'+list(byG,function(r){return r.gp+(r.gp===1?" game":" games")},function(r){return r.gp>0})+'</div><h3>Best timings</h3><p class="tip">Ranked by fastest games with every answer correct. “Overall” adds points from each game.</p><label class="lab">Ranking<select id="lbs">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(o[0]===key?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></label><div class="list">'+list(byT,function(r){return key==="all"?r.pts+" pts"+(r.m?"<br><small>Best time: "+fmt(r.m)+"</small>":""):(r.t?fmt(r.t):"—")},function(r){return key==="all"?r.pts>0:!!r.t})+'</div><div class="row"><button class="btn main" id="lbd">Done</button></div>');
  $("lbs").onchange=function(){lbView(this.value)};$("lbd").onclick=closeOv;
 }
 $("bLb").onclick=function(){lbView()};
@@ -1059,7 +1059,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4026.js"></script>
+<script src="garden-ui-4027.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

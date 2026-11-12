@@ -1,0 +1,37 @@
+Removed generated legacy bundles and redundant root mirrors.
+Editable versioned styles, migrations, third-party notices and historical records are retained.
+Deploy directory: public/. Build: python3 scripts/build-release.py
+
+garden-ui-4024.js
+garden-ui-4026.js
+garden-ui-4024.css
+garden-ui-4025.css
+garden-ui-401.css
+garden-ui-4026.css
+garden-ui-4025.js
+garden-ui-401.js
+daily-and-controls.test.cjs
+release-ui.test.cjs
+home-nature.js
+sw.js
+bouquet-3d.js
+navbar-overflow.test.cjs
+new-features.test.cjs
+restore-accessibility.test.cjs
+release-cache.test.cjs
+motion-navigation.test.cjs
+multiplayer-taps.test.mjs
+home-nature-overlay.test.cjs
+v4.css
+online-expansion-ui.test.mjs
+bingo-ui.test.mjs
+dashboard.js
+page-visibility.test.cjs
+multiplayer.js
+audio-gesture.test.cjs
+progression-practice.test.cjs
+bouquet-speed.test.cjs
+soundscape.js
+five-games.test.cjs
+storage-failure.test.cjs
+v38.css
