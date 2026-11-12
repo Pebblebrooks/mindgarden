@@ -17,7 +17,6 @@ if(!save.motionMode)save.motionMode=save.still?'off':'gentle';
 function effectiveMode(){return save.still||save.motionMode==='off'||(reduced.matches&&!save.motionExplicit)?'off':save.motionMode==='standard'?'standard':'gentle'}
 function setMode(mode){if(!['off','gentle','standard'].includes(mode))return;if(mode!=='off')save.motionPrevious=mode;else if(['gentle','standard'].includes(save.motionMode))save.motionPrevious=save.motionMode;save.motionMode=mode;save.still=mode==='off'?1:0;save.motionExplicit=true;persist();sync()}
 function sync(){
- if(!document?.documentElement)return;
  const scene=dash.querySelector('.welcome-scene');if(scene&&!scene.contains(life))scene.prepend(life);
  const mode=effectiveMode();
  document.documentElement.dataset.motionExplicit=String(!!save.motionExplicit);

@@ -1,9 +1,7 @@
-import {roomRequestGuard,boundedJSON} from '../../shared/request-guard.js';
 import {onlineActivities,makeOnlineQuestions} from '../../shared/online-activities.js';
 // Eight-player rooms and in-app invitation delivery. Sessions are device identities, not accounts.
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}});
 const fail=(message,status=400)=>{throw Object.assign(new Error(message),{status})};
-const pilotModes=['pairs6','pairs10','sums','patterns','odd','bingo9'];
 const modes={bingo9:9,pairs6:6,pairs10:10,sums:8,patterns:8,odd:8,sums12:12,patterns12:12,odd12:12};
 for(const activity of onlineActivities)modes[activity.id]=8;
 const random=n=>Array.from(crypto.getRandomValues(new Uint8Array(n)),x=>x.toString(16).padStart(2,'0')).join('');
@@ -19,10 +17,9 @@ export async function onRequest({request,env}){
  try{
   if(request.method!=='POST')return json({error:'POST required.'},405);
   const a=new URL(request.url).searchParams.get('action');
-  const blocked=await roomRequestGuard(request,db,a);if(blocked)return blocked;
-  let b;try{b=await boundedJSON(request)}catch(e){if(e.status===413)return json({error:e.message},413);fail('Send a valid JSON object.')}
+  let b;try{b=await request.json()}catch{fail('Send a valid JSON object.')}
   if(!b||typeof b!=='object'||Array.isArray(b))fail('Send a valid JSON object.');
-  if(['launch','advance','finishRound','finishSession','begin','submit','bingoCall','bingoMark','startTogether'].includes(a)&&(!Number.isSafeInteger(b.round)||b.round<0))fail('Enter a valid round number.');
+  if(['launch','advance','finishRound','finishSession','begin','submit','bingoCall','bingoMark'].includes(a)&&(!Number.isSafeInteger(b.round)||b.round<0))fail('Enter a valid round number.');
   if(a==='login'){
    const name=String(b.name||'').trim();
    if(!/^[\p{L}\p{N} ._'-]{1,20}$/u.test(name))fail('Enter a name (1–20 letters/numbers).');
@@ -100,9 +97,6 @@ export async function onRequest({request,env}){
   let room=await one(db,'SELECT * FROM mg_rooms WHERE code=?',c);
   if(!room)fail('Room not found.',404);
   let plan=await one(db,'SELECT * FROM mg_room_sessions WHERE code=?',c);
-  let pilot=null;
-  try{pilot=await one(db,'SELECT * FROM mg_pilot_rooms WHERE code=?',c)}catch(e){if(!String(e).includes('no such table'))throw e}
-
   if(now-room.created_at>86400000)fail('This room has expired (24 hours). Create a new one.',410);
   if(a==='join'){
    if(room.status==='closed')fail('The host closed this room.',410);
@@ -126,28 +120,13 @@ export async function onRequest({request,env}){
    await db.batch([query(db,'INSERT OR IGNORE INTO mg_departures(code,token,left_at) VALUES(?,?,?)',c,b.token,now),query(db,'UPDATE mg_results SET skipped=1 WHERE code=? AND token=? AND score IS NULL',c,b.token),query(db,'DELETE FROM mg_active_rooms WHERE token=? AND code=?',b.token,c)]);return json({code:c,left:true});
   }
   if(await one(db,'SELECT token FROM mg_departures WHERE code=? AND token=?',c,b.token)){if(a==='status')return json({code:c,left:true});fail('You have left this room.',403)}
-  if(['launch','advance','close','finishRound','finishSession','bingoCall','configurePilot','startTogether'].includes(a)&&!host)fail('Only the host can do this.',403);
+  if(['launch','advance','close','finishRound','finishSession','bingoCall'].includes(a)&&!host)fail('Only the host can do this.',403);
   if(a==='close'){await db.batch([
    query(db,"UPDATE mg_room_sessions SET ended_at=?,end_reason='cancelled' WHERE code=? AND ended_at IS NULL",now,c),
    query(db,"UPDATE mg_rooms SET status='closed',closed_at=COALESCE(closed_at,?) WHERE code=?",now,c)
   ]);return json({code:c,closed:true})}
   if(room.status==='closed'&&!(plan?.end_reason==='finished'&&['status','finishSession'].includes(a)))return json({code:c,closed:true});
-  if(a==='configurePilot'){
-   if(room.status!=='lobby')fail('Configure the session before the first round.',409);
-   if(!Array.isArray(b.activities)||b.activities.length<1||b.activities.length>10||b.activities.some(m=>!pilotModes.includes(m)))fail('Choose 1–10 supported activities.');
-   await db.batch([query(db,'INSERT INTO mg_pilot_rooms(code,activities) VALUES(?,?) ON CONFLICT(code) DO UPDATE SET activities=excluded.activities',c,JSON.stringify(b.activities)),query(db,'UPDATE mg_room_sessions SET total_rounds=? WHERE code=?',b.activities.length,c)]);
-   return json({ok:true});
-  }
-  if(a==='startTogether'){
-   if(!pilot||room.status!=='playing'||b.round!==room.round)fail('Round has changed.',409);
-   const waiting=await one(db,`SELECT COUNT(*) AS n FROM mg_results q JOIN mg_sessions s ON s.token=q.token LEFT JOIN mg_round_starts t ON t.code=q.code AND t.round=q.round AND t.token=q.token WHERE q.code=? AND q.round=? AND q.score IS NULL AND q.skipped=0 AND (t.began_at IS NULL OR s.last_seen<?)`,c,room.round,now-15000);
-   if(waiting.n)fail('Wait for every player to be ready and connected.',409);
-   if(pilot.released_round!==room.round){
-    const release=now+3500;
-    await db.batch([query(db,'UPDATE mg_pilot_rooms SET released_round=?,released_at=? WHERE code=? AND released_round!=?',room.round,release,c,room.round),query(db,'UPDATE mg_round_starts SET began_at=(SELECT released_at FROM mg_pilot_rooms WHERE code=?) WHERE code=? AND round=?',c,c,room.round)]);
-   }
-  }else if(a==='launch'||a==='advance'){
-   if(pilot)b.mode=JSON.parse(pilot.activities)[room.round];
+  if(a==='launch'||a==='advance'){
    if(!Object.hasOwn(modes,b.mode))fail('Choose an available activity.');
    if(plan&&room.round>=plan.total_rounds)fail('This session has reached its planned number of rounds.',409);
    const count=(await one(db,'SELECT COUNT(*) AS n FROM mg_active_rooms WHERE code=?',c)).n;
@@ -161,14 +140,12 @@ export async function onRequest({request,env}){
    if(b.mode==='bingo9')await query(db,'INSERT OR IGNORE INTO mg_bingo_rounds(code,round) VALUES(?,?)',c,room.round+1).run();
   }else if(a==='begin'){
    if(room.status!=='playing'||b.round!==room.round)fail('Round has changed; reopen the room.',409);
-   if(pilot&&pilot.released_round===room.round&&!await one(db,'SELECT token FROM mg_round_starts WHERE code=? AND round=? AND token=?',c,room.round,b.token))fail('This group round has already started.',409);
    const result=await one(db,'SELECT score,skipped FROM mg_results WHERE code=? AND round=? AND token=?',c,room.round,b.token);
    if(!result||result.skipped||result.score!==null)fail('Your participation in this round has ended.',409);
    await query(db,`INSERT OR IGNORE INTO mg_round_starts(code,round,token,began_at)
     SELECT code,round,token,? FROM mg_results WHERE code=? AND round=? AND token=? AND score IS NULL AND skipped=0
     AND EXISTS(SELECT 1 FROM mg_rooms WHERE code=? AND round=? AND status='playing')`,now,c,room.round,b.token,c,room.round).run();
   }else if(a==='bingoCall'||a==='bingoMark'){
-   if(pilot&&(pilot.released_round!==room.round||now<pilot.released_at))fail('Wait for the facilitator to start together.',409);
    if(plan&&(await one(db,`SELECT COUNT(*) AS n FROM mg_results q LEFT JOIN mg_round_starts t
     ON t.code=q.code AND t.round=q.round AND t.token=q.token WHERE q.code=? AND q.round=?
     AND q.score IS NULL AND q.skipped=0 AND t.began_at IS NULL`,c,room.round)).n)fail('Wait for every remaining player to press Begin before calling or marking pictures.',409);
@@ -205,7 +182,6 @@ export async function onRequest({request,env}){
    if(Number(b.round)!==room.round)fail('Round has changed; reopen the room.',409);
    await query(db,'UPDATE mg_results SET skipped=1 WHERE code=? AND round=? AND score IS NULL',c,room.round).run();
   }else if(a==='submit'){
-   if(pilot&&(pilot.released_round!==room.round||now<pilot.released_at))fail('Wait for the facilitator to start together.',409);
    if(room.mode==='bingo9')fail('Mark the called bingo pictures to complete this round.');
    if(room.status!=='playing'||Number(b.round)!==room.round)fail('Round has changed; reopen the room.',409);
    if(plan&&!await one(db,'SELECT began_at FROM mg_round_starts WHERE code=? AND round=? AND token=?',c,room.round,b.token))fail('Press Begin before submitting a result.',409);
@@ -219,7 +195,7 @@ export async function onRequest({request,env}){
     verifiedMoves=questions.length+questions.filter((q,i)=>q.answer!==b.answers[i]).length;
     if(moves!==verifiedMoves)fail('Result does not match the answers.');
    }
-   const score=Math.max(0,Math.round(3000-verifiedMoves*40-(pilot?0:Math.min(900,elapsed)*3)));
+   const score=Math.max(0,Math.round(3000-verifiedMoves*40-Math.min(900,elapsed)*3));
    // Compare-and-set makes retries idempotent and prevents late submissions after host closure.
    await query(db,'UPDATE mg_results SET score=?,moves=?,elapsed=? WHERE code=? AND round=? AND token=? AND score IS NULL AND skipped=0',score,moves,elapsed,c,room.round,b.token).run();
   }else if(a!=='status')fail('Unknown action.',404);
@@ -246,8 +222,7 @@ export async function onRequest({request,env}){
    WHERE m.code=? ORDER BY m.joined_at,s.id`,c);
   const invitations=host?await all(db,`SELECT s.id,s.name,i.received_at AS receivedAt,s.last_seen AS lastSeen FROM mg_invites i JOIN mg_sessions s ON s.token=i.token WHERE i.code=? AND i.token!=?`,c,b.token):[];
   const bingo=room.mode==='bingo9'?await one(db,'SELECT called FROM mg_bingo_rounds WHERE code=? AND round=?',c,room.round):null;
-  if(pilot)pilot=await one(db,'SELECT * FROM mg_pilot_rooms WHERE code=?',c);
-  return json({pilot:pilot?{activities:JSON.parse(pilot.activities),releaseAt:pilot.released_round===room.round?pilot.released_at:null}:null,createdAt:room.created_at,endedAt:plan?.ended_at||null,bingo,code:c,round:room.round,mode:room.mode,seed:room.seed,status:room.status,started:room.round>0,closed:room.status==='closed'||undefined,sessionFinished:plan?.end_reason==='finished',totalRounds:plan?.total_rounds||null,requiresBegin:!!plan,allReady:!plan||players.every(p=>p.departed||p.skipped||p.score!==null||p.beganAt!==null),host,me:session.id,players,invitations,serverTime:now,
+  return json({bingo,code:c,round:room.round,mode:room.mode,seed:room.seed,status:room.status,started:room.round>0,closed:room.status==='closed'||undefined,sessionFinished:plan?.end_reason==='finished',totalRounds:plan?.total_rounds||null,requiresBegin:!!plan,allReady:!plan||players.every(p=>p.departed||p.skipped||p.score!==null||p.beganAt!==null),host,me:session.id,players,invitations,serverTime:now,
    finished:room.round>0&&players.every(p=>p.departed||p.score!==null||p.skipped===1)});
  }catch(e){
   let msg=String(e.message||e),status=e.status||500;
