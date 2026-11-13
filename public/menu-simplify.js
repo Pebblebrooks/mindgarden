@@ -1,0 +1,25 @@
+/* Progressive disclosure keeps frequent actions visible without removing capabilities. */
+(function(){
+'use strict';const T=(a,b)=>window.MindGardenLocale.pair(a,b),$=id=>document.getElementById(id);const remembered={settings:new Set(),music:new Set()};
+function disclosure(label,key,area){const d=document.createElement('details');d.className='simple-menu-group';d.dataset.menuGroup=key;const summary=document.createElement('summary');summary.textContent=label;d.append(summary);d.open=remembered[area]?.has(key)||false;d.addEventListener('toggle',()=>{if(!d.isConnected)return;if(d.open)remembered[area]?.add(key);else remembered[area]?.delete(key)});return d}
+function foldFieldset(field,area,index){const title=field.querySelector('legend');if(!title)return;const d=disclosure(title.textContent,'section'+index,area);field.before(d);d.append(field);field.setAttribute('aria-label',title.textContent);title.hidden=true;return d}
+function settings(){const box=$('box');if(!$('sd')||box.dataset.simpleSettings)return;box.dataset.simpleSettings='1';
+ const nodes=[...box.children],heading=nodes.find(n=>n.tagName==='H2'),footer=$('sd').parentElement;
+ const groups={player:disclosure(T('Players & saved data','玩家与保存资料'),'player','settings'),access:disclosure(T('Reading & accessibility','阅读与无障碍'),'access','settings'),garden:disclosure(T('Garden & appearance','花园与外观'),'garden','settings'),play:disclosure(T('Sound & play','声音与游戏'),'play','settings'),media:disclosure(T('Personal photos & videos','个人照片与视频'),'media','settings')};
+ let native='garden';for(const n of nodes){if(n===heading||n===footer||n.classList.contains('text-size-settings')||n.id==='appReleaseInfo')continue;
+ if(n.classList.contains('account-settings')||n.classList.contains('data-export-settings')){groups.player.append(n);continue}
+ if(n.classList.contains('list')){for(const b of [...n.children]){const k=b.dataset.k;if(k==='fs'||k==='timed')b.hidden=true;( ['fs','hc','cb','lh'].includes(k)?groups.access:groups.play).append(b)}n.remove();continue}
+ if(n.tagName==='B'){native=/rest|休息/i.test(n.textContent)?'play':/photos|照片/i.test(n.textContent)?'media':'garden'}
+ if(n.matches('.photo-settings,.video-settings'))groups.media.append(n);else if(n.matches('.scene-settings,.motion-options'))groups.garden.append(n);else if(n.id==='v4GameSetting')groups.play.append(n);else groups[native].append(n);
+ }
+ if(heading)box.prepend(heading);for(const g of Object.values(groups))footer.before(g);if($('appReleaseInfo'))footer.after($('appReleaseInfo'));
+ const scene=box.querySelector('.scene-settings');if(scene){const actual=document.documentElement.dataset.gardenSceneMode==='dark'?'dark':'light';for(const grid of scene.querySelectorAll('.scene-grid')){const mode=grid.querySelector('[data-for-mode]')?.dataset.forMode;if(mode&&mode!==actual){grid.hidden=true;const h=grid.previousElementSibling;if(h?.tagName==='H3')h.hidden=true}}}
+ box.querySelectorAll('.text-size-settings p').forEach(p=>p.hidden=true);
+ if(document.activeElement?.closest('details:not([open])'))box.querySelector('.text-size-settings select')?.focus();
+}
+function music(){const panel=document.querySelector('#box .sound-panel');if(!panel||panel.dataset.simpleMenu)return;panel.dataset.simpleMenu='1';const fields=[...panel.querySelectorAll(':scope > fieldset')];fields.forEach((f,i)=>foldFieldset(f,'music',i));const download=$('soundDownload');if(download){const more=disclosure(T('Download & credits','下载与鸣谢'),'download','music'),row=download.parentElement;row.before(more);more.append(row);for(const p of [...panel.querySelectorAll(':scope > .sound-note')])more.append(p)}const intro=panel.querySelector('.sound-intro');if(intro)intro.textContent=T('Choose music or nature sounds, then adjust the overall volume.','选择音乐或自然声，再调整总音量。');}
+function players(){const box=$('box');if(!$('pn')||!$('pa')||box.dataset.simplePlayers)return;box.dataset.simplePlayers='1';const more=disclosure(T('Add or manage players','添加或管理玩家'),'players','players');const done=$('pd'),footer=document.createElement('div');footer.className='row';footer.append(done);const name=$('pn').closest('label'),add=$('pa');box.append(more);more.append(name,add);for(const row of box.querySelectorAll('.prow')){const select=row.querySelector('[data-p]');if(!select)continue;const title=select.textContent.replace(/ ✓$/,'');for(const b of row.querySelectorAll('[data-av],[data-x]')){b.classList.remove('ic','avb');b.textContent=(b.dataset.x?T('Remove · ','删除 · '):T('Photo · ','照片 · '))+title;more.append(b)}}for(const b of box.querySelectorAll('#profileRename,[data-avx]'))more.append(b);box.append(footer);}
+const baseSet=window.openSet;window.openSet=function(){delete $('box').dataset.simpleSettings;baseSet();settings()};$('bSet').onclick=window.openSet;
+const basePlayers=window.openPl;window.openPl=function(){delete $('box').dataset.simplePlayers;basePlayers();players()};$('bPl').onclick=window.openPl;
+new MutationObserver(()=>{settings();music();players()}).observe($('box'),{childList:true,subtree:true});
+})();

@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.32">
+<meta name="mind-garden-release" content="v4.0.33">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4032.css">
+<link rel="stylesheet" href="garden-ui-4033.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -564,7 +564,7 @@ function dstr(d){d=d||new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1
 function ystr(){var y=new Date();y.setDate(y.getDate()-1);return dstr(y)}
 function age(d){return Math.round((new Date(dstr())-new Date(d))/864e5)}
 function curStreak(p){return p.last===dstr()||p.last===ystr()?(p.streak||0):0}
-function logPlay(g,r,s,details){var p=me(),t=dstr();if(p.last!==t){p.streak=p.last===ystr()?(p.streak||0)+1:1;p.last=t}var record={d:t,g:g,r:Math.round(r*100)/100,s:Math.max(1,s|0)};var lev=details&&details.level||((mg&&mg.t===g)?mg.difficulty:g==="pairs"?cur+1:null);if(lev)record.level=lev;if(details)for(var key of ["attempts","mismatches","hints","stars","timed","preview","shared"])if(details[key]!==undefined)record[key]=details[key];p.log.push(record);if(p.log.length>300)p.log.shift();persist()}
+function logPlay(g,r,s,details){var p=me(),t=dstr();if(p.last!==t){p.streak=p.last===ystr()?(p.streak||0)+1:1;p.last=t}var record={d:t,g:g,r:Math.round(r*100)/100,s:Math.max(1,s|0)};var lev=details&&details.level||((mg&&mg.t===g)?mg.difficulty:g==="pairs"?cur+1:null);if(lev)record.level=lev;if(details)for(var key of ["attempts","mismatches","hints","stars","timed","preview","shared"])if(details[key]!==undefined)record[key]=details[key];p.log.push(record);if(!save.accountSync&&p.log.length>300)p.log.shift();persist()}
 /* ---------- home extras ---------- */
 var MG={seq:{n:"Remember the order",d:"Watch the pictures light up, then repeat them.",ic:"🔔"},miss:{n:"What’s missing?",d:"One picture disappears. Which one was it?",ic:"🧺"},sort:{n:"Sort it",d:"Put each picture in the right group.",ic:"🗂️"}};
 function renderExtra(){
@@ -606,7 +606,7 @@ $("box").addEventListener("click",function(e){
 $("decks").addEventListener("click",function(e){var b=e.target.closest("[data-d]");if(b){save.deck=b.dataset.d;persist();renderHome()}});
 /* ---------- family view ---------- */
 function famView(){
-  if(!save.famOk){overlay('<h2>Family view</h2><p>This summarises each player’s play time and progress. It stays on this device and is never sent anywhere. Continue only if every player agrees.</p><div class="row"><button class="btn main" id="fy">Yes, show it</button><button class="btn" id="fn">Not now</button></div>');$("fy").onclick=function(){save.famOk=1;persist();famView()};$("fn").onclick=closeOv;return}
+  if(!save.famOk){overlay('<h2>Family view</h2><p>This summarises each player’s play time and progress. When signed in, player data is saved to the account server. Otherwise it stays on this device. Continue only if every player agrees.</p><div class="row"><button class="btn main" id="fy">Yes, show it</button><button class="btn" id="fn">Not now</button></div>');$("fy").onclick=function(){save.famOk=1;persist();famView()};$("fn").onclick=closeOv;return}
   var dn=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   var blocks=Object.keys(save.pr).map(function(id){var p=save.pr[id],m=[0,0,0,0,0,0,0],a=[],b=[],g=0,tm=0;
     p.log.forEach(function(x){var n=age(x.d);if(n<7){m[6-n]+=x.s;a.push(x.r);g++;tm+=x.s}else if(n<14)b.push(x.r)});
@@ -1059,7 +1059,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4032.js"></script>
+<script src="garden-ui-4033.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

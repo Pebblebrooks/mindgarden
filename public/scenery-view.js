@@ -2,7 +2,8 @@
 'use strict';
 const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const icon='<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="5" height="14" rx="1"/><rect x="10" y="5" width="5" height="14" rx="1"/><rect x="17" y="5" width="4" height="14" rx="1"/></svg>';
-let cardsHidden=true;
+let cardsHidden=me().dashboardPreferences?.welcomeVisible!==true;
+window.MindGardenWelcomeCards={setVisible(value){cardsHidden=!value;mount()}};
 function toggle(){cardsHidden=!cardsHidden;mount()}
 function mount(){
  const nav=document.getElementById('unifiedNav'),menu=document.getElementById('navMenu'),scene=document.querySelector('.welcome-scene');if(!nav||!menu||!scene)return;
@@ -24,5 +25,5 @@ let queued=false;const schedule=()=>{if(queued)return;queued=true;queueMicrotask
 new MutationObserver(schedule).observe(document.getElementById('unifiedNav'),{childList:true,subtree:true});
 new MutationObserver(schedule).observe(document.getElementById('welcomeDashboard'),{childList:true});
 document.addEventListener('keydown',e=>{const panel=document.getElementById('gardenCat');if(e.key==='Escape'&&panel?.contains(document.activeElement)&&!panel.classList.contains('mochi-collapsed')){e.preventDefault();panel.querySelector('[data-mochi="hide"]')?.click()}});
-window.addEventListener('gardenPetsChange',schedule);window.addEventListener('gardenPlayerChange',schedule);window.addEventListener('gardenSceneChange',schedule);mount();
+window.addEventListener('gardenPetsChange',schedule);window.addEventListener('gardenPlayerChange',()=>{cardsHidden=me().dashboardPreferences?.welcomeVisible!==true;schedule()});window.addEventListener('gardenSceneChange',schedule);mount();
 })();

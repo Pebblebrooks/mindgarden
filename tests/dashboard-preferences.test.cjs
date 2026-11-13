@@ -1,0 +1,23 @@
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=html.match(/src="(garden-ui-\d+\.js)"/)[1];
+const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,el=id=>w.document.getElementById(id),errors=[];
+w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+bundle,'utf8'));
+const click=id=>{assert(el(id),'Missing '+id);el(id).click()},tick=()=>new Promise(r=>setImmediate(r));
+(async()=>{
+await tick();const api=w.MindGardenDisplay,first=w.save.cp;
+assert.equal(api.prefs().welcomeVisible,false);assert.equal(w.document.documentElement.dataset.welcomeCards,'hidden');
+api.panel();el('displayLaunch').querySelector('[value="welcomeVisible"]').checked=true;
+el('displayLaunch').querySelector('[value="progressVisible"]').checked=false;
+el('displayWelcome').querySelector('[value="daily"]').checked=false;
+click('displayNone');el('displayGames').querySelector('[value="pairs"]').checked=true;click('displaySave');await tick();
+assert.equal(w.document.documentElement.dataset.welcomeCards,'shown');assert(el('dashStart').closest('.welcome-choice').classList.contains('display-choice-hidden'));
+assert(el('gardenProgressStrip').classList.contains('display-choice-hidden'));
+w.MindGardenDashboard.library();await tick();assert(w.document.querySelector('#gameCards [data-game="num"]').closest('article').classList.contains('display-choice-hidden'));
+el('displayGameNotice').querySelector('button').click();assert(!w.document.querySelector('#gameCards [data-game="num"]').closest('article').classList.contains('display-choice-hidden'));
+const exported=w.MindGardenExport.backup();assert.equal(exported.profile.dashboardPreferences.welcomeVisible,true);assert.equal(w.MindGardenExport.validated(JSON.stringify(exported)).dashboardPreferences.gameCards[0],'pairs');
+w.save.pr.second=w.newP('Second');w.save.cp='second';w.load();w.renderHome();await tick();assert.equal(api.prefs().welcomeVisible,false);assert.equal(w.document.documentElement.dataset.welcomeCards,'hidden');
+w.save.cp=first;w.load();w.renderHome();await tick();assert.equal(w.document.documentElement.dataset.welcomeCards,'shown');assert.equal(api.prefs().gameCards.length,1);
+api.panel();click('displayAll');click('displayCancel');assert.equal(api.prefs().gameCards.length,1);
+for(const lang of ['en','zh']){w.save.lang=lang;w.openSet();await tick();assert(w.document.querySelector('[data-menu-group="garden"]'));w.openPl();await tick();assert(el('pd'));api.panel();await tick();assert(el('displaySave'));}
+assert.deepEqual(errors,[]);console.log('PASS dashboard selections, show-all escape, player isolation, restore, backup round-trip, cancel and bilingual menu access.');
+})().then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)});

@@ -1,23 +1,36 @@
-Mind Garden v4.0.32 — compact menus and paired scenery
+Mind Garden v4.0.33 — personal dashboards and saved player accounts
 
 CHANGES
-- Corrected the shared dialog width override. Rename and Game menu are compact;
-  settings, About and game setup use content-appropriate widths.
-- Built-in scenery stays at the same location when switching light/dark mode.
-  Older separate scenery preferences are reconciled when switching appearance.
-- About FAQ and Latest improvements updated in English and Chinese.
+- Per-player dashboard: choose welcome shortcuts and game cards, launch visibility
+  for welcome cards and pets, and visibility of the progress bouquet.
+- Simplified Settings, player management, music choices and My Games menus.
+- Separate My Games / All Games settings for each game and each player.
+- Account-based server saving of profiles, scores and preferences; offline pending
+  changes, revision conflict protection and all-player JSON / score CSV export.
+- English and Chinese About documentation updated.
 
 INSTALLATION
-Replace repository files with this package. Cloudflare Pages uses main and
-output directory public. Preserve existing DB binding and environment settings.
-No database migration or data reset is required.
-Verify About shows v4.0.32. Close older tabs and refresh if needed; do not clear
-site data, which contains local progress.
-Built assets: garden-ui-4032.js and garden-ui-4032.css.
+Existing Cloudflare Pages project: main branch, output directory public.
+Preserve the DB binding and all existing data. Do not clear browser site data.
+For server accounts, back up D1 and run migrate-v4.0.33.sql on the Pages database.
+Add Pages secret MG_ACCOUNT_PEPPER (cryptographically random, at least 32 characters).
+Keep this secret stable; never commit it or share it in chat.
+Set MG_ACCOUNT_SIGNUP=enabled to allow account registration, then redeploy Pages.
+Without this setup, account saving reports unavailable; device-local play still works.
+See docs/account-saving.md for setup, recovery, limits and runtime acceptance checks.
+Verify About v4.0.33 and garden-ui-4033.js / garden-ui-4033.css after deployment.
+Remove obsolete garden-ui-4032.js / .css when manually replacing package files.
 
 VALIDATION
-620 menu/setup viewport checks at 100% and 200% text sizes passed across five
-phone, tablet and desktop sizes. Long panels retain internal scrolling.
-All eight built-in scenery pairs tested in both directions, including older
-preferences and profile isolation. Release, About, cache and syntax checks pass.
-This does not claim exhaustive live multiplayer or gameplay-state coverage.
+Account API/client tests cover account isolation, authentication, revision conflicts,
+profile retrieval, offline retry and export. Dashboard tests cover player isolation,
+visibility, show-all access, cancellation and backup import/export. Release, About,
+cache and syntax checks pass. Dashboard panel inspected at desktop and mobile sizes.
+Live Cloudflare account registration, recovery and two-device syncing require the
+configuration above and have not yet been verified against production.
+
+LIMITS
+Personal photos/videos/music files remain device-local. Previously trimmed history
+cannot be recovered. Account snapshots have a 4 MB request / 1.8 MB compressed limit.
+New players start with welcome cards and pets hidden; saved launch choices override it.
+Copyright 2026 Pebblebrooks.
