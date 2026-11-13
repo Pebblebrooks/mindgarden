@@ -18,7 +18,3 @@ html[data-v4-mode=dark] .mochi-widget{--mochi-panel:#254740;--mochi-ink:#f4f7e6;
 .mochi-heading{display:grid;grid-template-columns:minmax(44px,1fr) minmax(0,5fr) minmax(44px,1fr);align-items:center;gap:8px}
 .mochi-heading h2{grid-column:2;text-align:center;overflow-wrap:anywhere}
 .mochi-heading button{grid-column:3;justify-self:end;min-width:44px;padding:8px}
-
-/* Leave room to walk in either direction without moving surrounding controls. */
-.mochi-widget .mochi-stage{aspect-ratio:1;overflow:hidden}
-.mochi-widget .mochi-sprite,#gardenCat.mochi-widget[data-free-pet="true"] .mochi-sprite{position:absolute;bottom:0;left:0;width:66%;transition:none;will-change:transform}

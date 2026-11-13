@@ -5959,65 +5959,6 @@ window.MindGardenV4={sync,mount,openGuide};mount();
 };window.getMindGardenPetAudio=()=>window.MindGardenPetAudio||(window.MindGardenPetAudio=window.createPetAudio(document.documentElement));})();
 
 ;
-/* companion-motion.js */
-/* Shared, bounded locomotion. Direction changes happen only at the front pose. */
-(function(){
-'use strict';
-window.createCompanionMotion=function(sprite,options={}){
- const reduced=matchMedia('(prefers-reduced-motion: reduce)');
- let state='idle',time=0,duration=4,position=options.start??.5,direction=options.direction||1;
- let frame=0,last=0,raf=null,disposed=false,response=0,queued=null,travel=0,species=options.species||'cat';
- const blend=document.createElement('span');blend.setAttribute('aria-hidden','true');blend.style.cssText='position:absolute;inset:0;background-size:400% 400%;background-repeat:no-repeat;pointer-events:none;opacity:0';sprite.append(blend);let previousFrame=-1,previousSpecies=species,fade=null;
- const bounds=()=>options.bounds?.()||[0,1];
- const smooth=p=>(1-Math.cos(Math.PI*Math.max(0,Math.min(1,p))))/2;
- const set=(next,seconds)=>{state=next;time=0;duration=seconds;options.onAction?.(next)};
- function allowed(){return !disposed&&!document.hidden&&!reduced.matches&&options.allowed?.()!==false}
- function paint(){
-  const [lo,hi]=bounds();position=Math.max(lo,Math.min(hi,position));
-  if(frame!==previousFrame&&previousFrame>=0&&species===previousSpecies&&allowed()){fade?.cancel();blend.style.backgroundImage=sprite.style.backgroundImage;blend.style.backgroundPosition=sprite.style.backgroundPosition;fade=blend.animate?.([{opacity:1},{opacity:0}],{duration:160,easing:'ease-in-out'})}previousFrame=frame;previousSpecies=species;
-  sprite.style.backgroundImage='url("pets/'+(species==='dog'?'toby':'mochi')+'-consistent.webp")';
-  sprite.style.backgroundSize='400% 400%';sprite.style.backgroundPosition=`${frame%4*100/3}% ${Math.floor(frame/4)*100/3}%`;
-  sprite.style.transform=`scaleX(${direction})`;sprite.style.transition='none';
-  sprite.dataset.motion=state;sprite.dataset.frame=frame;sprite.dataset.direction=direction===1?'right':'left';sprite.dataset.position=position.toFixed(4);
-  options.position?.(position);
- }
- function depart(){const [lo,hi]=bounds();direction=position>(lo+hi)/2?-1:1;if(queued){direction=queued;queued=null}set('turn-out',1.1)}
- function advance(dt){
-  time+=dt;
-  if(state==='idle'){
-   frame=response>0?[12,13,14,15,13,12][Math.floor(time*3)%6]:0;
-   response=Math.max(0,response-dt);
-   if(time>=duration&&response===0)depart();
-  }else if(state==='turn-out'){
-   frame=Math.min(3,Math.floor(smooth(time/duration)*4));
-   if(time>=duration)set('stand',1.2);
-  }else if(state==='stand'){
-   frame=4+Math.min(3,Math.floor(smooth(time/duration)*4));
-   if(time>=duration)set('walk',3+Math.random()*2);
-  }else if(state==='walk'||state==='brake'){
-   const speed=state==='brake'?1-smooth(time/duration):smooth(Math.min(1,time/.8));
-   const delta=dt*.12*speed;position+=direction*delta;travel+=delta;
-   frame=8+Math.floor(travel/.035)%4;
-   const [lo,hi]=bounds();
-   if(state==='walk'&&(time>=duration||position<=lo+.035||position>=hi-.035||response>0||queued))set('brake',.55);
-   else if(state==='brake'&&time>=duration)set('sit',1.2);
-  }else if(state==='sit'){
-   frame=7-Math.min(3,Math.floor(smooth(time/duration)*4));
-   if(time>=duration)set('turn-in',1.1);
-  }else if(state==='turn-in'){
-   frame=3-Math.min(3,Math.floor(smooth(time/duration)*4));
-   if(time>=duration){frame=0;set('idle',response>0?5:2+Math.random()*3)}
-  }
-  paint();
- }
- function tick(now){raf=null;if(!allowed()){last=0;return}const dt=last?Math.min(.05,(now-last)/1000):0;last=now;advance(dt);raf=requestAnimationFrame(tick)}
- function refresh(){if(!allowed()){fade?.cancel();if(raf!==null)cancelAnimationFrame(raf);raf=null;last=0}else if(raf===null)raf=requestAnimationFrame(tick)}
- document.addEventListener('visibilitychange',refresh);reduced.addEventListener?.('change',refresh);paint();refresh();
- return {refresh,react(action){if(action==='idle')return;response=5;if(state==='idle'){time=0;duration=6}refresh()},travel(dir){queued=dir<0?-1:1;if(state==='idle')duration=time;refresh()},setSpecies(value){species=value==='dog'?'dog':'cat';frame=0;set('idle',4);response=0;queued=null;paint()},destroy(){disposed=true;refresh();blend.remove();document.removeEventListener('visibilitychange',refresh);reduced.removeEventListener?.('change',refresh)}};
-};
-})();
-
-;
 /* mochi-widget.js */
 /* Preview only: gesture-first companions, audio unlocked only by a user action. */
 (function(){
@@ -6035,9 +5976,8 @@ window.createMochiWidget=function(root,options={}){
  function clearHearts(){for(const timer of heartTimers)clearTimeout(timer);heartTimers.clear();q('.mochi-hearts').replaceChildren()}
  function hearts(e){if(blocked())return;const now=Date.now();if(now-lastHeart<100)return;lastHeart=now;const layer=q('.mochi-hearts'),r=stage.getBoundingClientRect(),x=e&&r.width?Math.max(15,Math.min(85,(e.clientX-r.left)/r.width*100)):50,y=e&&r.height?Math.max(25,Math.min(75,(e.clientY-r.top)/r.height*100)):40;for(let i=0;i<2;i++){if(layer.childElementCount>=20)break;const h=document.createElement('span');h.className='mochi-floating-heart';h.textContent='♥';h.style.left=x+'%';h.style.top=y+'%';h.style.setProperty('--heart-drift',((Math.random()-.5)*65)+'px');h.style.setProperty('--heart-rise',(-65-Math.random()*55)+'px');h.style.fontSize=(20+Math.random()*10)+'px';h.style.animationDelay=(i*65)+'ms';layer.append(h);const timer=setTimeout(()=>{h.remove();heartTimers.delete(timer)},1500);heartTimers.add(timer)}}
  const poses={meow:[0,1,2,3],purr:[4,5,6,7],bark:[8,9,10,11],growl:[12,13,14,15],idle:[0,0,1,2,1,0,3,0],pet:[4,5,6,7,6,5],play:[8,9,10,11,10,9],feed:[4,5,6,5],brush:[4,5,6,7],rest:[12,13,14,15]};
- let motion=null;
- function image(){if(motion)return;sprite.style.backgroundImage='url("'+(species==='cat'?options.asset:options.dogAsset||'pets/toby-sprites.webp')+'")'}
- function draw(f){if(motion)return;if(['meow','purr','bark','growl'].includes(mode)&&options.vocalAsset)sprite.style.backgroundImage='url("'+options.vocalAsset+'")';else image();root.dataset.frame=f;sprite.style.backgroundPosition=`${f%4*100/3}% ${Math.floor(f/4)*100/3}%`}
+ function image(){sprite.style.backgroundImage='url("'+(species==='cat'?options.asset:options.dogAsset||'pets/toby-sprites.webp')+'")'}
+ function draw(f){if(['meow','purr','bark','growl'].includes(mode)&&options.vocalAsset)sprite.style.backgroundImage='url("'+options.vocalAsset+'")';else image();root.dataset.frame=f;sprite.style.backgroundPosition=`${f%4*100/3}% ${Math.floor(f/4)*100/3}%`}
  function blocked(){return options.sceneAllowed?.()===false||disposed||hidden||!visible||document.hidden||paused||reduced.matches||options.motionAllowed?.()===false}
  let player=null,soundStop=null,lastSound=0,lastClip='',idleAction=null;
  const soundFiles={catPet:['purr'],catHello:['meow','meow-short'],catFood:['meow-short','meow'],dogHello:['bark','bark-two'],toy:['meow-short']};
@@ -6058,10 +5998,10 @@ window.createMochiWidget=function(root,options={}){
  catch{root.dataset.audio='blocked';audioStatus.textContent=T('Tap Enable sound to retry; check device volume.','请点启用声音重试，并检查设备音量。');sound=false;q('[data-mochi=sound]').textContent=T('Enable sound','启用声音');q('[data-mochi=sound]').setAttribute('aria-pressed','false')}
  }
 
- function planIdle(){clearTimeout(idleAction);if(blocked())return;idleAction=setTimeout(()=>{if(blocked())return;const action=['idle',...(motion?[]:['play','rest']),...(species==='cat'?['meow','purr']:['bark'])].filter(x=>x!==mode);react(action[Math.floor(Math.random()*action.length)]);},7000+Math.random()*13000)}
+ function planIdle(){clearTimeout(idleAction);if(blocked())return;idleAction=setTimeout(()=>{if(blocked())return;const action=['idle','play','rest',...(species==='cat'?['meow','purr']:['bark'])].filter(x=>x!==mode);react(action[Math.floor(Math.random()*action.length)]);},7000+Math.random()*13000)}
  function schedule(){clearTimeout(clock);clock=null;if(blocked())return;clock=setTimeout(()=>{frameIndex=['meow','bark','growl'].includes(mode)?Math.min(frameIndex+1,3):(frameIndex+1)%poses[mode].length;draw(poses[mode][frameIndex]);if(mode==='idle'&&frameIndex===0)root.dataset.look=['left','right','forward'][Math.floor(Math.random()*3)];schedule()},mode==='idle'?350+Math.random()*350:mode==='rest'?750:mode==='meow'?75:mode==='bark'?95:mode==='growl'?140:220)}
- function refresh(){motion?.refresh();if(blocked()){clearTimeout(clock);clearTimeout(idleAction);clock=null;idleAction=null}else if(clock===null){schedule();planIdle()};if(blocked()){clearHearts();stopSound();options.audio?.stop('main')}q('[data-mochi=motion]').textContent=paused?T('Resume','继续'):reduced.matches?T('Reduced motion','减少动态'):options.motionAllowed?.()===false?T('Motion off','动态已关闭'):T('Pause','暂停');q('[data-mochi=motion]').setAttribute('aria-pressed',String(paused));root.dataset.still=String(blocked());options.onMotionChange?.(!paused)}
- function react(next){if(disposed)return;motion?.react(next);if(['meow','purr','bark','growl'].includes(next)&&!(species==='cat'?['meow','purr']:['bark']).includes(next))return;clearTimeout(reset);const same=mode===next;if(!same)options.audio?.stop('main');mode=next;root.dataset.mood=mode;if(!same)voice=!blocked()?options.audio?.perform('main',mode==='pet'?(species==='cat'?'purr':'play'):mode):null;if(!same){frameIndex=0;draw(poses[mode][0])}q('.mochi-prop').textContent=next==='feed'?'🥣':next==='brush'?'🪮':'';status.textContent=next==='pet'?T('That feels lovely…','真舒服……'):next==='feed'?T('A little snack — thank you!','谢谢您的小零食！'):next==='brush'?T('Soft, gentle brushing','轻柔梳毛，真舒服'):next==='play'?T('You found my favourite toy!','您找到了我最喜欢的玩具！'):next==='rest'?T('A quiet little nap','安静地睡个小觉'):T('Tap or gently stroke your friend','轻点或轻轻抚摸伙伴');schedule();planIdle();if(!['idle','rest'].includes(next))reset=setTimeout(()=>react('idle'),voice?.active?Math.max(1200,voice.duration*1000+150):({meow:1100,bark:1200,purr:5700,pet:5700})[next]||(next==='play'?5000:2800))}
+ function refresh(){if(blocked()){clearTimeout(clock);clearTimeout(idleAction);clock=null;idleAction=null}else if(clock===null){schedule();planIdle()};if(blocked()){clearHearts();stopSound();options.audio?.stop('main')}q('[data-mochi=motion]').textContent=paused?T('Resume','继续'):reduced.matches?T('Reduced motion','减少动态'):options.motionAllowed?.()===false?T('Motion off','动态已关闭'):T('Pause','暂停');q('[data-mochi=motion]').setAttribute('aria-pressed',String(paused));root.dataset.still=String(blocked());options.onMotionChange?.(!paused)}
+ function react(next){if(disposed)return;if(['meow','purr','bark','growl'].includes(next)&&!(species==='cat'?['meow','purr']:['bark']).includes(next))return;clearTimeout(reset);const same=mode===next;if(!same)options.audio?.stop('main');mode=next;root.dataset.mood=mode;if(!same)voice=!blocked()?options.audio?.perform('main',mode==='pet'?(species==='cat'?'purr':'play'):mode):null;if(!same){frameIndex=0;draw(poses[mode][0])}q('.mochi-prop').textContent=next==='feed'?'🥣':next==='brush'?'🪮':'';status.textContent=next==='pet'?T('That feels lovely…','真舒服……'):next==='feed'?T('A little snack — thank you!','谢谢您的小零食！'):next==='brush'?T('Soft, gentle brushing','轻柔梳毛，真舒服'):next==='play'?T('You found my favourite toy!','您找到了我最喜欢的玩具！'):next==='rest'?T('A quiet little nap','安静地睡个小觉'):T('Tap or gently stroke your friend','轻点或轻轻抚摸伙伴');schedule();planIdle();if(!['idle','rest'].includes(next))reset=setTimeout(()=>react('idle'),voice?.active?Math.max(1200,voice.duration*1000+150):({meow:1100,bark:1200,purr:5700,pet:5700})[next]||(next==='play'?5000:2800))}
  function persist(){try{localStorage.setItem(key,String(!hidden))}catch{}if(hidden)options.audio?.stop();options.onVisibilityChange?.(!hidden)}
  function toggle(value){hidden=!value;panel.hidden=hidden;show.setAttribute('aria-expanded',String(!hidden));root.classList.toggle('mochi-collapsed',hidden);persist();refresh()}
  function choose(tool){selected=tool;root.querySelectorAll('[data-tool]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tool===tool)));status.textContent=tool==='feed'?T('Drop food near the mouth, or tap your pet','将食物拖到嘴边，或轻点宠物'):tool==='brush'?T('Brush gently across the coat','轻轻刷过毛发'):T('Drag the toy into the play area','将玩具拖入玩耍区')}
@@ -6076,10 +6016,9 @@ window.createMochiWidget=function(root,options={}){
  const unsubscribeAudio=options.audio?.subscribe?.(audioState);
  q('[data-mochi=sound]').onclick=async()=>{const enabling=!sound;const ready=await options.audio?.enable(enabling);if(enabling&&ready&&!blocked())react(species==='cat'?'meow':'bark')};
  q('[data-mochi=motion]').onclick=()=>{paused=!paused;options.audio?.pause(paused);refresh()};q('[data-mochi=hide]').onclick=()=>{toggle(false);(document.getElementById('navMore')||show).focus()};show.onclick=()=>toggle(hidden);
- q('select').onchange=e=>{species=e.target.value==='dog'?'dog':'cat';options.audio?.setSpecies?.(species);motion?.setSpecies(species);image();q('h2').textContent=species==='cat'?T('Meet Mochi','认识糯米'):T('Meet Toby','认识托比');stopSound();react('idle');if(sound&&!blocked())react(species==='cat'?'meow':'bark')};
- motion=window.createCompanionMotion?.(sprite,{allowed:()=>!blocked(),position:p=>{sprite.style.marginLeft=(p*34)+'%'},species});
+ q('select').onchange=e=>{species=e.target.value==='dog'?'dog':'cat';options.audio?.setSpecies?.(species);image();q('h2').textContent=species==='cat'?T('Meet Mochi','认识糯米'):T('Meet Toby','认识托比');stopSound();react('idle');if(sound&&!blocked())react(species==='cat'?'meow':'bark')};
  const observer=typeof IntersectionObserver==='function'?new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;refresh()},{threshold:0}):null;observer?.observe(stage);document.addEventListener('visibilitychange',refresh);reduced.addEventListener?.('change',refresh);options.audio?.setSpecies?.(species);image();draw(0);toggle(!hidden);
- return {react,refresh,travel:dir=>motion?.travel(dir),previewSound(clip){sound=true;q('[data-mochi=sound]').textContent=T('Mute','静音');q('[data-mochi=sound]').setAttribute('aria-pressed','true');return chirp(true,clip)},get mode(){return mode},destroy(){motion?.destroy();clearHearts();unsubscribeAudio?.();options.audio?.stop('main');disposed=true;clearTimeout(clock);clearTimeout(reset);clearTimeout(idleAction);stopSound();observer?.disconnect();document.removeEventListener('visibilitychange',refresh);reduced.removeEventListener?.('change',refresh)}};
+ return {react,refresh,previewSound(clip){sound=true;q('[data-mochi=sound]').textContent=T('Mute','静音');q('[data-mochi=sound]').setAttribute('aria-pressed','true');return chirp(true,clip)},get mode(){return mode},destroy(){clearHearts();unsubscribeAudio?.();options.audio?.stop('main');disposed=true;clearTimeout(clock);clearTimeout(reset);clearTimeout(idleAction);stopSound();observer?.disconnect();document.removeEventListener('visibilitychange',refresh);reduced.removeEventListener?.('change',refresh)}};
 };
 })();
 
@@ -6307,21 +6246,69 @@ window.MindGardenBloomPreview={bouquet,select(type){const select=$('bloomType');
 
 ;
 /* pet-ledge.js */
-/* The progress animals share the welcome companion identities and turn sequences. */
+/* Continuous visits: enter from an edge, pause in place, then visibly leave. */
 (function(){
-window.createPetLedge=function(root,assets,enabled=()=>true,crawlAsset,onAction=()=>{},actionAsset,options={}){
+window.createPetLedge=function(root,assets,enabled=()=>true,crawlAsset='pets/crawl-sprites.webp',onAction=()=>{},actionAsset='pets/natural-actions.webp',options={}){
  root.innerHTML='<span class="ledge-pet cat" aria-hidden="true"><i></i></span><span class="ledge-pet dog" aria-hidden="true"><i></i></span>';
- let paused=false,visible=true,disposed=false;
- const els=[...root.children],controllers=els.map((el,i)=>window.createCompanionMotion(el.firstElementChild,{
-  species:i?'dog':'cat',start:i?.8:.2,direction:i?-1:1,
-  // Separate roaming areas prevent pets walking through each other.
-  bounds:()=>{const w=root.clientWidth||400,size=Math.min(140,w*.24),span=w-size;return i?[(w/2+4)/span,1]:[0,Math.max(0,(w/2-size-4)/span)]},allowed:()=>!disposed&&!paused&&visible&&enabled(),
-  position:p=>{const size=Math.min(140,root.clientWidth*.24);el.style.width=el.style.height=size+'px';el.style.transform=`translate(${p*Math.max(0,root.clientWidth-size)}px,${root.clientHeight-size*.88}px)`},
-  onAction:a=>{el.dataset.action=a;onAction(i,a)}
- }));
- function refresh(){root.hidden=!enabled();controllers.forEach(c=>c.refresh())}
- const observer=typeof IntersectionObserver==='function'?new IntersectionObserver(e=>{visible=e[0].isIntersecting;refresh()}):null;observer?.observe(root);refresh();
- return {refresh,travel(dir){controllers.forEach(c=>c.travel(dir))},visit(action){controllers.forEach(c=>action==='travel'||action==='crawl'?c.travel(Math.random()<.5?-1:1):c.react(action));refresh()},pause(value){paused=value;refresh()},destroy(){disposed=true;controllers.forEach(c=>c.destroy());observer?.disconnect()}};
+ const els=[...root.children],reduced=matchMedia('(prefers-reduced-motion: reduce)');let disposed=false,paused=false,visible=true,raf=null,lastTime=0;
+ const rand=(a,b)=>a+Math.random()*(b-a),ease=window.anime?.eases?.inOutSine||((p)=>(1-Math.cos(Math.PI*p))/2);
+ const states=els.map((el,i)=>({el,i,action:'away',time:0,duration:i?2:0,x:0,dir:i?-1:1,travel:0,speed:0,targetSpeed:0,age:0,stay:0,pauses:0,lastRest:'',nextAction:null,forced:null,size:140}));
+ function allowed(){return !disposed&&!paused&&visible&&!document.hidden&&!reduced.matches&&enabled()}
+ function set(s,a,d){options.audio?.stop('ledge-'+s.i);s.voice=null;s.action=a;s.time=0;s.duration=d;s.el.dataset.action=a;s.voice=options.audio?.perform('ledge-'+s.i,a);onAction(s.i,a);root.dataset.behaviour=states.map(v=>v.action).join(',')}
+ function enter(s){s.size=Math.min(150,root.clientWidth*.32);s.dir=Math.random()<.5?1:-1;const other=states[1-s.i];if(other.action!=='away')s.dir=other.x<root.clientWidth/2?-1:1;s.x=s.dir===1?-s.size-2:root.clientWidth+2;s.speed=0;s.targetSpeed=rand(20,33);s.travel=0;s.age=0;s.stay=rand(18,32);s.pauses=0;s.exiting=false;s.el.style.width=s.el.style.height=s.size+'px';set(s,'enter',0)}
+ function restChoice(s){const choices=['sit','look','groom',...(s.i?['bark','growl']:['meow','purr'])].filter(a=>a!==s.lastRest),a=s.forced||choices[Math.floor(Math.random()*choices.length)];s.forced=null;s.lastRest=a;set(s,a,({meow:1.1,bark:1.2,growl:2.6,purr:5.7})[a]||rand(a==='groom'?3:2,a==='groom'?6:4));s.pauses++}
+ function leave(s){s.exiting=true;if((s.jumpRequested||Math.random()<.45)&&s.x>0&&s.x+s.size<root.clientWidth){set(s,'jump',1.7);s.jumpX=s.x;s.jumpRequested=false}else{set(s,'exit',0)}}
+ function advance(s,dt){s.time+=dt;if(s.action==='away'){if(s.time>=s.duration)enter(s);return} s.age+=dt;
+ const width=root.clientWidth,size=s.size,fullyInside=s.x>=0&&s.x+size<=width;
+ if(['enter','crawl','exit'].includes(s.action)){
+   // Smooth acceleration; the gait advances with actual distance, not a free-running timer.
+   const desired=s.targetSpeed;s.speed+=(desired-s.speed)*(1-Math.exp(-dt*4));
+   const other=states[1-s.i],near=other.action!=='away'&&Math.abs(other.x-s.x)<size*.92&&((s.dir===1&&other.x>s.x)||(s.dir===-1&&other.x<s.x));
+   if(near&&s.action!=='exit'&&fullyInside){s.dir*=-1;s.speed=0;set(s,'brake',.7);s.nextAction='rise';return}
+   const distance=s.speed*dt;s.x+=s.dir*distance;s.travel+=distance;
+   if(s.action==='enter'&&fullyInside)set(s,'crawl',rand(2,5));
+   else if(s.action==='crawl'&&(s.time>=s.duration||s.forced)&&fullyInside){set(s,'brake',.7);s.nextAction='rise'}
+   // Crossing an edge is the only horizontal removal path.
+   if(s.action!=='enter'&&(s.x+size<0||s.x>width)){set(s,'away',rand(2,6));s.exiting=false}
+   else if(s.action==='crawl'&&!fullyInside&&s.age>10)set(s,'exit',0);
+ }else if(s.action==='brake'){
+   const distance=s.speed*(1-ease(Math.min(1,s.time/s.duration)))*dt;s.x+=s.dir*distance;s.travel+=distance;
+   if(s.time>=s.duration){s.speed=0;set(s,'rise',.85)}
+ }else if(s.action==='rise'&&s.time>=s.duration)restChoice(s);
+ else if(['sit','look','groom','meow','purr','bark','growl'].includes(s.action)&&s.time>=s.duration){
+   if(s.jumpRequested||s.age>s.stay||s.pauses>=3){set(s,'lower',.85);s.nextAction='leave'}
+   else if(Math.random()<.45&&s.pauses<5)restChoice(s);
+   else{set(s,'lower',.85);s.nextAction='crawl'}
+ }else if(s.action==='lower'&&s.time>=s.duration){if(s.nextAction==='leave')leave(s);else set(s,'crawl',rand(3,7))}
+ else if(s.action==='jump'&&s.time>=s.duration){set(s,'away',rand(3,7))}
+ }
+ function paint(s){const sprite=s.el.firstElementChild,size=s.size;let frame=0,rows=8,y=root.clientHeight-size*.92,flip=s.dir;
+ // All disappearance occurs after the animal is geometrically outside the clipped ledge.
+ if(s.action==='away'){s.el.style.transform=`translate(${-size-4}px,${root.clientHeight+size}px)`;return}
+ if(['enter','crawl','brake','exit'].includes(s.action)){rows=4;frame=Math.floor(s.travel/Math.max(2,size*.045))%8+s.i*8;y=root.clientHeight-size*.78;sprite.style.backgroundImage='url("'+crawlAsset+'")'}
+ else if(['meow','purr','bark','growl'].includes(s.action)){rows=4;sprite.style.backgroundImage='url("'+(options.vocalAsset||'pets/vocal-poses.webp')+'")';const t=s.voice?.active?s.voice.time:s.time;const row={meow:0,purr:1,bark:2,growl:3}[s.action];frame=row*4+(s.action==='purr'?Math.floor(t*2)%4:Math.min(3,Math.floor(t/({meow:.34,bark:.44,growl:.61}[s.action])*4)));}
+ else{sprite.style.backgroundImage='url("'+actionAsset+'")';const t=s.time;
+ if(s.action==='rise')frame=Math.min(3,Math.floor(ease(Math.min(1,t/s.duration))*4));
+ else if(s.action==='lower')frame=3-Math.min(3,Math.floor(ease(Math.min(1,t/s.duration))*4));
+ else if(s.action==='sit')frame=3;
+ else if(s.action==='look')frame=[4,4,5,5,6,6,5,7][Math.floor(t*2)%8];
+ else if(s.action==='groom')frame=[8,9,9,10,10,9,11][Math.floor(t*3)%7];
+ else if(s.action==='jump'){
+   const flight=Math.max(0,t-.35);frame=t<.18?13:t<.35?14:15;
+   s.x=s.jumpX+s.dir*size*.7*flight;
+   y+=-size*.65*flight+size*1.7*flight*flight;
+ }
+ frame+=s.i*16;
+ }
+ sprite.style.backgroundSize=`400% ${rows*100}%`;sprite.style.backgroundPosition=`${frame%4*100/3}% ${Math.floor(frame/4)*100/(rows-1)}%`;sprite.style.transform=`scaleX(${flip})`;
+ s.el.dataset.frame=frame;s.el.dataset.x=s.x.toFixed(2);s.el.dataset.y=y.toFixed(2);s.el.style.opacity='1';s.el.style.transform=`translate(${s.x}px,${y}px)`;
+ }
+ function tick(now){raf=null;if(!allowed()){stop();return}const dt=Math.min(.05,lastTime?(now-lastTime)/1000:0);lastTime=now;states.forEach(s=>{advance(s,dt);paint(s)});raf=requestAnimationFrame(tick)}
+ function stop(){states.forEach(s=>options.audio?.stop('ledge-'+s.i));if(raf!==null)cancelAnimationFrame(raf);raf=null;lastTime=0}
+ function refresh(){root.hidden=!enabled();if(!allowed())stop();else if(raf===null)raf=requestAnimationFrame(tick)}
+ function visit(action){states.forEach(s=>{if(s.action==='away'){s.duration=0}else if(['sit','look','groom','meow','purr','bark','growl'].includes(action)){s.forced=action;if(s.action==='crawl'&&s.x>=0&&s.x+s.size<=root.clientWidth){set(s,'brake',.7)}else if(['sit','look','groom','meow','purr','bark','growl'].includes(s.action)){restChoice(s)}}else if(action==='jump'){s.jumpRequested=true;if(['sit','look','groom','meow','purr','bark','growl'].includes(s.action)){s.jumpX=s.x;s.jumpRequested=false;set(s,'jump',1.7)}else{s.stay=0}}else if(action==='crawl'||action==='travel'){if(['sit','look','groom','meow','purr','bark','growl'].includes(s.action)){s.nextAction='crawl';set(s,'lower',.85)}}else{s.stay=0}});refresh()}
+ const obs=typeof IntersectionObserver==='function'?new IntersectionObserver(e=>{visible=e[0].isIntersecting;refresh()}):null;obs?.observe(root);document.addEventListener('visibilitychange',refresh);reduced.addEventListener?.('change',refresh);refresh();
+ return {refresh,visit,pause(value){paused=value;refresh()},destroy(){disposed=true;stop();obs?.disconnect();document.removeEventListener('visibilitychange',refresh);reduced.removeEventListener?.('change',refresh)}};
 };
 })();
 

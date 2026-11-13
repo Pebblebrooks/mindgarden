@@ -1,9 +1,8 @@
-# Mind Garden Classic v4.0.28
+# Mind Garden Classic v4.0.29
 
-Classic v4 release with compact catalog/lobby layouts, floating petting hearts, matching kitten/puppy artwork and bounded left/right movement. No v5 design controls.
+Restores the v4.0.27 progress animals and movement, and the welcome pet's original sleeping and toy-play animations. Removes the v4.0.28 walking controller and its artwork. Floating red petting hearts and compact catalog/lobby layouts remain.
 
 Build: `python3 scripts/build-release.py`.
 Deploy existing Cloudflare Pages project from `main`, output directory `public`.
 Preserve the existing D1 DB binding; no database migration is required.
-
-See `README-UPDATE.txt` for features, validation, animation limitations and rollback information. Historical `REVIEW-*` files describe earlier draft checkpoints.
+See `README-UPDATE.txt` for release details. Historical REVIEW files document earlier drafts.
