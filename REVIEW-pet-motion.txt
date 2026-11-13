@@ -1,0 +1,7 @@
+v4 companion motion review. Not a production release.
+
+Approved kitten/puppy identity used in new front, quarter, profile, stand, walk and pet-response atlases. One motion controller serves welcome and progress. Pets walk both directions, slow before sitting, turn through front before changing facing, and stand before moving. Short pose blends reduce frame cuts. Pause, reduced-motion, hidden-tab and scene visibility stop movement. Progress animals use nonoverlapping roaming areas. Welcome movement is bounded within the existing pet placement; drag/resize controls remain.
+
+This iteration is a walking/turning/petting preview using illustrated frames, not true rigged 3D animation. Autonomous jumps, grooming and abrupt toy/nap swaps are not part of this preview; complete matching lie-down/toy action sequences remain future work. Existing user-triggered audio remains available in the app; the standalone motion preview omits sound controls.
+
+Review public/pet-motion-preview.html. Tests: companion-motion and pet-heart-feedback passed with jsdom26; build passed. Browser checked matching transparent artwork, visible progress animals and direction controls. Physical-device testing and a full app regression pass remain outstanding. Production v4.0.27 has not been changed. Includes earlier compact-container and floating-heart draft fixes.
