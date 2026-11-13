@@ -107,3 +107,22 @@ html{overflow-x:clip}
 
 #box:has(.movement-integrated){width:min(1160px,calc(100vw - 20px));max-width:1160px;padding:0;overflow:hidden;max-height:94dvh}
 .movement-integrated{width:100%;text-align:center}.movement-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 18px}.movement-toolbar span{flex:1;text-align:center;font-weight:700}.movement-toolbar .btn{min-height:44px}#movementFrame{display:block;width:100%;height:calc(90dvh - 70px);border:0;background:#edf1dd}
+
+/* Content-sized v4 containers: filtered cards must not fill an empty row. */
+#libraryDisplay .game-card-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(270px * var(--fs))),min(100%,calc(360px * var(--fs)))))!important;justify-content:center;align-items:start}
+#libraryDisplay .game-card-grid>*{min-width:0;width:100%;box-sizing:border-box}
+#libraryDisplay .library-top{width:min(100%,760px);box-sizing:border-box;padding:16px 20px;margin:0 auto 16px}
+#libraryDisplay .library-sprout{font-size:calc(1.5rem * var(--fs))}
+#libraryDisplay .library-top h1{font-size:calc(2rem * var(--fs));line-height:1.2}
+#libraryDisplay .category-pills{width:100%;max-width:1200px;box-sizing:border-box;flex-wrap:wrap;gap:8px;margin:12px auto 20px}
+#box.mp-dialog:has(#mpCode){width:100%;max-width:min(680px,calc(100vw - 24px));padding:20px 24px}
+#box.mp-dialog:has(#mpLogin){max-width:min(560px,calc(100vw - 24px))}
+#box.mp-dialog:has(#mpCode) h2{font-size:calc(1.5rem * var(--fs));line-height:1.25;margin:0 0 12px}
+#box.mp-dialog:has(#mpCode) .lab{width:100%;max-width:440px;margin:12px auto}
+#box.mp-dialog:has(#mpCode) input{min-height:48px}
+#box.mp-dialog:has(#mpCode) #multiError:empty{display:none}
+@media(max-width:600px){#box.mp-dialog:has(#mpCode){padding:18px 14px}#libraryDisplay .library-top{padding:14px 12px}}
+#box.mp-dialog:has(#mpCode){--dialog-gap:10px;gap:10px}
+#box.mp-dialog:has(#mpCode) .lab{gap:6px;margin:6px auto}
+#box.mp-dialog:has(#mpCode) .row{margin:10px 0 0}
+#box.mp-dialog:has(#mpCode)>p{line-height:1.45}

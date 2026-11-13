@@ -1,0 +1,10 @@
+v4.0.27-based review candidate; NOT deployed.
+
+Fixes: cap filtered catalog cards at 360px scaled by text preference; compact library header; wrapped category controls; 560px login dialog / 680px signed-in lobby; tighter lobby spacing. Existing larger gameplay boards remain unchanged.
+Pet feedback: solid red floating hearts on taps and sustained strokes, bounded to 20 simultaneous particles, automatic removal, pause/reduced-motion/visibility cleanup. Dog petting requests existing playful recording; shared sound opt-in and cooldown remain. Real head turns are not implemented: current pet is flat sprite artwork.
+
+Validation: build and syntax passed; dedicated pet-heart and gesture tests passed. Browser: 600 personal-game setup combinations (50 setups x 3 widths 390/768/1366 x EN/ZH x 100/200% text) with no dialog horizontal overflow. Desktop single catalog card measured 360px, lobby 560px x 532px. Existing personal-game test printed 118 passing setup/launch assertions but exited 1 during jsdom window teardown; not a clean test-suite pass. Every active gameplay/results/settings state and physical devices have NOT been visually audited.
+
+This branch contains editable source changes and the new test. Run python3 scripts/build-release.py to regenerate bundles before preview or packaging. Production remains v4.0.27 unchanged. No v5 features restored.
+
+Next animation proposal: retain v4 interface; add rigged cat/dog GLB assets to existing Three.js stack. Blend idle/walk/sit/pet clips; separately aim head/eyes at touch position with gentle limits, add blink/ear/tail motion, ease into/out of strokes, and retain a lightweight fallback. No additional ChatGPT plugin is required. Asset quality and animation rigging are the key dependency.
