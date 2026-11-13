@@ -1,6 +1,6 @@
-# Mind Garden Classic v4.0.33
+# Mind Garden Classic v4.0.34
 
-Personal dashboards, simplified menus, independent per-game settings, and optional account-based server saving with all-player exports.
+Audited gameplay transitions, responsive boards, bilingual readiness instructions and story-memory corrections, with personal dashboards and account saving retained.
 
 Build: `python3 scripts/build-release.py`.
 Deploy the existing Cloudflare Pages project from `main`, output directory `public`.

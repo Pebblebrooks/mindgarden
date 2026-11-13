@@ -3,13 +3,13 @@
 'use strict';
 const T=(a,b)=>window.MindGardenLocale.pair(a,b),language=()=>save.lang==='zh'?'zh':'en';
 function voices(){return (window.speechSynthesis?.getVoices()||[]).filter(v=>{
- const lang=v.lang.toLowerCase().replaceAll('_','-');
+ const lang=String(v.lang||'').toLowerCase().replaceAll('_','-');
  return language()==='zh'?/^(zh(?:-(?:cn|sg|tw|hans|hant))?|cmn(?:-.*)?)$/.test(lang):lang.startsWith('en');
 })}
 // Browser voices do not expose gender. Classify documented named voices only;
 // unknown voices remain available under Automatic, without guessing their gender.
 function gender(v){
- const name=v.name.toLowerCase();
+ const name=String(v.name||'').toLowerCase();
  if(/\b(xiaoxiao|xiaoyi|xiaohan|xiaomeng|xiaomo|xiaorui|xiaoyan|xiaozhen|xiaoxuan|xiaoqiu|xiaoshuang|xiaoyou|samantha|karen|susan|zira|hazel|jenny|aria|sonia)\b/.test(name.replace(/neural/g,'')))return 'female';
  if(/\b(yunxi|yunjian|yunyang|yunfeng|yunhao|yunxia|yunye|yunze|daniel|david|mark|george|guy|ryan)\b/.test(name.replace(/neural/g,'')))return 'male';
  return '';

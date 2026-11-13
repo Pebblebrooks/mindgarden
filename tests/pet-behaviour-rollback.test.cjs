@@ -3,6 +3,7 @@ const d=new JSDOM('<section id="pet"></section>',{runScripts:'outside-only',pret
 w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 w.eval(fs.readFileSync('public/mochi-widget.js','utf8'));
 const root=w.document.getElementById('pet'),c=w.createMochiWidget(root,{asset:'pets/mochi-sprites.webp'}),sprite=root.querySelector('.mochi-sprite');
+root.querySelector('.mochi-show').click();
 for(const species of ['cat','dog']){
  const select=root.querySelector('select');select.value=species;select.dispatchEvent(new w.Event('change'));
  c.react('rest');assert.equal(root.dataset.frame,'12');assert(sprite.style.backgroundImage.includes(species==='cat'?'mochi-sprites.webp':'toby-sprites.webp'));

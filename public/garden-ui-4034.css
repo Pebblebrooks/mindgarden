@@ -1734,3 +1734,31 @@ html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-ctas{display:
 #dashboardCustom input[type=checkbox]{width:22px;height:22px;flex:none;margin:0}
 #displayGames{max-height:35dvh;overflow:auto}
 #dashboardCustom .display-option[hidden]{display:none}
+
+/* A settings screen must not expose the completed board or old scenery. */
+body:has(#ov:not(.hidden) .personal-setup) :is(#game,#mini){visibility:hidden!important}
+body:has(#ov:not(.hidden) .personal-setup) #gbg{display:none!important}
+body:has(#ov:not(.hidden) .personal-setup) #ov{background:var(--bg)!important;backdrop-filter:none}
+
+/* viewport-fit.css */
+/* Keep compact choices readable; allow overflow only when content cannot fit safely. */
+#mini:not(.hidden){box-sizing:border-box;min-height:0;padding-block:8px}
+#mini #mp{max-height:var(--play-space,calc(100dvh - 170px));overflow:auto;overscroll-behavior:contain;padding-bottom:8px;scrollbar-gutter:stable}
+#mini #mp .viewport-grid>.big{height:var(--fit-cell)!important;min-height:44px;aspect-ratio:auto!important;padding:4px}
+#mini #mp .viewport-grid>.big .game-picture{max-height:100%;font-size:clamp(24px,6vh,64px)}
+#mini #mp .picture-grid,#mini #mp .path-grid{width:min(100%,max(220px,calc(var(--play-space) - 170px)))}
+#mini #mp .bingo-grid{width:min(100%,max(220px,calc(var(--play-space) - 210px)));grid-template-columns:repeat(var(--cols),minmax(44px,1fr))}
+#mini #mp .bingo-card{min-height:44px}
+#mini #mp .ga-linkboard,#mini #mp .ga-dotboard{width:min(100%,max(220px,calc(var(--play-space) - 130px)))}
+@media(max-height:700px){
+ #mini .hud{margin-block:0 4px;gap:4px}
+ #mini .personal-session{margin-block:4px;padding:2px;font-size:.9em}
+ #mini #mmsg,#mini #mp p{margin-block:5px;line-height:1.3}
+ #mini #mp :is(.ga-game,.new-game,.cg-game,.ed-game){padding:2px}
+ #mini #mp h2{margin-block:5px;font-size:1.2em}
+ #mini #mp .big.one{width:min(110px,18vh);margin:4px auto}
+ #mini #mp .picture-sequence{gap:4px;margin-block:4px}
+ #mini #mp .new-actions,#mini #mp .ga-actions{margin-block:5px;gap:5px}
+ #mini #mp .domino-hand{display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:4px}
+ #mini #mp .domino-choice{flex:0 0 auto}
+}

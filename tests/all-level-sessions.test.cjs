@@ -8,11 +8,11 @@ const click=id=>{assert(el(id),'Missing '+id);el(id).click()};
 
 (async()=>{try{
 let pending=[],sessions=0,rounds=0;w.pt=fn=>pending.push(fn);w.beep=()=>{};w.chime=()=>{};w.say=()=>{};w.win=()=>{};
-const ids=Object.keys(w.MG).filter(k=>!w.MindGardenNewGames.has(k)&&!w.MindGardenActivities.has(k));
+const ids=Object.keys(w.MG).filter(k=>!w.MindGardenNewGames.has(k)&&!w.MindGardenActivities.has(k)&&!w.MindGardenMovement.has(k));
 for(const lang of ['en','zh'])for(const mode of ['light','dark'])for(let level=Number(process.env.MG_AUDIT_LEVEL||1);level<=Number(process.env.MG_AUDIT_LEVEL||15);level++)for(const id of ids){
  w.save.lang=lang;w.save.mode=mode;w.mgDifficulty=level;pending=[];w.startMG(id);const g=w.mg;assert(g&&g.t===id,id);const seen=new Set();
  for(let round=0;round<g.R;round++){
-  for(const ready of ['shoppingReady','storyReady','memoryReady','memoryBegin'])if(el(ready))el(ready).click();
+  for(const ready of ['shoppingReady','shoppingUpdate','storyReady','memoryReady','memoryBegin'])if(el(ready))el(ready).click();
   let count=0;while(pending.length&&count++<80)pending.shift()();assert(g.h,`${id} L${level} answer handler`);assert(el('mmsg').textContent.trim());
   let buttons=[...el('mp').querySelectorAll('[data-a]')];assert(buttons.length,id);
   if(id==='seq'){for(const name of g.reviewExpected){const b=buttons.find(b=>b.getAttribute('aria-label')===name);assert(b);b.click()}}

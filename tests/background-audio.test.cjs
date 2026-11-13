@@ -6,7 +6,7 @@ w.persist=()=>saves++;w.MindGardenIcon=name=>'<svg>'+name+'</svg>';
 w.MindGardenSound={status:()=>({playing}),start(){starts++;playing=true;w.dispatchEvent(new w.Event('gardenSoundChange'))},stop(){stops++;playing=false;w.dispatchEvent(new w.Event('gardenSoundChange'))}};
 w.AudioContext=class{currentTime=0;resume(){return Promise.resolve()}suspend(){return Promise.resolve()}createGain(){return{gain:{},connect(){},disconnect(){}}}};
 w.MindGardenNatureComposer=()=>{natureStarts++;return{schedule(){},stop(){natureStops++}}};
-w.eval(fs.readFileSync(__dirname+'/../public/home-nature.js','utf8'));
+w.eval(fs.readFileSync(__dirname+'/../public/language-runtime.js','utf8'));w.eval(fs.readFileSync(__dirname+'/../public/home-nature.js','utf8'));
 (async()=>{try{
  const b=w.document.getElementById('homeNatureToggle');b.click();await tick();assert.equal(playing,false);assert.equal(stops,1);assert(w.save.backgroundMuted);assert(w.save.backgroundResumeMusic);assert.equal(w.MindGardenHomeNature.status().active,false);assert.equal(b.getAttribute('aria-pressed'),'false');
  b.click();await tick();assert(playing);assert.equal(starts,1);assert.equal(w.save.backgroundMuted,false);assert.equal(JSON.stringify(w.save.soundscape),mix);assert(w.save.homeNature);

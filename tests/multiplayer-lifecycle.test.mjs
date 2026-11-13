@@ -11,7 +11,7 @@ async function boot(){
  const intervals=new Map();w.setInterval=(fn,ms)=>{intervals.set(ms,fn);return ms};w.clearInterval=ms=>intervals.delete(ms);w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.confirm=()=>true;
  const user=await api('login',{name:'Tester'});w.localStorage.setItem('mindGardenLobby',JSON.stringify(user));let gate;
  w.fetch=async(url,options)=>{const action=new URL(url,w.location.href).searchParams.get('action');if(gate?.action===action){const current=gate;gate=null;await current.promise;if(current.response)return current.response}return onRequest({env:{DB},request:new Request(new URL(url,w.location.href),options)})};
- w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(read('player-preferences.js'));w.eval(read('multiplayer.js'));await tick();w.document.getElementById('bOnline').click();await tick();
+ w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(read('language-catalog.js'));w.eval(read('language-runtime.js'));w.eval(read('player-preferences.js'));w.eval(read('multiplayer.js'));await tick();w.document.getElementById('bOnline').click();await tick();
  return {w,user,intervals,click:id=>w.document.getElementById(id).click(),hold(action,response){let release;gate={action,response,promise:new Promise(r=>release=r)};return release}};
 }
 try{

@@ -7,7 +7,7 @@ async function boot(kind){
  w.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){}});w.HTMLCanvasElement.prototype.toBlob=fn=>fn(new w.Blob(['photo']));
  const data=new Map(),pending=[];
  w.indexedDB={open(){const req={};setTimeout(()=>{req.result={transaction(){const tx={objectStore(){return{get(key){const r={};setTimeout(()=>{r.result=data.get(key);r.onsuccess()},0);return r},getAll(){const r={};setTimeout(()=>{r.result=[...data.values()];r.onsuccess()},0);return r},put(value,key){pending.push({tx,apply:()=>data.set(key||value.id,value)})},delete(key){pending.push({tx,apply:()=>data.delete(key)})}}}};return tx}};req.onsuccess()},0);return req}};
- w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'player-preferences.js','utf8'));
+ w.eval(fs.readFileSync(__dirname+'/../public/language-runtime.js','utf8'));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+'player-preferences.js','utf8'));
  w.MindGardenScenes={apply(){},scenes:[]};w.MindGardenMotion={effectiveMode:()=> 'gentle'};
  // The media modules must handle navigation independently of the rest of the dashboard.
  const dashboard=w.document.createElement('div');dashboard.id='welcomeDashboard';w.document.body.append(dashboard);

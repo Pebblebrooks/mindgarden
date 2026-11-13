@@ -45,7 +45,7 @@
     "id": "shp",
     "lang": "en",
     "level": 1,
-    "pictures": 11,
+    "pictures": 9,
     "memoryPreview": true
   },
   {
@@ -198,712 +198,712 @@
   {
     "id": "order",
     "lang": "en",
-    "level": 1,
-    "pictures": 11,
-    "memoryPreview": true
-  },
-  {
-    "id": "place",
-    "lang": "en",
-    "level": 1,
-    "pictures": 1,
-    "memoryPreview": true
-  },
-  {
-    "id": "jigsaw",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "dominoes",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "bingo",
-    "lang": "en",
-    "level": 1,
-    "pictures": 10,
-    "memoryPreview": false
-  },
-  {
-    "id": "pathways",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "sayings",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "dots",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "pets",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "spot",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "links",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "drawmemory",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "recall",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "today",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "foodknow",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "localnews",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "hawker",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "album",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "trail",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "sounds",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "teamgarden",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "melody",
-    "lang": "en",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "seq",
-    "lang": "en",
-    "level": 15,
-    "pictures": 8,
-    "memoryPreview": false
-  },
-  {
-    "id": "miss",
-    "lang": "en",
-    "level": 15,
-    "pictures": 15,
-    "memoryPreview": false
-  },
-  {
-    "id": "sort",
-    "lang": "en",
-    "level": 15,
-    "pictures": 1,
-    "memoryPreview": false
-  },
-  {
-    "id": "num",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "sum",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "odd",
-    "lang": "en",
-    "level": 15,
-    "pictures": 7,
-    "memoryPreview": false
-  },
-  {
-    "id": "shp",
-    "lang": "en",
-    "level": 15,
-    "pictures": 17,
-    "memoryPreview": true
-  },
-  {
-    "id": "tbl",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "clk",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "diff",
-    "lang": "en",
-    "level": 15,
-    "pictures": 40,
-    "memoryPreview": false
-  },
-  {
-    "id": "wrd",
-    "lang": "en",
-    "level": 15,
-    "pictures": 1,
-    "memoryPreview": false
-  },
-  {
-    "id": "rem",
-    "lang": "en",
-    "level": 15,
-    "pictures": 6,
-    "memoryPreview": true
-  },
-  {
-    "id": "cnt",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "add",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "same",
-    "lang": "en",
-    "level": 15,
-    "pictures": 8,
-    "memoryPreview": true
-  },
-  {
-    "id": "time",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "count",
-    "lang": "en",
-    "level": 15,
-    "pictures": 36,
-    "memoryPreview": false
-  },
-  {
-    "id": "find",
-    "lang": "en",
-    "level": 15,
-    "pictures": 19,
-    "memoryPreview": false
-  },
-  {
-    "id": "pic",
-    "lang": "en",
-    "level": 15,
-    "pictures": 6,
-    "memoryPreview": false
-  },
-  {
-    "id": "sub",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "wm",
-    "lang": "en",
-    "level": 15,
-    "pictures": 1,
-    "memoryPreview": false
-  },
-  {
-    "id": "shopping",
-    "lang": "en",
-    "level": 15,
-    "pictures": 6,
-    "memoryPreview": true
-  },
-  {
-    "id": "routine",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "related",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "calendar",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "money",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "story",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "visual",
-    "lang": "en",
-    "level": 15,
-    "pictures": 35,
-    "memoryPreview": false
-  },
-  {
-    "id": "order",
-    "lang": "en",
-    "level": 15,
-    "pictures": 17,
-    "memoryPreview": true
-  },
-  {
-    "id": "place",
-    "lang": "en",
-    "level": 15,
-    "pictures": 2,
-    "memoryPreview": true
-  },
-  {
-    "id": "jigsaw",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "dominoes",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "bingo",
-    "lang": "en",
-    "level": 15,
-    "pictures": 17,
-    "memoryPreview": false
-  },
-  {
-    "id": "pathways",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "sayings",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "dots",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "pets",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "spot",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "links",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "drawmemory",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "recall",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "today",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "foodknow",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "localnews",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "hawker",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "album",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "trail",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "sounds",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "teamgarden",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "melody",
-    "lang": "en",
-    "level": 15,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "seq",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 3,
-    "memoryPreview": false
-  },
-  {
-    "id": "miss",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 5,
-    "memoryPreview": false
-  },
-  {
-    "id": "sort",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 1,
-    "memoryPreview": false
-  },
-  {
-    "id": "num",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "sum",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "odd",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 3,
-    "memoryPreview": false
-  },
-  {
-    "id": "shp",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 11,
-    "memoryPreview": true
-  },
-  {
-    "id": "tbl",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "clk",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "diff",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 12,
-    "memoryPreview": false
-  },
-  {
-    "id": "wrd",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 1,
-    "memoryPreview": false
-  },
-  {
-    "id": "rem",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 3,
-    "memoryPreview": true
-  },
-  {
-    "id": "cnt",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "add",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "same",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 3,
-    "memoryPreview": true
-  },
-  {
-    "id": "time",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "count",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 8,
-    "memoryPreview": false
-  },
-  {
-    "id": "find",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 5,
-    "memoryPreview": false
-  },
-  {
-    "id": "pic",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 3,
-    "memoryPreview": false
-  },
-  {
-    "id": "sub",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "wm",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 1,
-    "memoryPreview": false
-  },
-  {
-    "id": "shopping",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 3,
-    "memoryPreview": true
-  },
-  {
-    "id": "routine",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "related",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "calendar",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "money",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "story",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 0,
-    "memoryPreview": false
-  },
-  {
-    "id": "visual",
-    "lang": "zh",
-    "level": 1,
-    "pictures": 7,
-    "memoryPreview": false
-  },
-  {
-    "id": "order",
-    "lang": "zh",
     "level": 1,
     "pictures": 9,
     "memoryPreview": true
   },
   {
     "id": "place",
+    "lang": "en",
+    "level": 1,
+    "pictures": 1,
+    "memoryPreview": true
+  },
+  {
+    "id": "jigsaw",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "dominoes",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "bingo",
+    "lang": "en",
+    "level": 1,
+    "pictures": 10,
+    "memoryPreview": false
+  },
+  {
+    "id": "pathways",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sayings",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "dots",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "pets",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "spot",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "links",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "drawmemory",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "recall",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "today",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "foodknow",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "localnews",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "hawker",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "album",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "trail",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sounds",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "teamgarden",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "melody",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "seq",
+    "lang": "en",
+    "level": 15,
+    "pictures": 8,
+    "memoryPreview": false
+  },
+  {
+    "id": "miss",
+    "lang": "en",
+    "level": 15,
+    "pictures": 15,
+    "memoryPreview": false
+  },
+  {
+    "id": "sort",
+    "lang": "en",
+    "level": 15,
+    "pictures": 1,
+    "memoryPreview": false
+  },
+  {
+    "id": "num",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sum",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "odd",
+    "lang": "en",
+    "level": 15,
+    "pictures": 7,
+    "memoryPreview": false
+  },
+  {
+    "id": "shp",
+    "lang": "en",
+    "level": 15,
+    "pictures": 17,
+    "memoryPreview": true
+  },
+  {
+    "id": "tbl",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "clk",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "diff",
+    "lang": "en",
+    "level": 15,
+    "pictures": 40,
+    "memoryPreview": false
+  },
+  {
+    "id": "wrd",
+    "lang": "en",
+    "level": 15,
+    "pictures": 1,
+    "memoryPreview": false
+  },
+  {
+    "id": "rem",
+    "lang": "en",
+    "level": 15,
+    "pictures": 6,
+    "memoryPreview": true
+  },
+  {
+    "id": "cnt",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "add",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "same",
+    "lang": "en",
+    "level": 15,
+    "pictures": 8,
+    "memoryPreview": true
+  },
+  {
+    "id": "time",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "count",
+    "lang": "en",
+    "level": 15,
+    "pictures": 36,
+    "memoryPreview": false
+  },
+  {
+    "id": "find",
+    "lang": "en",
+    "level": 15,
+    "pictures": 19,
+    "memoryPreview": false
+  },
+  {
+    "id": "pic",
+    "lang": "en",
+    "level": 15,
+    "pictures": 6,
+    "memoryPreview": false
+  },
+  {
+    "id": "sub",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "wm",
+    "lang": "en",
+    "level": 15,
+    "pictures": 1,
+    "memoryPreview": false
+  },
+  {
+    "id": "shopping",
+    "lang": "en",
+    "level": 15,
+    "pictures": 6,
+    "memoryPreview": true
+  },
+  {
+    "id": "routine",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "related",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "calendar",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "money",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "story",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "visual",
+    "lang": "en",
+    "level": 15,
+    "pictures": 35,
+    "memoryPreview": false
+  },
+  {
+    "id": "order",
+    "lang": "en",
+    "level": 15,
+    "pictures": 17,
+    "memoryPreview": true
+  },
+  {
+    "id": "place",
+    "lang": "en",
+    "level": 15,
+    "pictures": 2,
+    "memoryPreview": true
+  },
+  {
+    "id": "jigsaw",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "dominoes",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "bingo",
+    "lang": "en",
+    "level": 15,
+    "pictures": 16,
+    "memoryPreview": false
+  },
+  {
+    "id": "pathways",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sayings",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "dots",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "pets",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "spot",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "links",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "drawmemory",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "recall",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "today",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "foodknow",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "localnews",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "hawker",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "album",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "trail",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sounds",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "teamgarden",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "melody",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "seq",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 3,
+    "memoryPreview": false
+  },
+  {
+    "id": "miss",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 5,
+    "memoryPreview": false
+  },
+  {
+    "id": "sort",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 1,
+    "memoryPreview": false
+  },
+  {
+    "id": "num",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sum",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "odd",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 3,
+    "memoryPreview": false
+  },
+  {
+    "id": "shp",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 11,
+    "memoryPreview": true
+  },
+  {
+    "id": "tbl",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "clk",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "diff",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 12,
+    "memoryPreview": false
+  },
+  {
+    "id": "wrd",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 1,
+    "memoryPreview": false
+  },
+  {
+    "id": "rem",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 3,
+    "memoryPreview": true
+  },
+  {
+    "id": "cnt",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "add",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "same",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 3,
+    "memoryPreview": true
+  },
+  {
+    "id": "time",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "count",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 8,
+    "memoryPreview": false
+  },
+  {
+    "id": "find",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 5,
+    "memoryPreview": false
+  },
+  {
+    "id": "pic",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 3,
+    "memoryPreview": false
+  },
+  {
+    "id": "sub",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "wm",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 1,
+    "memoryPreview": false
+  },
+  {
+    "id": "shopping",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 3,
+    "memoryPreview": true
+  },
+  {
+    "id": "routine",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "related",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "calendar",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "money",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "story",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "visual",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 7,
+    "memoryPreview": false
+  },
+  {
+    "id": "order",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 11,
+    "memoryPreview": true
+  },
+  {
+    "id": "place",
     "lang": "zh",
     "level": 1,
     "pictures": 1,
@@ -1277,7 +1277,7 @@
     "id": "bingo",
     "lang": "zh",
     "level": 15,
-    "pictures": 17,
+    "pictures": 16,
     "memoryPreview": false
   },
   {

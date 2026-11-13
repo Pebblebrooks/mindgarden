@@ -1,0 +1,338 @@
+{
+  "scope": "Local draft after v4.0.33",
+  "suites": [
+    {
+      "test": "audio-gesture.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "account-api.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "background-audio.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "bingo-room.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "about-documentation.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "bouquet-speed.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "account-sync.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "bingo-ui.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "commercial-preview.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "dashboard-preferences.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "daily-and-controls.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "depth-rules.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "everyday-games.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "feedback-sound.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "custom-level-sessions.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "five-games.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "game-visuals.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "gameplay-regressions.test.cjs",
+      "status": "PASS",
+      "note": "Passed after replacing a fixed playback sleep with a readiness check."
+    },
+    {
+      "test": "extended-language-stages.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "garden-activities.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "home-nature-overlay.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "grammar.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "info-help.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "matching-mode.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "media-lifecycle.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "live-language.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "mochi-widget.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "motion-navigation.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "mobile-reliability.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "move-remember.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "movement-games.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "multiplayer-lifecycle.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "multiplayer-ready-ui.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "multiplayer-round-flow.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "multiplayer-sessions.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "multiplayer-taps.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "navbar-overflow.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "new-features.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "multiplayer-ui.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "online-expansion.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "paced-rounds.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "page-visibility.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "pairs-language-stages.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "game-language-stages.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "personal-garden.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "pet-audio-buffer.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "pet-auto-audio.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "pet-behaviour-rollback.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "pet-gestures-preview.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "pet-heart-feedback.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "online-expansion-ui.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "pet-position.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "player-preferences.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "pet-ledge-preview.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "depth-progression.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "preview-feedback.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "quick-feedback.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "release-cache.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "ratings-variety.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "request-validation.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "release-ui.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "restore-accessibility.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "review-ui.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "room-lifecycle.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "room8.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "scenery-rotation.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "scenery-theme-pairing.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "scenery-view.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "review-corrections.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "scenery409.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "scroll-policy.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "sequence-language.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "single-pair-fast-taps.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "storage-failure.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "v4-design.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "v405-fixes.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "progression-practice.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "wildlife-spacing.test.mjs",
+      "status": "PASS"
+    },
+    {
+      "test": "personal-games.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "test": "wildlife-runtime.test.cjs",
+      "status": "PASS"
+    }
+  ],
+  "passed": 80,
+  "total": 80,
+  "excluded": [
+    "garden-ui.test.cjs (browser audit performed through supported browser controls)",
+    "all-level-sessions.test.cjs (levels 1 and 15 run separately: 240 complete sessions, 1456 rounds)"
+  ],
+  "browser": {
+    "gameBoundaryChecks": 400,
+    "setupDialogChecks": 400,
+    "outerOverflowFailures": 0,
+    "note": "Long content can require internal scrolling; not a zero-scroll guarantee."
+  }
+}

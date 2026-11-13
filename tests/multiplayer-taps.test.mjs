@@ -12,7 +12,7 @@ async function boot(lang){
  w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.confirm=()=>true;w.addEventListener('error',e=>errors.push(e.error?.stack||e.message));
  let requests=0;w.fetch=(url,opts)=>{requests++;return onRequest({env:{DB},request:new Request(new URL(url,'https://garden.test'),opts)})};w.requests=()=>requests;
  w.localStorage.setItem('gardenMatch',JSON.stringify({lang}));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
- for(const f of ['artwork.js','upgrade.js','online-activities.js','multiplayer.js','i18n.js','dashboard.js'])w.eval(f==='multiplayer.js'&&process.env.MG_MP_SOURCE?readFileSync(process.env.MG_MP_SOURCE,'utf8'):get(f));
+ for(const f of ['language-catalog.js','language-runtime.js','artwork.js','upgrade.js','online-activities.js','multiplayer.js','i18n.js','dashboard.js'])w.eval(f==='multiplayer.js'&&process.env.MG_MP_SOURCE?readFileSync(process.env.MG_MP_SOURCE,'utf8'):get(f));
  w.document.getElementById('bOnline').click();w.document.getElementById('mpName').value=lang;w.document.getElementById('mpLogin').click();await pause(30);return w;
 }
 const q=(w,s)=>w.document.querySelector(s),tiles=w=>[...w.document.querySelectorAll('[data-tile]')],stored=w=>JSON.parse(w.localStorage.getItem('mindGardenRound8'));

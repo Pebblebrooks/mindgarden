@@ -11,7 +11,7 @@ async function boot(user){
  let now=Date.now();w.Date.now=()=>now;const intervals=new Map();w.setInterval=(fn,ms)=>{intervals.set(ms,fn);return ms};w.clearInterval=ms=>intervals.delete(ms);w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.confirm=()=>true;
  w.addEventListener('error',e=>errors.push(e.error?.stack||e.message));w.localStorage.setItem('mindGardenLobby',JSON.stringify(user));const gates=new Map();
  w.fetch=async(url,options)=>{const action=new URL(url,w.location.href).searchParams.get('action'),gate=gates.get(action);if(gate){gates.delete(action);await gate.promise;if(gate.response)return gate.response}return onRequest({env:{DB},request:new Request(new URL(url,w.location.href),options)})};
- w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);for(const f of ['artwork.js','player-preferences.js','online-activities.js','multiplayer.js'])w.eval(read(f));await tick();w.document.getElementById('bOnline').click();await tick();
+ w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);for(const f of ['language-catalog.js','language-runtime.js','artwork.js','player-preferences.js','online-activities.js','multiplayer.js'])w.eval(read(f));await tick();w.document.getElementById('bOnline').click();await tick();
  const by=id=>w.document.getElementById(id),click=id=>{assert(by(id),id+' exists');by(id).click()};
  return {w,by,click,intervals,user,stored:key=>JSON.parse(w.localStorage.getItem(key)||'null'),advance:ms=>now+=ms,async poll(){await intervals.get(1500)();await tick()},async join(code){by('mpCode').value=code;click('mpJoin');await tick()},hold(action,response){let release;gates.set(action,{response,promise:new Promise(r=>release=r)});return release}};
 }

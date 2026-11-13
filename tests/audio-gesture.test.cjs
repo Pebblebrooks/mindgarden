@@ -8,7 +8,7 @@ w.Audio=class {src='';pause(){this.paused=true}play(){playCalls++;permissionChec
 const BaseAudio=w.Audio;w.Audio=class extends BaseAudio{constructor(){super();media=this}};
 w.AudioContext=class {state='running';sampleRate=1000;currentTime=0;destination={};createGain=node;createDynamicsCompressor=node;createMediaElementSource=node;createConvolver=node;createBuffer(c,n){return {getChannelData:()=>new Float32Array(n)}}resume(){return holdResume?new Promise(r=>resumeResolve=r):Promise.resolve()}suspend(){return Promise.resolve()}};
 w.URL.createObjectURL=()=> 'blob:my-track';w.URL.revokeObjectURL=()=>{};
-w.save={lang:'en',soundscape:{music:'personal',nature:'none'}};w.persist=()=>{};w.overlay=html=>w.document.getElementById('box').innerHTML=html;w.closeOv=()=>{};w.eval(source);
+w.save={lang:'en',soundscape:{music:'personal',nature:'none'}};w.persist=()=>{};w.overlay=html=>w.document.getElementById('box').innerHTML=html;w.closeOv=()=>{};w.eval(fs.readFileSync(__dirname+'/../public/language-runtime.js','utf8'));w.eval(source);
 const click=id=>{gesture=true;w.document.getElementById(id).click();gesture=false};
 (async()=>{try{
  w.openMu();const input=w.document.getElementById('soundFiles');input.onchange({target:{files:[new w.File(['test'],'song.mp3',{type:'audio/mpeg'})]}});

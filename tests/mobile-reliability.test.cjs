@@ -10,7 +10,10 @@ w.AudioContext=class{constructor(){this.state='running';this.currentTime=0;this.
  for(const lang of ['en','zh'])for(let level=1;level<=15;level++){
   w.save.lang=lang;w.mgDifficulty=level;w.startMG('story');const g=w.mg;
   const count=level===1?2:Math.min(8,2+Math.ceil((level-1)/2));assert.equal(g.storyFactCount,count);
-  const story=el('mp').textContent;for(const q of g.storyQuestions)assert(story.toLowerCase().replaceAll('了','').includes(q[2].toLowerCase()),'Every answer is present in story');
+  const story=el('mp').textContent;for(const q of g.storyQuestions){
+   if(q[4]==='relationship'){assert(story.includes(q[0]),'Relationship source must be shown');assert(g.storyQuestions.some(f=>f[4]==='sequence'&&story.includes(f[0])),'Relationship question requires the final action in the story');}
+   else assert(story.toLowerCase().replaceAll('了','').includes(q[2].toLowerCase()),'Every answer is present in story: '+JSON.stringify({lang,level,question:q,story}));
+  }
   el('storyReady').click();for(let i=0;i<count;i++){
    const q=g.storyQuestions[i];assert.equal(g.storyIndex,i);const buttons=[...el('mp').querySelectorAll('[data-a]')];
    const b=buttons.find(b=>b.dataset.a===q[2]);assert(b);b.click();assert.equal(g.storyAnswers.length,i+1);assert(buttons.every(b=>b.disabled));el('storyNextDetail').click();

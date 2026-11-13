@@ -1,13 +1,13 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=fs.readFileSync(p+html.match(/src="(garden-ui-\d+\.js)"/)[1],'utf8');
-function boot(lang){const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window;w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.localStorage.setItem('gardenMatch',JSON.stringify({lang}));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(bundle);return d}
+function boot(lang){const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window;w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.localStorage.setItem('gardenMatch',JSON.stringify({lang}));require('./dom-lifecycle.cjs')(w);w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(bundle);return d}
 for(const lang of ['en','zh']){const d=boot(lang),w=d.window,errors=[],pending=[];w.addEventListener('error',e=>errors.push(e.message));w.pt=fn=>pending.push(fn);
  try{
-  const ids=w.eval('Object.keys(MG)').filter(k=>!w.MindGardenNewGames.has(k)&&!w.MindGardenActivities.has(k)),click=id=>{const b=w.document.getElementById(id);assert(b,id);b.click()};
+  const ids=w.eval('Object.keys(MG)').filter(k=>!w.MindGardenNewGames.has(k)&&!w.MindGardenActivities.has(k)&&!w.MindGardenMovement.has(k)),click=id=>{const b=w.document.getElementById(id);assert(b,id);b.click()};
   const snapshots={};
   for(let level=1;level<=15;level++)for(const id of ids){
    pending.length=0;w.mgDifficulty=level;w.startMG(id);
-   for(const ready of ['shoppingReady','storyReady','memoryReady','memoryBegin'])if(w.document.getElementById(ready))click(ready);
+   for(const ready of ['shoppingReady','shoppingUpdate','storyReady','memoryReady','memoryBegin'])if(w.document.getElementById(ready))click(ready);
    let guard=0;while(!w.eval('mg.h')&&pending.length&&guard++<30)pending.shift()();
    assert(w.document.getElementById('mp').children.length,id+' at '+level);
    const buttons=[...w.document.querySelectorAll('#mp [data-a]')];assert(buttons.length,id+' answers at '+level);

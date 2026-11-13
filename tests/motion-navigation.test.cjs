@@ -1,11 +1,12 @@
+const currentUiTag=JSON.parse(require('fs').readFileSync(__dirname+'/../package.json','utf8')).version.replaceAll('.','');
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('node:fs'),assert=require('node:assert/strict');
-const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=fs.readFileSync(p+'garden-ui-4023.js','utf8');
+const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=fs.readFileSync(p+`garden-ui-${currentUiTag}.js`,'utf8');
 function boot(reduced,stored){
  const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=d.window,errors=[],listeners=new Set();
  const media={matches:reduced,addEventListener:(event,fn)=>listeners.add(fn),removeEventListener:(event,fn)=>listeners.delete(fn)};
  w.matchMedia=q=>/prefers-reduced-motion/.test(q)?media:{matches:false,addEventListener(){},removeEventListener(){}};w.scrollTo=()=>{};
  w.addEventListener('error',e=>errors.push(e.message));if(stored)w.localStorage.setItem('gardenMatch',stored);
- w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(bundle);
+ require('./dom-lifecycle.cjs')(w);w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(bundle);
  return {w,close:()=>d.window.close(),errors,change:value=>{media.matches=value;for(const fn of listeners)fn({matches:value})}};
 }
 (async()=>{

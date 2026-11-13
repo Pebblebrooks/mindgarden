@@ -216,3 +216,8 @@ html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-ctas{display:
 #dashboardCustom input[type=checkbox]{width:22px;height:22px;flex:none;margin:0}
 #displayGames{max-height:35dvh;overflow:auto}
 #dashboardCustom .display-option[hidden]{display:none}
+
+/* A settings screen must not expose the completed board or old scenery. */
+body:has(#ov:not(.hidden) .personal-setup) :is(#game,#mini){visibility:hidden!important}
+body:has(#ov:not(.hidden) .personal-setup) #gbg{display:none!important}
+body:has(#ov:not(.hidden) .personal-setup) #ov{background:var(--bg)!important;backdrop-filter:none}
