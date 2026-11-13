@@ -1,25 +1,27 @@
-MIND GARDEN CLASSIC v4.0.29
-Restore familiar pet movement
+Mind Garden v4.0.31 — richer progression and compact controls
 
 CHANGES
-- Progress animals and controller restored exactly from v4.0.27.
-- Welcome pet uses its original idle, sleep, toy-play and petting sprite sequences.
-- Removed the v4.0.28 welcome walking controller, reduced sprite sizing and walking preview.
-- Floating red hearts, repeated-stroke feedback, opt-in audio and compact library/lobby layouts retained.
-- Original v4.0.27 front/side artwork is restored as requested; this rollback does not introduce a new 3D animation system or redesign.
+- Balanced sessions use the full 1–15 difficulty scale; Gentle remains approachable.
+- Picture/word matching, reverse recall, shopping-list updates, route checkpoints
+  and detours, stronger domino choices, saying meanings and everyday reasoning.
+- Varied movement sequences without faster physical movements; practice and rest choices.
+- Welcome cards and pets start hidden. Navbar card toggle restored, compact mobile
+  cards and quick icons, desktop scenery arrows, compact room lobby and sharing.
+- About updated in English and Chinese; documentation checks are part of releases.
+- Existing V4 appearance and earlier pet animation behaviour retained.
 
-DEPLOYMENT
-Cloudflare Pages, production branch main, output directory public; existing DB binding unchanged.
-No database migration or data reset.
-About displays v4.0.29. New bundle files: garden-ui-4029.js and garden-ui-4029.css.
-If an old version remains, close old app tabs and reopen. Do not clear site data.
+INSTALLATION
+Replace repository files with this package. Cloudflare Pages uses production
+branch main and output directory public. Preserve the existing DB binding and
+environment settings. No database migration or data reset is required.
+Verify About shows v4.0.31. If an older version remains, close old app tabs and
+reopen or refresh once. Do not clear site data, which contains local progress.
+The built assets are garden-ui-4031.js and garden-ui-4031.css.
 
 VALIDATION
-Build and JavaScript syntax passed.
-Pet rollback tests verify exact progress-controller restoration, cat/dog sleep and toy frames, no welcome locomotion and retained heart feedback.
-Existing progress movement tests pass at 340px and 640px: gait phases, no teleporting, resting in place, offscreen exits and pause.
-Existing heart tests pass for taps/strokes, particle limits, cat/dog audio requests, pause and reduced motion.
-Release UI, navbar, cache and v4 design tests are run for this release.
-Not an exhaustive physical-device or every-gameplay-state audit.
-
-Copyright 2026 Pebblebrooks.
+294 bilingual game launches; 300 generated solvable route puzzles; complete
+advanced matching, domino, recall, bingo and saying flows; 118 personal-game
+checks; 48 movement flows. Release, About, cache and syntax checks pass.
+Responsive checks cover representative phones, tablets and desktops; large text
+and short viewports may still require accessible scrolling. Not every possible
+game state/device combination was manually tested. Online room rules unchanged.

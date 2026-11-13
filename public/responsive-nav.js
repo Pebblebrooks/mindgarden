@@ -6,10 +6,11 @@ const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const removalOrder=['contact','about','music','appearance','text','nature','motion','leaderboard','progress','online','library'];
 function fit({available,brand,compactBrand,main,tools,toggle,gap=12,mainGap=5,toolGap=6}){
  tools=tools.map(x=>x.key==='language'?{...x,width:48}:x);
- const hidden=new Set(),sum=(items,space)=>{const shown=items.filter(x=>!hidden.has(x.key));return shown.reduce((s,x)=>s+x.width,0)+Math.max(0,shown.length-1)*space};
+ const mobile=available<=740;
+ const hidden=new Set(mobile?main.map(x=>x.key):[]),sum=(items,space)=>{const shown=items.filter(x=>!hidden.has(x.key));return shown.reduce((s,x)=>s+x.width,0)+Math.max(0,shown.length-1)*space};
  const required=(b)=>{const center=sum(main,mainGap),right=sum([...tools,{key:'toggle',width:toggle}],toolGap);return center?center+2*Math.max(b,right)+2*gap:b+right+gap};
- for(const key of removalOrder){if(required(brand)<=available-2)break;hidden.add(key)}
- const compact=required(brand)>available-2;
+ for(const key of removalOrder){if(required(mobile?compactBrand:brand)<=available-2)break;hidden.add(key)}
+ const compact=mobile||required(brand)>available-2;
  return {hidden:[...hidden],compact,required:required(compact?compactBrand:brand)};
 }
 let scheduled=false;

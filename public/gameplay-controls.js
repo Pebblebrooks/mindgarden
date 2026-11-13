@@ -22,7 +22,7 @@ for(const id of ['bPause','bPause2']){const b=$(id);b.setAttribute('aria-label',
 /* Recently used synchronous question content, scoped to player/game/level/language.
    Bounded retries avoid hanging when a finite learning pool is exhausted. */
 (function(){const history=new Map();
-window.MindGardenQuestions={generate(run){const key=[save.cp,mg.t,mg.difficulty,save.lang].join('|'),seen=history.get(key)||[];let candidate;
+window.MindGardenQuestions={generate(run){const key=[save.cp,mg.t,save.lang].join('|'),seen=history.get(key)||[];let candidate;
  for(let attempt=0;attempt<60;attempt++){mg.questionKey=null;run();candidate=mg.questionKey;if(!candidate||!seen.includes(candidate))break;}
  if(candidate){const at=seen.indexOf(candidate);if(at>=0)seen.splice(at,1);seen.push(candidate);if(seen.length>40)seen.shift();history.set(key,seen);if(history.size>500)history.delete(history.keys().next().value);}
 },reset(){history.clear()}};

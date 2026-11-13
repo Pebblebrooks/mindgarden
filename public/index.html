@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.30">
+<meta name="mind-garden-release" content="v4.0.31">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4030.css">
+<link rel="stylesheet" href="garden-ui-4031.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -463,7 +463,7 @@ function start(i){
   clearInterval(timer);closeOv();cur=i;me().lg={k:"p",i:i};persist();var L=LEVELS[i];
   var bonus=(fails[i]||0)>=1?15*Math.min(fails[i],3):0; // extra time after a miss
   total=L.t+bonus;left=total;found=0;first=null;lock=true;paused=false;hints=3;streak=0;
-  var personalPair=window.MindGardenPersonal?.challenge('pairs'),pool=icons();if(personalPair&&personalPair.difficulty<9)pool=shuffle(pool);else if(personalPair)pool=pool.slice(personalPair.rank%Math.max(1,pool.length-L.p+1)).concat(pool);var D=personalPair?.pairMode==='related'?window.MindGardenPersonal.pairDeck(L.p):pool.slice(0,L.p),deck=shuffle(D.concat(D.map(function(e){return e.partner?Object.assign({},e,e.partner):e})));
+  var personalPair=window.MindGardenPersonal?.challenge('pairs'),pool=icons();if(personalPair&&personalPair.difficulty<9)pool=shuffle(pool);else if(personalPair)pool=pool.slice(personalPair.rank%Math.max(1,pool.length-L.p+1)).concat(pool);var D=personalPair?.pairMode==='related'?window.MindGardenPersonal.pairDeck(L.p):pool.slice(0,L.p);if(personalPair?.pairMode==='words')D=D.map(e=>Object.assign({},e,{partner:{h:'<span class="pair-word">'+esc(window.MindGardenLocale.convert(e.n,save.lang))+'</span>',n:e.n}}));var deck=shuffle(D.concat(D.map(function(e){return e.partner?Object.assign({},e,e.partner):e})));
   var g=$("grid");g.style.setProperty("--c",COLS[L.p]);
   var rows=Math.ceil(deck.length/COLS[L.p]);
   g.style.setProperty("--mw",Math.min(1050,COLS[L.p]*190)+"px");
@@ -1059,7 +1059,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4030.js"></script>
+<script src="garden-ui-4031.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

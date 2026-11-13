@@ -15,9 +15,9 @@ const cfg={high:false,selected:new Set(motions.filter(m=>!m.high).map(m=>m.id)),
 let previousPhase=null;
 let s={phase:'setup',step:'cue',index:0,elapsed:0,paused:false,follow:[],seq:[],skipped:0},speechToken=0,speaking=false,speechStart=0,last=performance.now(),voiceNote='',ready=false,loadFailed=false;
 const names=()=>({gentle:T('Gentle','轻松'),balanced:T('Balanced','适中'),challenging:T('Challenging','挑战'),advanced:T('Advanced','进阶')});
-function length(){const base={gentle:1,balanced:2,challenging:3,advanced:5}[cfg.challenge];return base+(cfg.level>Math.ceil(cfg.count/2)?1:0)}
+function length(){const rank=(cfg.level-1)/Math.max(1,cfg.count-1),base={gentle:1,balanced:2,challenging:3,advanced:5}[cfg.challenge],growth=cfg.challenge==='gentle'?2:cfg.challenge==='advanced'?3:4;return base+Math.floor(rank*growth)}
 function pool(){return motions.filter(m=>cfg.selected.has(m.id)&&(!m.high||cfg.high))}
-function makeSequence(){const p=pool(),n=length(),a=[];for(let i=0;i<n;i++)a.push(p[(i+cfg.level-1)%p.length]);return a}
+let previousSequence='';function makeSequence(){const p=pool(),n=length();let a=[];for(let attempt=0;attempt<20;attempt++){a=[];for(let i=0;i<n;i++){const choices=p.filter(x=>x!==a.at(-1));a.push((choices.length?choices:p)[Math.floor(Math.random()*(choices.length||p.length))])}if(a.map(x=>x.id).join(',')!==previousSequence)break}previousSequence=a.map(x=>x.id).join(',');return a}
 const name=m=>lang==='zh'?m.zh:m.en;
 function figure(m=motions[0],frame=0,id=''){return `<div ${id?'id="'+id+'"':''} class="figure" data-sheet="${m.sheet}" role="img" aria-label="${name(m)}" style="background-position:${frame*100/3}% ${m.row*100/3}%"></div>`}
 function stopVoice(){speechToken++;speaking=false;window.speechSynthesis?.cancel()}
