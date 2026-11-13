@@ -1,0 +1,22 @@
+Mind Garden v4.0.30
+
+Includes the approved v4 menu, review styling, compact game layouts and pet defaults.
+- Six primary menu actions, followed by collapsed Garden view & pets.
+- Family View and Switch Player grouped under Player.
+- Hide game cards moved out of the navbar into Garden view.
+- Wrong review answers shown as bold red text, with a neutral review panel.
+- Pets hidden on every page reload; previous progress and welcome sleep/play animations retained.
+- Smaller game grids and measured matching-board sizing.
+- Optional game explanations moved into information buttons.
+
+No database migration or D1 binding changes are required.
+
+Installation: replace repository files with this package and deploy with the existing
+Cloudflare Pages project configuration. Keep the existing DB binding and environment
+settings. The public folder contains the built site; functions contains Pages APIs.
+Verify About displays v4.0.30 after deployment and refresh once if needed.
+
+Validation: release checks pass. 300 opening-board viewport checks were run at
+390x844, 768x1024 and 1366x768; final two desktop overflow cases were fixed and
+rechecked individually. This is not a guarantee that every later round, multiplayer
+state or enlarged-text setting is scroll-free. Short screens may require scrolling.

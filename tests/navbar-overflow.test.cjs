@@ -15,7 +15,7 @@ const pause=()=>new Promise(r=>setTimeout(r,35));
   w.eval('save.lang='+JSON.stringify(lang)+';persist();load();renderHome()');await pause();
   assert(w.document.querySelector('#navMore svg[aria-hidden="true"]'));assert.equal(w.document.getElementById('navMore').textContent,'');
   assert.equal(w.document.querySelectorAll('#navTextSize').length,1);assert.equal(w.document.querySelectorAll('#menuTextSize').length,1);
-  for(const action of ['home','library','online','progress','leaderboard','family','profile','settings','music','nature','motion','language','about','contact'])assert(w.document.querySelector('#navMenu [data-go="'+action+'"]'),action);
+  for(const action of ['daily','mygames','library','online','progress','leaderboard','family','profile','settings','music','nature','motion','language','about','contact'])assert(w.document.querySelector('#navMenu [data-go="'+action+'"]'),action);
   w.document.getElementById('navMore').click();assert.equal(w.document.getElementById('navMore').getAttribute('aria-expanded'),'true');
   w.document.querySelector('.nav-preferences').open=true;const preset=w.document.querySelector('#menuTextSize select');preset.value='200';preset.dispatchEvent(new w.Event('change',{bubbles:true}));await pause();
   assert.equal(w.MindGardenTextSize.current(),2);assert.equal(w.document.querySelector('#navTextSize select').value,'200');assert(!w.document.getElementById('navMenu').classList.contains('hidden'));

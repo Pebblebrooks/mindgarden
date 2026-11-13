@@ -13,3 +13,19 @@ function enhance(){
 }
 let pending=false;new MutationObserver(()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;enhance()})}).observe(document.getElementById('box'),{childList:true,subtree:true});enhance();
 })();
+
+/* Fit square matching cards to the space below the actual HUD, not an assumed header. */
+(function(){
+ const game=document.getElementById('game'),grid=document.getElementById('grid');let frame=0;
+ function fit(){frame=0;if(game.classList.contains('hidden')||!grid.children.length)return;
+ const columns=parseInt(getComputedStyle(grid).getPropertyValue('--c'))||4,rows=Math.ceil(grid.children.length/columns);
+ const gap=parseFloat(getComputedStyle(grid).gap)||10;
+ const available=(window.visualViewport?.height||innerHeight)-grid.getBoundingClientRect().top-16;
+ const cell=Math.max(44,Math.min(190,(available-gap*(rows-1))/rows));
+ grid.style.setProperty('--mw',Math.min(game.clientWidth,columns*cell+gap*(columns-1))+'px');
+ }
+ function schedule(){if(!frame){frame=1;queueMicrotask(fit)}}
+ new MutationObserver(schedule).observe(game,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+ window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);
+ document.fonts?.ready.then(schedule);schedule();
+})();

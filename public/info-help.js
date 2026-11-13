@@ -12,6 +12,6 @@ document.addEventListener('focusout',e=>{if(e.target===owner&&!pinned)hide()});
 document.addEventListener('click',e=>{const b=e.target.closest?.('.mg-info-button');if(b){if(owner===b&&pinned)hide();else{show(b);pinned=true}}else if(!tip?.contains(e.target))hide()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&owner){e.stopPropagation();hide()}},true);
 window.addEventListener('resize',hide);window.addEventListener('scroll',hide,true);
-new MutationObserver(()=>{if(owner&&!owner.isConnected)hide()}).observe(document.getElementById('box'),{childList:true,subtree:true});
+new MutationObserver(()=>{if(owner&&!owner.isConnected)hide()}).observe(document.body,{childList:true,subtree:true});
 window.MindGardenInfo={html(text,label){return '<button class="mg-info-button" type="button" aria-label="'+esc(label||(save.lang==='zh'?'更多说明':'More information'))+'" aria-expanded="false" data-info="'+esc(text)+'"><span aria-hidden="true">ⓘ</span></button>'},hide};
 })();
