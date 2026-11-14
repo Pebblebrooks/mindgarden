@@ -6,10 +6,12 @@ let sessionAccount=null,authRevision=0;
 let account=null,applying=false,pending=null,timer=null,status='',conflict=null,sequence=0,recoverySlip=null,accountNotice='',needsSignin=false,loginDetails=null,pendingConnection=null;
 const rawPersist=window.persist;
 const snapshot=()=>({schemaVersion:1,profiles:copy(save.pr)});
+let syncFailed=false;
 let baseline=JSON.stringify(save.pr);
 function signedIn(){return !!sessionAccount&&!needsSignin}
 function navLabel(){return signedIn()?'👤 '+sessionAccount.username:T('Sign in','登录')}
 function refreshUI(){
+ const retry=$('accountRetrySave');if(retry)retry.hidden=!syncFailed||needsSignin||!!conflict;
  const nav=$('navAccount');if(nav){const label=navLabel();nav.setAttribute('translate','no');if(nav.textContent!==label)nav.textContent=label;nav.dataset.sessionState=signedIn()?'signed-in':'signed-out';nav.title=signedIn()?T('Account: ','账户：')+sessionAccount.username:T('Sign in to your online account','登录在线账户');nav.setAttribute('aria-label',nav.title)}
  const reconnect=$('accountReconnect');if(reconnect)reconnect.hidden=!needsSignin;
  document.querySelectorAll('[data-account-open]').forEach(b=>{const label=signedIn()?T('Account: ','账户：')+sessionAccount.username:T('Online account (optional)','在线账户（可选）');if(b.textContent!==label)b.textContent=label});
@@ -40,11 +42,11 @@ function apply(remote){
 async function sync({pull=false}={}){
  if(pending)return pending;if(!account)return false;
  pending=Promise.resolve().then(async()=>{let confirmedSave=false;try{
-  if(conflict)throw Object.assign(Error(T('Resolve the saved-profile conflict in Account & saved players.','请在“账户与已存玩家”中处理保存冲突。')),{code:'CONFLICT'});
+  if(conflict)throw Object.assign(Error(T('Resolve the saved-profile conflict in Account settings.','请在“账户设置”中处理保存冲突。')),{code:'CONFLICT'});
   if(save.accountSync?.dirty){const document=snapshot(),sent=JSON.stringify(save.pr);message(T('Saving to account…','正在保存至账户…'));const result=await api('save',{document,revision:save.accountSync.revision});confirmedSave=true;save.accountSync.revision=result.revision;save.accountSync.dirty=JSON.stringify(save.pr)!==sent;baseline=sent;local();}
   if((pull||!confirmedSave)&&!save.accountSync?.dirty){const remote=await api('state');if(remote.account.id!==account.id)throw Error(T('The signed-in account changed. Sign in again.','登录账户已改变，请重新登录。'));if(remote.revision!==save.accountSync.revision)apply(remote)}
-  needsSignin=false;message(T('Saved to your account.','已保存至您的账户。'));return true;
- }catch(e){if(e.status===401){needsSignin=true;sessionAccount=null;authRevision++}if(e.code==='CONFLICT'){try{conflict=await api('state')}catch{}}message(e.status===401?T('Sign in again to save. Local changes are kept.','请重新登录以保存，本地更改已保留。'):e.message);return false}finally{pending=null;if(account&&save.accountSync?.dirty&&!conflict&&navigator.onLine&&status===T('Saved to your account.','已保存至您的账户。'))schedule()}});return pending;
+  syncFailed=false;needsSignin=false;message(T('Saved to your account.','已保存至您的账户。'));return true;
+ }catch(e){syncFailed=true;if(e.status===401){needsSignin=true;sessionAccount=null;authRevision++}if(e.code==='CONFLICT'){try{conflict=await api('state')}catch{}}message(e.status===401?T('Sign in again to save. Local changes are kept.','请重新登录以保存，本地更改已保留。'):e.message);return false}finally{pending=null;if(account&&save.accountSync?.dirty&&!conflict&&navigator.onLine&&status===T('Saved to your account.','已保存至您的账户。'))schedule()}});return pending;
 }
 function schedule(){message(navigator.onLine?T('Changes pending…','等待保存更改…'):T('Offline — changes pending','离线：更改等待保存'));clearTimeout(timer);if(account&&!conflict)timer=setTimeout(()=>sync(),1000)}
 window.persist=function(){const ok=rawPersist();if(applying||!account)return ok;const current=JSON.stringify(save.pr);if(current!==baseline){save.accountSync.dirty=true;local();schedule()}return ok};
@@ -52,7 +54,7 @@ function download(value,name,type='application/json'){const url=URL.createObject
 async function connect(action,data){
  if(save.accountSync?.dirty&&save.accountSync.username!==data.username.trim().toLowerCase())throw Error(T('Export and sync the previous account before signing into another.','请先导出并同步上一账户，再登录其他账户。'));
  const auth=await api(action,data);
- authRevision++;sessionAccount=auth.account;needsSignin=false;status='';
+ authRevision++;sessionAccount=auth.account;needsSignin=false;syncFailed=false;status='';
  loginDetails={id:auth.account.username,password:data.password};
  accountNotice=action==='signup'?T('✓ Account created · Signed in','✓ 账户已创建 · 已登录'):action==='recover'?T('Password reset. You are signed in.','密码已重置，您已登录。'):T('Signed in successfully.','登录成功。');
  if(recoverySlip&&recoverySlip.account!==auth.account.username)recoverySlip=null;
@@ -107,6 +109,7 @@ function panel(mode){
  $('accountDone').textContent=T('Close','关闭');$('accountDone').onclick=closeOv;message(status||(connected?T('Saved profiles loaded.','已加载保存的玩家资料。'):''));
  const panelEl=document.querySelector('.account-panel'),anchor=panelEl.querySelector(':scope > p')||panelEl.querySelector('h2');
  panelEl.dataset.authView=connected?'connected':mode;
+ if(connected){const retry=document.createElement('button');retry.id='accountRetrySave';retry.className='btn';retry.textContent=T('Retry save','重试保存');retry.hidden=!syncFailed||needsSignin||!!conflict;retry.onclick=async()=>{retry.disabled=true;try{await sync({pull:true});panel()}finally{if(retry.isConnected)retry.disabled=false}};$('accountStatus').after(retry);}
  const title=panelEl.querySelector('h2'),titleText=document.createElement('span');titleText.textContent=title.textContent;title.classList.add('account-title');title.replaceChildren(titleText);title.insertAdjacentHTML('beforeend',infoButton());
  if(!connected){panelEl.dataset.clearMenu='1';panelEl.querySelector(':scope > details')?.remove();$('accountLocalExport')?.remove();panelEl.querySelector('.account-success')?.remove();panelEl.querySelector('.account-recovery-slip')?.remove();$('accountForm').append($('accountStatus'));$('accountStatus').setAttribute('aria-live','polite');$('accountStatus').setAttribute('tabindex','-1');}
 
@@ -134,6 +137,7 @@ function panel(mode){
 }
 function landing(){
  overlay('<section class="personal-panel account-panel" data-clear-menu="1"><div class="menu-brand">🌿 '+T('Mind Garden','心灵花园')+'</div><h2>'+T('Online account (optional)','在线账户（可选）')+'</h2><p>'+T('An optional account lets you access one player or a group on another device. No account is needed to play here.','可选账户让您在其他设备读取个人或一组玩家。在此设备游玩无需账户。')+'</p><div class="account-help-row">'+infoButton()+'</div><div class="account-choice"><h3>'+T('I already have an account','我已有账户')+'</h3><button class="btn main" id="accountChooseSignin">'+T('Sign in','登录')+'</button></div><div class="account-choice"><h3>'+T('I need a new account','我需要新账户')+'</h3><button class="btn" id="accountChooseSignup">'+T('Create account','创建账户')+'</button></div><p id="accountStatus" role="status"></p><button class="btn" id="accountDone">'+T('Keep playing on this device','继续在此设备游玩')+'</button></section>');
+ const options=document.createElement('details');options.id='accountOptions';options.className='simple-menu-group';options.innerHTML='<summary>'+T('Saved data & backup','保存资料与备份')+'</summary><button class="btn" id="accountDeviceData">'+T('Player backup & import','玩家备份与导入')+'</button>';$('accountDone').before(options);$('accountDeviceData').onclick=()=>window.MindGardenMenus.player();
  $('accountChooseSignin').focus({preventScroll:true});$('accountChooseSignin').onclick=()=>panel('signin');$('accountChooseSignup').onclick=()=>panel('signup');$('accountDone').textContent=T('Close','关闭');$('accountDone').onclick=closeOv;
 }
 async function offerLoginSave(){if(loginDetails&&window.PasswordCredential&&navigator.credentials?.store){try{await navigator.credentials.store(new PasswordCredential(loginDetails))}catch{ /* The visible save step remains available. */ }}}

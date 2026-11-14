@@ -2125,3 +2125,10 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 #ov #box #accountForm #accountStatus:not(:empty){padding:12px;border:2px solid var(--menu-edge);border-radius:10px;overflow-wrap:anywhere}
 #ov #box .account-panel .account-success{padding:12px;border:2px solid var(--menu-edge);border-radius:10px;font-weight:700}
 #ov #box .account-panel [aria-busy="true"] button:disabled{cursor:progress}
+
+/* Compact account actions retain centred text and independent help targets. */
+#ov #box .account-everyday{display:flex;flex-direction:column;align-items:center;gap:10px;margin:16px auto}
+#ov #box .account-tool-row{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:10px auto;max-width:100%}
+#ov #box .account-tool-row>.btn{max-width:calc(100% - 54px);overflow-wrap:anywhere;white-space:normal;text-align:center;margin:0}
+#ov #box #accountOptions,#ov #box #accountStatus{text-align:center;overflow-wrap:anywhere}
+#navMenu>#customiseDashboard,#navMenu>#menuAccountSettings{display:block;width:100%;text-align:center;white-space:normal;padding:12px}

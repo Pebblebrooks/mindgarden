@@ -1,0 +1,34 @@
+Mind Garden v4.0.43 — simpler account and customisation menus
+
+Implementation
+- Everyday account popup: account name, current save feedback, Continue playing,
+  Switch player and Sign out. Reauthentication remains visible when needed.
+- Account settings groups Sign-in & security and Saved data & backup.
+  Manual sync, player copying, exports, password tools, recovery and device
+  sign-in are optional collapsed tools, with separate accessible information buttons.
+- Retry save is visible after a failed sync; successful retry clears it.
+  Conflicts and reauthentication retain their dedicated recovery actions.
+- Main menu has a single Account settings entry. Customise my home is a
+  separate row immediately below Settings, with the existing per-player editor.
+- Player backup/import is reachable both signed in and signed out.
+- Family View renamed Players’ Progress throughout active UI and help.
+- English/Chinese About: menu paths, latest improvements, setup, backup guidance,
+  and account/device scope corrected. Generated version and offline assets updated.
+
+Validation
+- Build and JavaScript syntax checks passed.
+- Account suite passed (10 scripts), including the new full-app bilingual menu
+  flow regression: navigation order, customisation, signed-out backups, collapsed
+  tools, device sign-in placement, independent help, failed sync/retry, sign-out.
+- Release suite passed (6 scripts): menus, responsive navbar model, cache,
+  design flows, About documentation, direct Close/Escape.
+- Dashboard preferences regression passed, including per-player isolation,
+  persistence, cancel, restore and backup round-trip.
+- git diff --check passed.
+
+Limits
+- Playwright browser validation could not launch because its browser executable
+  is absent in this environment. DOM simulation is not rendered layout validation.
+- Phone/tablet portrait and landscape, 140–200% text, light/dark visual checks
+  and live Cloudflare account interactions remain unverified.
+- Review branch only; production deployment is not part of this implementation.
