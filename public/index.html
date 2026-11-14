@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.44">
+<meta name="mind-garden-release" content="v4.0.45">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4044.css">
+<link rel="stylesheet" href="garden-ui-4045.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -914,7 +914,7 @@ function shrink(f,cb,z){z=z||192;var r=new FileReader();r.onload=function(){var 
 function addPhotos(fl){save.photos=save.photos||[];var q=[].slice.call(fl).slice(0,24-save.photos.length);(function nx(){var f=q.shift();if(!f){persist();renderHome();openSet();return}shrink(f,function(d){if(d&&save.photos.length<24)save.photos.push({d:d,n:"photo"});nx()})})()}
 function lbView(key){
  window.MindGardenMenuHistory?.enter('leaderboard',()=>lbView());
- key=key||"all";var ids=Object.keys(save.pr),keys={},pts={};
+ key=key||"all";var ids=window.MindGardenProfileGroups?MindGardenProfileGroups.groups().map(g=>g.id):Object.keys(save.pr),keys={},pts={};
  ids.forEach(function(id){var b=save.pr[id].bt||{};for(var k in b)keys[k]=1});
  Object.keys(keys).forEach(function(k){ids.filter(function(id){return(save.pr[id].bt||{})[k]}).sort(function(a,b){return save.pr[a].bt[k]-save.pr[b].bt[k]}).forEach(function(id,i){pts[id]=(pts[id]||0)+ids.length-i})});
  var all=ids.map(function(id){var p=save.pr[id],bt=p.bt||{},m=Object.keys(bt).reduce(function(a,k){return a===null||bt[k]<a?bt[k]:a},null);return{n:p.name,a:avHtml(p),me:id===save.cp,gp:Math.max(p.gp||0,(p.log||[]).length),pts:pts[id]||0,m:m,t:key==="all"?m:bt[key]}});
@@ -1065,7 +1065,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4044.js"></script>
+<script src="garden-ui-4045.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

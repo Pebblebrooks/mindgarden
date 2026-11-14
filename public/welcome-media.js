@@ -9,8 +9,9 @@ function selected(list){return list.find(x=>x.id===save[key()])||list.find(x=>x.
 function clearVideo(){if(currentVideo){currentVideo.pause();currentVideo.removeAttribute('src');currentVideo.load();currentVideo.remove()}currentVideo=null;currentId='';window.dispatchEvent(new Event('gardenVideoSoundChange'))}
 function select(item){if(!item)return;save[key()]=item.id;if(item.type==='scene'){window.MindGardenScenes.choose(item.id)}else if(item.type==='photo')save['photo'+mode()]=true;persist();window.MindGardenScenes.apply();render()}
 function render(){const host=document.querySelector('.welcome-scene');if(!host)return;const list=items(),item=selected(list);
-let footer=document.getElementById('sceneFooter');if(!footer){footer=document.createElement('footer');footer.id='sceneFooter';footer.setAttribute('aria-live','polite');document.getElementById('home').append(footer)}
-const footerText=T('Background: ','背景：')+(item.type==='photo'?T('My photo','我的照片'):item.type==='video'?T('My video: ','我的视频：')+item.label:item.label);
+let footer=document.getElementById('sceneFooter');if(!footer){footer=document.createElement('footer');footer.id='sceneFooter';footer.setAttribute('aria-live','polite');host.append(footer)}
+if(footer.parentElement!==host)host.append(footer);
+const footerText=item.label;
 if(footer.textContent!==footerText)footer.textContent=footerText;
 if(host!==currentHost){clearVideo();currentHost=host}
 const controls=document.querySelector('#unifiedNav .nav-actions');if(!controls)return;
