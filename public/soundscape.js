@@ -163,6 +163,7 @@ async function start(){
 }
 function choose(key,value){prefs[key]=value;persistPrefs();if(playing)start();openSound()}
 function openSound(){
+ window.MindGardenMenuHistory?.enter('music',()=>openSound());
  const music=[['none','No music','无音乐'],['strings','Chamber garden','室内乐花园'],['harp','Harp & woodwinds','竖琴与木管'],['piano','Piano & cello','钢琴与大提琴'],['serenade','Twilight ensemble','暮色合奏'],['personal','My own music','我的音乐']];
  const nature=[['none','No nature sounds','无自然音效'],['ocean','Ocean & gulls','海浪与海鸥'],['garden','Garden & birds','花园与鸟鸣'],['wind','Soft wind','轻柔微风'],['rain','Rain on leaves','叶上细雨'],['stream','Woodland stream','林间溪流'],['night','Evening crickets','晚间虫鸣']];
  const choices=(key,items)=>'<div class="sound-choices">'+items.map(([id,en,zh])=>'<button class="btn" data-sound-'+key+'="'+id+'" aria-pressed="'+(prefs[key]===id)+'">'+T(en,zh)+'</button>').join('')+'</div>';

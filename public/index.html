@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.43">
+<meta name="mind-garden-release" content="v4.0.44">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4043.css">
+<link rel="stylesheet" href="garden-ui-4044.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -581,6 +581,7 @@ function openSet(){
   $("sd").onclick=closeOv;$("pha").onclick=function(){$("phf").click()};$("phf").onchange=function(){addPhotos(this.files)};
 }
 function openPl(){
+ window.MindGardenMenuHistory?.enter('players',()=>openPl());
   var ks=Object.keys(save.pr);
   overlay('<h2>Who is playing?</h2><div class="list">'+ks.map(function(id){var p=save.pr[id];return '<div class="prow"><button class="btn sm ic avb" data-av="'+id+'" aria-label="Change photo">'+avHtml(p)+'</button><button class="btn tg" data-p="'+id+'" aria-pressed="'+(id===save.cp)+'">'+esc(p.name)+(id===save.cp?" ✓":"")+'</button>'+(ks.length>1?'<button class="btn sm" data-x="'+id+'">Remove</button>':'')+'</div>'}).join("")+'</div>'+((me().av||me().ae)?'<button class="btn sm" data-avx="me">Remove my photo</button>':'')+'<input type="file" id="avf" accept="image/*" class="hidden"><label class="lab">New player’s name<input id="pn" maxlength="14" autocomplete="off"></label><div class="row"><button class="btn main" id="pa">Add player</button><button class="btn" id="pd">Done</button></div>');
   $("pd").onclick=closeOv;$("avf").onchange=function(){var id=this.dataset.t,f=this.files[0];if(!f||!id)return;shrink(f,function(dd){if(dd){save.pr[id].av=dd;persist();renderHome()}openPl()},96)};
@@ -606,6 +607,7 @@ $("box").addEventListener("click",function(e){
 $("decks").addEventListener("click",function(e){var b=e.target.closest("[data-d]");if(b){save.deck=b.dataset.d;persist();renderHome()}});
 /* ---------- family view ---------- */
 function famView(){
+ window.MindGardenMenuHistory?.enter('players-progress',()=>famView());
   if(!save.famOk){overlay('<h2>Players’ Progress</h2><p>This summarises each player’s play time and progress. When signed in, player data is saved to the account server. Otherwise it stays on this device. Continue only if every player agrees.</p><div class="row"><button class="btn main" id="fy">Yes, show it</button><button class="btn" id="fn">Not now</button></div>');$("fy").onclick=function(){save.famOk=1;persist();famView()};$("fn").onclick=closeOv;return}
   var dn=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   var blocks=Object.keys(save.pr).map(function(id){var p=save.pr[id],m=[0,0,0,0,0,0,0],a=[],b=[],g=0,tm=0;
@@ -828,7 +830,8 @@ function award(c,key,secs){var p=me();p.ok=(p.ok||0)+c;p.gp=(p.gp||0)+1;growUp(p
 function avHtml(p){return p.av?'<img class="av" src="'+p.av+'" alt="">':p.ae?'<span class="av em" aria-hidden="true">'+p.ae+'</span>':'<span class="av" aria-hidden="true">'+esc((p.name||"?").trim().charAt(0).toUpperCase())+'</span>'}
 function avHtmlOld(p){return p.av?'<img class="av" src="'+p.av+'" alt="">':'<span class="av" aria-hidden="true">'+esc((p.name||"?").trim().charAt(0).toUpperCase())+'</span>'}
 var AVL=["🐶","🐱","🐼","🦊","🦁","🐯","🐸","🐧","🦉","🦋","🌻","🌷","🌸","🌳","🍎","🍓","⭐","🌈","⛵","🚲","🎵","🎹","☕","🏡"],avT=null;
-function openAv(id){avT=id;var q=save.pr[id];overlay('<h2>Choose a picture</h2><div class="avgrid">'+AVL.map(function(e){return'<button class="btn sm tg" data-ae="'+e+'" aria-pressed="'+(q.ae===e&&!q.av)+'">'+e+'</button>'}).join("")+'</div><input type="file" id="avf" accept="image/*" class="hidden"><div class="row"><button class="btn main" id="avu">Upload from my device</button></div><div class="row">'+((q.av||q.ae)?'<button class="btn sm" data-avx="t">Remove my photo</button>':'')+'<button class="btn sm" id="avb">Back</button></div>');
+function openAv(id){
+ window.MindGardenMenuHistory?.enter('avatar:'+id,()=>openAv(id));avT=id;var q=save.pr[id];overlay('<h2>Choose a picture</h2><div class="avgrid">'+AVL.map(function(e){return'<button class="btn sm tg" data-ae="'+e+'" aria-pressed="'+(q.ae===e&&!q.av)+'">'+e+'</button>'}).join("")+'</div><input type="file" id="avf" accept="image/*" class="hidden"><div class="row"><button class="btn main" id="avu">Upload from my device</button></div><div class="row">'+((q.av||q.ae)?'<button class="btn sm" data-avx="t">Remove my photo</button>':'')+'<button class="btn sm" id="avb">Back</button></div>');
  $("avu").onclick=function(){$("avf").click()};$("avb").onclick=openPl;$("avf").onchange=function(){var f=this.files[0];if(!f)return;shrink(f,function(dd){if(dd){save.pr[id].av=dd;delete save.pr[id].ae;persist();renderHome()}openPl()},96)}}
 function trophy(i){var c=["#E0A800","#A9B4BE","#C27A3C"][i],t=["Gold trophy","Silver trophy","Bronze trophy"][i];return '<svg class="tro" viewBox="0 0 24 24" role="img" aria-label="'+t+'"><path d="M7 3h10v5a5 5 0 0 1-10 0z" fill="'+c+'"/><path d="M7 5H3.5v1.5A3.5 3.5 0 0 0 7 10M17 5h3.5v1.5A3.5 3.5 0 0 1 17 10" fill="none" stroke="'+c+'" stroke-width="1.8"/><rect x="10.7" y="12.5" width="2.6" height="4" fill="'+c+'"/><rect x="7.5" y="17" width="9" height="3.2" rx="1" fill="'+c+'"/></svg>'}
 var FL={sunflower:{n:"Sunflower"},daisy:{n:"Daisy"},tulip:{n:"Tulip"},rose:{n:"Rose"},orchid:{n:"Orchid"},hibiscus:{n:"Hibiscus"}},FLK=Object.keys(FL),ORD=[5,0,8,3,10,1,6,11,2,9,4,7],growMsg="";
@@ -901,7 +904,8 @@ function renderHero(){var p=me(),pts=Math.min(60,p.gr||0),ty=p.fl||"mixed",st=gs
   +'<div class="hchips">'+(sn?'<span class="chip"><span aria-hidden="true">🔥</span> '+sn+'-day streak</span>':'')+(tm?'<span class="chip">Today: '+tm+' min</span>':'')+'<span class="chip">'+(p.last===t?"Today’s game is done ✓":"Your first game today counts double!")+'</span>'+(p.gs?'<span class="chip">🌼 × '+p.gs+'</span>':'')+'</div>'
   +'<div class="hrow"><button class="btn sm" id="bFlw">Choose flowers</button>'+(full?'<button class="btn sm" id="bNewG">Plant a new garden</button>':'')+'</div></div>';
  motion();$("bFlw").onclick=openFlw;if(full)$("bNewG").onclick=function(){p.gr=0;p.gs=(p.gs||0)+1;persist();renderHero()}}
-function openFlw(){var cur=me().fl||"mixed";overlay('<h2>Choose your flowers</h2><div class="flgrid">'+FLK.concat(["mixed"]).map(function(k){var m=k==="mixed",pv=m?FLK.slice(0,3).map(function(t,i){return head(t,12+i*18,18,.5)}).join(""):head(k,18,18,.85);return'<button class="btn tg" data-fl="'+k+'" aria-pressed="'+(cur===k)+'"><svg viewBox="0 0 '+(m?54:36)+' 36" width="'+(m?54:36)+'" height="36" aria-hidden="true">'+pv+'</svg><span>'+(m?"Mixed":FL[k].n)+'</span></button>'}).join("")+'</div><p class="tip">Full bloom takes about 60 growth points. Each finished game adds one, plus one for your first game each day: about four weeks at one game a day, three weeks at two, or two weeks at three. Missed days never harm your garden.</p><div class="row"><button class="btn main" id="fld">Done</button></div>');$("fld").onclick=closeOv}
+function openFlw(){
+ window.MindGardenMenuHistory?.enter('flowers',()=>window.openFlw());var cur=me().fl||"mixed";overlay('<h2>Choose your flowers</h2><div class="flgrid">'+FLK.concat(["mixed"]).map(function(k){var m=k==="mixed",pv=m?FLK.slice(0,3).map(function(t,i){return head(t,12+i*18,18,.5)}).join(""):head(k,18,18,.85);return'<button class="btn tg" data-fl="'+k+'" aria-pressed="'+(cur===k)+'"><svg viewBox="0 0 '+(m?54:36)+' 36" width="'+(m?54:36)+'" height="36" aria-hidden="true">'+pv+'</svg><span>'+(m?"Mixed":FL[k].n)+'</span></button>'}).join("")+'</div><p class="tip">Full bloom takes about 60 growth points. Each finished game adds one, plus one for your first game each day: about four weeks at one game a day, three weeks at two, or two weeks at three. Missed days never harm your garden.</p><div class="row"><button class="btn main" id="fld">Done</button></div>');$("fld").onclick=closeOv}
 function breakHtml(){return '<b>Remind me to rest every</b><div class="prow">'+[10,15,20,30].map(function(m){return '<button class="btn tg" data-bn="'+m+'" aria-pressed="'+((save.bn||15)===m)+'">'+m+' min</button>'}).join("")+'</div>'}
 function addBreak(){if(!save.brk||$("ov").classList.contains("hidden"))return;var p=me(),t=dstr(),m=Math.floor(p.log.filter(function(x){return x.d===t}).reduce(function(a,x){return a+x.s},0)/60),n=Math.floor(m/(save.bn||15));if(!p.bk||p.bk.d!==t)p.bk={d:t,n:0};if(n>p.bk.n){p.bk.n=n;persist();var r=$("box").querySelector(".row");if(r)r.insertAdjacentHTML("beforebegin",'<p class="brk">You’ve played '+m+(m===1?' minute':' minutes')+' today – lovely! Time for a drink, a stretch or a rest.</p>')}}
 var _end=end;end=function(ok){_end(ok);addBreak();addGrow()};var _md=mdone;mdone=function(){_md();addBreak();addGrow()};
@@ -909,6 +913,7 @@ function photosHtml(){var ph=save.photos||[];return '<b>My photos for Matching p
 function shrink(f,cb,z){z=z||192;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var m=Math.min(im.width,im.height),c=document.createElement("canvas");c.width=c.height=z;c.getContext("2d").drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,z,z);cb(c.toDataURL("image/jpeg",.78))};im.onerror=function(){cb(null)};im.src=r.result};r.onerror=function(){cb(null)};r.readAsDataURL(f)}
 function addPhotos(fl){save.photos=save.photos||[];var q=[].slice.call(fl).slice(0,24-save.photos.length);(function nx(){var f=q.shift();if(!f){persist();renderHome();openSet();return}shrink(f,function(d){if(d&&save.photos.length<24)save.photos.push({d:d,n:"photo"});nx()})})()}
 function lbView(key){
+ window.MindGardenMenuHistory?.enter('leaderboard',()=>lbView());
  key=key||"all";var ids=Object.keys(save.pr),keys={},pts={};
  ids.forEach(function(id){var b=save.pr[id].bt||{};for(var k in b)keys[k]=1});
  Object.keys(keys).forEach(function(k){ids.filter(function(id){return(save.pr[id].bt||{})[k]}).sort(function(a,b){return save.pr[a].bt[k]-save.pr[b].bt[k]}).forEach(function(id,i){pts[id]=(pts[id]||0)+ids.length-i})});
@@ -1060,7 +1065,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4043.js"></script>
+<script src="garden-ui-4044.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>
