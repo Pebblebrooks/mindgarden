@@ -55,7 +55,7 @@ async function resize(x,expected){
   assert(!api.signedIn);assert(!api.connected);assert.equal(w.me().name,'Jamie');assert.equal(w.save.cp,localId);assert.equal(w.me().log.length,1);
   assert.equal(JSON.parse(w.localStorage.getItem('mindGardenAccountCopies'))['account-test'].profiles[localId].log.length,2);
   assert(w.document.querySelector('[data-auth-view="signed-out"]'));assert(el('accountSwitchPlayer'));assert(el('accountOutcome').textContent.includes(lang==='en'?'Local player':'本地玩家'));
-  await resize(x,lang==='en'?'Sign in':'登录');assert(el('welcomeAccountState').textContent.includes(lang==='en'?'Local player':'本地玩家'));
+  await resize(x,lang==='en'?'Sign in':'登录');assert(!el('welcomeAccountState'));
   click('accountSwitchPlayer');await wait();assert(el('pn'));assert.deepEqual(x.errors,[]);x.finishManager();w.close();
  }
  // Real form events cover loading, repeated Enter, server rejection and explicit retry.
