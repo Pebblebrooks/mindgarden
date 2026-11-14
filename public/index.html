@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.42">
+<meta name="mind-garden-release" content="v4.0.43">
 
 
 
@@ -322,14 +322,14 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4042.css">
+<link rel="stylesheet" href="garden-ui-4043.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
 <div class="wrap">
 <section id="home">
   <div class="tools" id="nav">
-      <button class="btn sm" id="bPl"></button><span id="cont" class="hidden"><button class="btn sm" id="bCont" aria-label="Continue last game"><span aria-hidden="true">▶</span> Continue</button><button class="btn sm ic" id="bContX" aria-label="Forget last game">✕</button></span><button class="btn sm" id="bFam">Family view</button><button class="btn sm" id="bOnline">🌍 Play Together</button><button class="btn sm" id="bLb">Leaderboard</button>
+      <button class="btn sm" id="bPl"></button><span id="cont" class="hidden"><button class="btn sm" id="bCont" aria-label="Continue last game"><span aria-hidden="true">▶</span> Continue</button><button class="btn sm ic" id="bContX" aria-label="Forget last game">✕</button></span><button class="btn sm" id="bFam">Players’ Progress</button><button class="btn sm" id="bOnline">🌍 Play Together</button><button class="btn sm" id="bLb">Leaderboard</button>
       <button class="btn sm" id="bSet">Settings</button><button class="btn sm" id="bAll"><span aria-hidden="true">▾</span> Collapse all</button><button class="btn sm" id="bMus"><span aria-hidden="true">♪</span> Music</button><button class="btn sm" id="bLang" aria-label="Language / 语言"></button>
     </div>
   <div class="top"><h1>Mind Garden</h1></div>
@@ -606,7 +606,7 @@ $("box").addEventListener("click",function(e){
 $("decks").addEventListener("click",function(e){var b=e.target.closest("[data-d]");if(b){save.deck=b.dataset.d;persist();renderHome()}});
 /* ---------- family view ---------- */
 function famView(){
-  if(!save.famOk){overlay('<h2>Family view</h2><p>This summarises each player’s play time and progress. When signed in, player data is saved to the account server. Otherwise it stays on this device. Continue only if every player agrees.</p><div class="row"><button class="btn main" id="fy">Yes, show it</button><button class="btn" id="fn">Not now</button></div>');$("fy").onclick=function(){save.famOk=1;persist();famView()};$("fn").onclick=closeOv;return}
+  if(!save.famOk){overlay('<h2>Players’ Progress</h2><p>This summarises each player’s play time and progress. When signed in, player data is saved to the account server. Otherwise it stays on this device. Continue only if every player agrees.</p><div class="row"><button class="btn main" id="fy">Yes, show it</button><button class="btn" id="fn">Not now</button></div>');$("fy").onclick=function(){save.famOk=1;persist();famView()};$("fn").onclick=closeOv;return}
   var dn=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   var blocks=Object.keys(save.pr).map(function(id){var p=save.pr[id],m=[0,0,0,0,0,0,0],a=[],b=[],g=0,tm=0;
     p.log.forEach(function(x){var n=age(x.d);if(n<7){m[6-n]+=x.s;a.push(x.r);g++;tm+=x.s}else if(n<14)b.push(x.r)});
@@ -615,7 +615,7 @@ function famView(){
     var mx=Math.max.apply(null,m.concat([60])),st=0;for(var k in p.stars)st+=p.stars[k];
     var bars=m.map(function(s,i){var d=new Date();d.setDate(d.getDate()-(6-i));return '<div class="bc"><i style="height:'+Math.round(s/mx*70)+'px"></i><small>'+Math.round(s/60)+' min</small><span>'+dn[d.getDay()]+'</span></div>'}).join("");
     return '<section class="fam"><h3>'+avHtml(p)+esc(p.name)+'’s week'+(id===save.cp?" ✓":"")+'</h3><div class="bars s">'+bars+'</div><p>'+g+(g===1?' game, ':' games, ')+Math.round(tm/60)+(Math.round(tm/60)===1?' minute':' minutes')+' this week<br>Matching level reached: '+Math.min(p.unlocked||1,6)+' of 6, with '+st+(st===1?' star':' stars')+'<br>Garden: '+Math.min(60,p.gr||0)+' of 60<br>'+tr+'</p><button class="btn sm" data-fc="'+id+'">Clear history</button></section>'}).join("");
-  overlay('<h2>Family view</h2>'+blocks+'<div class="row"><button class="btn main" id="fd">Done</button><button class="btn sm" id="fs2">Stop sharing</button></div>');
+  overlay('<h2>Players’ Progress</h2>'+blocks+'<div class="row"><button class="btn main" id="fd">Done</button><button class="btn sm" id="fs2">Stop sharing</button></div>');
   $("fd").onclick=closeOv;$("fs2").onclick=function(){save.famOk=0;persist();closeOv()};
 }
 /* ---------- brain games ---------- */
@@ -1060,7 +1060,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4042.js"></script>
+<script src="garden-ui-4043.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

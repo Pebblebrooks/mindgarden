@@ -15,7 +15,7 @@ function apply(){const p=prefs();
  document.querySelectorAll('#gameCards [data-game]').forEach(b=>(b.closest('.personal-game-card')||b).classList.toggle('display-choice-hidden',!showAll&&p.gameCards!==null&&!p.gameCards.includes(b.dataset.game)));
  const grid=$('gameCards');if(grid&&!$('displayGameNotice')){const row=document.createElement('div');row.id='displayGameNotice';row.className='row';grid.before(row)}
  const notice=$('displayGameNotice');if(notice){const key=JSON.stringify([save.lang,p.gameCards,showAll]);if(notice.dataset.state!==key){notice.dataset.state=key;notice.replaceChildren();if(p.gameCards!==null){const b=document.createElement('button');b.className='btn';b.textContent=showAll?T('Show my chosen cards','显示我选择的卡片'):T('Show all game cards','显示所有游戏卡片');b.onclick=()=>{showAll=!showAll;apply()};notice.append(b)}}}
- const group=document.querySelector('#navMenu .nav-preferences');if(group&&!$('customiseDashboard')){const b=document.createElement('button');b.id='customiseDashboard';b.textContent=T('Customise my home','定制我的主页');b.onclick=panel;group.append(b)}
+ const group=document.querySelector('#navMenu .nav-preferences');if(group&&!$('customiseDashboard')){const b=document.createElement('button');b.id='customiseDashboard';b.textContent=T('Customise my home','定制我的主页');b.onclick=()=>{$('navMenu').classList.add('hidden');$('navMore').setAttribute('aria-expanded','false');panel()};group.after(b)}
 }
 function restore(){showAll=false;const p=prefs();window.MindGardenWelcomeCards?.setVisible(p.welcomeVisible);window.MindGardenWelcomePet?.setVisible(p.petsVisible);apply()}
 function panel(){const menu=$('navMenu');menu?.classList.add('hidden');$('navMore')?.setAttribute('aria-expanded','false');const p=prefs();
