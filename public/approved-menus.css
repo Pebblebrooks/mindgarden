@@ -144,10 +144,10 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 #ov #box .account-panel .recovery-choice{display:flex;gap:12px}
 #ov #box .account-panel .account-hint{font-size:calc(.9rem * var(--fs))}
 
-/* Standing project standard: centred card text and balanced text groups. */
-#ov #box :is(h1,h2,h3,h4,p,label,summary,input,textarea,select,button,small,strong),
-#libraryDisplay :is(h1,h2,h3,h4,p,label,summary,input,select,button,small,strong),
-:is(.welcome-choice,.personal-picked-card,.personal-game-card,.game-tile,.card) :is(p,span,strong,small,label,button){text-align:center!important;text-align-last:center!important}
+/* Centre headings and controls; keep prose independently aligned below. */
+#ov #box :is(h1,h2,h3,h4,label,summary,input,textarea,select,button),
+#libraryDisplay :is(h1,h2,h3,h4,label,summary,input,select,button),
+:is(.welcome-choice,.personal-picked-card,.personal-game-card,.game-tile,.card) :is(span,strong,small,label,button){text-align:center!important;text-align-last:center!important}
 #ov #box .menu-brand,#libraryDisplay .library-top,#libraryDisplay .library-category,#libraryDisplay .game-filterbar,#ov #box .library-tabs{justify-content:center;text-align:center!important}
 #ov #box .account-panel label,#ov #box .account-panel .account-secret,#ov #box .account-player-selection label{justify-content:center}
 #ov #box .account-panel :is(input,textarea){text-align:center!important;text-align-last:center!important}
@@ -196,7 +196,8 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 #ov #box[data-settings-area="garden"]:has(#sd){width:min(800px,calc(100vw - 24px))}
 
 /* Welcome context and optional account access use the same centred axis. */
-#home .welcome-scene>#sceneFooter{position:relative;z-index:2;flex:0 0 auto;display:block;clear:both;width:100%;box-sizing:border-box;text-align:center;text-align-last:center;margin:auto auto 0;padding:12px 24px;font-size:calc(.95rem * var(--fs));line-height:1.5;overflow-wrap:anywhere;color:var(--ink)}
+#home .welcome-scene>#sceneFooter{position:relative;z-index:2;flex:0 0 auto;display:block;clear:both;width:fit-content;max-width:calc(100% - 24px);box-sizing:border-box;text-align:center;text-align-last:center;margin:auto auto 12px;padding:4px 12px;font-size:calc(1.25rem * var(--fs));font-weight:700;line-height:1.4;overflow-wrap:anywhere;color:#f5fff9;background:#153e38;border:1px solid #8bb5a5;border-radius:10px;box-shadow:0 2px 8px #0004}
+html[data-v4-mode="light"] #home .welcome-scene>#sceneFooter{color:#163e37;background:#f2faed;border-color:#578575}
 #ov #box .rename-account-option{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;width:100%;border-top:1px solid var(--menu-edge);padding-top:14px;margin-top:16px}
 #ov #box .rename-account-option>#gardenOnlineAccount{grid-column:2;width:100%;margin:0;white-space:normal}
 #ov #box .rename-account-option>.mg-info-button{grid-column:3;position:static;min-width:44px;min-height:44px;margin:0}
@@ -306,7 +307,10 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
 
 /* Player visibility preferences outrank decorative layout rules. */
 #home #gardenProgressStrip.display-choice-hidden{display:none!important}
-#box .app-info,#box .app-info p,#box .app-info li{text-align:center}
+/* Body copy follows the user's reference; reset inherited last-line centring too. */
+#ov #box :is(p,li),#libraryDisplay :is(p,li){text-align:left!important;text-align-last:left!important}
+#ov #box :is(p,li) :is(span,strong,em,small,a),#libraryDisplay :is(p,li) :is(span,strong,em,small,a){text-align:inherit!important;text-align-last:inherit!important}
+#ov #box .app-info :is(h1,h2,h3,h4,summary){text-align:center!important;text-align-last:center!important}
 #home #unifiedNav .nav-actions [data-go="account"]{order:10}
 #home #unifiedNav .nav-actions [data-go="language"]{order:11}
 #home #unifiedNav .nav-actions [data-go="appearance"]{order:12}
@@ -322,3 +326,7 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
  #home #unifiedNav #navAccount{font-size:0!important}
  #home #unifiedNav #navAccount::before{content:"👤";font-size:22px}
 }
+
+#ov #box .lbr .ranking-copy-note{grid-column:1/-1;display:flex;justify-content:center}
+/* Dark palace artwork retains readable welcome copy in either interface theme. */
+html:is([data-garden-scene="moon-palace"],[data-garden-scene="golden-sanctuary"],[data-garden-scene="starlight-court"]) #home .welcome-scene :is(.welcome-heading,.welcome-heading h1,.welcome-heading p,#welcomeName,#welcomeName span,#welcomeName strong){color:#f5fff9!important;text-shadow:0 2px 5px #102c36,0 0 12px #102c36!important}

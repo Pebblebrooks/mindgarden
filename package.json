@@ -1,6 +1,6 @@
 {
   "name": "mind-garden-cloudflare",
-  "version": "4.0.49",
+  "version": "4.0.50",
   "private": true,
   "scripts": {
     "dev": "wrangler pages dev public --local",

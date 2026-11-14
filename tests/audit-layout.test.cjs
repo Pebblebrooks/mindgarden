@@ -11,6 +11,6 @@ const root=path.resolve(__dirname,'../public');
  await page.setViewportSize({width:390,height:844});await page.evaluate(()=>{save.textScale=1;save.lang='en';persist();load();renderHome();me().dashboardPreferences={...MindGardenDisplay.prefs(),progressVisible:false};MindGardenDisplay.restore()});assert.equal(await page.locator('#gardenProgressStrip').evaluate(n=>getComputedStyle(n).display),'none');
  await page.evaluate(()=>{me().dashboardPreferences.progressVisible=true;MindGardenDisplay.restore()});assert.notEqual(await page.locator('#gardenProgressStrip').evaluate(n=>getComputedStyle(n).display),'none');
  await page.screenshot({path:'/tmp/mg-audit-mobile.png'});
- await page.evaluate(()=>document.querySelector('#navMenu [data-go="about"]').click());assert.equal(await page.locator('.app-info p').first().evaluate(n=>getComputedStyle(n).textAlign),'center');
+ await page.evaluate(()=>document.querySelector('#navMenu [data-go="about"]').click());assert.equal(await page.locator('.app-info p').first().evaluate(n=>getComputedStyle(n).textAlign),'left');
  console.log('PASS rendered navbar priority/order at 48 viewport/language/text/theme settings; progress hide/show and About alignment.');
  }finally{await browser?.close();await new Promise(r=>server.close(r))}})().catch(e=>{console.error(e);process.exitCode=1});

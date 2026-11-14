@@ -91,7 +91,21 @@ function simplifyPanels(){const box=$('box');
 // Group byte-equivalent profile content for presentation only; never remove stored IDs.
 function profileKey(value){if(Array.isArray(value))return '['+value.map(profileKey).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+profileKey(value[k])).join(',')+'}';return JSON.stringify(value)}
 function profileGroups(profiles=save.pr){const groups=[],seen=new Map();for(const [id,p]of Object.entries(profiles)){const key=p.log?.length?profileKey(p):id;let group=seen.get(key);if(!group){group=[];seen.set(key,group);groups.push(group)}group.push(id)}return groups.map(ids=>({ids,id:ids.includes(save.cp)?save.cp:ids[0]}))}
-window.MindGardenProfileGroups={groups:profileGroups,equivalent:(a,b)=>profileKey(a)===profileKey(b)};
+// Ranking-only suppression of an older same-name snapshot. Stored profiles remain separate.
+const rankName=n=>String(n||'').normalize('NFKC').trim().replace(/\s+/gu,' ').toLowerCase();
+function containsRecords(newer=[],older=[]){const counts=new Map();for(const r of newer){const key=profileKey(r);counts.set(key,(counts.get(key)||0)+1)}for(const r of older){const key=profileKey(r),n=counts.get(key)||0;if(!n)return false;counts.set(key,n-1)}return true}
+function coversProfile(newer,older){
+ if(!older.log?.length||rankName(newer.name)!==rankName(older.name)||!containsRecords(newer.log,older.log)||!containsRecords(newer.multiplayerHistory,older.multiplayerHistory))return false;
+ for(const key of ['gp','gr','unlocked'])if((newer[key]||0)<(older[key]||0))return false;
+ for(const key of ['stars','levels'])for(const [id,value]of Object.entries(older[key]||{}))if((newer[key]?.[id]||0)<value)return false;
+ for(const [id,value]of Object.entries(older.bt||{}))if(!newer.bt?.[id]||newer.bt[id]>value)return false;
+ return true;
+}
+function rankingGroups(profiles=save.pr){
+ const order=Object.keys(profiles).sort((a,b)=>Math.max(profiles[b].gp||0,profiles[b].log?.length||0)-Math.max(profiles[a].gp||0,profiles[a].log?.length||0)||(a===save.cp?-1:b===save.cp?1:0));
+ const groups=[];for(const id of order){const p=profiles[id];let group=groups.find(g=>coversProfile(profiles[g.id],p));if(group)group.ids.push(id);else{const covered=groups.filter(g=>g.ids.every(old=>coversProfile(p,profiles[old])));group={id,ids:[id,...covered.flatMap(g=>g.ids)]};for(const g of covered)groups.splice(groups.indexOf(g),1);groups.push(group)}}return groups;
+}
+window.MindGardenProfileGroups={groups:profileGroups,rankingGroups,equivalent:(a,b)=>profileKey(a)===profileKey(b)};
 function players(){const box=$('box');if(!$('pn')||!$('pa')||box.dataset.simplePlayers)return;box.dataset.simplePlayers='1';
  const storage=document.createElement('p');storage.className='player-storage';storage.textContent=window.MindGardenAccount?.connected?T('Players in account: ','账户中的玩家：')+window.MindGardenAccount.username:T('Saved on this device · No account needed','保存在此设备 · 无需账户');box.querySelector('h2').after(storage);
  const brand=document.createElement('div');brand.className='menu-brand';brand.textContent='🌿 '+T('Mind Garden','心灵花园');box.prepend(brand);
