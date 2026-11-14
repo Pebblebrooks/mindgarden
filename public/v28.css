@@ -6,9 +6,10 @@ html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}
 body:has(#home:not(.hidden)){background:var(--mg-progress-bg)}
 body:has(#home:not(.hidden))>.wrap{max-width:none!important;width:100%;padding:0!important;margin:0!important}
 #home:not(.hidden):has(#welcomeDashboard:not(.hidden)){height:100dvh!important;min-height:100dvh!important;display:flex!important;flex-direction:column;position:relative;width:100%;overflow:visible}
-#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav{position:absolute!important;z-index:30;top:8px;left:2%;right:2%;width:96%;max-width:none;margin:0!important;box-sizing:border-box}
+#home:not(.hidden) #unifiedNav{width:96%;max-width:none;box-sizing:border-box}
+#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav{position:absolute!important;z-index:30;top:8px;left:2%;right:2%;margin:0!important}
 #home:not(.hidden):has(#gameLibrary:not(.hidden)){height:auto!important;min-height:100dvh;display:block}
-#home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav{position:sticky!important;top:6px;left:auto;right:auto;width:calc(100% - 24px);margin:6px auto 0!important}
+#home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav{position:sticky!important;top:8px;left:auto;right:auto;margin:8px auto 0!important}
 /* Four cards take half of the available viewport height. */
 #home #welcomeDashboard:not(.hidden){display:block!important;flex:0 0 50dvh!important;width:100%;height:50dvh!important;min-height:0!important;max-height:none!important;margin:0!important;overflow:hidden;box-sizing:border-box}
 #home .welcome-scene{display:flex!important;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%!important;min-height:0!important;max-height:none!important;margin:0!important;padding:clamp(70px,9dvh,105px) clamp(12px,2vw,32px) clamp(8px,1.3vh,20px)!important;gap:clamp(4px,1.2dvh,13px);box-sizing:border-box;background:url('garden-landscape.webp') center 50%/cover no-repeat!important;border-radius:0!important;border:0!important}
@@ -54,7 +55,9 @@ body:has(#home:not(.hidden))>.wrap{max-width:none!important;width:100%;padding:0
 /* Mobile: navbar becomes one hamburger; room for large, accessible buttons takes priority. */
 @media(max-width:750px){
  #home:not(.hidden):has(#welcomeDashboard:not(.hidden)){height:auto!important;min-height:100dvh!important}
- #home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav{top:5px;left:7px;right:7px;width:calc(100% - 14px)}
+ #home:not(.hidden) #unifiedNav{width:calc(100% - 14px)}
+ #home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav{top:5px;left:7px;right:7px}
+ #home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav{top:5px;margin:5px auto 0!important}
  #home #welcomeDashboard:not(.hidden){height:auto!important;min-height:0!important;flex:0 0 auto!important;overflow:visible}
  #home .welcome-scene{height:auto!important;min-height:0!important;padding:76px 12px 22px!important;gap:11px}
  #home .welcome-heading h1{font-size:calc(clamp(2rem,7.7vw,3rem) * var(--fs))}

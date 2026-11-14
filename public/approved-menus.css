@@ -197,7 +197,7 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 
 /* Welcome context and optional account access use the same centred axis. */
 #home .welcome-scene>#sceneFooter{position:relative;z-index:2;flex:0 0 auto;display:block;clear:both;width:fit-content;max-width:calc(100% - 24px);box-sizing:border-box;text-align:center;text-align-last:center;margin:auto auto 12px;padding:4px 12px;font-size:calc(1.25rem * var(--fs));font-weight:700;line-height:1.4;overflow-wrap:anywhere;color:#f5fff9;background:transparent;border:0;border-radius:0;box-shadow:none;text-shadow:0 1px 3px #102c36,0 0 6px #102c36}
-html[data-v4-mode="light"] #home .welcome-scene>#sceneFooter{color:#163e37;background:transparent;text-shadow:0 1px 3px #fff,0 0 6px #fff}
+html[data-v4-mode="light"] #home .welcome-scene>#sceneFooter{color:#000;font-weight:800;background:transparent;text-shadow:0 1px 3px #fff,0 0 6px #fff}
 #ov #box .rename-account-option{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;width:100%;border-top:1px solid var(--menu-edge);padding-top:14px;margin-top:16px}
 #ov #box .rename-account-option>#gardenOnlineAccount{grid-column:2;width:100%;margin:0;white-space:normal}
 #ov #box .rename-account-option>.mg-info-button{grid-column:3;position:static;min-width:44px;min-height:44px;margin:0}
