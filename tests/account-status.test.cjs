@@ -1,14 +1,15 @@
 const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
 const root=__dirname+'/../public/',html=fs.readFileSync(root+'index.html','utf8'),bundle=html.match(/src="(garden-ui-\d+\.js)"/)[1];
 const wait=async()=>{for(let i=0;i<14;i++)await new Promise(r=>setImmediate(r))};
-async function boot({lang='en',saved=null,remote=null,signed=false,deferStartup=false}={}){
+async function boot({lang='en',saved=null,remote=null,signed=false,deferStartup=false,deferSignup=false,signupFailure=false}={}){
  const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test/',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,errors=[],downloads=[];
- let firstState=true,finishStartup,managerResolve,storedBlob;
+ let firstState=true,finishStartup,managerResolve,storedBlob,finishSignup,signupCount=0;
  remote=remote||{account:{id:'account-test',username:'tester'},revision:0,document:{schemaVersion:1,profiles:{}}};
  if(saved)w.localStorage.setItem('gardenMatch',saved);else w.localStorage.setItem('gardenMatch',JSON.stringify({lang}));
  w.fetch=async(url,options)=>{const action=new URL(url,'https://garden.test').searchParams.get('action'),body=JSON.parse(options.body);let data={},status=200;
   if(action==='passkey-status')return {ok:true,status:200,json:async()=>({available:false})};
   if(action==='state'&&firstState){firstState=false;if(deferStartup)return new Promise(resolve=>{finishStartup=()=>resolve({ok:false,status:401,json:async()=>({code:'SIGNIN',error:'Sign in'})})})}
+  if(action==='signup'){signupCount++;if(deferSignup)await new Promise(resolve=>finishSignup=resolve);if(signupFailure)return {ok:false,status:409,json:async()=>({code:'EXISTS',error:'Account already exists.'})};}
   if(action==='signup'||action==='signin'){signed=true;data={account:remote.account,...(body.generateRecovery?{recovery:'a'.repeat(64)}:{})}}
   else if(!signed){status=401;data={code:'SIGNIN',error:'Sign in'}}
   else if(action==='state')data=JSON.parse(JSON.stringify(remote));
@@ -21,7 +22,7 @@ async function boot({lang='en',saved=null,remote=null,signed=false,deferStartup=
  w.PasswordCredential=function(data){Object.assign(this,data)};w.navigator.credentials={store:()=>new Promise(resolve=>{managerResolve=resolve})};
  w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(root+bundle,'utf8'));await wait();
  const el=id=>w.document.getElementById(id),click=id=>{assert(el(id),id);el(id).click()};
- return {w,el,click,remote,downloads,errors,lateStartup:()=>finishStartup?.(),finishManager:()=>managerResolve?.(),expire:()=>{signed=false}};
+ return {w,el,click,remote,downloads,errors,lateStartup:()=>finishStartup?.(),finishManager:()=>managerResolve?.(),expire:()=>{signed=false},finishSignup:()=>finishSignup?.(),get signupCount(){return signupCount},allowSignup:()=>{signupFailure=false;deferSignup=false}};
 }
 async function resize(x,expected){
  for(const [width,height]of [[390,844],[844,390],[768,1024],[1024,768]]){
@@ -40,27 +41,35 @@ async function resize(x,expected){
   assert(el('accountOutcome').textContent.includes(lang==='en'?'Account created':'账户已创建'));assert.equal(w.document.activeElement.id,'accountOutcome');
   // A password-manager prompt that stays open must not prevent the success screen.
   assert(el('accountContinue'));x.lateStartup();await wait();assert(api.signedIn,'stale startup 401 cannot undo new sign-in');
-  await resize(x,lang==='en'?'Account':'账户');
+  await resize(x,'👤 tester');
   click('accountDownloadLogin');click('accountSaveKey');await wait();assert.equal(x.downloads.length,2);
   assert.equal(el('accountDownloadLogin').nextElementSibling.id,'accountDownloadLoginFeedback');assert.equal(el('accountSaveKey').nextElementSibling.id,'accountSaveKeyFeedback');
   assert(el('accountDownloadLoginFeedback').textContent.includes(lang==='en'?'Check Downloads':'下载列表'));
   // Closing the save screen does not sign out; opening Account returns to it.
   click('accountDone');click('navAccount');assert(el('accountOutcome'));assert(el('accountGeneratedKey'));
   click('accountContinue');await wait();assert(el('accountCopyPlayers'));assert(api.signedIn);assert(!api.connected);
-  await resize(x,lang==='en'?'Account':'账户');
+  await resize(x,'👤 tester');
   w.document.querySelector('[data-copy-player]').checked=true;click('accountCopyPlayers');await wait();assert(api.connected);
   assert(el('accountOutcome').textContent.includes(lang==='en'?'Players saved to account':'玩家已保存至账户'));
   const localId=w.save.cp;w.me().log.push({g:'num',r:2,s:5,d:'2026-11-14'});w.persist();await api.sync();click('accountSignout');await wait();
   assert(!api.signedIn);assert(!api.connected);assert.equal(w.me().name,'Jamie');assert.equal(w.save.cp,localId);assert.equal(w.me().log.length,1);
   assert.equal(JSON.parse(w.localStorage.getItem('mindGardenAccountCopies'))['account-test'].profiles[localId].log.length,2);
-  assert(w.document.querySelector('[data-auth-view="signed-out"]'));assert(el('accountSwitchPlayer'));assert(el('accountOutcome').textContent.includes(lang==='en'?'Playing on this device':'此设备游玩'));
-  await resize(x,lang==='en'?'Sign in':'登录');assert(el('welcomeAccountState').textContent.includes(lang==='en'?'On this device':'此设备玩家'));
+  assert(w.document.querySelector('[data-auth-view="signed-out"]'));assert(el('accountSwitchPlayer'));assert(el('accountOutcome').textContent.includes(lang==='en'?'Local player':'本地玩家'));
+  await resize(x,lang==='en'?'Sign in':'登录');assert(el('welcomeAccountState').textContent.includes(lang==='en'?'Local player':'本地玩家'));
   click('accountSwitchPlayer');await wait();assert(el('pn'));assert.deepEqual(x.errors,[]);x.finishManager();w.close();
  }
+ // Real form events cover loading, repeated Enter, server rejection and explicit retry.
+ for(const lang of ['en','zh']){
+  const x=await boot({lang,deferSignup:true,signupFailure:true});x.w.MindGardenAccount.panel('signup');x.el('accountName').value='tester';x.el('accountPassword').value='test-only-password';
+  x.click('accountSignup');await wait();assert.equal(x.el('accountSignup').textContent,lang==='en'?'Creating account…':'正在创建账户…');assert(x.el('accountSignup').disabled);
+  x.el('accountForm').dispatchEvent(new x.w.Event('submit',{cancelable:true}));await wait();assert.equal(x.signupCount,1);assert.equal(x.el('accountStatus').parentElement.id,'accountForm');
+  x.finishSignup();await wait();assert(!x.el('accountOutcome'));assert(!x.w.MindGardenAccount.signedIn);assert(!x.el('accountSignup').disabled);assert.equal(x.el('accountSignup').textContent,lang==='en'?'Try again':'重试');assert(x.el('accountStatus').textContent);
+  x.allowSignup();x.click('accountSignup');await wait();assert(x.w.MindGardenAccount.signedIn);assert(x.el('accountOutcome'));assert.equal(x.signupCount,2);assert.deepEqual(x.errors,[]);x.w.close();
+ }
  // Reload after successful signup but before selecting players keeps the real session.
- const x=await boot({signed:true});assert(x.w.MindGardenAccount.signedIn);assert(!x.w.MindGardenAccount.connected);x.click('navAccount');await wait();assert(x.el('accountCopyPlayers'));await resize(x,'Account');x.w.close();
+ const x=await boot({signed:true});assert(x.w.MindGardenAccount.signedIn);assert(!x.w.MindGardenAccount.connected);x.click('navAccount');await wait();assert(x.el('accountCopyPlayers'));await resize(x,'👤 tester');x.w.close();
  // A cached profile is not evidence of a currently valid server session.
  const setup=await boot();setup.w.MindGardenAccount.panel('signup');setup.el('accountName').value='tester';setup.el('accountPassword').value='test-only-long-password';setup.click('accountSignup');await wait();setup.click('accountContinue');await wait();setup.w.document.querySelector('[data-copy-player]').checked=true;setup.click('accountCopyPlayers');await wait();
- const saved=setup.w.localStorage.getItem('gardenMatch'),remote=setup.remote;setup.w.close();const expired=await boot({saved,remote,signed:false});assert(!expired.w.MindGardenAccount.signedIn);assert(expired.w.MindGardenAccount.connected);await resize(expired,'Sign in');expired.click('navAccount');await wait();assert(expired.el('accountSignin'));assert(expired.w.me().name);expired.w.close();
+ const saved=setup.w.localStorage.getItem('gardenMatch'),remote=setup.remote;setup.expire();assert.equal(await setup.w.MindGardenAccount.sync(),false,'Sync with no edits must still verify the server session');assert(!setup.w.MindGardenAccount.signedIn);assert.equal(setup.el('navAccount').textContent,'Sign in');setup.w.close();const expired=await boot({saved,remote,signed:false});assert(!expired.w.MindGardenAccount.signedIn);assert(expired.w.MindGardenAccount.connected);await resize(expired,'Sign in');expired.click('navAccount');await wait();assert(expired.el('accountSignin'));assert(expired.w.me().name);expired.w.close();
  console.log('PASS account outcomes, adjacent download feedback, pending password-manager prompt, verified session vs cached players, late startup response, reload, orientation/rebuild state, and sign-out preserving named device players and account copies.');
 })().catch(e=>{console.error(e);process.exitCode=1}).finally(()=>setTimeout(()=>process.exit(process.exitCode||0),50));
