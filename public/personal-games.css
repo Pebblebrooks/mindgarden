@@ -302,3 +302,17 @@ body:has(#ov:not(.hidden) .personal-setup) #ov{background:var(--bg)!important;ba
 #box .account-panel #accountStatus{font-weight:700;min-height:1.5em}
 #box .personal-progress table{width:100%;table-layout:fixed;overflow-wrap:anywhere}
 @media(max-width:480px){.menu-view-tabs .btn{flex:1 1 80px;padding:10px 8px}#box .mp-room-code{font-size:1rem}#box .simple-menu-group{padding:8px}}
+
+/* Help controls reserve space independently of title length and text scaling. */
+.mg-info-button{box-sizing:border-box;flex-shrink:0}
+#box .personal-picked-card{flex:0 1 200px;max-width:100%;min-width:0}
+#box .personal-picked-card button.personal-picked{box-sizing:border-box;width:100%;max-width:none;height:100%;padding:58px 12px 14px;white-space:normal}
+#box .personal-picked-card>.mg-info-button{width:44px;height:44px;min-height:44px;padding:0;font-size:20px;line-height:1}
+#libraryDisplay .personal-game-card .game-tile{padding-right:62px}
+#libraryDisplay .personal-game-card>.mg-info-button{width:44px;height:44px;padding:0;font-size:20px;line-height:1}
+#home #welcomeDashboard .welcome-choice:has(>.mg-info-button) .welcome-feature,
+#home #welcomeDashboard .welcome-choice:has(.mg-help) .welcome-feature{padding-right:60px!important;box-sizing:border-box;overflow-wrap:anywhere}
+#box .pair-result-stars{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;padding-right:0}
+#box .pair-result-stars>.mg-info-button{position:static;margin:0;flex:none}
+
+#box .welcome-account-links{width:100%;border-top:1px solid var(--line);padding-top:12px;margin-top:8px}#box .welcome-account-links h3{margin:12px 0 6px}#box .welcome-account-links .row{gap:8px}
