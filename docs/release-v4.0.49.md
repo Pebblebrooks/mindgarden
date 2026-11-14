@@ -10,8 +10,12 @@ Continues the functional audit left pending after the v4.0.48 cleanup.
 - Progress bouquet hiding outranks decorative CSS. Navbar reserves account, language, appearance, cards, menu in left-to-right order; narrow phones use a labelled account icon. About text remains centred. Keyboard focus filtering checks hidden ancestors. Multiplayer requests time out after 25 seconds.
 - Updated English and Chinese About changes, navbar help, and backup metadata.
 
-Validation: account and release suites passed before the final version bump; targeted API authorization, backup, quota retry and restoration regression checks added. Final release checks and rendered preview verification are recorded in the PR.
+Validation completed:
+- 29 distinct automated scripts passed: account suite (11), release suite (9), multiplayer/preferences suite (4), bilingual screen audit, dashboard preferences, export, audit regression and storage-failure checks.
+- Hosted desktop checks verified navbar order, card visibility, light/dark themes, Chinese navigation, centred About text and version, and Progress hiding after reload.
+- An isolated Pages test branch rendered 48 combinations: widths 280/320/390/768/1024/1440, text scales 100%/200%, English/Chinese, and light/dark. All five priority navbar controls stayed visible, in bounds and in order. Progress hide/show and About alignment passed. The final 390px view was visually inspected.
+- The temporary test page exists only on codex/qa-v49-responsive; it is excluded from the release branch. Its reusable source is tests/responsive-preview.html. No app runtime changes followed the passing test run.
 
-Local Chromium launch is blocked by the environment's socket restrictions. The rendered layout test is included as `npm run test:audit-layout`; a hosted preview must be inspected before declaring visual verification complete. Real-device authentication and multi-device gameplay remain outside these automated checks.
+Local Chromium launch remains blocked by socket restrictions, so the rendered checks were run in the hosted browser. These are viewport tests, not physical iOS/Android device tests. Real-device authentication remains unverified.
 
-Target: Cloudflare Pages only. No Workers deployment or database migration.
+Target: Cloudflare Pages only. No database migration or Workers changes.
