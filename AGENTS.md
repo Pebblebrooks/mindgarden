@@ -11,9 +11,10 @@ After every app update, review the About documentation and update it wherever th
 
 ## Standing UI alignment rule
 
-- Centre-align all existing and new text inside cards, panels and dialogs, including headings, descriptions, labels, input values, buttons and card footers. Keep multi-line text centred too.
-- Apply the same rule in English and Chinese, light and dark modes, mobile and desktop, and enlarged text settings. Do not introduce left-aligned card text without an explicit user request.
-- Verify both text alignment and the position of text groups (balanced space around icons and action controls); avoid text that is centred only inside an off-centre column.
+- Centre-align headings and section headers only. Keep explanatory paragraphs and numbered/bulleted instructions left-aligned, including in About and the User guide.
+- Do not apply blanket centring to paragraph/list text or inherit a centred last line from a parent. Follow the user's reference: centred heading/disclosure header above left-aligned multi-line instructions.
+- Keep existing button labels, compact controls and game-answer layouts unless separately requested. This rule does not require changing their alignment.
+- Verify English and Chinese, light and dark modes, mobile/desktop, and enlarged text.
 
 ## Account and player flow contract
 

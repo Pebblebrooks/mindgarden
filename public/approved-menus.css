@@ -144,10 +144,10 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 #ov #box .account-panel .recovery-choice{display:flex;gap:12px}
 #ov #box .account-panel .account-hint{font-size:calc(.9rem * var(--fs))}
 
-/* Standing project standard: centred card text and balanced text groups. */
-#ov #box :is(h1,h2,h3,h4,p,label,summary,input,textarea,select,button,small,strong),
-#libraryDisplay :is(h1,h2,h3,h4,p,label,summary,input,select,button,small,strong),
-:is(.welcome-choice,.personal-picked-card,.personal-game-card,.game-tile,.card) :is(p,span,strong,small,label,button){text-align:center!important;text-align-last:center!important}
+/* Centre headings and controls; keep prose independently aligned below. */
+#ov #box :is(h1,h2,h3,h4,label,summary,input,textarea,select,button),
+#libraryDisplay :is(h1,h2,h3,h4,label,summary,input,select,button),
+:is(.welcome-choice,.personal-picked-card,.personal-game-card,.game-tile,.card) :is(span,strong,small,label,button){text-align:center!important;text-align-last:center!important}
 #ov #box .menu-brand,#libraryDisplay .library-top,#libraryDisplay .library-category,#libraryDisplay .game-filterbar,#ov #box .library-tabs{justify-content:center;text-align:center!important}
 #ov #box .account-panel label,#ov #box .account-panel .account-secret,#ov #box .account-player-selection label{justify-content:center}
 #ov #box .account-panel :is(input,textarea){text-align:center!important;text-align-last:center!important}
@@ -306,7 +306,10 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
 
 /* Player visibility preferences outrank decorative layout rules. */
 #home #gardenProgressStrip.display-choice-hidden{display:none!important}
-#box .app-info,#box .app-info p,#box .app-info li{text-align:center}
+/* Body copy follows the user's reference; reset inherited last-line centring too. */
+#ov #box :is(p,li),#libraryDisplay :is(p,li){text-align:left!important;text-align-last:left!important}
+#ov #box :is(p,li) :is(span,strong,em,small,a),#libraryDisplay :is(p,li) :is(span,strong,em,small,a){text-align:inherit!important;text-align-last:inherit!important}
+#ov #box .app-info :is(h1,h2,h3,h4,summary){text-align:center!important;text-align-last:center!important}
 #home #unifiedNav .nav-actions [data-go="account"]{order:10}
 #home #unifiedNav .nav-actions [data-go="language"]{order:11}
 #home #unifiedNav .nav-actions [data-go="appearance"]{order:12}
