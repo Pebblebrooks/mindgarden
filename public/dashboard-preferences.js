@@ -24,7 +24,7 @@ function panel(){
  function checkbox(host,key,label,checked){const l=document.createElement('label');l.className='display-option';const c=document.createElement('input');c.type='checkbox';c.value=key;c.checked=checked;l.append(c,document.createTextNode(label));$(host).append(l);return c}
  const favourites=me().myGames?.games||['pairs','num','gardenrhythm'];ids().forEach(id=>checkbox('displayFavourites',id,id==='pairs'?T('Matching Pairs','配对游戏'):MG[id].n,favourites.includes(id)));
  $('displayScene').innerHTML='<option value="keep">'+T('Keep current background','保留当前背景')+'</option>'+MindGardenScenes.scenes.map(s=>'<option value="'+s.id+'">'+T(s.en,s.zh)+'</option>').join('');$('displayTheme').value=save.mode||'auto';
- const launch={};for(const [key,en,zh]of [['welcomeVisible','Welcome cards','欢迎卡片'],['progressVisible','Progress bouquet','进度花束'],['petsVisible','Garden pet','花园宠物']])launch[key]=checkbox('displayLaunch',key,T(en,zh),p[key]);
+ const launch={};for(const [key,en,zh]of [['welcomeVisible','Welcome cards','欢迎卡片'],['progressVisible','Progress bouquet','进度花束']])launch[key]=checkbox('displayLaunch',key,T(en,zh),p[key]);
  shortcuts.forEach(([id,,en,zh])=>checkbox('displayWelcome',id,T(en,zh),p.welcomeCards.includes(id)));
  ids().forEach(id=>checkbox('displayGames',id,id==='pairs'?T('Matching Pairs','配对游戏'):MG[id].n,p.gameCards===null||p.gameCards.includes(id)));
  for(const [search,host]of [['displaySearch','displayGames'],['favouriteSearch','displayFavourites']])$(search).oninput=()=>{const q=$(search).value.trim().toLocaleLowerCase();$(host).querySelectorAll('label').forEach(l=>l.hidden=!l.textContent.toLocaleLowerCase().includes(q))};

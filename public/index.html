@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.50">
+<meta name="mind-garden-release" content="v4.0.51">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4050.css">
+<link rel="stylesheet" href="garden-ui-4051.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -934,21 +934,13 @@ $("bCont").onclick=function(){var lg=me().lg;if(!lg)return;try{ac&&ac.resume()}c
 $("bContX").onclick=function(){me().lg=null;persist();renderCont()};
 
 (function(){
-var WALK=["\ud83d\udc08","\ud83d\udc15","\ud83d\udc16","\ud83d\udc13","\ud83d\udc29","\ud83d\udc14","\ud83d\udc25"],
- PEEK=["\ud83d\udc31","\ud83d\udc36","\ud83d\udc37","\ud83d\udc14","\ud83d\udc25","\ud83d\udc26"],
- FLY=["\ud83e\udd8b","\ud83d\udc26","\ud83d\udc1d","\ud83e\udd8b","\ud83d\udc1e","\ud83d\udc24"],
- CRAWL=["\ud83d\udc0c","\ud83d\udc1b","\ud83d\udc1e","\ud83d\udc1c"];
+var FLY=['🦋','🐦','🦋'];
 function rng(s){return function(){s=(s*1664525+1013904223)%4294967296;return s/4294967296}}
 function z(cls,emo,st){return'<span class="z '+cls+'" style="'+st+'"><span class="m"><span class="b">'+emo+'</span></span></span>'}
 var zs=[].slice.call(document.querySelectorAll(".zoo"));
 zs.forEach(function(el,gi){
  var r=rng(7919*(gi+3)),pick=function(a,k){return a[(gi*2+k+Math.floor(r()*3))%a.length]},h="",k,
   rg=function(a,b){return Math.round(a+r()*(b-a))};
- h+='<div class="pks">';
- for(k=0;k<3;k++)h+=z("pk",pick(PEEK,k),"left:"+(12+k*30+rg(0,12))+"%;--d:"+rg(9,15)+"s;--dl:-"+rg(0,12)+"s;--bd:"+(2+r()*1.5).toFixed(1)+"s");
- h+='</div>';
- for(k=0;k<3;k++)h+=z("wk",pick(WALK,k),"--sl:"+(8+k*34)+"%;--d:"+rg(48,80)+"s;--dl:-"+rg(0,60)+"s;--bd:"+(.55+r()*.2).toFixed(2)+"s");
- h+=z("wk cr",pick(CRAWL,0),"--sl:"+rg(30,70)+"%;--d:"+rg(90,130)+"s;--dl:-"+rg(0,90)+"s");
  for(k=0;k<3;k++)h+=z("fl",pick(FLY,k),"top:"+rg(10+k*22,26+k*24)+"%;--d:"+rg(26,46)+"s;--dl:-"+rg(0,40)+"s;--vd:"+rg(6,10)+"s");
  el.innerHTML=h});
 if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle("zoff",!e.isIntersecting)})});zs.forEach(function(el){io.observe(el)})}
@@ -1065,7 +1057,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4050.js"></script>
+<script src="garden-ui-4051.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

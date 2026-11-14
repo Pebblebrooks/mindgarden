@@ -14,7 +14,7 @@ setTimeout(()=>{try{
  assert.deepEqual([...el('navMenu').firstElementChild.querySelectorAll('[data-go]')].map(b=>b.dataset.go),['daily','mygames','library','online','progress','leaderboard']);
  assert.equal(el('navMenu').children[1].id,'gardenViewControls');assert.equal(el('gardenViewControls').tagName,'DETAILS');assert(!el('gardenViewControls').open);assert(el('navCards'));assert(el('menuCards'));assert.equal(el('navMenu').children[2].querySelector('summary').textContent,'Player');
  assert(!el('navMenu').querySelector('[data-go=home]'));assert(w.document.querySelector('.nav-brand[data-go=home]'));
- assert.equal(w.MindGardenPetsVisible,false);assert(el('gardenCat').classList.contains('mochi-collapsed'));
+ assert.equal(w.MindGardenPetsVisible,false);assert.equal(el('gardenCat'),null);assert.equal(el('menuPetToggle'),null);
  let myGames=0;w.MindGardenPersonal.myGames=()=>myGames++;el('navMenu').querySelector('[data-go=mygames]').click();assert.equal(myGames,1);
 
  assert(el('navMenu').querySelector('[data-go=progress]'));assert(el('navMenu').querySelector('[data-go=leaderboard]'));

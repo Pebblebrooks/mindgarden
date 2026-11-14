@@ -6,8 +6,8 @@ const dash=document.getElementById('welcomeDashboard');
 if(!dash)return;
 const assetUrl=name=>window.MindGardenAssets?.[name]||name;
 const life=document.createElement('div');life.id='gardenLife';life.setAttribute('aria-hidden','true');
-// Locally bundled 3D animation; GIFs are the fallback if WebGL is unavailable.
-life.innerHTML=['cat','fox','owl'].map(kind=>'<div class="wildlife-poster fallback-'+kind+'"><img data-kind="'+kind+'" src="'+assetUrl('wildlife/'+kind+'.png')+'" alt=""></div>').join('');
+// Lightweight flying-only fallback when WebGL is unavailable.
+life.innerHTML='<div class="scenery-flyers"><span class="scenery-bird">🕊️</span><span class="scenery-butterfly">🦋</span><span class="scenery-bird">🐦</span></div>';
 life.insertAdjacentHTML('beforeend','<div class="garden-weather"><i class="garden-cloud cloud-one"></i><i class="garden-cloud cloud-two"></i></div>');
 let engine=null,visible=true;
 if(window.IntersectionObserver)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;sync()},{threshold:0}).observe(dash);
@@ -26,10 +26,6 @@ function sync(){
  const paused=!visible||document.hidden||!document.getElementById('ov').classList.contains('hidden')||document.getElementById('home').classList.contains('hidden')||dash.classList.contains('hidden');
  document.documentElement.dataset.ambientPaused=String(paused);
  engine?.setMode(mode,paused);
- life.querySelectorAll('.wildlife-poster img').forEach(poster=>{
- const source=assetUrl('wildlife/'+poster.dataset.kind+(paused||mode==='off'?'.png':'.gif'));
- if(poster.getAttribute('src')!==source)poster.src=source;
- });
  window.MindGardenWelcomeMedia?.render();
 }
 new MutationObserver(sync).observe(dash,{childList:true,attributes:true,attributeFilter:['class']});

@@ -130,7 +130,7 @@ function focusedSettings(kind){
 function applyFocusedSettings(kind){const box=$('box'),footer=$('sd').parentElement;box.dataset.settingsArea=kind;
  const keep=kind==='garden'?['scenery','media']:['player'];
  for(const d of [...box.querySelectorAll(':scope > details')]){d.hidden=!keep.includes(d.dataset.menuGroup);if(!d.hidden)d.open=true;}
- if(kind==='garden'){const scene=box.querySelector('[data-menu-group="scenery"]');if(scene){footer.before(scene);scene.hidden=false;scene.open=true;const pets=document.createElement('button');pets.className='btn';pets.textContent=T('Garden pets','花园宠物');pets.onclick=()=>{closeOv();$('menuPetToggle')?.click()};const d=disclosure(T('Pets & motion','宠物与动画'),'pets','garden');d.append(pets);for(const n of [...scene.querySelectorAll('.motion-options')])d.append(n);footer.before(d)}const media=box.querySelector('[data-menu-group="media"]');if(media)media.hidden=false;}
+ if(kind==='garden'){const scene=box.querySelector('[data-menu-group="scenery"]');if(scene){footer.before(scene);scene.hidden=false;scene.open=true;const d=disclosure(T('Animation','动画'),'pets','garden');for(const n of [...scene.querySelectorAll('.motion-options')])d.append(n);footer.before(d)}const media=box.querySelector('[data-menu-group="media"]');if(media)media.hidden=false;}
  box.querySelector('h2').textContent=kind==='garden'?T('Garden','花园'):T('Player & saved data','玩家与保存资料');
  box.querySelector('#appReleaseInfo')?.remove();
 }
