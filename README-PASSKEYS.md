@@ -1,4 +1,4 @@
-# Optional device sign-in — v4.0.40
+# Optional device sign-in — v4.0.41
 
 This release implements real WebAuthn passkeys. Physical Face ID/fingerprint prompts require device testing. The portable HTML review deliberately simulates account and passkey calls; it creates no real credentials.
 

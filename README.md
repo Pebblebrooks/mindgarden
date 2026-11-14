@@ -1,4 +1,4 @@
-# Mind Garden Classic v4.0.40
+# Mind Garden Classic v4.0.41
 
 Approved compact menus, separate account tasks, per-player preferences and retained device records, with optional WebAuthn device sign-in.
 

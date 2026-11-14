@@ -1,4 +1,4 @@
-Mind Garden Classic v4.0.40
+Mind Garden Classic v4.0.41
 
 Existing installation: follow README-UPDATE.txt. Do not clear player data.
 Cloudflare Pages uses GitHub main and output directory public.

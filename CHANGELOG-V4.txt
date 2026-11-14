@@ -1,3 +1,8 @@
+v4.0.41 — 14 November 2026
+- Clear account/save outcomes and consistent session-based navbar labels.
+- Named device players retained after sign-out with explicit status and switching.
+- Regression coverage for delayed session responses, pending password managers, reload and orientation changes.
+
 v4.0.40 — 14 November 2026
 Approved separate account/player menus; compact centred controls and game selectors;
 personal display/difficulty restoration; retained device copies; scene footer;

@@ -2113,3 +2113,9 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 #ov #box .game-background-choice{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 #ov #box .game-background-choice>.btn{flex:1 1 calc(7rem * var(--fs));min-width:0;margin:0;white-space:normal}
 #ov #box .family-scope{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+
+/* Keep account outcomes visible without mistaking a download request for a saved file. */
+#ov #box .account-panel #accountOutcome{font-size:1.12em;line-height:1.45;background:rgba(89,164,111,.17);margin:12px 0;padding:12px;text-align:center}
+#ov #box .account-action-feedback{margin:2px 0 10px;font-size:.95em;font-weight:700;line-height:1.4;text-align:center}
+#welcomeAccountState{margin:6px 0 0;text-align:center;font-size:calc(1rem * var(--fs));color:inherit;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+#ov #box .account-panel[data-auth-view="signed-out"]>.btn{display:block;margin:10px auto;max-width:100%}
