@@ -1,15 +1,4 @@
-/* v2.9 motion layers preserve the v2.8 responsive proportions. */
-#home #seaScene:not(.hidden){background:#157896!important;position:relative}
-#seaScene>svg{display:block;width:100%;height:100%}
-:root[data-theme="dark"] #seaScene>svg{filter:brightness(.72) saturate(.8)}
-.sea-drift{animation:seaDrift 22s ease-in-out infinite;transform-origin:center}
-.sea-rock{animation:seaRock 4.8s ease-in-out infinite;transform-origin:0 65px}
-.sea-waves{animation:seaWave 6s ease-in-out infinite}
-.sea-shimmer{animation:seaShimmer 4s ease-in-out infinite}
-@keyframes seaDrift{0%,100%{transform:translateX(-105px)}50%{transform:translateX(105px)}}
-@keyframes seaRock{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2deg)}}
-@keyframes seaWave{50%{transform:translate(-18px,3px)}}
-@keyframes seaShimmer{50%{opacity:.28;transform:translateY(3px)}}
+/* Garden motion layers. */
 #home .welcome-scene{position:relative;isolation:isolate}
 #gardenLife{z-index:1!important;display:block!important}
 .welcome-heading,.welcome-ctas,.welcome-extra{position:relative;z-index:2}
@@ -28,9 +17,7 @@
 @keyframes gardenRun{0%{transform:translateX(0) scaleX(-1)}48%{transform:translateX(85vw) scaleX(-1)}50%{transform:translateX(85vw) scaleX(1)}98%,100%{transform:translateX(0) scaleX(1)}}
 @keyframes hop{50%{transform:translateY(-5px) rotate(3deg)}}
 html[data-motion="gentle"] #gardenLife .life{animation-duration:45s}
-html[data-motion="gentle"] .sea-drift{animation-duration:40s}
-html[data-motion="gentle"] .sea-rock{animation-duration:7s}
-html[data-motion="off"] #gardenLife *,html[data-motion="off"] #seaScene *,html[data-ambient-paused="true"] #gardenLife *,html[data-ambient-paused="true"] #seaScene *{animation-play-state:paused!important}
+html[data-motion="off"] #gardenLife *,html[data-ambient-paused="true"] #gardenLife *{animation-play-state:paused!important}
 .motion-options{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0;border:1px solid var(--line);border-radius:12px;padding:12px}
 .motion-options .btn[aria-pressed="true"]{outline:3px solid var(--back);outline-offset:1px}
-@media(prefers-reduced-motion:reduce){html:not([data-motion-explicit="true"]) #gardenLife *,#seaScene *{animation:none!important}}
+@media(prefers-reduced-motion:reduce){html:not([data-motion-explicit="true"]) #gardenLife *{animation:none!important}}

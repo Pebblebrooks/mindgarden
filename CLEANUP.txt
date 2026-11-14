@@ -1,37 +1,32 @@
-Removed generated legacy bundles and redundant root mirrors.
-Editable versioned styles, migrations, third-party notices and historical records are retained.
-Deploy directory: public/. Build: python3 scripts/build-release.py
+Mind Garden release cleanup (v4.0.48)
 
-garden-ui-4024.js
-garden-ui-4026.js
-garden-ui-4024.css
-garden-ui-4025.css
-garden-ui-401.css
-garden-ui-4026.css
-garden-ui-4025.js
-garden-ui-401.js
-daily-and-controls.test.cjs
-release-ui.test.cjs
-home-nature.js
-sw.js
-bouquet-3d.js
-navbar-overflow.test.cjs
-new-features.test.cjs
-restore-accessibility.test.cjs
-release-cache.test.cjs
-motion-navigation.test.cjs
-multiplayer-taps.test.mjs
-home-nature-overlay.test.cjs
-v4.css
-online-expansion-ui.test.mjs
-bingo-ui.test.mjs
-dashboard.js
-page-visibility.test.cjs
-multiplayer.js
-audio-gesture.test.cjs
-progression-practice.test.cjs
-bouquet-speed.test.cjs
-soundscape.js
-five-games.test.cjs
-storage-failure.test.cjs
-v38.css
+Removed from the deployed app:
+- Retired daily-quotes.js and its unused generated translations.
+- Unloaded v27.css, superseded by the active style layers.
+- Retired sailboat/seaScene rules, animations and sea-banner.svg.
+- Duplicate Music translation key (the retained translation is unchanged).
+
+Moved public/wildlife.js to src/wildlife-art.js: this is a build-time SVG
+artwork generator, not a runtime module. The GIF renderer still uses it.
+Removed the obsolete V3.8 standalone-preview builder; the current isolated
+review builder remains scripts/build-menu-review.py.
+
+Build safeguards:
+- scripts/release-sources.json is the explicit list of active UI modules.
+- The translation generator only scans active application modules.
+- esbuild compacts release JS/CSS while preserving public/global names and
+  property names. It does not bundle/reorder the script execution sequence.
+- Only the current versioned JS/CSS pair is kept; offline cache entries are
+  regenerated from the deployed assets.
+- Legal comments, third-party notices and editable active sources remain.
+
+Preserved intentionally:
+- Database migrations, saved-data compatibility and profile IDs/history.
+- Active legacy-named styles: filenames alone do not establish dead code.
+- Account/multiplayer endpoints, current game prototypes and media fallbacks.
+- Historical release notes and checksums outside public/ (not downloaded by
+  the app). Git also retains removed source history.
+
+This cleanup does not implement the separate account-security, failed-save,
+navbar or Progress-visibility revisions from the broader approved audit.
+Deploy target remains Cloudflare Pages, public/. Workers is untouched.
