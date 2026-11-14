@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.39">
+<meta name="mind-garden-release" content="v4.0.40">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4039.css">
+<link rel="stylesheet" href="garden-ui-4040.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -564,7 +564,7 @@ function dstr(d){d=d||new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1
 function ystr(){var y=new Date();y.setDate(y.getDate()-1);return dstr(y)}
 function age(d){return Math.round((new Date(dstr())-new Date(d))/864e5)}
 function curStreak(p){return p.last===dstr()||p.last===ystr()?(p.streak||0):0}
-function logPlay(g,r,s,details){var p=me(),t=dstr();if(p.last!==t){p.streak=p.last===ystr()?(p.streak||0)+1:1;p.last=t}var record={d:t,g:g,r:Math.round(r*100)/100,s:Math.max(1,s|0)};var lev=details&&details.level||((mg&&mg.t===g)?mg.difficulty:g==="pairs"?cur+1:null);if(lev)record.level=lev;if(details)for(var key of ["attempts","mismatches","hints","stars","timed","preview","shared"])if(details[key]!==undefined)record[key]=details[key];p.log.push(record);if(!save.accountSync&&p.log.length>300)p.log.shift();persist()}
+function logPlay(g,r,s,details){var p=me(),t=dstr();if(p.last!==t){p.streak=p.last===ystr()?(p.streak||0)+1:1;p.last=t}var record={d:t,g:g,r:Math.round(r*100)/100,s:Math.max(1,s|0)};var lev=details&&details.level||((mg&&mg.t===g)?mg.difficulty:g==="pairs"?cur+1:null);if(lev)record.level=lev;if(details)for(var key of ["attempts","mismatches","hints","stars","timed","preview","shared"])if(details[key]!==undefined)record[key]=details[key];p.log.push(record);persist()}
 /* ---------- home extras ---------- */
 var MG={seq:{n:"Remember the order",d:"Watch the pictures light up, then repeat them.",ic:"🔔"},miss:{n:"What’s missing?",d:"One picture disappears. Which one was it?",ic:"🧺"},sort:{n:"Sort it",d:"Put each picture in the right group.",ic:"🗂️"}};
 function renderExtra(){
@@ -775,9 +775,9 @@ function res(good,note){
   $("mp").querySelectorAll(".big").forEach(function(b){b.classList.remove("on");if(b.tagName==="BUTTON")b.disabled=true});
   var details="";
   if(g.reviewExpected){details=window.MindGardenFeedback.compare(g.reviewExpected,g.reviewEntered||[])}
-  else if(g.ans!=null){var answer=Array.from($("mp").querySelectorAll("[data-a]")).find(function(b){return b.dataset.a===String(g.ans)}),label=function(b,fallback){return b?(b.getAttribute("aria-label")||b.textContent.trim()):String(fallback)};details=window.MindGardenFeedback.compare([label(answer,g.ans)],[g.last?label(g.last,""):null],{sequence:false,correct:good})}
+  else if(g.ans!=null){var answer=Array.from($("mp").querySelectorAll("[data-a]")).find(function(b){return b.dataset.a===String(g.ans)}),label=function(b,fallback){return b?(b.getAttribute("aria-label")||b.textContent.trim()):String(fallback)};details=window.MindGardenFeedback.compare([label(answer,g.ans)],[g.last?label(g.last,""):null],{sequence:false,correct:good,showMatched:false})}
 
-  panel.innerHTML='<h3>'+T(good?"Correct!":"Let’s review",good?"正确！":"一起回顾")+'</h3><p>'+esc(note)+'</p>'+details+'<div class="row"><button class="btn main" id="roundContinue">'+T(g.r>=g.R?"See results":"Next round",g.r>=g.R?"查看结果":"下一轮")+'</button></div>';
+  panel.innerHTML='<h3>'+T(good?"Correct!":"Let’s review",good?"正确！":"一起回顾")+'</h3>'+(!details||g.t==='story'?'<p>'+esc(note)+'</p>':'')+details+'<div class="row"><button class="btn main" id="roundContinue">'+T(g.r>=g.R?"See results":"Next round",g.r>=g.R?"查看结果":"下一轮")+'</button></div>';
   $("mmsg").textContent="";$("mp").replaceChildren(panel);$("roundContinue").onclick=function(){if(mg!==g||paused)return;this.disabled=true;nextR()};panel.tabIndex=-1;panel.focus({preventScroll:true});
 
 }
@@ -916,9 +916,10 @@ function lbView(key){
  var byG=all.slice().sort(function(a,b){return b.gp-a.gp||(a.m||1e9)-(b.m||1e9)});
  var byT=all.slice().sort(key==="all"?function(a,b){return b.pts-a.pts||(a.m||1e9)-(b.m||1e9)}:function(a,b){return(a.t||1e9)-(b.t||1e9)});
  function row(r,i,v,has){return'<div class="lbr'+(r.me?" me":"")+'"><span class="rk">'+(has&&i<3?trophy(i):i+1)+'</span><b>'+r.a+esc(r.n)+'</b><span>'+v+'</span></div>'}
- function list(rows,val,has){var h=rows.slice(0,10).map(function(r,i){return row(r,i,val(r),has(r))}).join(""),mi=rows.findIndex(function(r){return r.me});if(mi>=10)h+=row(rows[mi],mi,val(rows[mi]),false);return h}
+ function list(rows,val,has){return rows.map(function(r,i){return row(r,i,val(r),has(r))}).join("")}
+ var listClass='list leaderboard-list'+(ids.length>=4?' leaderboard-many':'');
  var opts=[["all","Overall – fastest all-correct times"]].concat(Object.keys(MG).map(function(k){return[k,MG[k].n]})).concat([1,2,3,4,5,6].map(function(n){return["p"+n,"Matching pairs – Level "+n]}));
- overlay('<h2>Leaderboard</h2><h3>Most games played</h3><p class="tip">Ranked by the number of games finished.</p><div class="list">'+list(byG,function(r){return r.gp+(r.gp===1?" game":" games")},function(r){return r.gp>0})+'</div><h3>Best timings</h3><p class="tip">Ranked by fastest games with every answer correct. “Overall” adds points from each game.</p><label class="lab">Ranking<select id="lbs">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(o[0]===key?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></label><div class="list">'+list(byT,function(r){return key==="all"?r.pts+" pts"+(r.m?"<br><small>Best time: "+fmt(r.m)+"</small>":""):(r.t?fmt(r.t):"—")},function(r){return key==="all"?r.pts>0:!!r.t})+'</div><div class="row"><button class="btn main" id="lbd">Done</button></div>');
+ overlay('<h2>Leaderboard</h2><h3>Most games played</h3><p class="tip">Ranked by the number of games finished.</p><div class="'+listClass+'">'+list(byG,function(r){return r.gp+(r.gp===1?" game":" games")},function(r){return r.gp>0})+'</div><h3>Best timings</h3><p class="tip">Ranked by fastest games with every answer correct. “Overall” adds points from each game.</p><label class="lab">Ranking<select id="lbs">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(o[0]===key?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></label><div class="'+listClass+'">'+list(byT,function(r){return key==="all"?r.pts+" pts"+(r.m?"<br><small>Best time: "+fmt(r.m)+"</small>":""):(r.t?fmt(r.t):"—")},function(r){return key==="all"?r.pts>0:!!r.t})+'</div><div class="row"><button class="btn main" id="lbd">Done</button></div>');
  $("lbs").onchange=function(){lbView(this.value)};$("lbd").onclick=closeOv;
 }
 $("bLb").onclick=function(){lbView()};
@@ -1059,7 +1060,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4039.js"></script>
+<script src="garden-ui-4040.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

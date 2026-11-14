@@ -1,10 +1,10 @@
 {
   "name": "mind-garden-cloudflare",
-  "version": "4.0.39",
+  "version": "4.0.40",
   "private": true,
   "scripts": {
     "dev": "wrangler pages dev public --local",
-    "check": "node --check functions/api/room.js && node --check public/upgrade.js && node --check public/multiplayer.js && node --check public/dashboard.js && node --check public/ambient.js && node --check public/sw.js && node --check public/i18n.js && node --check functions/api/room8.js && node --check public/wildlife.js && node --check public/garden-wildlife.js && node --check public/soundscape.js && node --check public/identity.js && node --check public/personal-progress.js && node --check public/scenes.js && node --check public/personal-photos.js && node --check public/home-nature.js && node --check public/player-preferences.js && node --check public/welcome-media.js && node --check public/artwork.js && node --check public/v4.js && node --check public/personal-games.js && node --check public/movement-games.js && node --check public/move-remember/app.js && node --check functions/api/account.js && node --check public/account-sync.js && node --check public/menu-simplify.js && node --check public/dashboard-preferences.js && node --check public/viewport-fit.js && node --check public/narration.js",
+    "check": "node --check functions/api/room.js && node --check public/upgrade.js && node --check public/multiplayer.js && node --check public/dashboard.js && node --check public/ambient.js && node --check public/sw.js && node --check public/i18n.js && node --check functions/api/room8.js && node --check public/wildlife.js && node --check public/garden-wildlife.js && node --check public/soundscape.js && node --check public/identity.js && node --check public/personal-progress.js && node --check public/scenes.js && node --check public/personal-photos.js && node --check public/home-nature.js && node --check public/player-preferences.js && node --check public/welcome-media.js && node --check public/artwork.js && node --check public/v4.js && node --check public/personal-games.js && node --check public/movement-games.js && node --check public/move-remember/app.js && node --check functions/api/account.js && node --check public/account-sync.js && node --check public/menu-simplify.js && node --check public/dashboard-preferences.js && node --check public/viewport-fit.js && node --check public/narration.js && node --check public/device-signin.js && node --check public/local-player-records.js && node --check public/player-removal.js && node --check functions/lib/passkey-actions.js",
     "test": "node tests/room8.test.mjs && node tests/multiplayer-ui.test.mjs && node tests/personal-garden.test.cjs && node tests/player-preferences.test.cjs",
     "test:browser": "node tests/garden-ui.test.cjs",
     "build:wildlife": "esbuild src/garden-wildlife.js --bundle --minify --format=iife --outfile=public/garden-wildlife.js",
@@ -14,7 +14,7 @@
     "test:commercial": "node tests/commercial-preview.test.cjs",
     "test:personal": "node tests/personal-games.test.cjs && node tests/movement-games.test.cjs && node tests/move-remember.test.cjs",
     "test:depth": "node tests/depth-progression.test.cjs && node tests/depth-rules.test.cjs",
-    "test:accounts": "node tests/account-api.test.mjs && node tests/account-sync.test.cjs && node tests/account-flow.test.cjs && node tests/ui-followup.test.cjs",
+    "test:accounts": "node tests/account-api.test.mjs && node tests/account-sync.test.cjs && node tests/account-flow.test.cjs && node tests/ui-followup.test.cjs && node tests/welcome-account-options.test.cjs && node tests/profile-restoration.test.cjs && node tests/device-signin.test.cjs && node tests/passkeys.test.mjs",
     "test:display": "node tests/dashboard-preferences.test.cjs"
   },
   "devDependencies": {

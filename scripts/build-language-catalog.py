@@ -5,7 +5,7 @@ p=Path(__file__).resolve().parents[1]/'public'
 quoted=r'''(?:'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")'''
 pairs={}
 for f in sorted(p.glob('*.js')):
- if f.name.startswith(('garden-ui-','language-')) or f.name=='garden-wildlife.js':continue
+ if f.name.startswith(('garden-ui-','language-','qa-')) or f.name=='garden-wildlife.js':continue
  source=f.read_text()
  for m in re.finditer('('+quoted+r')\s*,\s*('+quoted+')',source):
   if source[:m.start()].rstrip()[-1:] not in ['(', '[', ','] or source[m.end():].lstrip().startswith('+'):continue

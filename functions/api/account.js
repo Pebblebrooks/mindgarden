@@ -1,3 +1,4 @@
+import {passkeyAction,passkeysAvailable} from '../lib/passkey-actions.js';
 // Account-scoped profile snapshots. Multiplayer device tokens never authorize this API.
 const COOKIE='__Host-mg_account',MAX=4*1024*1024,TTL=30*86400000;
 const enc=new TextEncoder(),hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');
@@ -31,6 +32,11 @@ export async function onRequest({request,env}){
   if(request.method!=='POST')fail('POST required.',405);
   if(request.headers.get('Origin')!==new URL(request.url).origin||!request.headers.get('Content-Type')?.startsWith('application/json'))fail('Request origin rejected.',403,'ORIGIN');
   const action=new URL(request.url).searchParams.get('action'),b=await body(request);
+  async function issueSession(user){const t=random();await q(db,'INSERT INTO mg_account_sessions VALUES(?,?,?)',await digest(t),user.id,now+TTL).run();return reply({account:user},200,cookie(t,TTL/1000))}
+  async function checkPassword(user,password){await limit(db,'reauth:'+user.id,10,600000,now);if(typeof password!=='string'||password.length>128)fail('Enter your current password.',401,'REAUTH');const row=await q(db,'SELECT * FROM mg_accounts WHERE username=?',user.username).first();if(!row||!equal(await passwordHash(password,row.salt,env.MG_ACCOUNT_PEPPER),row.password_hash))fail('Enter your current account password to continue.',401,'REAUTH')}
+  const pk={request,db,action,b,now,fail,reply,limit,digest,random,checkPassword,issueSession};
+  if(action==='passkey-status')return reply({available:await passkeysAvailable(db)});
+  if(action==='passkey-signin-options'||action==='passkey-signin-verify')return await passkeyAction(pk);
   if(['signup','signin','recover'].includes(action)){
    const username=String(b.username||'').trim().toLowerCase(),password=b.password;
    if(!/^[a-z0-9][a-z0-9_.-]{2,39}$/.test(username))fail('Use an account name of 3–40 letters, numbers, dots, dashes or underscores.');
@@ -46,7 +52,7 @@ export async function onRequest({request,env}){
     try{await db.batch([q(db,'INSERT INTO mg_accounts VALUES(?,?,?,?,?,?)',id,username,salt,hash,await digest(recovery||random()),now),q(db,'INSERT INTO mg_account_profiles(account_id,updated_at) VALUES(?,?)',id,now)])}catch(e){if(String(e).includes('UNIQUE'))fail('That account name is unavailable.',409);throw e}account={id,username};
    }else if(action==='recover'){
     if(!account||typeof b.recovery!=='string'||!equal(await digest(b.recovery.trim()),account.recovery_hash))fail('Account name or recovery key is incorrect.',401,'CREDENTIALS');
-    const salt=random();recovery=random();await db.batch([q(db,'UPDATE mg_accounts SET salt=?,password_hash=?,recovery_hash=? WHERE id=?',salt,await passwordHash(password,salt,env.MG_ACCOUNT_PEPPER),await digest(recovery),account.id),q(db,'DELETE FROM mg_account_sessions WHERE account_id=?',account.id)]);
+    const salt=random();recovery=random();await db.batch([q(db,'UPDATE mg_accounts SET salt=?,password_hash=?,recovery_hash=? WHERE id=?',salt,await passwordHash(password,salt,env.MG_ACCOUNT_PEPPER),await digest(recovery),account.id),q(db,'DELETE FROM mg_account_sessions WHERE account_id=?',account.id),...(await passkeysAvailable(db)?[q(db,'DELETE FROM mg_account_passkeys WHERE account_id=?',account.id),q(db,'DELETE FROM mg_passkey_challenges WHERE account_id=?',account.id)]:[])]);
    }else{
     const hash=await passwordHash(password,account?.salt||'invalid-account-salt',env.MG_ACCOUNT_PEPPER);
     if(!account||!equal(hash,account.password_hash))fail('Account name or password is incorrect.',401,'CREDENTIALS');
@@ -61,6 +67,8 @@ export async function onRequest({request,env}){
   if(!account)fail('Your session has expired. Sign in again.',401,'SIGNIN');
   if(action==='signout'){await q(db,'DELETE FROM mg_account_sessions WHERE token_hash=?',tokenHash).run();return reply({ok:true},200,cookie('',0))}
   await limit(db,'account:'+account.id,120,60000,now);
+  if(action==='verify-owner'){await checkPassword(account,b.password);return reply({ok:true})}
+  if(action.startsWith('passkey-'))return await passkeyAction({...pk,account,tokenHash});
   if(action==='recovery-key'){
    if(typeof b.password!=='string'||b.password.length>128)fail('Enter your current password.');
    await limit(db,'recovery-key:'+account.id,10,600000,now);

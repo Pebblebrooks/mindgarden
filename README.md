@@ -1,8 +1,10 @@
-# Mind Garden Classic v4.0.39
+# Mind Garden Classic v4.0.40
 
-Centred cards, direct navbar sign-in, explicit login/recovery saving, and My Games quick removal with Undo. Existing player records remain intact.
+Approved compact menus, separate account tasks, per-player preferences and retained device records, with optional WebAuthn device sign-in.
 
 Build: `python3 scripts/build-release.py`.
 Deploy the existing Cloudflare Pages project from `main`, output directory `public`.
-Preserve the existing D1 DB binding. Account saving requires `migrate-v4.0.33.sql`, the `MG_ACCOUNT_PEPPER` secret and `MG_ACCOUNT_SIGNUP=enabled` setting to permit new registrations.
-See `README-UPDATE.txt` and `docs/account-saving.md`. Historical REVIEW files document earlier drafts.
+
+Preserve the existing D1 `DB` binding and `MG_ACCOUNT_PEPPER`. Account saving requires `migrate-v4.0.33.sql`; new registrations require `MG_ACCOUNT_SIGNUP=enabled`. Device sign-in additionally requires the additive `migrate-passkeys.sql` migration. Password sign-in does not depend on the optional passkey tables.
+
+See `README-UPDATE.txt`, `README-PASSKEYS.md`, and `docs/account-saving.md`. Historical review documents describe earlier drafts, not current deployment status.

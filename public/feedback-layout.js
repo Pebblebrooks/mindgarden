@@ -12,9 +12,10 @@ function compare(expected,entered=[],options={}){
   const value=entered[i],missing=value==null,match=!missing&&(options.correct===undefined?String(value)===String(answer):options.correct);
   const state=missing?'pending':match?'match':'different';
   return '<li class="answer-card answer-'+state+'"'+(i!==initial?' hidden':'')+'>'+(sequence?'<span class="answer-position">'+T('Step ','第 ')+(i+1)+(save.lang==='zh'?' 项':'')+'</span>':'')+
-   '<div class="answer-value"><span class="answer-label">'+T('Correct answer','正确答案')+'</span><strong>'+escape(answer)+'</strong></div>'+
+   (!missing&&(!match||options.showMatched!==false)?'<span class="answer-outcome">'+T(match?'Matched':'Answer differs',match?'答对了':'答案不同')+'</span>':'')+
+   '<div class="answer-pair"><div class="answer-value"><span class="answer-label">'+T('Correct answer','正确答案')+'</span><strong>'+escape(answer)+'</strong></div>'+
    '<div class="answer-value answer-player"><span class="answer-label">'+T('Your answer','您的答案')+'</span><strong>'+escape(missing?T('Not entered','未输入'):value)+'</strong></div>'+
-   '<span class="answer-outcome"><span aria-hidden="true">'+(missing?'—':match?'✓':'')+'</span> '+T(missing?'Not entered':match?'Matched':'Answer differs',missing?'未输入':match?'答对了':'答案不同')+'</span></li>';
+   (!missing&&!match?'<span class="answer-encouragement">'+T('Keep practicing.','继续练习。')+'</span>':'')+'</div></li>';
  }).join('')+'</ol>'+(expected.length>1?'<div class="answer-pager"><button class="btn" data-review-step="-1"'+(initial===0?' disabled':'')+' aria-label="'+T('Previous answer','上一项答案')+'">‹</button><span class="answer-page" aria-live="polite">'+(initial+1)+' / '+expected.length+'</span><button class="btn" data-review-step="1"'+(initial===expected.length-1?' disabled':'')+' aria-label="'+T('Next answer','下一项答案')+'">›</button></div>':'')+'</section>';
 }
 document.addEventListener('click',e=>{
@@ -29,7 +30,7 @@ document.addEventListener('click',e=>{
 function readable(root){
  const paragraphs=root.matches?.('p,#mmsg')?[root]:[...root.querySelectorAll('p,#mmsg')];
  for(const p of paragraphs){
-  if(p.children.length||p.closest('button,pre,code,[contenteditable]'))continue;
+  if(p.children.length||p.matches('[data-inline-copy]')||p.closest('button,pre,code,[contenteditable]'))continue;
   const text=p.textContent.trim();
   const lines=text.split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*|\n+/u).filter(Boolean);
   if(lines.length<2)continue;

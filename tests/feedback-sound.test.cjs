@@ -25,6 +25,17 @@ w.AudioContext=class{constructor(){this.state='running';this.currentTime=0;this.
   assert.equal(el('mp').querySelectorAll('.answer-match').length,1);assert.equal(el('mp').querySelectorAll('.answer-different').length,1);assert.equal(el('mp').querySelectorAll('.answer-pending').length,1);
   assert.match(el('mp').textContent,lang==='zh'?/未输入/:/Not entered/);
  }
+ // Real round reviews retain both answers while removing the duplicated sentence.
+ for(const lang of ['en','zh'])for(const game of ['odd','num','sort']){
+  w.save.lang=lang;w.mgDifficulty=8;w.startMG(game);
+  const wrong=[...el('mp').querySelectorAll('[data-a]')].find(b=>b.dataset.a!==w.mg.ans),entered=wrong.getAttribute('aria-label')||wrong.textContent.trim();wrong.click();await tick();
+  const panel=el('roundReview'),status=panel.querySelector('.answer-outcome'),pair=panel.querySelector('.answer-pair'),encouragement=pair.querySelector('.answer-encouragement');
+  assert(status&&pair&&encouragement,game);assert.equal(status.textContent,lang==='en'?'Answer differs':'答案不同');assert.equal(encouragement.textContent,lang==='en'?'Keep practicing.':'继续练习。');
+  assert(status.compareDocumentPosition(pair)&w.Node.DOCUMENT_POSITION_FOLLOWING);assert.equal(pair.lastElementChild,encouragement);assert.equal(panel.querySelectorAll('.answer-encouragement').length,1);
+  assert(!/The answer was|答案是|Well tried|继续练习。.*继续练习。/.test(panel.textContent));assert.equal(panel.querySelector('.answer-player strong').textContent,entered);assert(el('roundContinue'));el('roundContinue').click();assert(!el('roundReview'));w.toHome();
+ }
+ w.save.lang='en';w.startMG('odd');[...el('mp').querySelectorAll('[data-a]')].find(b=>b.dataset.a===w.mg.ans).click();await tick();assert.equal(el('roundReview').querySelectorAll('.answer-outcome,.answer-encouragement').length,0);assert(el('roundReview').textContent.includes('Correct!'));w.toHome();
+ w.mg={t:'story',r:1,R:2,hist:[],ok:0,reviewExpected:['Tea','Rice'],reviewEntered:['Tea','Soup']};w.res(false,'1 of 2 story details recalled.');assert(el('roundReview').textContent.includes('1 of 2 story details recalled.'));w.toHome();
  w.MindGardenLocale.add('Read this first. Then choose an answer. Continue when ready.','先读说明。然后选择答案。准备好后继续。');
  w.MindGardenLocale.add('New instruction. New second sentence.','新说明。新的第二句话。');
  el('mp').innerHTML='<p>Read this first. Then choose an answer. Continue when ready.</p><button>Keep this. Button unchanged.</button><input value="Do not split. Input value."><p>先观察。再选择。准备好后继续。</p>';

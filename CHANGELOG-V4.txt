@@ -1,3 +1,9 @@
+v4.0.40 — 14 November 2026
+Approved separate account/player menus; compact centred controls and game selectors;
+personal display/difficulty restoration; retained device copies; scene footer;
+explicit password/recovery downloads; responsive rankings; concise review messages;
+optional WebAuthn device sign-in with additive migrate-passkeys.sql. See README-UPDATE.txt.
+
 Mind Garden V4.0.6 — 8 November 2026
 Developer: Pebblebrooks
 

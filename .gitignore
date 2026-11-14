@@ -1,0 +1,5 @@
+/node_modules/
+/third-party/webauthn/node_modules/
+/.openai/
+/public/qa-*.html
+/public/qa-*.js

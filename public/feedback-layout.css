@@ -161,3 +161,16 @@ html[data-hc="1"] #libraryDisplay::before,html[data-hc="1"] #libraryDisplay::aft
 
 #mini #mp .big.txt.nm{font-size:calc(1.5rem * var(--fs));line-height:1.3}
 #mini #mp .gridm>div.big.st.sm{height:40px;min-height:40px}
+
+/* Review status above the comparison; encouragement below, without repeating answers. */
+.answer-card{display:block;padding:0;background:none;box-shadow:none;border-radius:0;}
+.answer-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:12px;border-radius:16px;background:color-mix(in srgb,var(--panel) 88%,var(--ink) 12%);}
+.answer-card .answer-position{display:block;margin-bottom:6px;}
+.answer-card .answer-outcome{margin:0 0 6px;}
+.answer-encouragement{grid-column:1/-1;text-align:center;font-size:.86em;font-weight:700;line-height:1.25;}
+.answer-match .answer-pair{background:#e6f2e7;}
+.answer-pending .answer-pair{background:#edf0ed;}
+[data-v4-mode="dark"] .answer-card{background:none;}
+[data-v4-mode="dark"] .answer-pair{background:#25453d;color:#f3f7ee;}
+[data-v4-mode="dark"] .answer-pending .answer-pair{background:#34453f;}
+@media(max-height:500px){.answer-pair{padding:8px;gap:4px;}}

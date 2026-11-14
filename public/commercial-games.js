@@ -48,7 +48,7 @@ function feedback(ok,answer){
  if(g.id==='melody')timers.push(setTimeout(feedbackSound,450));else feedbackSound();
  document.querySelectorAll('[data-cg-item],[data-cg-answer],[data-cg-note]').forEach(b=>b.disabled=true);
  const sequence=['hawker','trail','melody'].includes(g.id),el=document.createElement('section');el.id='cgFeedback';el.setAttribute('role','status');
- el.innerHTML='<h3>'+T(ok?'Correct!':'Not quite — compare below',ok?'正确！':'再比较一下')+'</h3>'+(sequence?comparison():window.MindGardenFeedback.compare([answer],[g.userAnswer],{sequence:false,correct:ok}));
+ el.innerHTML='<h3>'+T(ok?'Correct!':'Let’s review',ok?'正确！':'一起回顾')+'</h3>'+(sequence?comparison():window.MindGardenFeedback.compare([answer],[g.userAnswer],{sequence:false,correct:ok,showMatched:false}));
  const panel=$('mp').querySelector('.cg-game');let nav=panel.querySelector('.ga-actions');if(!nav){nav=document.createElement('div');nav.className='ga-actions';panel.append(nav)}
  [...panel.children].forEach(child=>{if(child!==nav)child.hidden=true});nav.before(el);nav.innerHTML=button('cgNext',g.round+1===g.total?'See results':g.id==='teamgarden'?'Pass to player '+((g.round+1)%g.players+1):'Next round',g.round+1===g.total?'查看结果':g.id==='teamgarden'?'交给玩家 '+((g.round+1)%g.players+1):'下一轮');
  if($('cgListen'))$('cgListen').disabled=true;$('cgNext').onclick=()=>{g.skipped=false;g.round++;round()};el.tabIndex=-1;el.focus({preventScroll:true});
