@@ -3,7 +3,7 @@
 'use strict';
 const nav=document.getElementById('unifiedNav');if(!nav)return;
 const T=(a,b)=>window.MindGardenLocale.pair(a,b);
-const removalOrder=['contact','about','music','appearance','text','nature','motion','leaderboard','progress','online','library'];
+const removalOrder=['contact','about','welcomeCards','music','appearance','text','nature','motion','leaderboard','progress','online','library'];
 function fit({available,brand,compactBrand,main,tools,toggle,gap=12,mainGap=5,toolGap=6}){
  tools=tools.map(x=>x.key==='language'?{...x,width:48}:x);
  const mobile=available<=740;

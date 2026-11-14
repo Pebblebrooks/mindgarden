@@ -8,8 +8,8 @@ const pause=()=>new Promise(r=>setTimeout(r,35));
  await pause();
  const fit=w.MindGardenNav.fit;
  for(const scale of [.8,1,1.4,2])for(const available of [280,350,730,980,1380,1840,2400]){
-  const spec={available,brand:160*scale,compactBrand:44,main:['library','online'].map(key=>({key,width:125*scale})),tools:[{key:'welcomeCards',width:48},{key:'text',width:225*scale},...['music','language','appearance','nature','motion'].map(key=>({key,width:65*scale}))],toggle:48};
-  const result=fit(spec);assert(result.required<=available,result.required+' exceeds '+available);assert(!result.hidden.includes('toggle'));assert(!result.hidden.includes('language'),'Language stays directly accessible');
+  const spec={available,brand:160*scale,compactBrand:44,main:['library','online'].map(key=>({key,width:125*scale})),tools:[{key:'account',width:available<650?90:100},{key:'welcomeCards',width:48},{key:'text',width:225*scale},...['music','language','appearance','nature','motion'].map(key=>({key,width:available<650?48:65*scale}))],toggle:48};
+  const result=fit(spec);assert(result.required<=available,result.required+' exceeds '+available);assert(!result.hidden.includes('toggle'));assert(!result.hidden.includes('language'),'Language stays directly accessible');assert(!result.hidden.includes('account'),'Account stays directly accessible');
  }
  for(const lang of ['en','zh']){
   w.eval('save.lang='+JSON.stringify(lang)+';persist();load();renderHome()');await pause();

@@ -2004,3 +2004,29 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 #ov #box .account-panel label{margin:12px 0 6px}
 #ov #box .account-panel .recovery-choice{display:flex;gap:12px}
 #ov #box .account-panel .account-hint{font-size:calc(.9rem * var(--fs))}
+
+/* Standing project standard: centred card text and balanced text groups. */
+#ov #box :is(h1,h2,h3,h4,p,label,summary,input,textarea,select,button,small,strong),
+#libraryDisplay :is(h1,h2,h3,h4,p,label,summary,input,select,button,small,strong),
+:is(.welcome-choice,.personal-picked-card,.personal-game-card,.game-tile,.card) :is(p,span,strong,small,label,button){text-align:center!important;text-align-last:center!important}
+#ov #box .menu-brand,#libraryDisplay .library-top,#libraryDisplay .library-category,#libraryDisplay .game-filterbar,#ov #box .library-tabs{justify-content:center;text-align:center!important}
+#ov #box .account-panel label,#ov #box .account-panel .account-secret,#ov #box .account-player-selection label{justify-content:center}
+#ov #box .account-panel :is(input,textarea){text-align:center!important;text-align-last:center!important}
+#ov #box:has(#pd) .prow{position:relative;display:flex!important;flex-direction:column;gap:8px;padding:14px;align-items:center}
+#ov #box:has(#pd) .prow .avb{position:absolute;left:12px;top:12px;width:44px;height:44px;z-index:1}
+#ov #box:has(#pd) .prow [data-p]{width:100%;padding:8px 52px!important;min-height:44px;text-align:center!important}
+#ov #box:has(#pd) .prow .player-record-count{box-sizing:border-box;width:100%;padding:0 40px;text-align:center!important}
+#ov #box:has(#pd) .prow .player-edit-name,#ov #box:has(#pd) .prow details{width:100%;text-align:center!important}
+#navMenu :is(button,summary,h3){text-align:center!important;justify-content:center}
+#navMenu .nav-group>button{width:100%;justify-content:center;text-align:center!important}
+#unifiedNav .nav-account{display:inline-flex;align-items:center;justify-content:center;max-width:100px;min-width:0;white-space:normal;overflow-wrap:anywhere;font-size:calc(.95rem * var(--fs));line-height:1.15;min-height:44px;padding:8px 12px}
+#ov #box .personal-picked-card .personal-picked{padding:54px 16px 16px!important;width:100%;box-sizing:border-box}
+#ov #box .personal-picked-card .personal-remove-game{position:absolute;top:6px;left:6px;z-index:2;width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;font-size:1.5rem;display:grid;place-items:center}
+#ov #box .credential-save-step textarea{width:100%;box-sizing:border-box;overflow-wrap:anywhere;word-break:break-all;resize:vertical}
+#ov #box .credential-save-step .btn{width:100%;margin:8px 0}
+#home :is([class*="card"],.lv,.welcome-choice),#mini :is([class*="card"],.big),#game .card{ text-align:center!important;text-align-last:center!important }
+#libraryDisplay .library-top{align-items:center}
+#libraryDisplay .library-tabs{justify-content:center}
+
+#home #unifiedNav .nav-account{max-width:100px!important;white-space:normal!important;box-sizing:border-box}
+@media(max-width:650px){#home #unifiedNav{--nav-control-size:48px;--nav-icon-size:28px}#home #unifiedNav .nav-account{padding:8px 6px!important;max-width:90px!important}}
