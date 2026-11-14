@@ -319,10 +319,11 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
 #home #unifiedNav #navCards,#home #unifiedNav #navAppearance{flex-shrink:0}
 
 @media(max-width:450px){
- #home #unifiedNav .nav-brand{display:none!important}
+ #home #unifiedNav .nav-brand{display:inline-flex!important;flex-shrink:0!important}
+ #home #unifiedNav[data-nav-compact=true] .nav-brand{box-sizing:border-box;width:var(--nav-touch-width,40px)!important;min-width:var(--nav-touch-width,40px)!important;padding:4px!important}
  #home #unifiedNav{column-gap:4px!important}
  #home #unifiedNav .nav-actions{gap:4px!important}
- #home #unifiedNav .nav-actions #navAccount,#home #unifiedNav .nav-actions [data-go="language"],#home #unifiedNav .nav-actions #navAppearance,#home #unifiedNav .nav-actions #navCards,#home #unifiedNav .nav-actions #navMore{width:40px!important;min-width:40px!important;max-width:40px!important;padding:4px!important;flex:0 0 40px!important}
+ #home #unifiedNav .nav-actions #navAccount,#home #unifiedNav .nav-actions [data-go="language"],#home #unifiedNav .nav-actions #navAppearance,#home #unifiedNav .nav-actions #navCards,#home #unifiedNav .nav-actions #navMore{width:var(--nav-touch-width,40px)!important;min-width:var(--nav-touch-width,40px)!important;max-width:var(--nav-touch-width,40px)!important;padding:4px!important;flex:0 0 var(--nav-touch-width,40px)!important}
  #home #unifiedNav #navAccount{font-size:0!important}
  #home #unifiedNav #navAccount::before{content:"👤";font-size:22px}
 }

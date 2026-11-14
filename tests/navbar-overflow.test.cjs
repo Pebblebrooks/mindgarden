@@ -7,10 +7,11 @@ const pause=()=>new Promise(r=>setTimeout(r,35));
 (async()=>{try{
  await pause();
  const fit=w.MindGardenNav.fit;
- for(const scale of [.8,1,1.4,2])for(const available of [280,350,730,980,1380,1840,2400]){
+ for(const scale of [.8,1,1.4,2])for(const available of [240,260,280,350,730,980,1380,1840,2400]){
   const spec={available,brand:160*scale,compactBrand:44,main:['library','online'].map(key=>({key,width:125*scale})),tools:[{key:'account',width:available<650?90:100},{key:'welcomeCards',width:48},{key:'text',width:225*scale},...['music','language','appearance','nature','motion'].map(key=>({key,width:available<650?48:65*scale}))],toggle:48};
-  const result=fit(spec);assert(result.required<=available,result.required+' exceeds '+available);assert(!result.hidden.includes('toggle'));assert(!result.hidden.includes('welcomeCards'));assert(!result.hidden.includes('appearance'));assert(!result.hidden.includes('language'),'Language stays directly accessible');assert(!result.hidden.includes('account'),'Account stays directly accessible');
+  const result=fit(spec);assert(result.required<=available,result.required+' exceeds '+available);assert(result.required>= (available<=260?36:40), 'Home logo retains space');assert(!result.hidden.includes('toggle'));assert(!result.hidden.includes('welcomeCards'));assert(!result.hidden.includes('appearance'));assert(!result.hidden.includes('language'),'Language stays directly accessible');assert(!result.hidden.includes('account'),'Account stays directly accessible');
  }
+ assert.equal(fit({available:700,brand:150,compactBrand:44,main:[],tools:[],toggle:48}).compact,false,'Show brand text when it fits on a tablet');
  for(const lang of ['en','zh']){
   w.eval('save.lang='+JSON.stringify(lang)+';persist();load();renderHome()');await pause();
   assert(w.document.querySelector('#navMore svg[aria-hidden="true"]'));assert.equal(w.document.getElementById('navMore').textContent,'');
@@ -25,5 +26,5 @@ const pause=()=>new Promise(r=>setTimeout(r,35));
   w.document.getElementById('navMore').click();w.document.querySelector('#navMenu [data-go="contact"]').click();assert(w.document.getElementById('googleFeedbackLink').href.includes('TizHdrEgGxHGZV5q7'));w.document.getElementById('infoClose').click();
   w.document.getElementById('navMore').click();w.document.querySelector('#navMenu [data-mode="light"]').click();await pause();assert.equal(w.document.documentElement.dataset.theme,'light');assert.equal(w.document.activeElement.id,'navMore');
  }
- assert.deepEqual(errors,[]);console.log('PASS: fitted width budget at 28 size combinations; English/Chinese menu destinations; percentage/reset synchronization; Escape focus; About/Contact; appearance rebuilds; no duplicated controls.');
+ assert.deepEqual(errors,[]);console.log('PASS: fitted width budget at 36 size combinations; English/Chinese menu destinations; percentage/reset synchronization; Escape focus; About/Contact; appearance rebuilds; no duplicated controls.');
 }finally{w.close()}})();
