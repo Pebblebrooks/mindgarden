@@ -5,7 +5,9 @@ const root=path.resolve(__dirname,'../public');
  await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>window.MindGardenDisplay&&window.MindGardenNav);
  for(const width of [280,320,390,768,1024,1440])for(const scale of [1,2])for(const lang of ['en','zh'])for(const mode of ['light','dark']){
  await page.setViewportSize({width,height:850});await page.evaluate(({scale,lang,mode})=>{save.lang=lang;save.mode=mode;save.textScale=scale;persist();load();renderHome();applyPrefs();MindGardenNav.layout()},{scale,lang,mode});await page.waitForTimeout(80);
+ const brand=await page.locator('#unifiedNav .nav-brand').boundingBox();assert(brand&&brand.width>0&&brand.x>=0,'Home logo remains visible at '+width);
  const controls=await page.locator('#unifiedNav .nav-actions').evaluate(el=>['navAccount','language','navAppearance','navCards','navMore'].map(id=>{const n=id==='language'?el.querySelector('[data-go="language"]'):document.getElementById(id),r=n.getBoundingClientRect();return {id,x:r.x,right:r.right,w:r.width,display:getComputedStyle(n).display,hidden:n.dataset.navHidden}}));
+ assert(brand.x+brand.width<=controls[0].x+1,'Logo does not overlap priority controls');
  for(const c of controls)assert(c.w>0&&c.display!=='none'&&c.hidden!=='true'&&c.x>=0&&c.right<=width+.5,JSON.stringify({width,scale,lang,mode,c,controls}));for(let i=1;i<controls.length;i++)assert(controls[i].x>=controls[i-1].right-1,JSON.stringify(controls));
  }
  await page.setViewportSize({width:390,height:844});await page.evaluate(()=>{save.textScale=1;save.lang='en';persist();load();renderHome();me().dashboardPreferences={...MindGardenDisplay.prefs(),progressVisible:false};MindGardenDisplay.restore()});assert.equal(await page.locator('#gardenProgressStrip').evaluate(n=>getComputedStyle(n).display),'none');

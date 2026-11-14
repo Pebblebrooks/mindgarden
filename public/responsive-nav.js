@@ -5,12 +5,12 @@ const nav=document.getElementById('unifiedNav');if(!nav)return;
 const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const removalOrder=['contact','about','music','text','nature','motion','leaderboard','progress','online','library'];
 function fit({available,brand,compactBrand,main,tools,toggle,gap=12,mainGap=5,toolGap=6}){
- if(available<=420){compactBrand=0;toolGap=4;gap=4;toggle=40;tools=tools.map(x=>['account','language','appearance','welcomeCards'].includes(x.key)?{...x,width:40}:x)}else tools=tools.map(x=>x.key==='language'?{...x,width:48}:x);
+ if(available<=420){const touch=available<=260?36:40;compactBrand=touch;toolGap=4;gap=4;toggle=touch;tools=tools.map(x=>['account','language','appearance','welcomeCards'].includes(x.key)?{...x,width:touch}:x)}else tools=tools.map(x=>x.key==='language'?{...x,width:48}:x);
  const mobile=available<=740;
  const hidden=new Set(mobile?main.map(x=>x.key):[]),sum=(items,space)=>{const shown=items.filter(x=>!hidden.has(x.key));return shown.reduce((s,x)=>s+x.width,0)+Math.max(0,shown.length-1)*space};
  const required=(b)=>{const center=sum(main,mainGap),right=sum([...tools,{key:'toggle',width:toggle}],toolGap);return center?center+2*Math.max(b,right)+2*gap:b+right+gap};
  for(const key of removalOrder){if(required(mobile?compactBrand:brand)<=available-2)break;hidden.add(key)}
- const compact=mobile||required(brand)>available-2;
+ const compact=required(brand)>available-2;
  return {hidden:[...hidden],compact,required:required(compact?compactBrand:brand)};
 }
 let scheduled=false;
@@ -25,6 +25,7 @@ function layout(){
  nav.classList.add('nav-measuring');
  const width=el=>Math.ceil(el.getBoundingClientRect().width);
  const style=getComputedStyle(nav),available=nav.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
+ nav.style.setProperty('--nav-touch-width',available<=260?'36px':'40px');
  const brandWidth=width(brand),gap=parseFloat(style.columnGap)||12;
  const options={available,brand:brandWidth,compactBrand:48,main:mainButtons.map(el=>({key:el.dataset.go,width:width(el)})),tools:toolButtons.map(el=>({key:el.id==='navTextSize'?'text':el.dataset.go,width:width(el)})),toggle:width(more),gap,mainGap:parseFloat(getComputedStyle(main).gap)||5,toolGap:parseFloat(getComputedStyle(actions).gap)||6};
  const result=fit(options);
