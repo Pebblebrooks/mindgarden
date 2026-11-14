@@ -9,7 +9,7 @@
     "test:browser": "node tests/garden-ui.test.cjs",
     "build:wildlife": "esbuild src/garden-wildlife.js --bundle --minify --format=iife --outfile=public/garden-wildlife.js",
     "build": "python3 scripts/build-release.py",
-    "test:release": "node tests/review-ui.test.cjs && node tests/navbar-overflow.test.cjs && node tests/release-cache.test.cjs && node tests/v4-design.test.cjs && node tests/about-documentation.test.cjs && node tests/menu-exit.test.cjs && node tests/menu-navigation.test.cjs && node tests/popup-shell.test.cjs && node tests/release-cleanup.test.cjs",
+    "test:release": "node tests/review-ui.test.cjs && node tests/navbar-overflow.test.cjs && node tests/release-cache.test.cjs && node tests/v4-design.test.cjs && node tests/about-documentation.test.cjs && node tests/menu-exit.test.cjs && node tests/menu-navigation.test.cjs && node tests/popup-shell.test.cjs && node tests/release-cleanup.test.cjs && node tests/flying-scenery.test.cjs && node tests/paired-palace-scenes.test.cjs",
     "test:everyday": "node tests/everyday-games.test.cjs",
     "test:commercial": "node tests/commercial-preview.test.cjs",
     "test:personal": "node tests/personal-games.test.cjs && node tests/movement-games.test.cjs && node tests/move-remember.test.cjs",

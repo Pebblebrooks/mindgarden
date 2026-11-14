@@ -2,7 +2,7 @@
 
 Ten original images generated with the built-in image generator for Mind Garden. The supplied YouTube reference could not be retrieved (429); the final artwork follows the user's subsequent attached reference collage: modern cinematic oriental architecture, monumental scale, restrained colours and dramatic clouds. The first colourful fantasy set was superseded before publication.
 
-All final app assets are 1920 × 1080 WebP. Each scene uses the same artwork in light and dark mode; controls and scenery-label colours follow the chosen appearance.
+All final app assets are 1920 × 1080 WebP. Each scene has matching daytime and nighttime artwork, selected with light/dark mode. Both images preserve the same architecture and framing. App assets use garden-{scene-id}-day.webp and garden-{scene-id}-night.webp; the unsuffixed filenames below identify the original scene families.
 
 | File | English name | Chinese name | Scene prompt |
 | --- | --- | --- | --- |
@@ -23,3 +23,5 @@ Shared generation brief: one full-bleed 16:9 FHD background, modern cinematic ph
 - Palace of the Cloud Sea / 云海琼台 — public/garden-cloud-sea-harbour.webp
 
 Additional generation briefs: monumental waterfall citadel on a floating cliff; sunrise causeway leading to one grand palace; misty karst mountain palace with sculptural pine; silver-blue starlit imperial court; cloud-sea island palace viewed over a reflecting basin and circular moon gate. Same cinematic photoreal style constraints and attached reference as the first five.
+
+Paired-lighting edit prompt: preserve architecture, composition, camera, materials and landscaping; change only sky illumination, time-of-day lighting, architectural lights and reflections. Night variants use visible silver-blue detail with restrained warm lights. Day variants use natural soft daylight, blue sky and white clouds, without stars/moon. No people, animals, text or watermarks.

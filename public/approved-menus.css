@@ -328,8 +328,6 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
 }
 
 #ov #box .lbr .ranking-copy-note{grid-column:1/-1;display:flex;justify-content:center}
-/* Dark palace artwork retains readable welcome copy in either interface theme. */
-html:is([data-garden-scene="moon-palace"],[data-garden-scene="golden-sanctuary"],[data-garden-scene="starlight-court"]) #home .welcome-scene :is(.welcome-heading,.welcome-heading h1,.welcome-heading p,#welcomeName,#welcomeName span,#welcomeName strong){color:#f5fff9!important;text-shadow:0 2px 5px #102c36,0 0 12px #102c36!important}
 /* Flying-only scenery fallback; motion and visibility switches still apply. */
 #gardenLife .scenery-flyers{display:none;position:absolute;inset:0;overflow:hidden;pointer-events:none}
 #gardenLife.wildlife-fallback .scenery-flyers{display:block}
