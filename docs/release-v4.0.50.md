@@ -7,3 +7,5 @@ Updated AGENTS.md to prevent recurrence, the English/Chinese About description, 
 Validation results are recorded in the PR. Production publication requires approval for this new correction.
 
 Scenery label: increased from 0.95rem to 1.25rem, bold, with opaque dark-green/light-cream surfaces so photo brightness cannot reduce text contrast. Wraps within the scene and follows text-size controls. About FAQ updated in English and Chinese.
+
+Added five FHD heavenly oriental palace backgrounds, shared between light and dark modes. Existing paired garden imagery retained. Scenery label padding reduced to 4px vertical / 12px horizontal, retaining bold 1.25rem type and contrast surfaces.
