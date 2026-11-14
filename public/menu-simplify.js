@@ -95,7 +95,7 @@ window.MindGardenProfileGroups={groups:profileGroups,equivalent:(a,b)=>profileKe
 function players(){const box=$('box');if(!$('pn')||!$('pa')||box.dataset.simplePlayers)return;box.dataset.simplePlayers='1';
  const storage=document.createElement('p');storage.className='player-storage';storage.textContent=window.MindGardenAccount?.connected?T('Players in account: ','账户中的玩家：')+window.MindGardenAccount.username:T('Saved on this device · No account needed','保存在此设备 · 无需账户');box.querySelector('h2').after(storage);
  const brand=document.createElement('div');brand.className='menu-brand';brand.textContent='🌿 '+T('Mind Garden','心灵花园');box.prepend(brand);
- const more=disclosure(T('Add player','添加玩家'),'players','players'),done=$('pd'),footer=document.createElement('div');footer.className='row';footer.append(done);const name=$('pn').closest('label'),add=$('pa');box.append(more);more.append(name,add);
+ const more=disclosure(T('Add player','添加玩家'),'players','players'),done=$('pd'),footer=document.createElement('div');footer.className='row';footer.append(done);const name=$('pn').closest('label'),add=$('pa');box.append(more);more.append(name,$('playerNameStatus'),add);
  const profileIds=Object.keys(save.pr);
  for(const row of box.querySelectorAll('.prow')){const select=row.querySelector('[data-p]');if(!select)continue;const title=select.textContent.replace(/ ✓$/,'');select.textContent=title;
  const id=select.dataset.p,duplicates=profileIds.filter(key=>save.pr[key].name===save.pr[id].name);if(duplicates.length>1){const badge=document.createElement('small');badge.className='player-profile-label';badge.textContent=T('Profile ','资料 ')+(duplicates.indexOf(id)+1);select.append(document.createElement('br'),badge)}
