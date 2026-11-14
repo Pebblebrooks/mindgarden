@@ -16,6 +16,17 @@ await device2('signin',{username:'alice',password:'incorrect passphrase'},401);a
 const exported=await a('export');assert.equal(exported.format,'mind-garden-account-backup');assert(!JSON.stringify(exported).includes('password'));assert(!JSON.stringify(exported).includes(auth.recovery));
 const corrupt=structuredClone(doc);corrupt.profiles.p1.av='x" onerror="alert(1)';await a('save',{document:corrupt,revision:1},400);
 const poison=JSON.parse('{"schemaVersion":1,"profiles":{"__proto__":{"name":"X","log":[],"stars":{}}}}');await a('save',{document:poison,revision:1},400);
+// Cookie possession alone must not authorize deleted profiles or history.
+const erased=structuredClone(doc);erased.profiles.p1.log=[];
+await a('save',{document:erased,revision:1},401);
+await a('verify-owner',{password:'a sufficiently long passphrase'});
+await a('save',{document:erased,revision:1},401);
+await a('save',{document:erased,revision:1,password:'wrong'},401);
+const deleted=structuredClone(doc);delete deleted.profiles.p2;
+await a('save',{document:deleted,revision:1},401);
+assert.deepEqual((await a('state')).document,doc);
+await a('save',{document:erased,revision:1,password:'a sufficiently long passphrase'});
+await a('save',{document:doc,revision:2});
 await a('signout');await a('state',{},401);
 const recovery=await a('recover',{username:'alice',password:'replacement passphrase long',recovery:auth.recovery});assert.notEqual(recovery.recovery,auth.recovery);await device2('state',{},401);assert.deepEqual((await a('state')).document,doc);
 const row=sqlite.prepare('SELECT * FROM mg_accounts WHERE username=?').get('alice');assert.notEqual(row.password_hash,'replacement passphrase long');assert.notEqual(row.recovery_hash,recovery.recovery);

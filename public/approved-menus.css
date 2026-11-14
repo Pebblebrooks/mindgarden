@@ -303,3 +303,22 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
 #ov #box.standard-popup:has(#pd) .prow:has([data-p][aria-pressed="true"]){background:color-mix(in srgb,var(--menu-edge) 16%,transparent)!important;color:var(--menu-ink)!important;border-color:#8dba78}
 #ov #box.standard-popup:has(#pd) .prow [data-p][aria-pressed="true"]::after{content:' ✓';color:inherit}
 @media(max-width:480px){#ov #box.standard-popup{padding:14px;width:calc(100vw - 16px);max-height:calc(100dvh - 16px)}#ov #box.standard-popup .menu-exit-bar{gap:6px}#ov #box.standard-popup .account-tool-row>.btn{padding-inline:50px}}
+
+/* Player visibility preferences outrank decorative layout rules. */
+#home #gardenProgressStrip.display-choice-hidden{display:none!important}
+#box .app-info,#box .app-info p,#box .app-info li{text-align:center}
+#home #unifiedNav .nav-actions [data-go="account"]{order:10}
+#home #unifiedNav .nav-actions [data-go="language"]{order:11}
+#home #unifiedNav .nav-actions [data-go="appearance"]{order:12}
+#home #unifiedNav .nav-actions #navCards{order:13}
+#home #unifiedNav .nav-actions #navMore{order:14}
+#home #unifiedNav #navCards,#home #unifiedNav #navAppearance{flex-shrink:0}
+
+@media(max-width:450px){
+ #home #unifiedNav .nav-brand{display:none!important}
+ #home #unifiedNav{column-gap:4px!important}
+ #home #unifiedNav .nav-actions{gap:4px!important}
+ #home #unifiedNav .nav-actions #navAccount,#home #unifiedNav .nav-actions [data-go="language"],#home #unifiedNav .nav-actions #navAppearance,#home #unifiedNav .nav-actions #navCards,#home #unifiedNav .nav-actions #navMore{width:40px!important;min-width:40px!important;max-width:40px!important;padding:4px!important;flex:0 0 40px!important}
+ #home #unifiedNav #navAccount{font-size:0!important}
+ #home #unifiedNav #navAccount::before{content:"👤";font-size:22px}
+}

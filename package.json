@@ -1,6 +1,6 @@
 {
   "name": "mind-garden-cloudflare",
-  "version": "4.0.48",
+  "version": "4.0.49",
   "private": true,
   "scripts": {
     "dev": "wrangler pages dev public --local",
@@ -16,7 +16,9 @@
     "test:depth": "node tests/depth-progression.test.cjs && node tests/depth-rules.test.cjs",
     "test:accounts": "node tests/account-api.test.mjs && node tests/account-sync.test.cjs && node tests/account-flow.test.cjs && node tests/ui-followup.test.cjs && node tests/welcome-account-options.test.cjs && node tests/profile-restoration.test.cjs && node tests/device-signin.test.cjs && node tests/passkeys.test.mjs && node tests/account-status.test.cjs && node tests/account-menu.test.cjs && node tests/player-name-validation.test.cjs",
     "test:display": "node tests/dashboard-preferences.test.cjs",
-    "test:account-browser": "node tests/account-feedback-browser.test.cjs"
+    "test:account-browser": "node tests/account-feedback-browser.test.cjs",
+    "test:audit": "node tests/audit-followup.test.cjs",
+    "test:audit-layout": "node tests/audit-layout.test.cjs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0",
