@@ -28,8 +28,8 @@ for(const reduced of [false,true]){
  w.document.querySelector('[data-about-target=aboutSetup]').click();assert(w.document.getElementById('aboutSetup').open);assert.equal(w.document.activeElement,w.document.querySelector('#aboutSetup>summary'));
  w.document.querySelector('[data-about-target=aboutFAQ]').click();assert(w.document.getElementById('aboutFAQ').open);
  w.document.querySelector('[data-about-target=aboutPrivacy]').click();assert(w.document.getElementById('aboutPrivacy').open);
- w.document.querySelector('#aboutPrivacy [data-about-action=settings]').click();assert(w.document.getElementById('exportPlayerJSON'));assert(w.document.getElementById('importPlayerJSON'));w.closeOv();about.click();
- w.document.querySelector('#aboutSetup [data-about-action=players]').click();assert(w.document.getElementById('profileRename'));w.closeOv();about.click();
+ w.document.querySelector('#aboutPrivacy [data-about-action=data]').click();assert(w.document.getElementById('exportPlayerJSON'));assert(w.document.getElementById('importPlayerJSON'));w.closeOv();about.click();
+ w.document.querySelector('#aboutSetup [data-about-action=players]').click();assert(w.document.querySelector('.player-edit-name'));w.closeOv();about.click();
  w.document.querySelector('#aboutFAQ [data-about-action=contact]').click();assert(w.document.getElementById('googleFeedbackFrame'));w.closeOv();about.click();
  w.document.querySelector('meta[name=mind-garden-release]').content='v3.8.6';w.document.getElementById('infoDone').click();assert.equal(w.document.activeElement.id,'navMore');about.click();assert(w.document.querySelector('.about-version').textContent.includes('v3.8.6'));assert.equal(w.MindGardenExport.backup().appVersion,'3.8.6');
  w.document.querySelector('.app-info').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert(w.document.getElementById('ov').classList.contains('hidden'));

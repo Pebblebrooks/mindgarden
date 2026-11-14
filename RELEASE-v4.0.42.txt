@@ -1,0 +1,9 @@
+Mind Garden v4.0.42 — account feedback and identity
+
+Clear account creation/sign-in/reset progress, visible retry errors, repeated-submit protection, and persistent account-created confirmation. Password generation and player uploads remain distinct from account creation.
+
+Signed-in navbar shows the account name. Signed-out status uses Local player, retaining existing device records and Switch player. Long account names are shortened visually, with full accessible labels.
+
+Account requests have a timeout; sync checks session validity even without new edits. Additional asynchronous account-menu errors are shown to the player. English and Chinese help updated.
+
+No database migration required. See docs/QA-v4.0.42.md for test evidence and browser/device validation limits. This review branch has not been promoted to production.

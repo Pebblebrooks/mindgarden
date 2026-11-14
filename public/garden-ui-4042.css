@@ -2119,3 +2119,9 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 #ov #box .account-action-feedback{margin:2px 0 10px;font-size:.95em;font-weight:700;line-height:1.4;text-align:center}
 #welcomeAccountState{margin:6px 0 0;text-align:center;font-size:calc(1rem * var(--fs));color:inherit;text-shadow:0 1px 4px rgba(0,0,0,.4)}
 #ov #box .account-panel[data-auth-view="signed-out"]>.btn{display:block;margin:10px auto;max-width:100%}
+
+/* Account identity stays compact across orientation and text-size changes. */
+#home #unifiedNav #navAccount{display:block;max-width:clamp(80px,18vw,180px)!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap!important;overflow-wrap:normal}
+#ov #box #accountForm #accountStatus:not(:empty){padding:12px;border:2px solid var(--menu-edge);border-radius:10px;overflow-wrap:anywhere}
+#ov #box .account-panel .account-success{padding:12px;border:2px solid var(--menu-edge);border-radius:10px;font-weight:700}
+#ov #box .account-panel [aria-busy="true"] button:disabled{cursor:progress}
