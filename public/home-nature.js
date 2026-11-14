@@ -10,7 +10,7 @@ function ui(){
  document.querySelectorAll('#navMenu [data-go="nature"]').forEach(el=>el.setAttribute('aria-pressed',String(enabled)));
  const fab=document.getElementById('mFab');if(fab){fab.textContent=(enabled?'🔊 ':'🔇 ')+T('Background: ','背景：')+(enabled?T('On','开'):T('Off','关'));fab.setAttribute('aria-pressed',String(enabled));fab.setAttribute('aria-label',b.title);fab.title=b.title;fab.onclick=()=>setMuted(!save.backgroundMuted)}
  document.querySelectorAll('[data-background-audio]').forEach(el=>{if(el.innerHTML!==symbol)el.innerHTML=symbol;el.setAttribute('aria-label',label);el.setAttribute('aria-pressed',String(enabled));el.title=b.title});
- const master=document.getElementById('backgroundAudioToggle');if(master){master.textContent=label;master.setAttribute('aria-pressed',String(enabled));master.onclick=()=>setMuted(!save.backgroundMuted)}
+ const master=document.getElementById('backgroundAudioToggle');if(master){const on=enabled&&!!window.MindGardenSound?.status().playing;master.textContent=on?T('Sound: On','声音：开'):T('Sound: Off','声音：关');master.setAttribute('aria-pressed',String(on));master.onclick=()=>{if(on)setMuted(true);else{setMuted(false);window.MindGardenSound?.start()}}}
 }
 function setMuted(muted){
  muted=!!muted;if(muted===!!save.backgroundMuted){ui();return}

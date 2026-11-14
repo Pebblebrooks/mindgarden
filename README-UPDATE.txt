@@ -1,23 +1,33 @@
-Mind Garden v4.0.34 — audited gameplay and layout fixes
+Mind Garden v4.0.35 — clearer menus and accounts
 
-- Next level, Replay and Easier level use saved choices without repeated setup.
-- Settings hide the previous board and scenery. Move & Remember advances directly.
-- Corrected story-memory question prerequisites and bilingual readiness text.
-- Responsive grids and bounded content preserve readable text and touch targets.
-- Long content may scroll internally on small screens or with enlarged text.
-- About documentation updated in English and Chinese.
+CHANGES
+- Separate sign-in, create-account and password recovery forms; Show/Hide password.
+- Recovery-key downloads identify the account. New passwords require 10 characters.
+- Player photo and remove controls restored beside each player.
+- Compact Games library, category search, info buttons inside each card.
+- Results: Next, Replay, Games; secondary actions under More.
+- Clearer room joining/creation, Settings, Garden, Sound and Account menus.
+- Progress views: Overview, By game, History. Expandable Family View.
+- Dashboard selection counts, simpler rankings, bilingual About and help updates.
+- Independent player/game settings and existing scores preserved.
 
 UPDATE
-Use the existing Cloudflare Pages project, production branch main, output public.
-No additional SQL migration is required for this release. Keep the existing DB
-binding, MG_ACCOUNT_PEPPER and MG_ACCOUNT_SIGNUP settings unchanged.
-Upload the package contents to the repository root, then deploy the latest main.
-Verify About v4.0.34 and garden-ui-4034.js / garden-ui-4034.css.
-Remove obsolete garden-ui-4033.js / .css when manually replacing files.
-Close and reopen app tabs to refresh. Do not clear site data or reset the database.
+Existing Cloudflare Pages project: mindgarden-bk1; production branch main;
+build output public; preserve existing build settings and functions/.
+No new SQL migration is required. Keep DB, MG_ACCOUNT_PEPPER and
+MG_ACCOUNT_SIGNUP unchanged. Never replace the account pepper for this update.
+Verify About v4.0.35 and garden-ui-4035.js / garden-ui-4035.css.
+When manually uploading, delete obsolete public/garden-ui-4034.js and .css.
+Close and reopen app tabs to refresh. Do not clear site data or reset D1.
 
 VALIDATION
-80 regression suites passed; 800 rendered layout checks; 240 complete sessions
-covering 1,456 rounds. See docs/release-audit-v4.0.33-follow-up.md for scope/limits.
-Physical devices and live production account/network behaviour remain unverified.
+Bilingual menu-flow, account API/sync, display preferences and release checks.
+Eight-client multiplayer joining, invitations, reconnect and round progression.
+Eight menu layouts checked at 320, 360, 768 and 1280 pixels without horizontal overflow.
+Earlier approved gameplay checks: 300 transitions and 118 bilingual setups.
+Physical devices and live account creation/recovery are not covered by local tests.
+
+ROLLBACK
+Restore the previous successful Cloudflare Pages deployment (v4.0.34).
+No database rollback is needed for this UI release. Preserve secrets and player data.
 Copyright 2026 Pebblebrooks.

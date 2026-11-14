@@ -34,7 +34,7 @@ export async function onRequest({request,env}){
   if(['signup','signin','recover'].includes(action)){
    const username=String(b.username||'').trim().toLowerCase(),password=b.password;
    if(!/^[a-z0-9][a-z0-9_.-]{2,39}$/.test(username))fail('Use an account name of 3–40 letters, numbers, dots, dashes or underscores.');
-   if(typeof password!=='string'||password.length<15||password.length>128)fail('Use a passphrase of 15–128 characters.');
+   if(typeof password!=='string'||password.length<(action==='signin'?1:10)||password.length>128)fail('Use a password of 10–128 characters.');
    const ip=request.headers.get('CF-Connecting-IP')||'unknown';
    await limit(db,'auth-ip:'+ip,30,600000,now);await limit(db,'auth-name:'+username,10,600000,now);
    let account=await q(db,'SELECT * FROM mg_accounts WHERE username=?',username).first(),recovery;
@@ -49,7 +49,7 @@ export async function onRequest({request,env}){
     const salt=random();recovery=random();await db.batch([q(db,'UPDATE mg_accounts SET salt=?,password_hash=?,recovery_hash=? WHERE id=?',salt,await passwordHash(password,salt,env.MG_ACCOUNT_PEPPER),await digest(recovery),account.id),q(db,'DELETE FROM mg_account_sessions WHERE account_id=?',account.id)]);
    }else{
     const hash=await passwordHash(password,account?.salt||'invalid-account-salt',env.MG_ACCOUNT_PEPPER);
-    if(!account||!equal(hash,account.password_hash))fail('Account name or passphrase is incorrect.',401,'CREDENTIALS');
+    if(!account||!equal(hash,account.password_hash))fail('Account name or password is incorrect.',401,'CREDENTIALS');
    }
    const token=random();await q(db,'INSERT INTO mg_account_sessions VALUES(?,?,?)',await digest(token),account.id,now+TTL).run();
    await q(db,'DELETE FROM mg_account_sessions WHERE expires_at<?',now).run();await q(db,'DELETE FROM mg_account_limits WHERE expires_at<?',now).run();

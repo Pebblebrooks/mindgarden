@@ -1,36 +1,33 @@
-Mind Garden v4.0.33 — personal dashboards and saved player accounts
+Mind Garden v4.0.35 — clearer menus and accounts
 
 CHANGES
-- Per-player dashboard: choose welcome shortcuts and game cards, launch visibility
-  for welcome cards and pets, and visibility of the progress bouquet.
-- Simplified Settings, player management, music choices and My Games menus.
-- Separate My Games / All Games settings for each game and each player.
-- Account-based server saving of profiles, scores and preferences; offline pending
-  changes, revision conflict protection and all-player JSON / score CSV export.
-- English and Chinese About documentation updated.
+- Separate sign-in, create-account and password recovery forms; Show/Hide password.
+- Recovery-key downloads identify the account. New passwords require 10 characters.
+- Player photo and remove controls restored beside each player.
+- Compact Games library, category search, info buttons inside each card.
+- Results: Next, Replay, Games; secondary actions under More.
+- Clearer room joining/creation, Settings, Garden, Sound and Account menus.
+- Progress views: Overview, By game, History. Expandable Family View.
+- Dashboard selection counts, simpler rankings, bilingual About and help updates.
+- Independent player/game settings and existing scores preserved.
 
-INSTALLATION
-Existing Cloudflare Pages project: main branch, output directory public.
-Preserve the DB binding and all existing data. Do not clear browser site data.
-For server accounts, back up D1 and run migrate-v4.0.33.sql on the Pages database.
-Add Pages secret MG_ACCOUNT_PEPPER (cryptographically random, at least 32 characters).
-Keep this secret stable; never commit it or share it in chat.
-Set MG_ACCOUNT_SIGNUP=enabled to allow account registration, then redeploy Pages.
-Without this setup, account saving reports unavailable; device-local play still works.
-See docs/account-saving.md for setup, recovery, limits and runtime acceptance checks.
-Verify About v4.0.33 and garden-ui-4033.js / garden-ui-4033.css after deployment.
-Remove obsolete garden-ui-4032.js / .css when manually replacing package files.
+UPDATE
+Existing Cloudflare Pages project: mindgarden-bk1; production branch main;
+build output public; preserve existing build settings and functions/.
+No new SQL migration is required. Keep DB, MG_ACCOUNT_PEPPER and
+MG_ACCOUNT_SIGNUP unchanged. Never replace the account pepper for this update.
+Verify About v4.0.35 and garden-ui-4035.js / garden-ui-4035.css.
+When manually uploading, delete obsolete public/garden-ui-4034.js and .css.
+Close and reopen app tabs to refresh. Do not clear site data or reset D1.
 
 VALIDATION
-Account API/client tests cover account isolation, authentication, revision conflicts,
-profile retrieval, offline retry and export. Dashboard tests cover player isolation,
-visibility, show-all access, cancellation and backup import/export. Release, About,
-cache and syntax checks pass. Dashboard panel inspected at desktop and mobile sizes.
-Live Cloudflare account registration, recovery and two-device syncing require the
-configuration above and have not yet been verified against production.
+Bilingual menu-flow, account API/sync, display preferences and release checks.
+Eight-client multiplayer joining, invitations, reconnect and round progression.
+Eight menu layouts checked at 320, 360, 768 and 1280 pixels without horizontal overflow.
+Earlier approved gameplay checks: 300 transitions and 118 bilingual setups.
+Physical devices and live account creation/recovery are not covered by local tests.
 
-LIMITS
-Personal photos/videos/music files remain device-local. Previously trimmed history
-cannot be recovered. Account snapshots have a 4 MB request / 1.8 MB compressed limit.
-New players start with welcome cards and pets hidden; saved launch choices override it.
+ROLLBACK
+Restore the previous successful Cloudflare Pages deployment (v4.0.34).
+No database rollback is needed for this UI release. Preserve secrets and player data.
 Copyright 2026 Pebblebrooks.
