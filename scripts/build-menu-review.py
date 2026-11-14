@@ -11,7 +11,7 @@ for file in p.rglob('*'):
  if file.suffix in ['.webp','.svg','.png','.gif'] and file.stat().st_size<700000:
   assets[str(file.relative_to(p))]='data:'+mimetypes.guess_type(file.name)[0]+';base64,'+base64.b64encode(file.read_bytes()).decode()
 for name,data in assets.items():
- css=css.replace('url("'+name+'")','url("'+data+'")').replace("url('"+name+"')",'url("'+data+'")')
+ css=css.replace('url("'+name+'")','url("'+data+'")').replace("url('"+name+"')",'url("'+data+'")').replace('url('+name+')','url("'+data+'")')
 s=s.replace('</head>','<style>'+css+'</style></head>')
 s=re.sub(r'<script src="([^"?]+)[^"]*"></script>',lambda m:'<script>'+ (p/m[1]).read_text().replace('</script','<\\/script')+'</script>',s)
 pre='''<script>

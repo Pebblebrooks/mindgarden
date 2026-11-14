@@ -4,7 +4,8 @@ import re,ast,json
 p=Path(__file__).resolve().parents[1]/'public'
 quoted=r'''(?:'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*")'''
 pairs={}
-for f in sorted(p.glob('*.js')):
+sources=json.loads((p.parent/'scripts/release-sources.json').read_text())
+for f in sorted(p/name for name in sources['scripts'] if '/' not in name):
  if f.name.startswith(('garden-ui-','language-','qa-')) or f.name=='garden-wildlife.js':continue
  source=f.read_text()
  for m in re.finditer('('+quoted+r')\s*,\s*('+quoted+')',source):

@@ -1,5 +1,4 @@
-/* Mind Garden v2.8 — authoritative responsive 50 / 25 / 25 welcome layout.
-   Loaded LAST with a release-specific URL, replacing conflicting legacy v27 rules. */
+/* Base welcome and progress styles, composed with subsequent component styles. */
 :root{--mg-progress-bg:#e9f8ef;--mg-progress-text:#123b42;--mg-progress-line:#92b9a4}
 :root[data-theme="dark"]{--mg-progress-bg:#073c44;--mg-progress-text:#e6fff5;--mg-progress-line:#628a8a}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="dark"]){--mg-progress-bg:#073c44;--mg-progress-text:#e6fff5;--mg-progress-line:#628a8a}}
@@ -24,9 +23,6 @@ body:has(#home:not(.hidden))>.wrap{max-width:none!important;width:100%;padding:0
 #home .welcome-extra{gap:10px;margin:0!important;flex:none}
 #home .welcome-extra .daily-shortcut{min-height:clamp(35px,4.3dvh,46px);padding:5px 21px}
 #home .welcome-extra span{font-size:calc(clamp(.65rem,.8vw,.83rem) * var(--fs))}
-/* Sea: one panoramic 25vh-wide IMAGE section, no little thumbnail or inset card. */
-#home #seaScene:not(.hidden){display:block!important;flex:0 0 25dvh!important;width:100%!important;height:25dvh!important;min-height:0!important;max-height:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#2d92ae url('sea-banner.svg') center 54%/100% 100% no-repeat!important;overflow:hidden}
-:root[data-theme="dark"] #home #seaScene{background-image:linear-gradient(#092d4466,#0c425855),url('sea-banner.svg')!important}
 /* The old generated garden SVG remains in the document for progress updates but is not displayed. */
 #home #gardenProgressStrip:not(.hidden){display:flex!important;flex:0 0 25dvh!important;align-items:stretch;justify-content:center;width:100%!important;height:25dvh!important;min-height:0!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-sizing:border-box;background:var(--mg-progress-bg)!important;color:var(--mg-progress-text)!important;overflow:hidden}
 #gardenProgressStrip #hero{display:none!important}
@@ -46,14 +42,13 @@ body:has(#home:not(.hidden))>.wrap{max-width:none!important;width:100%;padding:0
 .progress-info .progress-flowers:focus-visible{outline:3px solid #f3be3f;outline-offset:3px}
 #home .dash-disclaimer{display:none!important}
 /* When the user has selected the All Games page, allow it to scroll normally. */
-#home:not(.hidden):has(#gameLibrary:not(.hidden)) #welcomeDashboard,#home:not(.hidden):has(#gameLibrary:not(.hidden)) #seaScene,#home:not(.hidden):has(#gameLibrary:not(.hidden)) #gardenProgressStrip{display:none!important}
+#home:not(.hidden):has(#gameLibrary:not(.hidden)) #welcomeDashboard,#home:not(.hidden):has(#gameLibrary:not(.hidden)) #gardenProgressStrip{display:none!important}
 /* On shorter desktop viewports, content remains usable rather than clipped at an exact proportion. */
 @media(min-width:751px) and (max-height:720px){
  #home:not(.hidden):has(#welcomeDashboard:not(.hidden)){height:auto!important;min-height:100dvh!important}
  #home #welcomeDashboard:not(.hidden){height:auto!important;min-height:355px!important;flex:0 0 auto!important;overflow:visible}
  #home .welcome-scene{min-height:355px!important;height:auto!important;padding:74px 15px 15px!important;gap:7px}
  #home .welcome-feature{height:105px}
- #home #seaScene:not(.hidden){height:clamp(115px,25dvh,170px)!important;flex:0 0 auto!important}
  #home #gardenProgressStrip:not(.hidden){height:175px!important;flex:0 0 auto!important}
 }
 /* Mobile: navbar becomes one hamburger; room for large, accessible buttons takes priority. */
@@ -70,7 +65,6 @@ body:has(#home:not(.hidden))>.wrap{max-width:none!important;width:100%;padding:0
  #home .welcome-feature strong{font-size:calc(1rem * var(--fs))}
  #home .welcome-feature>span:last-child{font-size:calc(.72rem * var(--fs))}
  #home .welcome-extra span{display:none}
- #home #seaScene:not(.hidden){height:clamp(110px,22dvh,210px)!important;flex:0 0 auto!important;background-size:cover!important}
  #home #gardenProgressStrip:not(.hidden){height:auto!important;min-height:205px!important;flex:0 0 auto!important;overflow:visible}
  #gardenProgressStrip .progress-summary{grid-template-columns:1fr;grid-template-rows:auto auto;gap:9px;padding:14px 9px 22px;text-align:center}
  .progress-summary .progress-stages{grid-row:2;padding-top:5px}
