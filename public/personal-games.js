@@ -35,6 +35,7 @@ function preview(r){const depth=window.MindGardenDepth?.preview(r);if(depth)retu
 function select(id,label,values,value){return '<label>'+label+'<select id="'+id+'">'+values.map(([v,n])=>'<option value="'+v+'"'+(String(value)===String(v)?' selected':'')+'>'+n+'</option>').join('')+'</select></label>'}
 function button(id,en,zh,main=false){return '<button type="button" class="btn'+(main?' main':'')+'" id="'+id+'">'+T(en,zh)+'</button>'}
 function myGames(){
+ window.MindGardenMenuHistory?.enter('my-games',()=>myGames());
  stopSession();result=null;queue=[];scope='my';
  const c=config(),games=['pairs',...Object.keys(MG)];if(!me().myGames)c.games=['pairs','num','gardenrhythm'];
  overlay('<section class="personal-panel personal-simple"><h2>'+T('Games','游戏')+'</h2><div class="library-tabs">'+button('personalAllGames','All Games','所有游戏')+'<button class="btn main" aria-current="page">'+T('My Games','我的游戏')+'</button></div><p>'+T('Choose a game or play your selection.','选择游戏或开始已选游戏。')+'</p><div id="personalSelected" class="personal-selected-grid"></div><div class="personal-actions">'+button('personalStart','Play my selection','按顺序开始',true)+'</div><details id="personalPicker"><summary>'+T('Choose my games','选择我的游戏')+'</summary><label>'+T('Find a game','查找游戏')+'<input id="personalSearch" type="search"></label><div class="personal-game-list">'+games.map(id=>'<label class="personal-check"><input type="checkbox" data-personal-game="'+id+'"'+(c.games.includes(id)?' checked':'')+'><span>'+esc(gameName(id))+'</span></label>').join('')+'</div>'+button('personalPickerDone','Done choosing','选择完毕')+'</details><p id="personalSummary" role="status" data-inline-copy></p><div class="personal-footer-actions"><button class="btn" id="personalUndo" hidden>'+T('Undo','撤销')+'</button>'+button('personalSkip','Close','关闭')+'</div>'+'</section>');
@@ -49,6 +50,7 @@ function myGames(){
 function category(id){if(window.MindGardenMovement?.has(id))return 'movement';if(['pairs','seq','miss','rem','shopping','story','recall','drawmemory','hawker','album','trail','melody'].includes(id))return 'memory';if(['num','sum','tbl','add','sub','cnt','money','calendar','time','clk','count'].includes(id))return 'numbers';return 'other';}
 
 function setup(id,step,context=scope,autoStart=false){
+ window.MindGardenMenuHistory?.enter('game-settings:'+id+':'+context,()=>setup(id,undefined,context));
  if(id==='followgardener')id='gardenrhythm';
  scope=context==='my'?'my':'all';if(step===undefined)step=lastStep(id);
  if(window.MindGardenMovement?.has(id)){stopSession();result=null;window.MindGardenMovement.setup(id,settings(id),()=>queue.length?setup(queue.shift(),undefined,scope,true):myGames(),()=>queue.length>0);return}
@@ -79,7 +81,7 @@ function setup(id,step,context=scope,autoStart=false){
  const startButton=$('startExtra')||$('newGameStart')||$('gaStart')||$('cgBegin')||$('edBegin')||$('personalPairStart'),run=startButton.onclick;
  for(const b of startButton.parentElement.querySelectorAll('button'))if(b!==startButton&&/^(Cancel|取消)$/.test(b.textContent.trim()))b.hidden=true;
  startButton.parentElement.append($('personalEdit'));
- const launch=practice=>{const r=current();beginSession(r,practice);launching=true;try{if(id==='pairs')basePairs(r.native-1);else run.call(startButton);session.started=Date.now();if(practice&&window.mg)mg.R=1;if(practice&&window.MindGardenCommercial?.current)window.MindGardenCommercial.current.total=1;if(practice&&window.MindGardenEveryday?.current)window.MindGardenEveryday.current.questions=window.MindGardenEveryday.current.questions.slice(0,1);}finally{launching=false}decorateSession()};
+ const launch=practice=>{window.MindGardenMenuHistory?.clear();const r=current();beginSession(r,practice);launching=true;try{if(id==='pairs')basePairs(r.native-1);else run.call(startButton);session.started=Date.now();if(practice&&window.mg)mg.R=1;if(practice&&window.MindGardenCommercial?.current)window.MindGardenCommercial.current.total=1;if(practice&&window.MindGardenEveryday?.current)window.MindGardenEveryday.current.questions=window.MindGardenEveryday.current.questions.slice(0,1);}finally{launching=false}decorateSession()};
  startButton.onclick=()=>launch(false);$('personalPractice').onclick=()=>launch(true);$('personalEdit').onclick=()=>{if(scope==='my')myGames();else{closeOv();toHome();document.querySelector('[data-go=library]')?.click()}};if($('personalPairCancel'))$('personalPairCancel').onclick=closeOv;
  if(autoStart)launch(false);
 }
