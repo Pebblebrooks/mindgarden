@@ -17,7 +17,7 @@ function bindName(input,status,excludeId=null,profiles=()=>save.pr){
 }
 async function rename(n){
  n=n.normalize('NFKC').trim().replace(/\s+/gu,' ');const error=nameError(n,save.cp);if(error)throw Error(error);
- const profile=me();await window.MindGardenMultiplayer?.rename(n);if(Object.values(save.pr).includes(profile)){profile.name=n;persist()}if(me()===profile)renderHome();return n;
+ const profile=me(),previous=profile.name;await window.MindGardenMultiplayer?.rename(n);if(Object.values(save.pr).includes(profile)){profile.name=n;if(persist()===false){profile.name=previous;throw Error(T('Name could not be saved. Free device storage and retry.','无法保存名称，请释放设备存储空间后重试。'))}}if(me()===profile)renderHome();return n;
 }
 function editor(){
  window.MindGardenMenuHistory?.enter('rename',()=>editor());

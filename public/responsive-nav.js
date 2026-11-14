@@ -3,9 +3,9 @@
 'use strict';
 const nav=document.getElementById('unifiedNav');if(!nav)return;
 const T=(a,b)=>window.MindGardenLocale.pair(a,b);
-const removalOrder=['contact','about','welcomeCards','music','appearance','text','nature','motion','leaderboard','progress','online','library'];
+const removalOrder=['contact','about','music','text','nature','motion','leaderboard','progress','online','library'];
 function fit({available,brand,compactBrand,main,tools,toggle,gap=12,mainGap=5,toolGap=6}){
- tools=tools.map(x=>x.key==='language'?{...x,width:48}:x);
+ if(available<=420){compactBrand=0;toolGap=4;gap=4;toggle=40;tools=tools.map(x=>['account','language','appearance','welcomeCards'].includes(x.key)?{...x,width:40}:x)}else tools=tools.map(x=>x.key==='language'?{...x,width:48}:x);
  const mobile=available<=740;
  const hidden=new Set(mobile?main.map(x=>x.key):[]),sum=(items,space)=>{const shown=items.filter(x=>!hidden.has(x.key));return shown.reduce((s,x)=>s+x.width,0)+Math.max(0,shown.length-1)*space};
  const required=(b)=>{const center=sum(main,mainGap),right=sum([...tools,{key:'toggle',width:toggle}],toolGap);return center?center+2*Math.max(b,right)+2*gap:b+right+gap};

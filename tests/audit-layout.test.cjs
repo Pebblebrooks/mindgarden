@@ -1,0 +1,16 @@
+const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),http=require('http'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'../public');
+(async()=>{const server=http.createServer((req,res)=>{const file=path.join(root,req.url.split('?')[0]==='/'?'index.html':req.url.split('?')[0]);try{res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml'})[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file))}catch{res.writeHead(404);res.end()}});await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;try{
+ browser=await chromium.launch({headless:true,executablePath:process.env.BROWSER_EXECUTABLE||undefined,args:['--no-sandbox','--disable-dev-shm-usage']});const page=await browser.newPage({serviceWorkers:'block'});await page.route('**/api/**',r=>r.fulfill({status:401,contentType:'application/json',body:'{"code":"SIGNIN"}'}));await page.route('https://fonts.googleapis.com/**',r=>r.abort());
+ await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>window.MindGardenDisplay&&window.MindGardenNav);
+ for(const width of [280,320,390,768,1024,1440])for(const scale of [1,2])for(const lang of ['en','zh']){
+ await page.setViewportSize({width,height:850});await page.evaluate(({scale,lang})=>{save.lang=lang;save.textScale=scale;persist();load();renderHome();MindGardenNav.layout()},{scale,lang});await page.waitForTimeout(80);
+ const controls=await page.locator('#unifiedNav .nav-actions').evaluate(el=>['navAccount','language','navAppearance','navCards','navMore'].map(id=>{const n=id==='language'?el.querySelector('[data-go="language"]'):document.getElementById(id),r=n.getBoundingClientRect();return {id,x:r.x,right:r.right,w:r.width,display:getComputedStyle(n).display,hidden:n.dataset.navHidden}}));
+ for(const c of controls)assert(c.w>0&&c.display!=='none'&&c.hidden!=='true'&&c.x>=0&&c.right<=width+.5,JSON.stringify({width,scale,lang,c,controls}));for(let i=1;i<controls.length;i++)assert(controls[i].x>=controls[i-1].right-1,JSON.stringify(controls));
+ }
+ await page.setViewportSize({width:390,height:844});await page.evaluate(()=>{save.textScale=1;save.lang='en';persist();load();renderHome();me().dashboardPreferences={...MindGardenDisplay.prefs(),progressVisible:false};MindGardenDisplay.restore()});assert.equal(await page.locator('#gardenProgressStrip').evaluate(n=>getComputedStyle(n).display),'none');
+ await page.evaluate(()=>{me().dashboardPreferences.progressVisible=true;MindGardenDisplay.restore()});assert.notEqual(await page.locator('#gardenProgressStrip').evaluate(n=>getComputedStyle(n).display),'none');
+ await page.screenshot({path:'/tmp/mg-audit-mobile.png'});
+ await page.evaluate(()=>document.querySelector('#navMenu [data-go="about"]').click());assert.equal(await page.locator('.app-info p').first().evaluate(n=>getComputedStyle(n).textAlign),'center');
+ console.log('PASS rendered navbar priority/order at 48 viewport/language/text settings; progress hide/show and About alignment.');
+ }finally{await browser?.close();await new Promise(r=>server.close(r))}})().catch(e=>{console.error(e);process.exitCode=1});

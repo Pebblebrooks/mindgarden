@@ -24,6 +24,18 @@ function cleanDocument(data){
  for(const [id,p]of entries){if(!/^[a-zA-Z0-9_-]{1,100}$/.test(id)||!p||Array.isArray(p)||typeof p.name!=='string'||!p.name.trim()||p.name.length>60||!Array.isArray(p.log)||!p.stars||typeof p.stars!=='object')fail('Invalid player profile.');if(p.av&&!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(p.av))fail('Invalid player image.');}
  return {schemaVersion:1,profiles:data.profiles};
 }
+// Treat profile removal or any removed/changed history entry as destructive.
+function removesHistory(before,after){
+ const canonical=v=>v&&typeof v==='object'?JSON.stringify(Array.isArray(v)?v.map(x=>JSON.parse(canonical(x))):Object.fromEntries(Object.keys(v).sort().map(k=>[k,JSON.parse(canonical(v[k]))]))):JSON.stringify(v);
+ for(const [id,old]of Object.entries(before.profiles||{})){
+  const next=after.profiles[id];if(!next)return true;
+  for(const field of ['log','multiplayerHistory']){
+   const counts=new Map();for(const entry of next[field]||[]){const key=canonical(entry);counts.set(key,(counts.get(key)||0)+1)}
+   for(const entry of old[field]||[]){const key=canonical(entry),n=counts.get(key)||0;if(!n)return true;counts.set(key,n-1)}
+  }
+ }
+ return false;
+}
 async function limit(db,key,max,span,now){const bucket=await digest(key+':'+Math.floor(now/span));await q(db,'INSERT INTO mg_account_limits(bucket,attempts,expires_at) VALUES(?,1,?) ON CONFLICT(bucket) DO UPDATE SET attempts=attempts+1',bucket,now+span).run();const row=await q(db,'SELECT attempts FROM mg_account_limits WHERE bucket=?',bucket).first();if(row.attempts>max)fail('Too many attempts. Please try again later.',429,'RATE');}
 export async function onRequest({request,env}){
  if(!env.DB||typeof env.MG_ACCOUNT_PEPPER!=='string'||env.MG_ACCOUNT_PEPPER.length<32)return reply({error:'Account saving is not configured yet.',code:'SETUP'},503);
@@ -78,7 +90,7 @@ export async function onRequest({request,env}){
    return reply({recovery});
   }
   if(action==='save'){
-   if(!Number.isSafeInteger(b.revision)||b.revision<0)fail('A saved revision is required.');const document=await pack(cleanDocument(b.document));
+   if(!Number.isSafeInteger(b.revision)||b.revision<0)fail('A saved revision is required.');const clean=cleanDocument(b.document);const current=await q(db,'SELECT document,revision,updated_at FROM mg_account_profiles WHERE account_id=?',account.id).first();if(current.revision!==b.revision)fail('Another device saved newer changes. Review the conflict before saving.',409,'CONFLICT');if(removesHistory(await unpack(current.document),clean))await checkPassword(account,b.password);const document=await pack(clean);
    const result=await q(db,'UPDATE mg_account_profiles SET document=?,revision=revision+1,updated_at=? WHERE account_id=? AND revision=?',document,now,account.id,b.revision).run();
    if(result.meta.changes!==1)fail('Another device saved newer changes. Review the conflict before saving.',409,'CONFLICT');
    return reply({revision:b.revision+1,updatedAt:now});
