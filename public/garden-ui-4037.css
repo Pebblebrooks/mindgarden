@@ -1974,3 +1974,33 @@ html:not([data-hc="1"]) #home #libraryDisplay .personal-game-card .game-tile{bac
 #ov #box:has(#pd)>.list{gap:10px!important}
 #ov #box:has(#pd) .prow{margin:0!important}
 #ov #box:has(#pd) .prow [data-p]{text-align:left!important}
+
+/* Clear player actions and optional account storage, matching the approved sage preview. */
+html[data-v4-mode="light"]{--menu-surface:linear-gradient(135deg,#fffdf5,#eef3e3);--menu-card:#f5f7e9;--menu-gold:linear-gradient(120deg,#4d853d,#27612c);--menu-edge:#6f8960}
+html[data-v4-mode="light"] #ov #box:has(.account-panel,#pd,.rename-panel) .btn.main{color:#fff!important;border-color:#4b743b!important}
+#ov #box:has(.rename-panel){width:min(560px,calc(100vw - 24px));padding:clamp(18px,3vw,32px)}
+.record-assurance,.player-storage{padding:12px;border-radius:12px;background:color-mix(in srgb,#83af55 20%,transparent);font-weight:650}
+.account-choice{border:1px solid var(--menu-edge);border-radius:14px;padding:16px;margin:14px 0}
+.account-choice .btn,.account-actions>.btn,#accountCopyPlayers{width:100%;margin:8px 0}
+.account-player-selection label,.recovery-choice{display:flex;align-items:center;gap:12px;border-radius:10px;padding:12px;background:color-mix(in srgb,#83af55 12%,transparent)}
+#ov #box .account-panel input[type=checkbox]{width:24px;height:24px;flex:0 0 24px;padding:0;accent-color:#42763b}
+#ov #box:has(#pd) .prow{grid-template-columns:56px minmax(0,1fr);padding:12px}
+#ov #box:has(#pd) .prow .avb{grid-row:1 / 3;width:52px;height:52px}
+.player-record-count{grid-column:2;grid-row:2;overflow-wrap:anywhere;text-align:left}
+#ov #box:has(#pd) .prow .player-edit-name{grid-column:2;text-decoration:underline;text-align:left}
+#ov #box:has(#pd) .prow details{grid-column:1 / -1;text-align:left;font-size:.9em}
+#ov #box:has(#pd) .prow:has([aria-pressed="true"]){background:color-mix(in srgb,#83af55 24%,transparent);color:var(--menu-ink)}
+#ov #box:has(#pd) .prow:has([aria-pressed="true"]) .btn{color:var(--menu-ink)!important}
+#ov #box .account-panel input,#ov #box .rename-panel input{min-width:0;max-width:100%;box-sizing:border-box}
+/* Card-relative type: cqi tracks actual card width, not the whole viewport. */
+.card:has(.pair-word){container-type:inline-size}
+.card .pair-word{display:block;width:100%;box-sizing:border-box;font-size:clamp(1rem,calc(18cqi * var(--fs,1)),3.5rem);line-height:1.15;overflow-wrap:anywhere;word-break:normal;padding:clamp(1px,1cqi,6px);font-weight:700;text-align:center}
+
+html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surface)!important;color:var(--menu-ink)!important;border:2px solid var(--menu-edge)!important;border-radius:24px}
+#ov #box .rename-panel :is(h2,p,label,input){text-align:left;text-align-last:left}
+#ov #box .rename-panel .btn.main{background:var(--menu-gold)!important}
+
+#ov #box .account-panel p{margin:8px 0;line-height:1.4;font-size:calc(1rem * var(--fs))}
+#ov #box .account-panel label{margin:12px 0 6px}
+#ov #box .account-panel .recovery-choice{display:flex;gap:12px}
+#ov #box .account-panel .account-hint{font-size:calc(.9rem * var(--fs))}

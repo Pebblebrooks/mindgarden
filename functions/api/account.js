@@ -42,8 +42,8 @@ export async function onRequest({request,env}){
     if(env.MG_ACCOUNT_SIGNUP!=='enabled')fail('New account registration is not enabled.',403,'REGISTRATION');
     await limit(db,'register:'+ip,4,3600000,now);
     if(account)fail('That account name is unavailable.',409);
-    const id=random(),salt=random();recovery=random();const hash=await passwordHash(password,salt,env.MG_ACCOUNT_PEPPER);
-    try{await db.batch([q(db,'INSERT INTO mg_accounts VALUES(?,?,?,?,?,?)',id,username,salt,hash,await digest(recovery),now),q(db,'INSERT INTO mg_account_profiles(account_id,updated_at) VALUES(?,?)',id,now)])}catch(e){if(String(e).includes('UNIQUE'))fail('That account name is unavailable.',409);throw e}account={id,username};
+    const id=random(),salt=random();recovery=b.generateRecovery===false?undefined:random();const hash=await passwordHash(password,salt,env.MG_ACCOUNT_PEPPER);
+    try{await db.batch([q(db,'INSERT INTO mg_accounts VALUES(?,?,?,?,?,?)',id,username,salt,hash,await digest(recovery||random()),now),q(db,'INSERT INTO mg_account_profiles(account_id,updated_at) VALUES(?,?)',id,now)])}catch(e){if(String(e).includes('UNIQUE'))fail('That account name is unavailable.',409);throw e}account={id,username};
    }else if(action==='recover'){
     if(!account||typeof b.recovery!=='string'||!equal(await digest(b.recovery.trim()),account.recovery_hash))fail('Account name or recovery key is incorrect.',401,'CREDENTIALS');
     const salt=random();recovery=random();await db.batch([q(db,'UPDATE mg_accounts SET salt=?,password_hash=?,recovery_hash=? WHERE id=?',salt,await passwordHash(password,salt,env.MG_ACCOUNT_PEPPER),await digest(recovery),account.id),q(db,'DELETE FROM mg_account_sessions WHERE account_id=?',account.id)]);
@@ -61,6 +61,14 @@ export async function onRequest({request,env}){
   if(!account)fail('Your session has expired. Sign in again.',401,'SIGNIN');
   if(action==='signout'){await q(db,'DELETE FROM mg_account_sessions WHERE token_hash=?',tokenHash).run();return reply({ok:true},200,cookie('',0))}
   await limit(db,'account:'+account.id,120,60000,now);
+  if(action==='recovery-key'){
+   if(typeof b.password!=='string'||b.password.length>128)fail('Enter your current password.');
+   await limit(db,'recovery-key:'+account.id,10,600000,now);
+   const credentials=await q(db,'SELECT * FROM mg_accounts WHERE username=?',account.username).first();
+   if(!equal(await passwordHash(b.password,credentials.salt,env.MG_ACCOUNT_PEPPER),credentials.password_hash))fail('Account name or password is incorrect.',401,'CREDENTIALS');
+   const recovery=random();await q(db,'UPDATE mg_accounts SET recovery_hash=? WHERE id=?',await digest(recovery),account.id).run();
+   return reply({recovery});
+  }
   if(action==='save'){
    if(!Number.isSafeInteger(b.revision)||b.revision<0)fail('A saved revision is required.');const document=await pack(cleanDocument(b.document));
    const result=await q(db,'UPDATE mg_account_profiles SET document=?,revision=revision+1,updated_at=? WHERE account_id=? AND revision=?',document,now,account.id,b.revision).run();

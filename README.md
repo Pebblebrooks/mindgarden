@@ -1,6 +1,6 @@
-# Mind Garden Classic v4.0.36
+# Mind Garden Classic v4.0.37
 
-Approved account/player, games-library and results designs, restored welcome account entry and corrected information-button spacing. Existing player data and account saving are retained.
+Separate player identity and optional account storage, explicit player copying, optional password/recovery-key generation, and responsive picture-word card text. Existing player records remain intact.
 
 Build: `python3 scripts/build-release.py`.
 Deploy the existing Cloudflare Pages project from `main`, output directory `public`.

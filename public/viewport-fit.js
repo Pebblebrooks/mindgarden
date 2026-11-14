@@ -17,3 +17,21 @@
  new MutationObserver(()=>{mp.scrollTop=0;schedule()}).observe(mp,{childList:true});
  window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);document.fonts?.ready.then(schedule);schedule();
 })();
+
+/* Word cards scale with their own card and fit long translated labels. */
+(function(){
+ const grid=document.getElementById('grid');if(!grid)return;let queued=false;
+ function fitWords(){queued=false;for(const word of grid.querySelectorAll('.pair-word')){
+  const face=word.closest('.f');if(!face||!face.clientWidth||!face.clientHeight)continue;
+  word.style.fontSize='';let size=parseFloat(getComputedStyle(word).fontSize);
+  // Dense boards need a smaller label; never clip or truncate a matching clue.
+  while(size>10&&(word.offsetHeight>face.clientHeight-2||word.scrollWidth>word.clientWidth+1)){
+   size=Math.max(10,size-1);word.style.fontSize=size+'px';
+  }
+ }}
+ function schedule(){if(!queued){queued=true;queueMicrotask(fitWords)}}
+ new MutationObserver(schedule).observe(grid,{childList:true,subtree:true,characterData:true});
+ new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['style','lang']});
+ if(window.ResizeObserver)new ResizeObserver(schedule).observe(grid);
+ window.addEventListener('resize',schedule);document.fonts?.ready.then(schedule);
+})();

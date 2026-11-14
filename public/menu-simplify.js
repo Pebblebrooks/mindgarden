@@ -25,7 +25,7 @@ function music(){const panel=document.querySelector('#box .sound-panel');if(!pan
 function groupNodes(parent,label,nodes){const d=disclosure(label,label,'extra');parent.append(d);for(const n of nodes)if(n)d.append(n);return d}
 function simplifyNav(){const menu=$('navMenu');if(!menu||menu.dataset.clearMenu)return;menu.dataset.clearMenu='1';
  const garden=$('gardenViewControls');if(garden&&!$('gardenPanelOpen')){const b=document.createElement('button');b.id='gardenPanelOpen';b.textContent=T('Scenery & personal media','景色与个人媒体');b.onclick=()=>{menu.classList.add('hidden');$('navMore').setAttribute('aria-expanded','false');focusedSettings('garden')};garden.append(b)}else if(!garden){delete menu.dataset.clearMenu;return}
- const player=menu.querySelector('[data-go="profile"]')?.closest('section');if(player){const b=document.createElement('button');b.textContent=T('Account & saved data','账户与保存资料');b.onclick=()=>{menu.classList.add('hidden');$('navMore').setAttribute('aria-expanded','false');focusedSettings('player')};player.append(b);const d=disclosure(T('Player','玩家'),'player','nav');player.before(d);d.append(player);player.querySelector('h3')?.remove()}
+ const player=menu.querySelector('[data-go="profile"]')?.closest('section');if(player){const b=document.createElement('button');b.textContent=T('Account & saved data','账户与保存资料');b.onclick=()=>{menu.classList.add('hidden');$('navMore').setAttribute('aria-expanded','false');focusedSettings('player')};player.append(b);const online=document.createElement('button');online.textContent=T('Online account (optional)','在线账户（可选）');online.onclick=()=>{menu.classList.add('hidden');$('navMore').setAttribute('aria-expanded','false');window.MindGardenAccount.panel()};player.append(online);const d=disclosure(T('Player','玩家'),'player','nav');player.before(d);d.append(player);player.querySelector('h3')?.remove()}
  const pref=menu.querySelector('.nav-preferences > summary');if(pref)pref.textContent=T('Settings','设置');
  for(const key of ['nature','motion'])menu.querySelector('[data-go="'+key+'"]')?.remove();
  const help=menu.querySelector('[data-go="about"]')?.closest('section');if(help){const d=disclosure(T('Help','帮助'),'help','nav');help.before(d);d.append(help);help.querySelector('h3')?.remove()}
@@ -51,14 +51,17 @@ function simplifyPanels(){const box=$('box');
 }
 
 function players(){const box=$('box');if(!$('pn')||!$('pa')||box.dataset.simplePlayers)return;box.dataset.simplePlayers='1';
+ const storage=document.createElement('p');storage.className='player-storage';storage.textContent=window.MindGardenAccount?.connected?T('Players in account: ','账户中的玩家：')+window.MindGardenAccount.username:T('Saved on this device · No account needed','保存在此设备 · 无需账户');box.querySelector('h2').after(storage);
  const brand=document.createElement('div');brand.className='menu-brand';brand.textContent='🌿 '+T('Mind Garden','心灵花园');box.prepend(brand);
  const more=disclosure(T('Add player','添加玩家'),'players','players'),done=$('pd'),footer=document.createElement('div');footer.className='row';footer.append(done);const name=$('pn').closest('label'),add=$('pa');box.append(more);more.append(name,add);
- for(const row of box.querySelectorAll('.prow')){const select=row.querySelector('[data-p]');if(!select)continue;const title=select.textContent.replace(/ ✓$/,'');select.textContent=title;
+ for(const row of box.querySelectorAll('.prow')){const select=row.querySelector('[data-p]');if(!select)continue;const title=select.textContent.replace(/ ✓$/,'');select.textContent=T('Play as ','选择玩家：')+title;
+ const id=select.dataset.p,edit=document.createElement('button');edit.className='btn player-edit-name';edit.textContent=T('Edit name','修改名称');edit.onclick=async()=>{if(window.MindGardenAccount?.connected&&!await window.MindGardenAccount.sync({pull:true}))return;if(!save.pr[id])return;save.cp=id;load();persist();renderHome();window.MindGardenIdentity.open()};row.append(edit);
+ const records=document.createElement('small');records.className='player-record-count';records.textContent=(save.pr[id].log||[]).length+' '+T('games played','局游戏');row.append(records);
  const photo=row.querySelector('[data-av]');if(photo){photo.setAttribute('aria-label',T('Change photo for ','更换照片：')+title);photo.title=photo.getAttribute('aria-label')}
- const remove=row.querySelector('[data-x]');if(remove){remove.textContent='×';remove.classList.add('player-remove');remove.setAttribute('aria-label',T('Remove player ','删除玩家：')+title);remove.title=remove.getAttribute('aria-label')}
+ const remove=row.querySelector('[data-x]');if(remove){remove.textContent=T('Delete player','删除玩家');remove.classList.add('player-remove');remove.setAttribute('aria-label',T('Remove player ','删除玩家：')+title);remove.title=remove.getAttribute('aria-label');const manage=disclosure(T('Manage player','管理玩家'),'manage-'+id,'players');manage.append(remove);row.append(manage)}
  }
- const hint=document.createElement('p');hint.className='player-photo-hint';hint.textContent=T('Tap a photo to change it.','点击照片即可更换。');more.before(hint);
- const rename=$('profileRename'),account=$('accountOpen');if(rename){rename.classList.add('menu-text-action');rename.textContent=T('Rename current player','修改当前玩家名称');box.append(rename)}if(account){account.textContent=T('Account & saved players','账户与已存玩家');box.append(account)}done.classList.add('main');box.append(footer);
+ const hint=document.createElement('p');hint.className='player-photo-hint';hint.textContent=T('A new player starts with empty records. Edit name keeps existing records.','新玩家从空白记录开始，修改名称会保留原有记录。');more.before(hint);
+ const rename=$('profileRename'),account=$('accountOpen');if(rename)rename.remove();if(account){account.textContent=T('Online account (optional)','在线账户（可选）');const separate=document.createElement('details');separate.className='simple-menu-group';separate.innerHTML='<summary>'+T('Online storage','在线存储')+'</summary>';separate.append(account);box.append(separate)}done.classList.add('main');box.append(footer);
 }
 function focusedSettings(kind){
  delete $('box').dataset.settingsArea;window.openSet();applyFocusedSettings(kind);
