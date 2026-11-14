@@ -914,13 +914,13 @@ function shrink(f,cb,z){z=z||192;var r=new FileReader();r.onload=function(){var 
 function addPhotos(fl){save.photos=save.photos||[];var q=[].slice.call(fl).slice(0,24-save.photos.length);(function nx(){var f=q.shift();if(!f){persist();renderHome();openSet();return}shrink(f,function(d){if(d&&save.photos.length<24)save.photos.push({d:d,n:"photo"});nx()})})()}
 function lbView(key){
  window.MindGardenMenuHistory?.enter('leaderboard',()=>lbView());
- key=key||"all";var ids=window.MindGardenProfileGroups?MindGardenProfileGroups.groups().map(g=>g.id):Object.keys(save.pr),keys={},pts={};
+ key=key||"all";var groups=window.MindGardenProfileGroups?MindGardenProfileGroups.rankingGroups():Object.keys(save.pr).map(id=>({id,ids:[id]})),ids=groups.map(g=>g.id),keys={},pts={};
  ids.forEach(function(id){var b=save.pr[id].bt||{};for(var k in b)keys[k]=1});
  Object.keys(keys).forEach(function(k){ids.filter(function(id){return(save.pr[id].bt||{})[k]}).sort(function(a,b){return save.pr[a].bt[k]-save.pr[b].bt[k]}).forEach(function(id,i){pts[id]=(pts[id]||0)+ids.length-i})});
- var all=ids.map(function(id){var p=save.pr[id],bt=p.bt||{},m=Object.keys(bt).reduce(function(a,k){return a===null||bt[k]<a?bt[k]:a},null);return{n:p.name,a:avHtml(p),me:id===save.cp,gp:Math.max(p.gp||0,(p.log||[]).length),pts:pts[id]||0,m:m,t:key==="all"?m:bt[key]}});
+ var all=ids.map(function(id){var p=save.pr[id],bt=p.bt||{},m=Object.keys(bt).reduce(function(a,k){return a===null||bt[k]<a?bt[k]:a},null);return{id:id,copies:groups.find(g=>g.id===id).ids.length,n:p.name,a:avHtml(p),me:groups.find(g=>g.id===id).ids.includes(save.cp),gp:Math.max(p.gp||0,(p.log||[]).length),pts:pts[id]||0,m:m,t:key==="all"?m:bt[key]}});
  var byG=all.slice().sort(function(a,b){return b.gp-a.gp||(a.m||1e9)-(b.m||1e9)});
  var byT=all.slice().sort(key==="all"?function(a,b){return b.pts-a.pts||(a.m||1e9)-(b.m||1e9)}:function(a,b){return(a.t||1e9)-(b.t||1e9)});
- function row(r,i,v,has){return'<div class="lbr'+(r.me?" me":"")+'"><span class="rk">'+(has&&i<3?trophy(i):i+1)+'</span><b>'+r.a+esc(r.n)+'</b><span>'+v+'</span></div>'}
+ function row(r,i,v,has){return'<div class="lbr'+(r.me?" me":"")+'"><span class="rk">'+(has&&i<3?trophy(i):i+1)+'</span><b>'+r.a+esc(r.n)+'</b><span>'+v+'</span>'+(r.copies>1?'<div class="ranking-copy-note">'+window.MindGardenInfo.html(window.MindGardenLocale.pair('An older copy has the same name and its history is fully included in this record. Only the more complete record is ranked. No scores were added together and no saved profiles were deleted. All copies remain in Switch player.','旧副本名称相同，且全部记录已包含在此资料中。排名仅显示较完整的资料；没有相加分数或删除玩家资料。所有副本仍可在切换玩家中找到。'),window.MindGardenLocale.pair('About saved copies','关于已存副本'))+'</div>':'')+'</div>'}
  function list(rows,val,has){return rows.map(function(r,i){return row(r,i,val(r),has(r))}).join("")}
  var listClass='list leaderboard-list'+(ids.length>=4?' leaderboard-many':'');
  var opts=[["all","Overall – fastest all-correct times"]].concat(Object.keys(MG).map(function(k){return[k,MG[k].n]})).concat([1,2,3,4,5,6].map(function(n){return["p"+n,"Matching pairs – Level "+n]}));

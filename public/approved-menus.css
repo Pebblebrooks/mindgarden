@@ -196,7 +196,8 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 #ov #box[data-settings-area="garden"]:has(#sd){width:min(800px,calc(100vw - 24px))}
 
 /* Welcome context and optional account access use the same centred axis. */
-#home .welcome-scene>#sceneFooter{position:relative;z-index:2;flex:0 0 auto;display:block;clear:both;width:100%;box-sizing:border-box;text-align:center;text-align-last:center;margin:auto auto 0;padding:12px 24px;font-size:calc(.95rem * var(--fs));line-height:1.5;overflow-wrap:anywhere;color:var(--ink)}
+#home .welcome-scene>#sceneFooter{position:relative;z-index:2;flex:0 0 auto;display:block;clear:both;width:fit-content;max-width:calc(100% - 24px);box-sizing:border-box;text-align:center;text-align-last:center;margin:auto auto 12px;padding:10px 20px;font-size:calc(1.25rem * var(--fs));font-weight:700;line-height:1.4;overflow-wrap:anywhere;color:#f5fff9;background:#153e38;border:1px solid #8bb5a5;border-radius:18px;box-shadow:0 2px 8px #0004}
+html[data-v4-mode="light"] #home .welcome-scene>#sceneFooter{color:#163e37;background:#f2faed;border-color:#578575}
 #ov #box .rename-account-option{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;width:100%;border-top:1px solid var(--menu-edge);padding-top:14px;margin-top:16px}
 #ov #box .rename-account-option>#gardenOnlineAccount{grid-column:2;width:100%;margin:0;white-space:normal}
 #ov #box .rename-account-option>.mg-info-button{grid-column:3;position:static;min-width:44px;min-height:44px;margin:0}
@@ -325,3 +326,5 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
  #home #unifiedNav #navAccount{font-size:0!important}
  #home #unifiedNav #navAccount::before{content:"👤";font-size:22px}
 }
+
+#ov #box .lbr .ranking-copy-note{grid-column:1/-1;display:flex;justify-content:center}
