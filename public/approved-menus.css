@@ -330,3 +330,12 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
 #ov #box .lbr .ranking-copy-note{grid-column:1/-1;display:flex;justify-content:center}
 /* Dark palace artwork retains readable welcome copy in either interface theme. */
 html:is([data-garden-scene="moon-palace"],[data-garden-scene="golden-sanctuary"],[data-garden-scene="starlight-court"]) #home .welcome-scene :is(.welcome-heading,.welcome-heading h1,.welcome-heading p,#welcomeName,#welcomeName span,#welcomeName strong){color:#f5fff9!important;text-shadow:0 2px 5px #102c36,0 0 12px #102c36!important}
+/* Flying-only scenery fallback; motion and visibility switches still apply. */
+#gardenLife .scenery-flyers{display:none;position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#gardenLife.wildlife-fallback .scenery-flyers{display:block}
+.scenery-flyers>span{position:absolute;left:15%;top:22%;font-size:26px;animation:scenery-flight 24s ease-in-out infinite alternate}
+.scenery-flyers>span:nth-child(2){left:55%;top:66%;font-size:22px;animation-duration:18s;animation-delay:-8s}
+.scenery-flyers>span:nth-child(3){left:68%;top:32%;font-size:20px;animation-delay:-14s;animation-duration:29s}
+@keyframes scenery-flight{from{transform:translate(-35px,10px) rotate(-8deg)}to{transform:translate(65px,-28px) rotate(8deg)}}
+html[data-ambient-paused="true"] .scenery-flyers>span,html[data-motion="off"] .scenery-flyers>span{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){html:not([data-motion-explicit="true"]) .scenery-flyers>span{animation:none}}
