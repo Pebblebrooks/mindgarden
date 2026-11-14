@@ -2030,3 +2030,6 @@ html:not([data-hc="1"]) #ov #box:has(.rename-panel){background:var(--menu-surfac
 
 #home #unifiedNav .nav-account{max-width:100px!important;white-space:normal!important;box-sizing:border-box}
 @media(max-width:650px){#home #unifiedNav{--nav-control-size:48px;--nav-icon-size:28px}#home #unifiedNav .nav-account{padding:8px 6px!important;max-width:90px!important}}
+
+#ov #box>.menu-exit-bar{position:sticky;top:0;z-index:15;display:flex;justify-content:center;flex-shrink:0;margin:0;padding:4px;background:var(--panel);border-radius:12px}
+#ov #box>.menu-exit-bar .btn{min-height:44px;min-width:110px;margin:0;padding:8px 16px;text-align:center!important}

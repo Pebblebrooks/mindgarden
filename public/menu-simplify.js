@@ -77,5 +77,22 @@ window.MindGardenMenus={garden:()=>focusedSettings('garden'),player:()=>focusedS
 const baseSet=window.openSet;window.openSet=function(){const area=$('sd')&&!$('ov').classList.contains('hidden')?$('box').dataset.settingsArea:null;delete $('box').dataset.simpleSettings;delete $('box').dataset.settingsArea;baseSet();settings();if(area)applyFocusedSettings(area)};$('bSet').onclick=window.openSet;
 const basePlayers=window.openPl;window.openPl=function(){delete $('box').dataset.simplePlayers;basePlayers();players()};$('bPl').onclick=window.openPl;
 new MutationObserver(simplifyNav).observe($('unifiedNav'),{childList:true,subtree:true});simplifyNav();
-new MutationObserver(()=>{settings();music();players();simplifyPanels();simplifyNav()}).observe($('box'),{childList:true,subtree:true});
+new MutationObserver(()=>{settings();music();players();simplifyPanels();simplifyNav();mountExit()}).observe($('box'),{childList:true,subtree:true});
+// Direct dismissal for navigation/forms; active game results retain their own actions.
+let menuOpener=null;
+const baseOverlay=window.overlay;
+window.overlay=function(html){if($('ov').classList.contains('hidden'))menuOpener=document.activeElement;return baseOverlay.apply(this,arguments)};
+function exitEligible(){return !$('home').classList.contains('hidden')||!!$('box').querySelector('.account-panel,.personal-setup')}
+function exitMenu(){
+ if($('ov').classList.contains('hidden')||!exitEligible())return;
+ closeOv();const menu=$('navMenu');if(menu)menu.classList.add('hidden');$('navMore')?.setAttribute('aria-expanded','false');
+ const target=menuOpener?.isConnected&&!$('box').contains(menuOpener)&&!menu?.contains(menuOpener)?menuOpener:$('welcomeName');
+ target?.focus({preventScroll:true});
+}
+function mountExit(){
+ if($('ov').classList.contains('hidden')||!exitEligible()||$('menuExit'))return;
+ const bar=document.createElement('div');bar.className='menu-exit-bar';
+ const button=document.createElement('button');button.type='button';button.id='menuExit';button.className='btn';button.textContent=T('× Close','× 关闭');button.setAttribute('aria-label',T('Close menu','关闭菜单'));button.onclick=exitMenu;bar.append(button);$('box').prepend(bar);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!e.defaultPrevented&&!$('ov').classList.contains('hidden')&&exitEligible()){e.preventDefault();exitMenu()}});
 })();

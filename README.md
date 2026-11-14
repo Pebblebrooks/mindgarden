@@ -1,4 +1,4 @@
-# Mind Garden Classic v4.0.38
+# Mind Garden Classic v4.0.39
 
 Centred cards, direct navbar sign-in, explicit login/recovery saving, and My Games quick removal with Undo. Existing player records remain intact.
 
