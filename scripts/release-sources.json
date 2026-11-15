@@ -28,7 +28,8 @@
     "approved-menus.css",
     "game-ui.css",
     "first-release-games.css",
-    "light-theme.css"
+    "light-theme.css",
+    "v5.css"
   ],
   "scripts": [
     "grammar.js",
@@ -89,6 +90,7 @@
     "menu-navigation.js",
     "dashboard-preferences.js",
     "viewport-fit.js",
-    "game-ui.js"
+    "game-ui.js",
+    "v5.js"
   ]
 }

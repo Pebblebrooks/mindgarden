@@ -4,12 +4,12 @@
 const $=id=>document.getElementById(id),T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const shortcuts=[['daily','dashStart','Today’s Games','今日游戏'],['my',' .personal-open','My Games','我的游戏'],['all','dashBrowse','All Games','所有游戏'],['online','dashTogether','Play Together','一起玩'],['progress','dashProgress','My Progress','我的进度'],['leaders','dashLeaders','Leaderboard','排行榜']];
 const ids=()=>['pairs',...Object.keys(MG).filter(id=>id!=='followgardener')];
-function clean(raw={}){return {welcomeVisible:raw.welcomeVisible===true,petsVisible:raw.petsVisible===true,progressVisible:raw.progressVisible!==false,welcomeCards:Array.isArray(raw.welcomeCards)?shortcuts.map(x=>x[0]).filter(id=>raw.welcomeCards.includes(id)):shortcuts.map(x=>x[0]),gameCards:Array.isArray(raw.gameCards)?ids().filter(id=>raw.gameCards.includes(id)):null}}
+function clean(raw={}){return {welcomeVisible:raw.welcomeVisible!==false,petsVisible:raw.petsVisible===true,progressVisible:raw.progressVisible!==false,welcomeCards:Array.isArray(raw.welcomeCards)?shortcuts.map(x=>x[0]).filter(id=>raw.welcomeCards.includes(id)):shortcuts.map(x=>x[0]),gameCards:Array.isArray(raw.gameCards)?ids().filter(id=>raw.gameCards.includes(id)):null}}
 const prefs=()=>clean(me().dashboardPreferences);
 let showAll=false;
 function apply(){const p=prefs();
  $('welcomeCustomise')?.remove();
- for(const [id,selector]of shortcuts){const b=selector.startsWith(' ')?document.querySelector('#welcomeDashboard'+selector):$(selector);b?.closest('.welcome-choice')?.classList.toggle('display-choice-hidden',!p.welcomeCards.includes(id))}
+ for(const [id,selector]of shortcuts){const b=selector.startsWith(' ')?document.querySelector('#welcomeDashboard'+selector):$(selector);b?.closest('.welcome-choice')?.classList.toggle('display-choice-hidden',!['daily','all'].includes(id)&&!p.welcomeCards.includes(id))}
  document.querySelectorAll('#welcomeDashboard .welcome-group-title').forEach(h=>{let n=h.nextElementSibling,visible=false;while(n&&!n.classList.contains('welcome-group-title')){if(n.classList.contains('welcome-choice')&&!n.classList.contains('display-choice-hidden'))visible=true;n=n.nextElementSibling}h.classList.toggle('display-choice-hidden',!visible)});
  $('gardenProgressStrip')?.classList.toggle('display-choice-hidden',!p.progressVisible);
  document.querySelectorAll('#gameCards [data-game]').forEach(b=>(b.closest('.personal-game-card')||b).classList.toggle('display-choice-hidden',!showAll&&p.gameCards!==null&&!p.gameCards.includes(b.dataset.game)));

@@ -31,11 +31,11 @@ function music(){const panel=document.querySelector('#box .sound-panel');if(!pan
 function groupNodes(parent,label,nodes){const d=disclosure(label,label,'extra');parent.append(d);for(const n of nodes)if(n)d.append(n);return d}
 function simplifyNav(){const menu=$('navMenu');if(!menu||menu.dataset.clearMenu)return;menu.dataset.clearMenu='1';
  const garden=$('gardenViewControls');if(garden&&!$('gardenPanelOpen')){const b=document.createElement('button');b.id='gardenPanelOpen';b.textContent=T('Scenery & personal media','景色与个人媒体');b.onclick=()=>{menu.classList.add('hidden');$('navMore').setAttribute('aria-expanded','false');focusedSettings('garden')};garden.append(b)}else if(!garden){delete menu.dataset.clearMenu;return}
- menu.querySelector('[data-go="account"]')?.remove();
+ const account=menu.querySelector('[data-go="account"]');const controls=menu.querySelector('.nav-preferences .nav-group>div');if(account&&controls)controls.prepend(account);
  const player=menu.querySelector('[data-go="profile"]')?.closest('section');if(player){const d=disclosure(T('Player','玩家'),'player','nav');player.before(d);d.append(player);player.querySelector('h3')?.remove()}
  const settings=menu.querySelector('.nav-preferences');if(settings){const b=document.createElement('button');b.id='menuAccountSettings';b.textContent=T('Account settings','账户设置');b.onclick=()=>{menu.classList.add('hidden');$('navMore').setAttribute('aria-expanded','false');window.MindGardenAccount.settings()};settings.after(b);}
  const pref=menu.querySelector('.nav-preferences > summary');if(pref)pref.textContent=T('Settings','设置');
- for(const key of ['nature','motion'])menu.querySelector('[data-go="'+key+'"]')?.remove();
+ // V5 keeps audio and motion labelled in Settings.
  const help=menu.querySelector('[data-go="about"]')?.closest('section');if(help){const d=disclosure(T('Help','帮助'),'help','nav');help.before(d);d.append(help);help.querySelector('h3')?.remove()}
 }
 function simplifyPanels(){const box=$('box');

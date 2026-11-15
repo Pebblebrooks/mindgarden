@@ -1,0 +1,103 @@
+/* v5 application shell. Game boards retain their own layouts. */
+html body{font-family:Arial,'Noto Sans SC',sans-serif;font-variant-numeric:normal;font-feature-settings:'zero' 0}
+#home #unifiedNav{display:flex!important;justify-content:space-between!important;gap:12px!important;position:relative!important;top:auto!important;min-height:72px!important;padding:12px!important}
+#home #unifiedNav .nav-items,#home #unifiedNav .nav-actions>:not(#navMore){display:none!important}
+#home #unifiedNav .nav-brand{display:flex!important;max-width:calc(100% - 105px)!important;width:auto!important;font-size:calc(1rem * var(--fs))!important;white-space:normal!important}
+#home #unifiedNav .nav-brand>span:last-child{display:inline!important}
+#home #unifiedNav #navMore{display:flex!important;gap:8px!important;width:auto!important;min-width:96px!important;min-height:48px!important;font-size:calc(1rem * var(--fs))!important;padding:10px!important}
+#home #unifiedNav #navMore svg{width:24px;flex-shrink:0}
+#home #unifiedNav #navMenu{position:absolute!important;top:100%!important;right:0!important;left:auto!important;width:min(520px,calc(100vw - 24px))!important;max-height:75svh!important;overflow:auto!important;box-sizing:border-box;padding:20px!important;z-index:200}
+#navMenu .nav-group>div{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+#home #navMenu button,#home #navMenu summary{min-height:48px!important;font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;white-space:normal!important}
+#navMenu button svg{width:26px;height:26px;flex:0 0 26px}
+#navMenu .nav-group,#navMenu details{margin:0 0 18px!important;padding:10px 0!important;clear:both}
+#navMenu #menuCards{position:static!important;display:flex!important;width:100%!important;margin:12px 0!important;gap:12px}
+#home #welcomeDashboard .welcome-scene{min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;padding:32px 20px 24px!important;gap:16px!important;overflow:visible!important;border-radius:24px!important}
+#home .welcome-heading{position:relative!important;margin:0!important;padding:8px!important}
+#home .welcome-heading h1{font-size:calc(2rem * var(--fs))!important;line-height:1.15!important;overflow-wrap:normal!important;margin:0!important}
+#home .welcome-heading p{font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;margin:10px 0!important}
+#home #welcomeName{position:relative!important;margin:0 auto 16px!important;font-size:calc(1.25rem * var(--fs))!important;line-height:1.4!important;background:var(--panel)!important;color:var(--ink)!important;max-width:100%!important;white-space:normal!important}
+#home #welcomeDashboard .welcome-ctas,html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-ctas{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:min(680px,100%)!important;margin:0 auto!important;padding:16px!important;background:var(--panel)!important;border-radius:20px;box-sizing:border-box}
+#home #welcomeDashboard .welcome-group-title{display:none!important}
+#home #welcomeDashboard .welcome-choice{min-width:0!important;width:auto!important;height:auto!important;position:relative;display:flex!important;align-items:stretch}
+#home #welcomeDashboard .welcome-choice:has(#dashStart),#home #welcomeDashboard .welcome-choice:has(#dashBrowse){grid-column:1/-1}
+#home #welcomeDashboard .welcome-feature{width:100%!important;min-width:0!important;min-height:84px!important;height:auto!important;padding:14px 48px 14px 14px!important;display:flex!important;flex-direction:row!important;gap:12px!important;justify-content:center!important;font-size:calc(1rem * var(--fs))!important;white-space:normal!important;line-height:1.4!important;box-sizing:border-box}
+#home #welcomeDashboard .welcome-feature strong{font-size:inherit!important;line-height:inherit!important;white-space:normal!important;word-break:normal!important;overflow:visible!important}
+#home #welcomeDashboard .feature-icon{width:32px!important;height:32px!important;flex:0 0 32px!important;margin:0!important}
+#home #welcomeDashboard .feature-icon svg{width:32px!important;height:32px!important}
+#home #welcomeDashboard #dashStart{background:#215d45!important;color:white!important;border:2px solid #215d45!important;font-size:calc(1.25rem * var(--fs))!important}
+#home #welcomeDashboard .welcome-choice:has(#dashStart) .mg-help-trigger{color:white!important}
+html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-choice:not(:has(#dashStart,#dashBrowse)){display:none!important}
+#home #welcomeDashboard .welcome-choice.display-choice-hidden:not(:has(#dashStart,#dashBrowse)){display:none!important}
+#v5GardenView{display:block;margin:12px auto;min-height:48px;font-size:calc(1rem * var(--fs))}
+html[data-v5-garden="true"] #home #welcomeDashboard .welcome-ctas{display:none!important}
+html[data-v5-garden="true"] #home #welcomeDashboard .welcome-scene{min-height:75svh!important}
+#home .mg-help{position:absolute!important;inset:12px 6px auto auto!important;width:40px!important}
+#home .mg-help-text{display:none!important}
+.mg-info-button,.mg-help-trigger{border-radius:50%!important;min-width:44px!important;min-height:48px!important;background:transparent!important;border:0!important;font-size:24px!important;color:inherit}
+.v5-dialog{border:1px solid var(--line);border-radius:24px;padding:28px;width:min(460px,calc(100vw - 32px));max-height:85svh;overflow:auto;background:var(--panel);color:var(--ink);box-sizing:border-box;font-size:calc(1rem * var(--fs));text-align:center}
+.v5-dialog::backdrop{background:#071c1688}
+.v5-dialog h2{font-size:calc(1.4rem * var(--fs));margin:30px 0 24px}
+.v5-dialog-close{position:absolute;top:8px;right:8px;min-width:48px;min-height:48px}
+.v5-language-options{display:grid;gap:16px}.v5-language-options .btn{min-height:64px;font-size:inherit}
+#home #gameCards{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr))!important;gap:12px!important}
+#home #gameCards .personal-game-card{min-height:0!important;position:relative!important}
+#home #gameCards .game-tile{min-height:100px!important;height:auto!important;padding:14px 48px 14px 12px!important;display:flex!important;align-items:center!important;gap:14px!important;box-sizing:border-box}
+#home #gameCards .game-art{width:56px!important;height:56px!important;flex:0 0 56px!important;margin:0!important}
+#home #gameCards .game-info{min-width:0!important;text-align:left!important}
+#home #gameCards .game-info strong{font-size:calc(1.1rem * var(--fs))!important;white-space:normal!important}
+#home #gameCards .game-desc{display:block!important;font-size:calc(1rem * var(--fs))!important;line-height:1.4!important}
+#home #gameCards .game-play{display:none!important}
+#home .library-category{display:none!important}
+#home .game-filterbar{display:block!important}
+.v5-category-chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.v5-category-chips button{min-height:48px;font-size:calc(1rem * var(--fs))}
+.v5-recent-list{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}.v5-recent-list button{min-height:48px}
+#box .personal-remove-game{position:static!important;width:auto!important;height:auto!important;min-height:48px!important;font-size:calc(1rem * var(--fs))!important;order:2}
+#box .personal-remove-game[hidden]{display:none!important}
+#box .personal-picked-card{display:flex!important;flex-wrap:wrap!important;align-items:center;gap:8px!important;padding:12px!important}
+#box .personal-picked-card .personal-picked{flex:1;min-width:140px;padding:12px!important}
+#box .personal-picked-card>.mg-info-button{position:static!important;order:3}
+#box .personal-selected-grid{grid-template-columns:1fr!important}
+#box .v5-game-options{border:1px solid var(--line);border-radius:14px;padding:12px;margin:20px 0}
+#box .v5-game-options>summary{min-height:48px;cursor:pointer;text-align:center;font-size:calc(1rem * var(--fs))}
+#box .v5-game-options .personal-more-options>summary{display:none}
+#box .v5-game-options .personal-setup{padding:0;border:0}
+#box :is(.progress-tabs,.menu-view-tabs,.library-tabs){display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+#box :is(.progress-tabs,.menu-view-tabs,.library-tabs) button{flex:1 0 auto!important;white-space:nowrap!important;word-break:normal!important;min-height:48px!important}
+#box :is(.tip,small,.player-storage){font-size:calc(1rem * var(--fs))!important;line-height:1.45!important}
+#home button:focus-visible,#box button:focus-visible,.v5-dialog button:focus-visible{outline:3px solid #b87f17;outline-offset:3px}
+html[data-text-large="true"] #home .welcome-heading p{display:none!important}
+@media(max-width:600px){#home #welcomeDashboard .welcome-scene{padding:16px 8px!important}#home .welcome-heading h1{font-size:calc(1.5rem * var(--fs))!important}#home #welcomeDashboard .welcome-ctas{padding:10px!important;gap:10px!important}#home #welcomeDashboard .welcome-feature{min-height:76px!important}#home #welcomeDashboard .feature-icon{display:none!important}#home #gameCards{grid-template-columns:1fr!important}}
+html[data-text-large="true"] #home #welcomeDashboard .welcome-ctas{grid-template-columns:1fr!important}
+@media(hover:none){#gameIconHelp,.mg-info-tooltip{display:none!important}}
+#home #welcomeDashboard #dashStart strong{color:#fff!important}
+#home #welcomeDashboard .welcome-choice{grid-column:auto!important;grid-row:auto!important}
+#home #welcomeDashboard .welcome-choice:has(#dashStart),#home #welcomeDashboard .welcome-choice:has(#dashBrowse){grid-column:1/-1!important}
+#home #welcomeDashboard .feature-icon{position:static!important;inset:auto!important;transform:none!important}
+#home #welcomeDashboard .welcome-heading{display:block!important;order:0!important;background:var(--panel);color:var(--ink);border-radius:16px;align-self:center}
+#home #welcomeDashboard .welcome-heading h1,#home #welcomeDashboard .welcome-heading p{color:var(--ink)!important}
+#home #welcomeDashboard .welcome-heading h1{display:block!important}
+#home #welcomeDashboard #welcomeName{order:1!important}#home #welcomeDashboard .welcome-ctas{order:2!important}
+#home #welcomeDashboard .welcome-name::before{display:none!important}
+#home #welcomeDashboard .welcome-heading h1 svg{display:none}
+#box button,#navMenu button{word-break:normal!important;overflow-wrap:normal!important}
+.v5-language-options [aria-pressed="true"]{outline:3px solid #4b816a;outline-offset:2px}
+#home #welcomeDashboard{margin:0!important;min-height:0!important;display:block!important}
+#home #unifiedNav .nav-actions #navMore{width:auto!important;min-width:96px!important;max-width:none!important;flex:0 0 auto!important;height:auto!important;padding:10px!important}
+#home #unifiedNav .nav-actions{width:auto!important;max-width:none!important;flex:0 0 auto!important}
+#home #welcomeDashboard .welcome-scene>#sceneFooter{order:3!important;font-size:calc(1rem * var(--fs))!important;margin:8px auto!important}
+#home #welcomeDashboard .welcome-scene>.garden-breathing-space{display:none!important}
+#home #welcomeDashboard .welcome-scene{justify-content:flex-start!important}
+#home #welcomeDashboard .welcome-heading{background:var(--panel)!important;text-shadow:none!important}
+#home #welcomeDashboard .welcome-heading h1{font-size:calc(1.5rem * var(--fs))!important;line-height:1.2!important}
+#home #welcomeDashboard .welcome-heading>p{font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;color:var(--ink)!important;text-shadow:none!important}
+#home #welcomeDashboard .welcome-choice .welcome-feature .feature-icon{position:static!important;transform:none!important;inset:auto!important;align-self:center!important}
+#home #welcomeDashboard .welcome-choice .welcome-feature{justify-content:center!important;align-items:center!important}
+#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav,#home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav{position:relative!important;top:auto!important;left:auto!important;right:auto!important;margin:0 auto!important}
+@media(max-width:600px){#home #welcomeDashboard .welcome-choice:not(:has(#dashStart,#dashBrowse)) .welcome-feature{padding:38px 8px 10px!important;min-height:100px!important}#home #welcomeDashboard .welcome-feature strong{overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}}
+#home #libraryDisplay h2{margin:20px 0 12px!important;font-size:calc(1.2rem * var(--fs))!important}
+#home #libraryDisplay .library-heading{margin:0 0 16px!important}
+#home #libraryDisplay{padding-top:24px!important}
+#home #gameCards .game-info{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:6px!important}
+#home #gameCards .game-info>strong,#home #gameCards .game-info>.game-desc{text-align:left!important}
+#home #unifiedNav #navMenu .nav-group button{justify-content:flex-start!important;text-align:left!important;gap:12px!important}

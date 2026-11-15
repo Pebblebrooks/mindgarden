@@ -122,7 +122,7 @@ function translateValue(n,key,value){
 }
 
 function walk(n){
- if(n.nodeType===3){var value=translateValue(n,'text',n.nodeValue);if(value!==n.nodeValue)n.nodeValue=value;return}
+ if(n.nodeType===3){if(n.parentElement?.closest('[translate=no]:not(html)'))return;var value=translateValue(n,'text',n.nodeValue);if(value!==n.nodeValue)n.nodeValue=value;return}
  if(n.nodeType!==1||n.id==='bLang'||/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.tagName)||n.closest('[translate=no]:not(html)'))return;
  ['aria-label','title','placeholder','alt'].forEach(function(key){var value=n.getAttribute(key);if(value){var output=translateValue(n,key,value);if(output!==value)n.setAttribute(key,output)}});
  for(var c=n.firstChild;c;c=c.nextSibling)walk(c);
@@ -135,6 +135,13 @@ function applyLanguage(){
  document.title=save.lang==='zh'?'心灵花园 – 大脑游戏':originalTitle;
  walk(document.body);observe();
 }
-window.MindGardenLanguage={toggle:function(){save.lang=save.lang==='zh'?'en':'zh';persist();window.speechSynthesis?.cancel();applyLanguage();window.dispatchEvent(new Event('gardenLanguageChange'))}};
+function chooseLanguage(){
+ if(document.getElementById('v5Language'))return;
+ const opener=document.activeElement,d=document.createElement('dialog');d.id='v5Language';d.className='v5-dialog';d.setAttribute('aria-labelledby','v5LanguageTitle');
+ d.innerHTML='<button class="btn v5-dialog-close" translate="no" aria-label="Close / 关闭">×</button><h2 id="v5LanguageTitle" translate="no">English / 中文</h2><div class="v5-language-options">'+[['en','English'],['zh','中文']].map(([lang,label])=>'<button class="btn" lang="'+lang+'" translate="no" data-language="'+lang+'" aria-pressed="'+(save.lang===lang)+'">'+label+(save.lang===lang?' ✓':'')+'</button>').join('')+'</div>';
+ document.body.append(d);d.querySelector('.v5-dialog-close').onclick=()=>d.close();d.addEventListener('close',()=>{d.remove();if(opener?.isConnected)opener.focus()});
+ d.querySelectorAll('[data-language]').forEach(b=>b.onclick=()=>{save.lang=b.dataset.language;persist();window.speechSynthesis?.cancel();d.close();applyLanguage();if(!document.getElementById('home').classList.contains('hidden'))window.renderHome?.();window.dispatchEvent(new Event('gardenLanguageChange'))});d.showModal();
+}
+window.MindGardenLanguage={toggle:chooseLanguage,open:chooseLanguage};
 btn.onclick=window.MindGardenLanguage.toggle;applyLanguage();
 })();
