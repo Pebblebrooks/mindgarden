@@ -20,4 +20,4 @@ User-approved release for Cloudflare Pages. No database migration. No Workers de
 - Release suite: menu/layout DOM contracts, 36 navbar size budgets, cache safety, About, popup navigation, asset cleanup and scenery.
 - Result/personal progression and movement regression suites.
 
-Local Chromium is blocked by the environment's Unix socket policy. DOM checks are not a substitute for physical-device touch and screen-reader validation. Deployment verification is recorded separately after publication.
+Local Chromium is blocked by the environment's Unix socket policy. DOM checks are not a substitute for physical-device touch and screen-reader validation. Cloudflare preview browser checks caught and corrected a CSS override that exposed the hidden shared hint alongside native hints. Sudoku boards were reduced to keep action controls more comfortably in view.
