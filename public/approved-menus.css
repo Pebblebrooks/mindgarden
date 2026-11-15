@@ -29,7 +29,7 @@ html:not([data-hc="1"]) #ov #box:has(.account-panel,#pd,.personal-result) .btn.m
 #ov #box:has(#pd) .prow .btn{border:0!important;background:transparent!important;outline:0;box-shadow:none!important;margin:0!important;padding:8px;max-width:100%}
 #ov #box:has(#pd) .prow [data-p]{text-align:center;font-size:calc(1.2rem * var(--fs));min-width:0;overflow-wrap:anywhere}
 #ov #box:has(#pd) .prow [data-p]::before{content:none!important}
-#ov #box:has(#pd) .prow:has([aria-pressed="true"]){background:var(--menu-gold);color:#14312d}
+#ov #box:has(#pd) .prow:has([aria-pressed="true"]){background:var(--menu-selected,var(--menu-gold));color:#14312d}
 #ov #box:has(#pd) .prow:has([aria-pressed="true"]) .btn{color:#14312d!important}
 #ov #box:has(#pd) .prow [data-p][aria-pressed="true"]::after{content:' ✓'}
 #ov #box:has(#pd) .prow .avb{width:64px;height:64px;padding:0!important;overflow:hidden;border-radius:50%!important}
@@ -108,8 +108,8 @@ html:not([data-hc="1"]) #home #libraryDisplay .personal-game-card .game-tile{bac
 #ov #box:has(#pd) .prow [data-p]{text-align:center!important}
 
 /* Clear player actions and optional account storage, matching the approved sage preview. */
-html[data-v4-mode="light"]{--menu-surface:linear-gradient(135deg,#fffdf5,#eef3e3);--menu-card:#f5f7e9;--menu-gold:linear-gradient(120deg,#4d853d,#27612c);--menu-edge:#6f8960}
-html[data-v4-mode="light"] #ov #box:has(.account-panel,#pd,.rename-panel) .btn.main{color:#fff!important;border-color:#4b743b!important}
+html[data-v4-mode="light"]{--menu-surface:#fafcf7;--menu-card:#e6efe4;--menu-gold:#24685b;--menu-edge:#628879}
+html[data-v4-mode="light"] #ov #box:has(.account-panel,#pd,.rename-panel) .btn.main{color:#fff!important;border-color:#24685b!important}
 #ov #box:has(.rename-panel){width:min(560px,calc(100vw - 24px));padding:clamp(18px,3vw,32px)}
 .record-assurance,.player-storage{padding:12px;border-radius:12px;background:color-mix(in srgb,#83af55 20%,transparent);font-weight:650}
 .account-choice{border:1px solid var(--menu-edge);border-radius:14px;padding:16px;margin:14px 0}
@@ -353,3 +353,14 @@ html[data-ambient-paused="true"] .scenery-flyers>span,html[data-motion="off"] .s
 #ov #box .daily-result-primary{display:flex;justify-content:center}
 #ov #box .daily-result-primary>.btn{display:flex;align-items:center;justify-content:center;gap:8px}
 #ov #box #dailyResult .garden-icon,#ov #box .daily-result-primary .garden-icon{width:24px;height:24px;flex-shrink:0}
+
+/* Light actions and selected tabs use distinct, readable surfaces. */
+html[data-v4-mode="light"]:not([data-hc="1"]) :is(#ov #box,#home,#game,#mini) .btn.main{background:#24685b!important;background-image:none!important;color:#fff!important;border-color:#24685b!important;box-shadow:0 2px 5px #174a421a!important}
+html[data-v4-mode="light"]:not([data-hc="1"]) :is(#home #libraryDisplay,#ov #box) .library-tabs .btn.main{background:#c5e2da!important;background-image:none!important;color:#174a42!important;border-color:#628879!important;box-shadow:inset 0 -3px 0 #24685b!important}
+/* One circled information glyph; retain an invisible 44px touch target. */
+html body .mg-info-button{appearance:none!important;-webkit-appearance:none!important;border-radius:0!important;border:0!important;background:transparent!important;background-image:none!important;box-shadow:none!important;text-shadow:none!important;display:inline-grid;place-items:center;padding:0;min-width:44px;min-height:44px}
+html body .mg-info-button:hover{background:transparent!important;box-shadow:none!important}
+#ov #box .personal-setup .personal-title{flex-direction:column;align-items:center;justify-content:center;gap:0}
+#ov #box .personal-setup .personal-title p{order:0;flex:none;width:100%;margin:0;text-align:center}
+#ov #box .personal-setup .personal-title>.mg-info-button{order:1;position:static;transform:none;margin:0 auto;flex:0 0 44px}
+#ov #box .personal-picked-card>.mg-info-button{left:50%;right:auto;top:6px;transform:translateX(-50%);margin:0}
