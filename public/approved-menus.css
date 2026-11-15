@@ -29,7 +29,7 @@ html:not([data-hc="1"]) #ov #box:has(.account-panel,#pd,.personal-result) .btn.m
 #ov #box:has(#pd) .prow .btn{border:0!important;background:transparent!important;outline:0;box-shadow:none!important;margin:0!important;padding:8px;max-width:100%}
 #ov #box:has(#pd) .prow [data-p]{text-align:center;font-size:calc(1.2rem * var(--fs));min-width:0;overflow-wrap:anywhere}
 #ov #box:has(#pd) .prow [data-p]::before{content:none!important}
-#ov #box:has(#pd) .prow:has([aria-pressed="true"]){background:var(--menu-gold);color:#14312d}
+#ov #box:has(#pd) .prow:has([aria-pressed="true"]){background:var(--menu-selected,var(--menu-gold));color:#14312d}
 #ov #box:has(#pd) .prow:has([aria-pressed="true"]) .btn{color:#14312d!important}
 #ov #box:has(#pd) .prow [data-p][aria-pressed="true"]::after{content:' ✓'}
 #ov #box:has(#pd) .prow .avb{width:64px;height:64px;padding:0!important;overflow:hidden;border-radius:50%!important}
