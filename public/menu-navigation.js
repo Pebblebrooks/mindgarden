@@ -38,6 +38,8 @@ function releaseOutside(){for(const [node,value]of inertBefore)node.inert=value;
 function decorate(bar){
  box.classList.add('standard-popup');box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.setAttribute('aria-labelledby','menuPopupTitle');
  let heading=$('menuPopupTitle');if(!heading){heading=document.createElement('div');heading.id='menuPopupTitle';heading.setAttribute('role','heading');heading.setAttribute('aria-level','2');bar.insertBefore(heading,$('menuExit'));}
+ const resultScreen=box.querySelector('#personalResult,#personalResultOptions,#personalRestScreen');
+ if(resultScreen){$('menuExit').setAttribute('aria-label',T('Close and return to games','关闭并返回游戏'));$('menuExit').title=T('Close and return to games','关闭并返回游戏');}
  const original=box.querySelector('h2'),account=box.querySelector('.account-panel[data-auth-view="connected"]'),isAccountHome=account&&account.dataset.accountView!=='settings';
  let text=isAccountHome?T('Account','账户'):$('pd')?T('Switch player','切换玩家'):(original?.querySelector('span')?.textContent||original?.textContent||T('Menu','菜单'));
  if(heading.textContent!==text)heading.textContent=text;

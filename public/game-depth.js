@@ -20,7 +20,7 @@ const rules={
  hawker:()=>T(d>=10?'Remember the order, then serve it in reverse.':'Remember and serve an increasingly varied food order.',d>=10?'记住餐单，然后按相反顺序出餐。':'记住并准备越来越多样的餐单。'),
  trail:()=>T(d>=10?'Remember the route, then retrace it in reverse.':'Remember a route with more stops.',d>=10?'记住路线，然后沿相反顺序返回。':'记住有更多站点的路线。'),
  melody:()=>T(d>=11?'Listen at the same pace, then repeat the notes backwards.':'Remember a longer note pattern; playback speed stays the same.',d>=11?'以相同速度聆听，然后倒序重复音符。':'记住更长的音符序列，播放速度保持不变。'),
- dots:()=>T('Join the dots on varied outlines. Clear spacing is preserved as the target count grows.','连接不同轮廓的点，目标数量增加时仍保持清晰间距。'),
+ dots:()=>T('Plan a varied grid route through ordered checkpoints without crossing. Higher ranks add space, detours and fill requirements.','规划方格路线，按顺序经过检查点且不可交叉；高关卡增加空间、绕路与填满要求。'),
  jigsaw:()=>T('Swap pieces on a '+(r.native===1?3:4)+' × '+Math.min(6,2+Math.floor((d-1)/3))+' board. Preview and undo remain available.','在'+(r.native===1?3:4)+' × '+Math.min(6,2+Math.floor((d-1)/3))+'的棋盘交换拼图，随时可查看原图和撤销。'),
  spot:()=>T(d>=10?'Compare finer changes across varied garden scenes.':'Find '+Math.min(8,2+Math.ceil(d/2))+' changes across varied garden scenes.',d>=10?'比较不同花园场景中的细微变化。':'找出不同花园场景中的'+Math.min(8,2+Math.ceil(d/2))+'处变化。'),
  sounds:()=>T('Identify recordings among '+Math.min(5,2+Math.ceil(d/4))+' choices. Replay and skipping remain available.','从'+Math.min(5,2+Math.ceil(d/4))+'个选项辨认录音，可重听或跳过。'),

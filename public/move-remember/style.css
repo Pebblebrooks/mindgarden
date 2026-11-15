@@ -3,3 +3,21 @@
 .figure[data-sheet=up]{background-image:url('assets/up.png');background-size:400% 100%;aspect-ratio:1/2;width:50%!important;max-width:285px!important}
 
 header #previewLabel{display:none}h1{font-size:clamp(32px,calc(4vw * var(--scale,1)),64px)}.movement-card strong{font-size:calc(18px * var(--scale,1))}.instruction{font-size:clamp(23px,calc(2vw * var(--scale,1)),42px)}.movement-grid button{overflow-wrap:anywhere}header{margin-top:8px}body{background-attachment:scroll}
+
+/* Match the shared result action hierarchy; keep unscored movement language. */
+.result-complete{max-width:560px;border:2px solid #729b87;box-shadow:none}
+.result-complete .result-primary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:24px}
+.result-complete .result-primary:not(:has(#nextLevel)){grid-template-columns:1fr}
+.result-complete .result-primary button{min-width:0;min-height:56px;padding:10px 8px;font-size:calc(18px * var(--scale,1))}
+.result-complete .primary{background:#ffd349;color:#173e37;border-color:#e6bf3c}
+.result-complete .result-footer{display:flex;justify-content:space-around;gap:8px;border-top:1px solid #729b87;padding-top:10px;margin-top:22px}
+.result-complete .result-footer button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:0;background:transparent;min-width:44px;min-height:48px;padding:6px;color:inherit}
+.result-complete .result-footer button>span{font-size:26px;line-height:1}
+.result-complete .result-footer small{font-size:calc(13px * var(--scale,1))}
+.result-complete p,.result-rest p{text-align:left}
+#resultBack{display:block;min-width:44px;min-height:44px;margin-bottom:8px}
+html[data-theme=dark] .result-complete,html[data-theme=dark] .result-rest{background:#164846;color:#fffcec;border-color:#accdc0}
+html[data-theme=dark] .result-complete button:not(.primary),html[data-theme=dark] .result-rest button:not(.primary){background:transparent;color:inherit;border-color:#accdc0}
+html[data-theme=dark] .result-complete .result-footer{border-color:#accdc0}
+/* Approved shared icon and centred popup format. */
+.movement-icon{width:48px;min-width:48px;height:48px;min-height:48px;padding:8px;display:inline-flex;align-items:center;justify-content:center}.movement-icon svg{width:26px;height:26px}.movement-hint{color:#ffda45!important;background:#153b3d!important}.movement-hint svg{width:32px;height:32px}header{display:flex;justify-content:space-between;align-items:center}#footer{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}#footer #stages{flex:1;margin:12px 0}#footer #movementSettings{margin-left:auto}#content .rest p,#content .result-rest p,#content .result-complete p,#content .setup p,#content .setup label{text-align:center}.result-primary .movement-icon{width:100%}.movement-confirm{max-width:min(90vw,440px);border-radius:22px;padding:24px;color:var(--text,#fffbea);background:var(--panel,#194941);text-align:center}.movement-confirm::backdrop{background:#102e3299}.movement-confirm p{text-align:center}.movement-confirm>div{display:flex;justify-content:center;gap:16px}

@@ -2,7 +2,7 @@ const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bundle=html.match(/src="(garden-ui-\d+\.js)"/)[1];
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,el=id=>w.document.getElementById(id),errors=[];
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+bundle,'utf8'));
-const click=id=>{assert(el(id),'Missing '+id);el(id).click()},tick=()=>new Promise(r=>setImmediate(r));
+const click=id=>{assert(el(id),'Missing '+id);el(id).click();if(id==='menuBack'){const confirm=w.document.querySelector('dialog.game-ui-dialog .main');assert(confirm,'Back confirmation');confirm.click()}},tick=()=>new Promise(r=>setImmediate(r));
 (async()=>{try{
 const api=w.MindGardenPersonal;
 w.toHome();w.document.querySelector('[data-go=library]').click();await tick();assert(el('gameCategory'));assert(!el('gameLength'));assert(!w.document.querySelector('.category-pills'));el('gameCategory').value='memory';el('gameCategory').dispatchEvent(new w.Event('change'));await tick();assert(w.document.querySelector('[data-game=pairs]'));const card=w.document.querySelector('.personal-game-card'),info=card.querySelector('.mg-info-button');assert(info);assert(!info.closest('.game-tile'));info.click();assert(!api.session);assert(!el('mgInfoTooltip').hidden);click('libraryMyGames');assert(el('personalAllGames'));click('personalAllGames');await tick();assert(el('gameCategory'));w.toHome();
@@ -15,11 +15,11 @@ w.save.lang='en';w.persist();delete w.me().gameSettings;w.me().myGames={count:5,
 // Complete an unscored round and confirm all progression fields survive untouched.
 const before=JSON.stringify(w.me());click('personalPractice');assert.equal(w.mg.R,1);w.mg.ok=1;w.mg.hist=[true];w.mdone();await tick();assert(el('personalResult'));assert.equal(JSON.stringify(w.me()),before);assert(el('personalResult').textContent.includes('No score'));w.toHome();
 // A scored result retains native difficulty and canonical challenge metadata.
-api.setup('num',10);click('startExtra');assert.equal(w.mg.difficulty,15);w.mg.ok=w.mg.R;w.mdone();await tick();const row=w.me().log.at(-1);assert.equal(row.level,15);assert.equal(row.challengeRank,15);assert.equal(row.displayLevel,10);assert.equal(row.displayCount,10);assert.equal(row.challengeRange,'challenging');assert(!el('personalNext'));assert.equal(el('personalReplay').textContent,'Replay');assert(el('personalReplay').classList.contains('main'));assert(el('personalHome').closest('details'));assert(!el('personalHome').closest('details').open);assert(el('mm').hidden);w.toHome();
+api.setup('num',10);click('startExtra');assert.equal(w.mg.difficulty,15);w.mg.ok=w.mg.R;w.mdone();await tick();const row=w.me().log.at(-1);assert.equal(row.level,15);assert.equal(row.challengeRank,15);assert.equal(row.displayLevel,10);assert.equal(row.displayCount,10);assert.equal(row.challengeRange,'challenging');assert(!el('personalNext'));assert.equal(el('personalReplay').getAttribute('aria-label'),'Replay');assert(el('personalReplay').classList.contains('main'));assert(el('personalHome').closest('.result-footer'));assert(!el('personalResult').querySelector('details'));assert(el('menuExit'));assert(!el('menuBack'));assert(el('mm').hidden);w.toHome();
 // Backup and restore must preserve new preferences and record identities.
 const exportApi=w.MindGardenExport;assert(exportApi);const backup=exportApi.backup();const restored=exportApi.validated(JSON.stringify(backup));assert.equal(restored.myGames.count,5);assert.equal(restored.log.at(-1).challengeRank,15);
 // A board practice also avoids scores, rewards, levels and stars.
-const boardBefore=JSON.stringify(w.me());api.setup('dots',1);click('personalPractice');let g=w.MindGardenActivities.current;while(g.next<g.points.length)w.document.querySelector('[data-dot="'+g.next+'"]').click();if(!g.finished)click('gaDone');await tick();assert(g.finished);assert.equal(JSON.stringify(w.me()),boardBefore);w.toHome();
+const boardBefore=JSON.stringify(w.me());api.setup('dots',1);click('personalPractice');let g=w.MindGardenActivities.current;for(const cell of g.solution)w.document.querySelector('[data-route="'+cell+'"]').click();await tick();assert(g.finished);assert.equal(JSON.stringify(w.me()),boardBefore);w.toHome();
 // Pair practice maintains old stars and unlocks, including a full win.
 const pairBefore=JSON.stringify(w.me());api.setup('pairs',1);click('personalPractice');drain();w.clearInterval(w.timer);const cards=[...el('grid').children];for(const a of cards)if(!a.classList.contains('ok')){const b=cards.find(b=>b!==a&&b.dataset.e===a.dataset.e&&!b.classList.contains('ok'));a.click();b.click();drain()}await tick();assert(cards.every(c=>c.classList.contains('ok')));assert.equal(JSON.stringify(w.me()),pairBefore);w.toHome();
 // Related-object matching uses different artwork but stable pair identities.
@@ -28,7 +28,7 @@ api.setup('pairs',1);el('personalPairMode').value='related';el('personalPairMode
 const oldBoard=el('grid').firstElementChild;click('personalNext');await tick();assert.equal(api.session.step,2);assert.equal(api.session.pairMode,'related');assert(el('ov').classList.contains('hidden'));assert.notEqual(el('grid').firstElementChild,oldBoard);drain();
 function finishPairs(){w.logPlay('pairs',1,10);w.overlay('<h2>Complete</h2><div><button id="ag">Again</button></div>');}
 finishPairs();await tick();click('personalReplay');assert.equal(api.session.step,2);assert(el('ov').classList.contains('hidden'));
-finishPairs();await tick();click('personalEasier');assert.equal(api.session.step,1);assert(el('ov').classList.contains('hidden'));
+finishPairs();await tick();click('personalChangeSettings');await tick();click('personalEasier');assert.equal(api.session.step,1);assert(el('ov').classList.contains('hidden'));
 finishPairs();await tick();click('personalChangeSettings');assert(!el('ov').classList.contains('hidden'));assert(el('personalStep'));assert.equal(el('personalPairMode').value,'related');w.toHome();
 // Exercise the shared result boundary for every scored game in both languages.
 let transitionChecks=0;
@@ -37,6 +37,7 @@ for(const id of ['pairs',...Object.keys(w.MG).filter(x=>x!=='pets'&&!w.MindGarde
  api.setup(id,2,'all',true);assert.equal(api.session.id,id);const count=api.session.count;
  for(const [action,level] of [['personalNext',3],['personalReplay',3],['personalEasier',2]]){
   w.logPlay(id,1,10);w.overlay('<h2>Complete</h2><div><button id="ag">Again</button></div>');await tick();
+  if(action==='personalEasier'){click('personalChangeSettings');await tick();}
   click(action);assert.equal(api.session.id,id,id+' '+action);assert.equal(api.session.step,level,id+' level');assert.equal(api.session.count,count);assert(el('ov').classList.contains('hidden'),id+' stale overlay');transitionChecks++;
  }
  w.toHome();pending=[];
@@ -45,7 +46,7 @@ w.save.lang='en';console.log('PASS '+transitionChecks+' next/replay/easier trans
 // Delayed recall hides all items, respects pause, then accepts the remembered answer.
 let interval;const setInterval=w.setInterval;w.setInterval=fn=>{interval=fn;return 99999};api.setup('recall',1);el('personalDelay').value='5';click('gaStart');click('gaReady');click('gaHide');g=w.MindGardenActivities.current;assert.equal(g.phase,'delay');assert(!el('gaAnswer'));g.paused=true;for(let i=0;i<20;i++)interval();assert.equal(g.remaining,5);g.paused=false;for(let i=0;i<50;i++)interval();assert.equal(g.phase,'answer');el('gaAnswer').value=g.answer.join('');el('gaRecallForm').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));click('gaDone');await tick();assert.equal(w.me().log.at(-1).challengeVariant,'numbers:delay5');w.toHome();w.setInterval=setInterval;
 // My Games advances to the next selected activity without losing the queue.
-api.myGames();click('personalStart');click('startExtra');w.mg.ok=w.mg.R;w.mdone();await tick();click('personalNextGame');assert.equal(api.session.id,'recall');assert(el('ov').classList.contains('hidden'));assert(el('gaReady'));w.toHome();
+api.myGames();click('personalStart');click('startExtra');w.mg.ok=w.mg.R;w.mdone();await tick();click('personalChangeSettings');await tick();click('personalNextGame');assert.equal(api.session.id,'recall');assert(el('ov').classList.contains('hidden'));assert(el('gaReady'));w.toHome();
 // Per-player isolation, questionnaire save, and reload persistence.
 api.setup('num',1,'my');el('gameCount').value='5';el('gameCount').dispatchEvent(new w.Event('change'));el('gameRange').value='gentle';el('gameRange').dispatchEvent(new w.Event('change'));assert.equal(api.settings('num','my').count,5);assert.equal(api.settings('num','all').count,10);assert.equal(JSON.parse(w.localStorage.getItem('gardenMatch')).pr[w.save.cp].gameSettings.my.num.count,5);
 const original=w.save.cp;w.save.pr.other=w.newP('Other');w.save.cp='other';w.load();assert.equal(api.config().count,15);assert.equal(api.config().games.length,0);w.save.cp=original;w.load();assert.equal(api.config().count,5);

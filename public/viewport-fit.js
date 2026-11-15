@@ -2,7 +2,7 @@
 (function(){
  const mini=document.getElementById('mini'),mp=document.getElementById('mp');let queued=false;
  function fit(){queued=false;if(mini.classList.contains('hidden'))return;
- const height=window.visualViewport?.height||innerHeight,available=Math.max(180,height-mp.getBoundingClientRect().top-12);
+ const height=window.visualViewport?.height||innerHeight,available=Math.max(180,height-mp.getBoundingClientRect().top-(mini.querySelector('.game-footer')?.getBoundingClientRect().height||90)-28);
  mp.style.setProperty('--play-space',available+'px');
  for(const grid of mp.querySelectorAll('.gridm')){
   const cells=[...grid.children];if(!cells.length)continue;

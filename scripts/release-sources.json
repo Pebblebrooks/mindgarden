@@ -25,7 +25,9 @@
     "feedback-layout.css",
     "personal-games.css",
     "viewport-fit.css",
-    "approved-menus.css"
+    "approved-menus.css",
+    "game-ui.css",
+    "first-release-games.css"
   ],
   "scripts": [
     "grammar.js",
@@ -57,6 +59,7 @@
     "v4.js",
     "pet-audio.js",
     "mochi-widget.js",
+    "dot-routes.js",
     "garden-activities.js",
     "everyday-games.js",
     "commercial-games.js",
@@ -72,6 +75,8 @@
     "mobile-reliability.js",
     "narration.js",
     "movement-games.js",
+    "first-release-rules.js",
+    "first-release-games.js",
     "game-depth.js",
     "personal-games.js",
     "account-sync.js",
@@ -82,6 +87,7 @@
     "menu-simplify.js",
     "menu-navigation.js",
     "dashboard-preferences.js",
-    "viewport-fit.js"
+    "viewport-fit.js",
+    "game-ui.js"
   ]
 }
