@@ -358,7 +358,7 @@ html[data-ambient-paused="true"] .scenery-flyers>span,html[data-motion="off"] .s
 html[data-v4-mode="light"]:not([data-hc="1"]) :is(#ov #box,#home,#game,#mini) .btn.main{background:#24685b!important;background-image:none!important;color:#fff!important;border-color:#24685b!important;box-shadow:0 2px 5px #174a421a!important}
 html[data-v4-mode="light"]:not([data-hc="1"]) :is(#home #libraryDisplay,#ov #box) .library-tabs .btn.main{background:#c5e2da!important;background-image:none!important;color:#174a42!important;border-color:#628879!important;box-shadow:inset 0 -3px 0 #24685b!important}
 /* One circled information glyph; retain an invisible 44px touch target. */
-html body .mg-info-button{border:0!important;background:transparent!important;background-image:none!important;box-shadow:none!important;text-shadow:none!important;display:inline-grid;place-items:center;padding:0;min-width:44px;min-height:44px}
+html body .mg-info-button{appearance:none!important;-webkit-appearance:none!important;border-radius:0!important;border:0!important;background:transparent!important;background-image:none!important;box-shadow:none!important;text-shadow:none!important;display:inline-grid;place-items:center;padding:0;min-width:44px;min-height:44px}
 html body .mg-info-button:hover{background:transparent!important;box-shadow:none!important}
 #ov #box .personal-setup .personal-title{flex-direction:column;align-items:center;justify-content:center;gap:0}
 #ov #box .personal-setup .personal-title p{order:0;flex:none;width:100%;margin:0;text-align:center}
