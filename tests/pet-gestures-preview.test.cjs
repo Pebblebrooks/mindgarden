@@ -1,4 +1,4 @@
-const {JSDOM}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const {JSDOM}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
 const d=new JSDOM('<div id="pet"></div>',{runScripts:'outside-only',pretendToBeVisual:true,url:'https://preview.test'}),w=d.window;
 w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});const calls=[];
 const audio={perform:(who,action)=>calls.push([who,action]),stop(){},pause(){},enable(){}};w.eval(fs.readFileSync('public/mochi-widget.js','utf8'));

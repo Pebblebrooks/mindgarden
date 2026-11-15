@@ -1,4 +1,4 @@
-const {JSDOM}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const {JSDOM}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
 const d=new JSDOM('<div id="home"><nav id="unifiedNav"><div class="nav-actions"><button id="navMore">Menu</button></div><div id="navMenu"><button data-go="nature">Background audio</button></div></nav><div id="welcomeDashboard"></div></div><div id="ov" class="hidden"></div><button id="mFab"></button><button id="backgroundAudioToggle"></button>',{runScripts:'outside-only',pretendToBeVisual:true}),w=d.window,tick=()=>new Promise(r=>setTimeout(r,10));
 let playing=true,starts=0,stops=0,natureStarts=0,natureStops=0,saves=0;
 w.save={homeNature:true,backgroundMuted:false,lang:'en',soundscape:{music:'piano',master:45,musicVolume:55,natureVolume:35}};const mix=JSON.stringify(w.save.soundscape);

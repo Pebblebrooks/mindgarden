@@ -1,4 +1,4 @@
-const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('node:fs'),assert=require('node:assert/strict');
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('node:fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8');
 function boot(raw,blocked=false){const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window;w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};if(raw!==undefined)w.localStorage.setItem('gardenMatch',raw);const set=w.Storage.prototype.setItem;if(blocked)w.Storage.prototype.setItem=function(){throw new w.DOMException('Quota exceeded','QuotaExceededError')};
  require('./dom-lifecycle.cjs')(w);w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+html.match(/src="(garden-ui-\d+\.js)"/)[1],'utf8'));return {w,dom,unblock:()=>w.Storage.prototype.setItem=set}}

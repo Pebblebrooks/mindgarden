@@ -8,7 +8,7 @@ function toggle(){cardsHidden=!cardsHidden;me().dashboardPreferences={...me().da
 function mount(){
  const nav=document.getElementById('unifiedNav'),menu=document.getElementById('navMenu'),scene=document.querySelector('.welcome-scene');if(!nav||!menu||!scene)return;
  const hidden=cardsHidden;document.documentElement.dataset.welcomeCards=hidden?'hidden':'shown';
- const label=hidden?T('Show game cards','显示游戏卡片'):T('Hide game cards','隐藏游戏卡片');
+ const label=T('More game cards','更多游戏卡片');
  for(const [id,target,text,zh,glyph] of [['scenePrevious','heroPrevious','Previous scenery','上一处景色','‹'],['sceneNext','heroNext','Next scenery','下一处景色','›']]){
  let arrow=document.getElementById(id);if(!arrow){arrow=document.createElement('button');arrow.id=id;arrow.type='button';arrow.className='scene-edge-arrow';arrow.textContent=glyph;arrow.onclick=()=>document.getElementById(target)?.click();scene.append(arrow)}arrow.setAttribute('aria-label',T(text,zh));
  }

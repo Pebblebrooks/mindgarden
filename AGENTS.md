@@ -34,7 +34,7 @@ After every app update, review the About documentation and update it wherever th
 - Restore display, language, sound, home cards, selected games and per-game difficulty by stable profile ID on sign-in/player switch. A name change never creates a new identity.
 - Place Customise my home in the menu, never on the welcome page and show whose settings are being edited. Never confuse hiding a card or removing a favourite with deleting scores.
 - Do not trim local activity or multiplayer history automatically. Preserve independent device copies of account players through sign-out and remote profile replacement. Keep them out of account exports.
-- Destructive UI actions apply only to the selected player, require the exact player name, and require account reauthentication for connected players. Do not claim person-only access control for unprotected shared browsers/group accounts.
+- Player-card deletion applies only to the explicitly named card; history deletion applies only to the selected player, require the exact player name, and require account reauthentication for connected players. Do not claim person-only access control for unprotected shared browsers/group accounts.
 - Keep WebAuthn passkeys distinct from passwords and recovery keys. Native device authentication requires real server verification; show no simulated success in production. The portable review must clearly label simulated credentials.
 - Explain that local copies survive sign-out and remain accessible in that browser. Browser clearing/eviction and finite capacity require backup guidance; do not promise permanent storage.
 

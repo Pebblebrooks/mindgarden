@@ -1,4 +1,4 @@
-const {JSDOM}=require(process.env.MG_JSDOM||'jsdom'),fs=require('node:fs'),assert=require('node:assert/strict');
+const {JSDOM}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('node:fs'),assert=require('node:assert/strict');
 const pause=()=>new Promise(r=>setTimeout(r,10)),source=fs.readFileSync(process.env.MG_AUDIO_SOURCE||__dirname+'/../public/soundscape.js','utf8');
 const dom=new JSDOM('<div id="box"></div><button id="bMus"></button><button id="mFab"></button>',{url:'https://garden.test',runScripts:'outside-only'}),w=dom.window;
 let gesture=false,media,resumeResolve,holdResume=false,playCalls=0,permissionChecks=[],nodes=0;

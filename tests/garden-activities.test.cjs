@@ -1,5 +1,5 @@
 const currentUiTag=JSON.parse(require('fs').readFileSync(__dirname+'/../package.json','utf8')).version.replaceAll('.','');
-const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
 const root=__dirname+'/../public/',html=fs.readFileSync(root+'index.html','utf8');const d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{runScripts:'outside-only',pretendToBeVisual:true,url:'https://garden.test',virtualConsole:new VirtualConsole()}),w=d.window;
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.confirm=()=>true;
 w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(root+`garden-ui-${currentUiTag}.js`,'utf8'));

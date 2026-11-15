@@ -1,0 +1,547 @@
+[
+  {
+    "test": "about-documentation.test.cjs",
+    "status": "fail",
+    "seconds": 3.6
+  },
+  {
+    "test": "account-api.test.mjs",
+    "status": "pass",
+    "seconds": 1.8
+  },
+  {
+    "test": "account-feedback-browser.test.cjs",
+    "status": "fail",
+    "seconds": 0.6
+  },
+  {
+    "test": "account-flow.test.cjs",
+    "status": "pass",
+    "seconds": 5.2
+  },
+  {
+    "test": "account-menu.test.cjs",
+    "status": "pass",
+    "seconds": 8.7
+  },
+  {
+    "test": "account-status.test.cjs",
+    "status": "pass",
+    "seconds": 14.9
+  },
+  {
+    "test": "account-sync.test.cjs",
+    "status": "fail",
+    "seconds": 5.5
+  },
+  {
+    "test": "all-level-sessions.test.cjs",
+    "status": "timeout",
+    "seconds": 180.0
+  },
+  {
+    "test": "audio-gesture.test.cjs",
+    "status": "pass",
+    "seconds": 1.0
+  },
+  {
+    "test": "audit-followup.test.cjs",
+    "status": "pass",
+    "seconds": 2.7
+  },
+  {
+    "test": "audit-layout.test.cjs",
+    "status": "fail",
+    "seconds": 0.4
+  },
+  {
+    "test": "background-audio.test.cjs",
+    "status": "pass",
+    "seconds": 1.0
+  },
+  {
+    "test": "bingo-room.test.mjs",
+    "status": "pass",
+    "seconds": 0.2
+  },
+  {
+    "test": "bingo-ui.test.mjs",
+    "status": "pass",
+    "seconds": 27.9
+  },
+  {
+    "test": "bouquet-speed.test.cjs",
+    "status": "pass",
+    "seconds": 2.6
+  },
+  {
+    "test": "commercial-preview.test.cjs",
+    "status": "pass",
+    "seconds": 22.3
+  },
+  {
+    "test": "custom-level-sessions.test.cjs",
+    "status": "pass",
+    "seconds": 35.4
+  },
+  {
+    "test": "daily-and-controls.test.cjs",
+    "status": "fail",
+    "seconds": 6.9
+  },
+  {
+    "test": "dashboard-preferences.test.cjs",
+    "status": "fail",
+    "seconds": 2.1
+  },
+  {
+    "test": "depth-progression.test.cjs",
+    "status": "pass",
+    "seconds": 123.6
+  },
+  {
+    "test": "depth-rules.test.cjs",
+    "status": "pass",
+    "seconds": 3.5
+  },
+  {
+    "test": "device-signin.test.cjs",
+    "status": "fail",
+    "seconds": 2.6
+  },
+  {
+    "test": "everyday-games.test.cjs",
+    "status": "pass",
+    "seconds": 10.0
+  },
+  {
+    "test": "extended-language-stages.test.cjs",
+    "status": "fail",
+    "seconds": 20.2
+  },
+  {
+    "test": "feedback-sound.test.cjs",
+    "status": "pass",
+    "seconds": 6.6
+  },
+  {
+    "test": "first-release.test.cjs",
+    "status": "pass",
+    "seconds": 20.7
+  },
+  {
+    "test": "five-games.test.cjs",
+    "status": "pass",
+    "seconds": 7.0
+  },
+  {
+    "test": "flying-scenery.test.cjs",
+    "status": "pass",
+    "seconds": 2.5
+  },
+  {
+    "test": "game-language-stages.test.cjs",
+    "status": "fail",
+    "seconds": 49.9
+  },
+  {
+    "test": "game-ui-approved.test.cjs",
+    "status": "pass",
+    "seconds": 8.1
+  },
+  {
+    "test": "game-visuals.test.cjs",
+    "status": "pass",
+    "seconds": 14.1
+  },
+  {
+    "test": "gameplay-regressions.test.cjs",
+    "status": "fail",
+    "seconds": 2.8
+  },
+  {
+    "test": "garden-activities.test.cjs",
+    "status": "fail",
+    "seconds": 3.8
+  },
+  {
+    "test": "garden-ui.test.cjs",
+    "status": "fail",
+    "seconds": 0.4
+  },
+  {
+    "test": "grammar.test.cjs",
+    "status": "pass",
+    "seconds": 2.4
+  },
+  {
+    "test": "home-nature-overlay.test.cjs",
+    "status": "pass",
+    "seconds": 0.8
+  },
+  {
+    "test": "info-help.test.cjs",
+    "status": "fail",
+    "seconds": 2.4
+  },
+  {
+    "test": "language-audit.cjs",
+    "status": "fail",
+    "seconds": 2.5
+  },
+  {
+    "test": "live-language.test.cjs",
+    "status": "fail",
+    "seconds": 2.7
+  },
+  {
+    "test": "matching-mode.test.cjs",
+    "status": "pass",
+    "seconds": 3.2
+  },
+  {
+    "test": "media-lifecycle.test.cjs",
+    "status": "pass",
+    "seconds": 2.2
+  },
+  {
+    "test": "menu-clarity.test.cjs",
+    "status": "pass",
+    "seconds": 6.6
+  },
+  {
+    "test": "menu-exit.test.cjs",
+    "status": "pass",
+    "seconds": 6.7
+  },
+  {
+    "test": "menu-navigation.test.cjs",
+    "status": "fail",
+    "seconds": 7.1
+  },
+  {
+    "test": "menu-preview.test.cjs",
+    "status": "fail",
+    "seconds": 0.7
+  },
+  {
+    "test": "mobile-reliability.test.cjs",
+    "status": "fail",
+    "seconds": 10.3
+  },
+  {
+    "test": "mochi-widget.test.cjs",
+    "status": "pass",
+    "seconds": 1.0
+  },
+  {
+    "test": "motion-navigation.test.cjs",
+    "status": "fail",
+    "seconds": 3.3
+  },
+  {
+    "test": "move-remember.test.cjs",
+    "status": "pass",
+    "seconds": 3.2
+  },
+  {
+    "test": "movement-controls.test.cjs",
+    "status": "pass",
+    "seconds": 1.0
+  },
+  {
+    "test": "movement-games.test.cjs",
+    "status": "pass",
+    "seconds": 2.5
+  },
+  {
+    "test": "multiplayer-lifecycle.test.mjs",
+    "status": "pass",
+    "seconds": 1.9
+  },
+  {
+    "test": "multiplayer-ready-ui.test.mjs",
+    "status": "pass",
+    "seconds": 2.8
+  },
+  {
+    "test": "multiplayer-round-flow.test.mjs",
+    "status": "pass",
+    "seconds": 2.0
+  },
+  {
+    "test": "multiplayer-sessions.test.mjs",
+    "status": "pass",
+    "seconds": 0.2
+  },
+  {
+    "test": "multiplayer-taps.test.mjs",
+    "status": "pass",
+    "seconds": 14.6
+  },
+  {
+    "test": "multiplayer-ui.test.mjs",
+    "status": "fail",
+    "seconds": 31.6
+  },
+  {
+    "test": "navbar-overflow.test.cjs",
+    "status": "fail",
+    "seconds": 2.8
+  },
+  {
+    "test": "new-features.test.cjs",
+    "status": "pass",
+    "seconds": 3.4
+  },
+  {
+    "test": "online-expansion-ui.test.mjs",
+    "status": "pass",
+    "seconds": 47.7
+  },
+  {
+    "test": "online-expansion.test.mjs",
+    "status": "pass",
+    "seconds": 0.2
+  },
+  {
+    "test": "paced-rounds.test.cjs",
+    "status": "pass",
+    "seconds": 8.8
+  },
+  {
+    "test": "page-visibility.test.cjs",
+    "status": "pass",
+    "seconds": 1.4
+  },
+  {
+    "test": "paired-palace-scenes.test.cjs",
+    "status": "pass",
+    "seconds": 1.5
+  },
+  {
+    "test": "pairs-language-stages.test.cjs",
+    "status": "fail",
+    "seconds": 3.8
+  },
+  {
+    "test": "passkeys.test.mjs",
+    "status": "pass",
+    "seconds": 0.5
+  },
+  {
+    "test": "personal-games.test.cjs",
+    "status": "pass",
+    "seconds": 112.3
+  },
+  {
+    "test": "personal-garden.test.cjs",
+    "status": "pass",
+    "seconds": 2.0
+  },
+  {
+    "test": "pet-audio-buffer.test.cjs",
+    "status": "pass",
+    "seconds": 0.9
+  },
+  {
+    "test": "pet-auto-audio.test.cjs",
+    "status": "pass",
+    "seconds": 0.9
+  },
+  {
+    "test": "pet-behaviour-rollback.test.cjs",
+    "status": "pass",
+    "seconds": 0.9
+  },
+  {
+    "test": "pet-gestures-preview.test.cjs",
+    "status": "pass",
+    "seconds": 1.1
+  },
+  {
+    "test": "pet-heart-feedback.test.cjs",
+    "status": "pass",
+    "seconds": 1.0
+  },
+  {
+    "test": "pet-ledge-preview.test.cjs",
+    "status": "pass",
+    "seconds": 2.7
+  },
+  {
+    "test": "pet-position.test.cjs",
+    "status": "pass",
+    "seconds": 1.0
+  },
+  {
+    "test": "player-name-validation.test.cjs",
+    "status": "pass",
+    "seconds": 7.3
+  },
+  {
+    "test": "player-preferences.test.cjs",
+    "status": "pass",
+    "seconds": 1.0
+  },
+  {
+    "test": "popup-shell.test.cjs",
+    "status": "fail",
+    "seconds": 4.1
+  },
+  {
+    "test": "preview-feedback.test.cjs",
+    "status": "pass",
+    "seconds": 7.3
+  },
+  {
+    "test": "profile-restoration.test.cjs",
+    "status": "fail",
+    "seconds": 3.8
+  },
+  {
+    "test": "progression-practice.test.cjs",
+    "status": "fail",
+    "seconds": 18.9
+  },
+  {
+    "test": "quick-feedback.test.cjs",
+    "status": "fail",
+    "seconds": 6.5
+  },
+  {
+    "test": "ranking-snapshots.test.cjs",
+    "status": "pass",
+    "seconds": 2.1
+  },
+  {
+    "test": "ratings-variety.test.cjs",
+    "status": "pass",
+    "seconds": 6.9
+  },
+  {
+    "test": "release-cache.test.cjs",
+    "status": "pass",
+    "seconds": 0.1
+  },
+  {
+    "test": "release-cleanup.test.cjs",
+    "status": "pass",
+    "seconds": 0.1
+  },
+  {
+    "test": "release-ui.test.cjs",
+    "status": "fail",
+    "seconds": 2.5
+  },
+  {
+    "test": "request-validation.test.mjs",
+    "status": "pass",
+    "seconds": 0.1
+  },
+  {
+    "test": "restore-accessibility.test.cjs",
+    "status": "pass",
+    "seconds": 2.8
+  },
+  {
+    "test": "result-dialog.test.cjs",
+    "status": "pass",
+    "seconds": 10.6
+  },
+  {
+    "test": "review-corrections.test.cjs",
+    "status": "pass",
+    "seconds": 8.6
+  },
+  {
+    "test": "review-ui.test.cjs",
+    "status": "fail",
+    "seconds": 2.1
+  },
+  {
+    "test": "room-lifecycle.test.mjs",
+    "status": "pass",
+    "seconds": 0.1
+  },
+  {
+    "test": "room8.test.mjs",
+    "status": "pass",
+    "seconds": 0.1
+  },
+  {
+    "test": "scenery-rotation.test.cjs",
+    "status": "pass",
+    "seconds": 0.1
+  },
+  {
+    "test": "scenery-theme-pairing.test.cjs",
+    "status": "pass",
+    "seconds": 3.2
+  },
+  {
+    "test": "scenery-view.test.cjs",
+    "status": "fail",
+    "seconds": 2.3
+  },
+  {
+    "test": "scenery409.test.cjs",
+    "status": "fail",
+    "seconds": 2.3
+  },
+  {
+    "test": "scroll-policy.test.cjs",
+    "status": "pass",
+    "seconds": 1.4
+  },
+  {
+    "test": "sequence-language.test.cjs",
+    "status": "fail",
+    "seconds": 2.5
+  },
+  {
+    "test": "single-pair-fast-taps.test.cjs",
+    "status": "pass",
+    "seconds": 3.5
+  },
+  {
+    "test": "storage-failure.test.cjs",
+    "status": "pass",
+    "seconds": 4.0
+  },
+  {
+    "test": "ui-followup.test.cjs",
+    "status": "pass",
+    "seconds": 2.8
+  },
+  {
+    "test": "v4-design.test.cjs",
+    "status": "pass",
+    "seconds": 6.9
+  },
+  {
+    "test": "v405-fixes.test.cjs",
+    "status": "fail",
+    "seconds": 8.8
+  },
+  {
+    "test": "v5-flow.test.cjs",
+    "status": "pass",
+    "seconds": 4.2
+  },
+  {
+    "test": "welcome-account-options.test.cjs",
+    "status": "fail",
+    "seconds": 2.2
+  },
+  {
+    "test": "wildlife-runtime.test.cjs",
+    "status": "fail",
+    "seconds": 0.4
+  },
+  {
+    "test": "wildlife-spacing.test.mjs",
+    "status": "pass",
+    "seconds": 0.5
+  }
+]

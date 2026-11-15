@@ -1,4 +1,4 @@
-const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
 const root=__dirname+'/../public/',html=fs.readFileSync(root+'index.html','utf8'),bundle=fs.readFileSync(root+html.match(/src="(garden-ui-\d+\.js)"/)[1],'utf8'),clone=x=>JSON.parse(JSON.stringify(x));
 const wait=async()=>{for(let i=0;i<12;i++)await new Promise(r=>setImmediate(r))};
 const accounts={};let signed=null;

@@ -1,4 +1,4 @@
-const {readFileSync}=require('node:fs'),{JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),assert=require('node:assert/strict');
+const {readFileSync}=require('node:fs'),{JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs'),assert=require('node:assert/strict');
 const root=__dirname+'/../public/',html=readFileSync(root+'index.html','utf8'),d=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{runScripts:'outside-only',pretendToBeVisual:true,url:'https://garden.test',virtualConsole:new VirtualConsole()}),w=d.window,errors=[];
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.confirm=()=>true;w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));
 w.localStorage.setItem('mind-garden-pet-visible','true');w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(readFileSync(root+html.match(/src="(garden-ui-\d+\.js)"/)[1],'utf8'));

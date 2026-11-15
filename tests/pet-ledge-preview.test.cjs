@@ -1,4 +1,4 @@
-const {JSDOM}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const {JSDOM}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
 for(const width of [340,640]){
  const d=new JSDOM('<div id="ledge"></div>',{runScripts:'outside-only',pretendToBeVisual:true}),w=d.window;
  w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});

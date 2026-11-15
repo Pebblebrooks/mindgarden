@@ -1,0 +1,18 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> mind-garden-cloudflare@5.0.2 test:v502
+> node tests/v502-layout.test.cjs && node tests/v5-flow.test.cjs && node tests/account-sync.test.cjs && node tests/device-signin.test.cjs && node tests/about-documentation.test.cjs && node tests/dashboard-preferences.test.cjs && node tests/popup-shell.test.cjs && node tests/menu-navigation.test.cjs && node tests/live-language.test.cjs && node tests/multiplayer-lifecycle.test.mjs && node tests/release-cache.test.cjs && node tests/release-cleanup.test.cjs
+
+PASS v502: Animation modes, per-card deletion and cancellation, preserved selected profile, password visibility, information dialog and bilingual About structure.
+PASS v5: defaults, explicit language choices, one daily preparation, Begin launch, edit/remove/undo preserves scores, catalogue search and categories.
+PASS initial upload, preferences, new players, fresh switch retrieval, offline retry, conflict protection, account-free exports and local-player restoration on signout.
+PASS device sign-in capability gating, cancellation, rejected assertion, verified account loading, setup/password handling, saved-key list and Escape.
+PASS About: bilingual latest changes, progression, quiet startup, rest guidance and generated version.
+PASS dashboard selections, show-all escape, player isolation, restore, backup round-trip, cancel and bilingual menu access.
+PASS approved popup shell: bilingual headers, symbol controls and labels, grouped account screens, primary/quiet action order, player management disclosure, parent returns, inert background cleanup and game-result isolation.
+PASS bilingual menu Back/Done: account/player/rename, settings/music, game settings, About, device sign-in; disclosure/scroll restoration; rerender deduplication; auth boundary; Close/Escape; independent help controls.
+PASS: live en language round trip preserves active story, buttons and answer values.
+PASS: live zh language round trip preserves active story, buttons and answer values.
+PASS: late join/create responses, expired rooms, navigation during polling, logout during invitation delivery and clipboard failure after closure and player switching during renaming.
+PASS: atomic offline install, correct release assets, scoped cache cleanup, no API caching, no HTML fallback for CSS/JS, reject incomplete deployment.
+PASS compact release: active source manifest, smaller bundles, removed code absent, artwork generation retained.

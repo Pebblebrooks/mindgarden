@@ -100,14 +100,8 @@ html[data-text-large="true"] #home #welcomeDashboard .welcome-ctas{grid-template
 #home #libraryDisplay{padding-top:24px!important}
 #home #gameCards .game-info{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:6px!important}
 #home #gameCards .game-info>strong,#home #gameCards .game-info>.game-desc{text-align:left!important}
-#home #unifiedNav #navMenu .nav-group button{justify-content:flex-start!important;text-align:left!important;gap:12px!important}
 
 /* v5.0.1: approved centred labels and controls near the board. */
-#home #unifiedNav #navMenu .nav-group button{position:relative!important;display:grid!important;grid-template-columns:32px minmax(0,1fr) 32px!important;gap:8px!important;padding:8px 10px!important;justify-content:center!important;text-align:center!important;width:100%!important}
-#home #unifiedNav #navMenu .nav-group button>span:first-child{grid-column:1;grid-row:1;justify-self:center}
-#home #unifiedNav #navMenu .nav-group button>span:last-child{grid-column:2;grid-row:1;text-align:center!important;min-width:0}
-#home #unifiedNav #navMenu .nav-group button::before{position:absolute;right:12px;top:50%;transform:translateY(-50%);margin:0!important}
-#home #unifiedNav #navMenu :is(summary,h3,legend,button){text-align:center!important;text-align-last:auto!important}
 #home #unifiedNav #navMenu :is(.nav-group,details){margin:0 0 8px!important;padding:4px 0!important;min-height:0!important}
 #home #unifiedNav #navMenu summary{padding:10px 28px!important;min-height:48px!important;box-sizing:border-box}
 #home #unifiedNav #navMenu .nav-group>div{gap:6px!important}
@@ -162,5 +156,61 @@ body:has(.game-ui-dialog[open]) #ov{visibility:hidden!important}
 #home #welcomeDashboard .welcome-heading h1{font-size:calc(clamp(2.1rem,4.6vw,4rem) * var(--fs))!important;font-weight:750!important;line-height:1.12!important;letter-spacing:-.025em!important;color:#fff!important;text-shadow:0 2px 8px #102a3080!important;text-align:center!important;overflow-wrap:normal!important}
 #home #welcomeDashboard .welcome-heading>p{font-size:calc(clamp(1rem,2vw,1.5rem) * var(--fs))!important;font-weight:400!important;color:#fff!important;text-shadow:0 1px 6px #102a30!important;margin:10px auto 4px!important;width:100%!important;text-align:center!important}
 #home #welcomeDashboard #welcomeName{background:transparent!important;border:0!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 5px #102a30,0 0 14px #102a3090!important;font-size:calc(clamp(1.15rem,2vw,1.5rem) * var(--fs))!important;margin:4px auto 12px!important}
-#home #welcomeDashboard .welcome-scene>#sceneFooter{align-self:flex-start!important;margin:4px 0 0!important;text-align:left!important;font-size:calc(.95rem * var(--fs))!important;font-weight:400!important;color:#fff!important;text-shadow:0 1px 5px #102a30!important}
+#home #welcomeDashboard .welcome-scene>#sceneFooter{align-self:center!important;margin: auto auto 0!important;text-align:center!important;font-size:calc(1rem * var(--fs))!important;font-weight:400!important;color:#fff!important;text-shadow:0 1px 5px #102a30!important}
 @media(max-width:600px){#home #welcomeDashboard .welcome-heading{padding:8px!important}#home #welcomeDashboard .welcome-heading::before{inset:-8px 0}#home #welcomeDashboard .welcome-heading h1{font-size:calc(2.1rem * var(--fs))!important}}
+
+/* v5.0.2: approved compact menu, account controls and readable About. */
+#home #unifiedNav #navMenu :is(.nav-group button,summary,#gardenPanelOpen,#menuCards){display:grid!important;grid-template-columns:28px minmax(0,1fr) 48px!important;align-items:center!important;gap:12px!important;width:min(260px,100%)!important;max-width:100%!important;min-width:0!important;margin:4px auto!important;padding:8px 0!important;text-align:left!important;text-align-last:auto!important;box-sizing:border-box;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:8px!important;color:inherit!important;position:relative!important}
+#home #unifiedNav #navMenu :is(.nav-group button,summary,#gardenPanelOpen,#menuCards)>:first-child{grid-column:1!important;grid-row:1;justify-self:center}
+#home #unifiedNav #navMenu :is(.nav-group button,summary,#gardenPanelOpen,#menuCards)>span:last-child{grid-column:2!important;grid-row:1;text-align:left!important;min-width:0;overflow-wrap:normal}
+#home #unifiedNav #navMenu summary{list-style:none!important}
+#home #unifiedNav #navMenu summary::marker,#home #unifiedNav #navMenu summary::-webkit-details-marker{display:none;content:''}
+#home #unifiedNav #navMenu summary::after{content:'›';grid-column:3;grid-row:1;text-align:center;font-size:26px}
+#home #unifiedNav #navMenu details[open]>summary::after{content:'⌄'}
+#home #unifiedNav #navMenu button::before,#home #unifiedNav #navMenu summary::before{content:none!important}
+#home #unifiedNav #navMenu .v5-switch{margin:10px auto!important}
+#home #unifiedNav #navMenu .v5-switch::after{content:''!important;display:block!important;grid-column:3;grid-row:1;width:44px;height:26px;border-radius:20px;background:radial-gradient(circle at 13px 13px,#fff 0 9px,transparent 10px),#627777;border:1px solid currentColor;box-sizing:border-box}
+#home #unifiedNav #navMenu .v5-switch[aria-pressed="true"]::after{background:radial-gradient(circle at 30px 13px,#fff 0 9px,transparent 10px),#83a95e}
+#home #unifiedNav #navMenu .nav-preferences .nav-group>h3{display:none}
+#home #unifiedNav #navMenu .nav-group>div{display:block!important}
+#home #unifiedNav #navMenu :is(h3,legend){text-align:center!important}
+#home #unifiedNav #navMenu .hero-media-controls{position:static!important;display:grid!important;grid-template-columns:48px minmax(0,1fr) 48px!important;gap:8px!important;align-items:center!important;width:min(360px,100%)!important;margin:8px auto!important;padding:0!important;background:none!important;border:0!important;transform:none!important;box-sizing:border-box}
+#home #unifiedNav #navMenu .hero-arrow{position:static!important;inset:auto!important;transform:none!important;min-width:48px!important;width:48px!important;min-height:48px!important;padding:8px!important;margin:0!important;border:1px solid var(--line)!important;border-radius:12px!important;display:block!important}
+#home #unifiedNav #navMenu #heroPrevious{grid-column:1!important;grid-row:1}
+#home #unifiedNav #navMenu #heroNext{grid-column:3!important;grid-row:1}
+#home #unifiedNav #navMenu #heroMediaCaption{grid-column:2;grid-row:1;min-width:0!important;width:auto!important;display:flex!important;flex-direction:column;gap:4px;white-space:normal!important;text-align:center!important;line-height:1.4!important;font-size:calc(1rem * var(--fs))!important}
+#heroMediaCaption small{font:inherit;opacity:.8}
+#home #unifiedNav #navMenu #heroVideoPlay{grid-column:1/-1}
+#ov #box [data-menu-group="pets"] .motion-options{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;border:0;padding:12px}
+#ov #box [data-menu-group="pets"] .motion-options legend{display:none}
+#ov #box [data-menu-group="pets"] .motion-options button{flex:1 1 100px;min-height:48px;margin:0}
+/* Explicit circle independent of the selected font's circled-i glyph. */
+.mg-info-button,.mg-help-trigger{font-size:0!important;position:relative;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:48px!important;height:48px!important;min-width:48px!important;padding:0!important;flex:none!important}
+.mg-info-button>span{display:none!important}
+.mg-info-button::after,.mg-help-trigger::after{content:'i';display:flex;align-items:center;justify-content:center;width:25px;height:25px;border:1.5px solid currentColor;border-radius:50%;font:700 18px/1 Georgia,serif;box-sizing:border-box}
+#ov #box .account-panel[data-auth-view="signin"] .account-title{display:none}
+.account-name-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+#ov #box .account-name-row label{margin:0!important}
+#ov #box .account-name-row{margin-top:18px;margin-bottom:8px}
+.account-name-help{display:inline-flex}
+#ov #box .account-panel #accountNameHint[hidden]{display:none!important}
+#ov #box .secret-toggle{width:48px!important;min-width:48px!important;height:48px!important;border:0!important;padding:10px!important}
+.secret-toggle svg,.player-card-actions svg{width:26px;height:26px;display:block}
+#ov #box:has(#pd) .prow{grid-template-columns:48px minmax(0,1fr) auto!important;padding:12px!important;gap:12px!important}
+#ov #box:has(#pd) .prow .avb{width:48px!important;height:48px!important}
+.player-card-name{text-align:center;min-width:0}
+.player-card-name [data-p]{width:100%}
+.player-record-count{display:block;text-align:center}
+.player-card-actions{display:flex;gap:12px;align-items:center}
+#ov #box:has(#pd) .prow .player-card-actions .btn{width:48px!important;min-width:48px!important;min-height:48px!important;padding:10px!important;border:1px solid currentColor!important;border-radius:12px!important}
+#ov #box .app-info-about p{width:100%!important;max-width:none!important;box-sizing:border-box;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important;display:block!important;line-height:1.6!important}
+#ov #box .app-info-about .about-version{text-align:center!important;width:100%;margin:16px 0}
+#ov #box .app-info-about :is(.about-copyright,.about-artwork){text-align:center!important;font-size:calc(1rem * var(--fs))!important}
+#ov #box .app-info-about .about-copyright{width:100%;white-space:normal!important}
+#home #welcomeDashboard .welcome-scene>#sceneFooter{width:100%!important;position:relative!important;inset:auto!important;transform:none!important;flex:none!important;order:99!important;text-align:center!important;box-sizing:border-box}
+@media(max-width:480px){#ov #box:has(#pd) .prow{grid-template-columns:48px minmax(0,1fr)!important}.player-card-actions{grid-column:1/-1;justify-content:center}#home #unifiedNav #navMenu{padding:16px!important}}
+
+#home #unifiedNav #navMenu :is(.nav-group,details){margin:0 0 8px!important;padding:4px 0!important}
+
+#home #unifiedNav #navMenu>details{margin:0!important;padding:0!important;border:0!important}
+#home #unifiedNav #navMenu summary{min-height:48px!important;height:auto!important;line-height:1.4!important}

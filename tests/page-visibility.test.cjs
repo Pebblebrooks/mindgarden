@@ -1,5 +1,5 @@
 const currentUiTag=JSON.parse(require('fs').readFileSync(__dirname+'/../package.json','utf8')).version.replaceAll('.','');
-const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
 const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8');
 const base=html.match(/<style>([\s\S]*?)<\/style>/)[1],css=fs.readFileSync(p+`garden-ui-${currentUiTag}.css`,'utf8');
 const d=new JSDOM('<style>'+base+css+'</style><div class="wrap"><section id="home"><div id="welcomeDashboard">Welcome</div></section><section id="mini" class="hidden">Daily game</section><section id="game" class="hidden">Pairs</section></div>',{virtualConsole:new VirtualConsole()}),w=d.window;

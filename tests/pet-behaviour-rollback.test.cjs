@@ -1,4 +1,4 @@
-const {JSDOM}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict'),cp=require('node:child_process');
+const {JSDOM}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict'),cp=require('node:child_process');
 const d=new JSDOM('<section id="pet"></section>',{runScripts:'outside-only',pretendToBeVisual:true,url:'https://garden.test'}),w=d.window;
 w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 w.eval(fs.readFileSync('public/mochi-widget.js','utf8'));

@@ -1,4 +1,4 @@
-const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
 const outer=fs.readFileSync(process.argv[2],'utf8');assert(outer.includes('allow-scripts allow-forms allow-downloads allow-modals'));const source=JSON.parse(outer.match(/const source=(.*);const frame=/)[1]);
 const scripts=[...source.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
 const dom=new JSDOM(source.replace(/<script[\s\S]*?<\/script>/g,''),{url:'https://review.test/',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,el=id=>w.document.getElementById(id),errors=[];

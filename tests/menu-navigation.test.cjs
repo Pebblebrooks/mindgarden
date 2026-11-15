@@ -1,4 +1,4 @@
-const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom'),fs=require('fs'),assert=require('node:assert/strict');
+const {JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
 const root=__dirname+'/../public/',html=fs.readFileSync(root+'index.html','utf8'),bundle=html.match(/src="(garden-ui-\d+\.js)"/)[1];
 const wait=async()=>{for(let i=0;i<14;i++)await new Promise(r=>setImmediate(r))};
 async function boot({lang='en',saved=null,remote=null,signed=false,deferStartup=false,deferSignup=false,signupFailure=false}={}){
@@ -48,8 +48,8 @@ async function boot({lang='en',saved=null,remote=null,signed=false,deferStartup=
  w.MindGardenAccount.panel('signup');el('accountName').value='tester';el('accountPassword').value='test-password-123';click('accountSignup');await wait();click('accountContinue');await wait();w.document.querySelector('[data-copy-player]').checked=true;click('accountCopyPlayers');await wait();assert.equal(nav.depth,0,'No credential forms remain behind the connected account');
  el('accountOptions').open=true;el('accountSecurity').open=true;el('box').scrollTop=130;
  click('accountPlayers');await wait();assert.equal(nav.key,'players');const depth2=nav.depth;w.document.querySelector('[data-p]').click();await wait();assert.equal(nav.depth,depth2,'Player refresh is not a new level');click('pd');await wait();assert(el('accountPlayers'));assert(el('accountOptions').open);assert(el('accountSecurity').open);assert.equal(el('box').scrollTop,130);assert(w.MindGardenAccount.signedIn);
- const icons=[...el('box').querySelectorAll('.account-panel .mg-info-button')];assert(icons.every(b=>b.querySelector('span').textContent==='i'));assert(!el('box').querySelector('button button'),'No nested interactive buttons');
- const signoutInfo=el('accountSignout').parentElement.querySelector('.mg-info-button');signoutInfo.click();assert(w.MindGardenAccount.signedIn);w.MindGardenInfo.hide();
+ const icons=[...el('box').querySelectorAll('.account-panel .mg-info-button')];assert(icons.every(b=>b.getAttribute('aria-label') && b.dataset.info));assert(!el('box').querySelector('button button'),'No nested interactive buttons');
+ const signoutInfo=el('accountSignout').parentElement.querySelector('.mg-info-button');signoutInfo.click();assert(w.MindGardenAccount.signedIn);el('v5Information').querySelector('button').click();
  click('accountSettingsOpen');await wait();el('accountSecurity').open=true;click('deviceSetup');await wait();assert.equal(nav.key,'device-signin');await back();assert(el('accountSecurity').open);await back();click('accountPlayers');await wait();click('menuExit');assert(el('ov').classList.contains('hidden'));assert.equal(nav.depth,0);w.MindGardenAccount.panel();await wait();assert.equal(nav.depth,0);
  click('accountPlayers');await wait();el('box').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));assert(el('ov').classList.contains('hidden'));assert.equal(nav.depth,0);
  assert.deepEqual(x.errors,[]);w.close();

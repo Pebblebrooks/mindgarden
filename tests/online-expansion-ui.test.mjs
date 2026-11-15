@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import {database} from './room8.test.mjs';
 import {onRequest} from '../functions/api/room8.js';
 import {onlineActivities,makeOnlineQuestions} from '../shared/online-activities.js';
-const require=createRequire(import.meta.url),{JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom');
+const require=createRequire(import.meta.url),{JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs');
 const {DB,sqlite}=database(),clients=[],errors=[],pause=ms=>new Promise(r=>setTimeout(r,ms));
 const get=f=>readFileSync(new URL('../public/'+f,import.meta.url),'utf8');
 async function boot(lang,stored){

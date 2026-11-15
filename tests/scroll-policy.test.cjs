@@ -1,4 +1,4 @@
-const {readFileSync}=require('node:fs'),assert=require('node:assert/strict'),{JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'jsdom');
+const {readFileSync}=require('node:fs'),assert=require('node:assert/strict'),{JSDOM,VirtualConsole}=require(process.env.MG_JSDOM||'./test-dom.cjs');
 const html=readFileSync(__dirname+'/../public/index.html','utf8'),css=readFileSync(__dirname+'/../public/garden-ui-'+require('../package.json').version.replaceAll('.','')+'.css','utf8');
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<link[^>]+>/g,''),{pretendToBeVisual:true,runScripts:'outside-only',virtualConsole:new VirtualConsole()}),w=dom.window,d=w.document;
 try{

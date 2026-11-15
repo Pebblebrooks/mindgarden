@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
 import {database} from './room8.test.mjs';
 import {onRequest} from '../functions/api/room8.js';
-const require=createRequire(import.meta.url),{JSDOM}=require(process.env.MG_JSDOM||'jsdom');
+const require=createRequire(import.meta.url),{JSDOM}=require(process.env.MG_JSDOM||'./test-dom.cjs');
 const {DB,sqlite}=database(),clients=[],errors=[];
 const root=new URL('../public/',import.meta.url),get=f=>readFileSync(new URL(f,root),'utf8'),pause=ms=>new Promise(r=>setTimeout(r,ms));
 async function boot(lang){
