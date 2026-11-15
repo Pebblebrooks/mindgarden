@@ -21,3 +21,9 @@ html[data-theme=dark] .result-complete button:not(.primary),html[data-theme=dark
 html[data-theme=dark] .result-complete .result-footer{border-color:#accdc0}
 /* Approved shared icon and centred popup format. */
 .movement-icon{width:48px;min-width:48px;height:48px;min-height:48px;padding:8px;display:inline-flex;align-items:center;justify-content:center}.movement-icon svg{width:26px;height:26px}.movement-hint{color:#ffda45!important;background:#153b3d!important}.movement-hint svg{width:32px;height:32px}header{display:flex;justify-content:space-between;align-items:center}#footer{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}#footer #stages{flex:1;margin:12px 0}#footer #movementSettings{margin-left:auto}#content .rest p,#content .result-rest p,#content .result-complete p,#content .setup p,#content .setup label{text-align:center}.result-primary .movement-icon{width:100%}.movement-confirm{max-width:min(90vw,440px);border-radius:22px;padding:24px;color:var(--text,#fffbea);background:var(--panel,#194941);text-align:center}.movement-confirm::backdrop{background:#102e3299}.movement-confirm p{text-align:center}.movement-confirm>div{display:flex;justify-content:center;gap:16px}
+/* Match the shared light palette in the embedded movement menus. */
+html:not([data-theme=dark]){--ink:#174a42;--sage:#e6efe4}
+html:not([data-theme=dark]) :is(.panel,.result-complete,.result-rest,dialog){background:#fafcf7;color:#174a42;border-color:#8fa99a}
+html:not([data-theme=dark]) button{background:#fafcf7;color:#174a42;border-color:#628879}
+html:not([data-theme=dark]) :is(button.primary,button.primary:hover){background:#24685b;color:#fff;border-color:#24685b}
+html:not([data-theme=dark]) button[aria-pressed=true]:not(.primary){background:#c5e2da;color:#174a42;border-color:#628879}

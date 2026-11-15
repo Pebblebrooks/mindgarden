@@ -27,7 +27,8 @@
     "viewport-fit.css",
     "approved-menus.css",
     "game-ui.css",
-    "first-release-games.css"
+    "first-release-games.css",
+    "light-theme.css"
   ],
   "scripts": [
     "grammar.js",
