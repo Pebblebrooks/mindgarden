@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v4.0.54">
+<meta name="mind-garden-release" content="v4.0.55">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-4054.css">
+<link rel="stylesheet" href="garden-ui-4055.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -709,10 +709,11 @@ function rWrd(){
   var r=mg.difficulty||1,mx=Math.min(10,3+Math.floor(r/2)),pool=allItems().filter(function(x){return/^[a-z]{3,10}$/.test(x.n)&&x.n.length<=mx&&x.n.length>=Math.max(3,mx-2)}),it=pool[rnd(0,pool.length-1)],w=it.n.toUpperCase(),L=w.split(""),sc,pos=0,bad=0,g=mg;
   for(var t=0;t<9;t++){sc=shuffle(L.slice());if(sc.join("")!==w)break}
   if(r>=6){var extra=pick("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").filter(function(c){return L.indexOf(c)<0}),Math.min(4,1+Math.floor((r-6)/3)));sc=shuffle(sc.concat(extra))}
+  g.hint=function(){if(pos>=L.length)return window.MindGardenLocale.pair("Word complete.","单词已完成。");var b=Array.from($("mp").querySelectorAll("[data-a]")).find(function(b){return !b.disabled&&sc[+b.dataset.a]===L[pos]});if(b)b.classList.add("game-hint-target");return window.MindGardenLocale.pair("Next letter: ","下一个字母：")+L[pos]};
   function slots(){return L.map(function(c,i){return i<pos?c:"_"}).join(" ")}
   $("mp").innerHTML='<div class="big st one">'+gamePicture(it.e)+'</div><div class="seqline" id="sl">'+slots()+'</div><div class="gridm" style="--c:'+Math.min(L.length,4)+'">'+sc.map(function(c,i){return '<button class="big txt nm" data-a="'+i+'" aria-label="Letter '+c+'">'+c+'</button>'}).join("")+'</div>';
   $("mmsg").textContent="Tap the letters in the right order to spell the word.";say(it.n);
-  g.h=function(b){if(b.disabled)return;var c=sc[+b.dataset.a];if(c===L[pos]){pos++;b.disabled=true;b.style.opacity=.35;$("sl").textContent=slots();if(pos===L.length)res(bad<3,"Yes – “"+it.n+"”!")}else{bad++;$("mmsg").textContent="Not that letter – try another."}};
+  g.h=function(b){if(b.disabled)return;var c=sc[+b.dataset.a];if(c===L[pos]){pos++;b.disabled=true;b.style.opacity=.35;$("sl").textContent=slots();if(pos===L.length)res(bad<3,"Yes – “"+it.n+"”!")}else{bad++;$("sharedHintStatus")?$("sharedHintStatus").textContent=window.MindGardenLocale.pair("Try another letter. Hint can help.","请尝试其他字母，也可使用提示。"):$("mmsg").textContent="Not that letter – try another."}};
 }
 Object.assign(MG,{rem:{n:"Remember the picture",d:"Look at one picture, then find it again.",ic:"💭"},cnt:{n:"Count down",d:"Keep taking away the same number.",ic:"⏬"},add:{n:"Missing number",d:"Find the number that completes the sum.",ic:"🎯"},same:{n:"Same group",d:"Find the picture from the same group.",ic:"🤝"},time:{n:"Time later",d:"Work out the time after a few hours.",ic:"⏳"},count:{n:"Count it",d:"Count how many of one picture you can see.",ic:"🔟"},find:{n:"Find it",d:"Find the named picture in the crowd.",ic:"🕵️"},pic:{n:"Find the picture",d:"Read the word, then pick its picture.",ic:"👀"},sub:{n:"Take away",d:"Find how much to take away.",ic:"➖"},wm:{n:"Match the word",d:"Pick the word that names the picture.",ic:"📖",g:2}});
 function rSub(){var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),hi=r<3?20:r<5?50:100,a=rnd(Math.floor(hi/2),hi),d=rnd(r<3?2:5,Math.max(r<3?5:9,Math.floor(a/2))),b=a-d;
@@ -765,7 +766,7 @@ function startMG(t){
 function nextR(){
   if(!mg)return;
   if(mg.r>=mg.R)return mdone();
-  $("mp").classList.remove("story-answer-panel");mg.r++;mg.h=null;mg.ans=null;mg.last=null;mg.reviewed=false;mg.reviewExpected=null;mg.reviewEntered=null;$("hRound").innerHTML='<span class="sr">Round '+mg.r+' of '+mg.R+'</span><span class="dots" aria-hidden="true">'+mg.hist.concat(new Array(mg.R-mg.hist.length).fill(null)).map(function(x,i){return"<i class=\""+(x===true?"d":x===false?"m":i===mg.r-1?"c":"")+"\"></i>"}).join("")+"</span>";$("mp").innerHTML="";
+  $("mp").classList.remove("story-answer-panel");mg.r++;mg.h=null;mg.hint=null;mg.ans=null;mg.last=null;mg.reviewed=false;mg.reviewExpected=null;mg.reviewEntered=null;$("hRound").innerHTML='<span class="sr">Round '+mg.r+' of '+mg.R+'</span><span class="dots" aria-hidden="true">'+mg.hist.concat(new Array(mg.R-mg.hist.length).fill(null)).map(function(x,i){return"<i class=\""+(x===true?"d":x===false?"m":i===mg.r-1?"c":"")+"\"></i>"}).join("")+"</span>";$("mp").innerHTML="";
   var generate=({seq:rSeq,miss:rMiss,sort:rSort,num:rNum,sum:rSum,odd:rOdd,shp:rShp,tbl:rTbl,clk:rClk,diff:rDiff,wrd:rWrd,wm:rWm,sub:rSub,rem:rRem,cnt:rCnt,add:rAdd,same:rSame,time:rTime,count:rCount,find:rFind,pic:rPic,...(window.MindGardenExtras||{})})[mg.t];if(window.MindGardenQuestions)window.MindGardenQuestions.generate(generate);else generate();
 }
 function res(good,note){
@@ -854,7 +855,7 @@ function gstage(p){var b=Math.floor(p/12),r=p%12,a=[];for(var j=0;j<12;j++)a[ORD
 function growUp(p){var b=p.gr||0;growMsg="";if(b>=60)return;p.gr=b+1;var t=dstr();if(p.gd!==t){p.gd=t;p.gr=Math.min(60,p.gr+1)}
  var M={12:"🌱 Every flower bed now has a seed!",24:"🌿 Little sprouts are showing everywhere!",36:"🌷 Buds are forming!",48:"🌸 The flowers are opening!",60:"🌼 Your garden is in full bloom! Wonderful!"};
  growMsg="🌱 Your garden grew a little.";[60,48,36,24,12].some(function(m){if(b<m&&p.gr>=m){growMsg=M[m];return true}})}
-function addGrow(){if(!growMsg)return;var r=$("box").querySelector(".row");if(r&&!$("ov").classList.contains("hidden"))r.insertAdjacentHTML("beforebegin",'<p class="brk">'+growMsg+'</p>');growMsg=""}
+function addGrow(){if(!growMsg)return;var r=$("box").querySelector(".row");if(r&&!$("ov").classList.contains("hidden"))r.insertAdjacentHTML("beforebegin",'<p class="brk garden-growth-message">'+growMsg+'</p>');growMsg=""}
 var STG=["Seeds","Sprouts","Buds","Opening","Full bloom"],STE=["🌰","🌱","🌷","🌸","🌼"];
 function wv(y,a,seg,n){var d="M0 "+y+" q"+seg/2+" -"+a+" "+seg+" 0",i;for(i=1;i<n;i++)d+=" t"+seg+" 0";return d}
 function wline(y,a,dur,rev,op){var from=rev?-72:0,to=rev?0:-72;return'<path d="'+wv(y,a,36,24)+'" fill="none" style="stroke:var(--cloud)" stroke-width="2" stroke-linecap="round" opacity="'+op+'"><animateTransform attributeName="transform" type="translate" from="'+from+' 0" to="'+to+' 0" dur="'+dur+'s" repeatCount="indefinite"/></path>'}
@@ -1057,7 +1058,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-4054.js"></script>
+<script src="garden-ui-4055.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

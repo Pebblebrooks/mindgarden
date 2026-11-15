@@ -3,7 +3,7 @@ const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bund
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,$=id=>w.document.getElementById(id),errors=[];
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));let spoken=[],cancels=0;w.SpeechSynthesisUtterance=function(t){this.text=t};w.speechSynthesis={getVoices:()=>[{name:'English',lang:'en-GB',voiceURI:'en'},{name:'Mandarin',lang:'zh-CN',voiceURI:'zh'}],addEventListener(){},speak:u=>spoken.push(u),cancel:()=>cancels++};
 w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+bundle,'utf8'));
-const click=id=>{assert($(id),id);$(id).click()},change=(id,v)=>{$(id).value=v;$(id).dispatchEvent(new w.Event('change',{bubbles:true}))},tick=()=>new Promise(r=>setImmediate(r));
+const click=id=>{assert($(id),id);$(id).click();if(id==='movementClose'){const confirm=w.document.querySelector('dialog .main');assert(confirm);confirm.click()}},change=(id,v)=>{$(id).value=v;$(id).dispatchEvent(new w.Event('change',{bubbles:true}))},tick=()=>new Promise(r=>setImmediate(r));
 (async()=>{try{await tick();const personal=w.MindGardenPersonal,move=w.MindGardenMovement;
 assert.equal(Object.keys(w.MG).filter(id=>move.has(id)).length,1);assert.equal(w.MG.gardenrhythm.n,'Move & Remember');
 delete w.me().gameSettings;w.me().myGames={count:5,range:'gentle',length:'short',start:1,timed:false,games:['followgardener','gardenrhythm','num'],overrides:{}};

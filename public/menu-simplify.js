@@ -143,9 +143,12 @@ new MutationObserver(()=>{settings();music();players();simplifyPanels();simplify
 let menuOpener=null;
 const baseOverlay=window.overlay;
 window.overlay=function(html){if($('ov').classList.contains('hidden'))menuOpener=document.activeElement;return baseOverlay.apply(this,arguments)};
-function exitEligible(){return !$('home').classList.contains('hidden')||!!$('box').querySelector('.account-panel,.personal-setup')}
+function exitEligible(){return !$('home').classList.contains('hidden')||!!$('box').querySelector('.account-panel,.personal-setup,#personalResult,#personalRestScreen,#dailyResult')}
 function exitMenu(){
  if($('ov').classList.contains('hidden')||!exitEligible())return;
+ if($('dailyResult')){($('dailyHome')||$('dailyRest')).click();return;}
+ if($('movementFrame')){window.MindGardenMovement.exitToGames();return;}
+ if(window.MindGardenPersonal?.closeResultMenu())return;
  closeOv();const menu=$('navMenu');if(menu)menu.classList.add('hidden');$('navMore')?.setAttribute('aria-expanded','false');
  const target=menuOpener?.isConnected&&!$('box').contains(menuOpener)&&!menu?.contains(menuOpener)?menuOpener:$('welcomeName');
  target?.focus({preventScroll:true});

@@ -11,7 +11,7 @@ After every app update, review the About documentation and update it wherever th
 
 ## Standing UI alignment rule
 
-- Centre-align headings and section headers only. Keep explanatory paragraphs and numbered/bulleted instructions left-aligned, including in About and the User guide.
+- Centre popup headings, labels and explanatory paragraphs per the approved November 15 revision. Keep structured lists readable; avoid text-align-last justification.
 - Do not apply blanket centring to paragraph/list text or inherit a centred last line from a parent. Follow the user's reference: centred heading/disclosure header above left-aligned multi-line instructions.
 - Keep existing button labels, compact controls and game-answer layouts unless separately requested. This rule does not require changing their alignment.
 - Verify English and Chinese, light and dark modes, mobile/desktop, and enlarged text.
@@ -39,3 +39,18 @@ After every app update, review the About documentation and update it wherever th
 - Explain that local copies survive sign-out and remain accessible in that browser. Browser clearing/eviction and finite capacity require backup guidance; do not promise permanent storage.
 
 - Keep visible copy concise; put optional explanations in attached info buttons. Visible games and favourites share the same scrollable selector. Password visibility controls must never cover their input.
+
+## Game result popup format
+
+- Use Replay followed by Next level for a completed solo level. Omit Next level at the final level and for unscored practice. Never abbreviate it to Next when that could mean a different game.
+- Use icon-only result actions with accessible bilingual labels and hover/focus/long-press help. Settings uses a gear; hints use a larger filled yellow bulb with rays. Put Easier level and conditional Next selected game in Settings; no More drawer.
+- Centre popup text, including the garden-growth status.
+- Close returns to the originating games list. Show Back only on related Options/break screens and preserve the result without re-awarding it. Icons require accessible names and comfortable touch targets.
+
+## Approved gameplay layout (November 15)
+
+- Gameplay uses a plain background, with no scenery toggle. Top-left logo is Home, top-right is Pause. Footer centres progress and puts Settings at the right.
+- Home and Back request confirmation; cancellation preserves the current round. Settings pauses solo play and resumes when dismissed.
+- All games offer contextual help. Existing scored/assisted rules remain explicit; never silently give multiplayer answer advantages.
+- Domino opponent turns run automatically after a brief delay and stop while paused or after leaving.
+- Numbered grid routes replace outline tracing in Connect the Dots: ordered checkpoints, adjacent steps, no reused cells, validated solvability and varied ranks.
