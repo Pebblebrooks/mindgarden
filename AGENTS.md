@@ -49,7 +49,7 @@ After every app update, review the About documentation and update it wherever th
 
 ## Approved gameplay layout (November 15)
 
-- Gameplay uses a plain background, with no scenery toggle. Top-left logo is Home, top-right is Pause. Footer centres progress and puts Settings at the right.
+- Gameplay uses a plain background, with no scenery toggle. Home and Pause sit in a centred toolbar above the board (maximum 720px wide). Footer centres progress, with Hint and Options together below. Exit confirmation has one border, centred Confirm Exit? / Game will not be saved text and icon-only cancel/exit actions; completed results retain truthful saved-result wording.
 - Home and Back request confirmation; cancellation preserves the current round. Settings pauses solo play and resumes when dismissed.
 - All games offer contextual help. Existing scored/assisted rules remain explicit; never silently give multiplayer answer advantages.
 - Domino opponent turns run automatically after a brief delay and stop while paused or after leaving.
