@@ -11,10 +11,31 @@ async function boot(){
  const intervals=new Map();w.setInterval=(fn,ms)=>{intervals.set(ms,fn);return ms};w.clearInterval=ms=>intervals.delete(ms);w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.confirm=()=>true;
  const user=await api('login',{name:'Tester'});w.localStorage.setItem('mindGardenLobby',JSON.stringify(user));let gate;
  w.fetch=async(url,options)=>{const action=new URL(url,w.location.href).searchParams.get('action');if(gate?.action===action){const current=gate;gate=null;await current.promise;if(current.response)return current.response}return onRequest({env:{DB},request:new Request(new URL(url,w.location.href),options)})};
- w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(read('language-catalog.js'));w.eval(read('language-runtime.js'));w.eval(read('player-preferences.js'));w.eval(read('identity.js'));w.eval(read('multiplayer.js'));await tick();w.document.getElementById('bOnline').click();await tick();
+ w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(read('language-catalog.js'));w.eval(read('language-runtime.js'));w.eval(read('player-preferences.js'));w.eval(read('identity.js'));w.eval(read('info-help.js'));w.eval(read('multiplayer.js'));await tick();w.document.getElementById('bOnline').click();await tick();
  return {w,user,intervals,click:id=>w.document.getElementById(id).click(),hold(action,response){let release;gate={action,response,promise:new Promise(r=>release=r)};return release}};
 }
 try{
+ {
+  const recipient=await boot();recipient.w.overlay('<h2 id="recipientSettings">Settings</h2>');
+  const host=await api('login',{name:'Invitation host'}),created=await api('create',host);
+  await recipient.intervals.get(2500)();
+  assert(recipient.w.document.getElementById('onlineInvitation').textContent.includes(created.code),'Code must arrive without opening the lobby again');
+  assert(recipient.w.document.getElementById('recipientSettings'),'Invitation must preserve the current popup');
+  const status=await api('status',{...host,code:created.code});
+  assert(status.invitations.find(i=>i.id===recipient.user.id)?.receivedAt,'Host receives delivery acknowledgement');
+  const style=recipient.w.document.createElement('style');style.textContent=read('v30.css')+read('v37.css');recipient.w.document.head.append(style);
+  assert(Number(recipient.w.getComputedStyle(recipient.w.document.getElementById('onlineInvitation')).zIndex)>Number(recipient.w.getComputedStyle(recipient.w.document.getElementById('ov')).zIndex),'Invitation must be above the popup');
+  const release=recipient.hold('lounge',new Response(JSON.stringify({error:'Session expired'}),{status:401}));
+  const pending=recipient.intervals.get(2500)();release();await pending;
+  assert(recipient.w.document.getElementById('mpReconnect'),'An expired session must show a reconnect action');
+  recipient.click('mpReconnect');assert(recipient.w.document.getElementById('mpLogin'),'Reconnect returns to lobby entry');
+ }
+ {
+  const a=await boot();a.click('mpHistory');await tick();
+  assert(a.w.document.getElementById('box').textContent.includes('No completed games'));
+  assert(!a.w.document.getElementById('box').textContent.includes('Clearing browser data'));
+  assert(a.w.document.querySelector('[data-info]').dataset.info.includes('Clearing browser data'));
+ }
  for(const action of ['create','join']){
   const a=await boot();if(action==='join'){const host=await api('login',{name:'Other host'}),r=await api('create',host);a.w.document.getElementById('mpCode').value=r.code}
   const release=a.hold(action);a.click(action==='create'?'mpCreate':'mpJoin');await tick();a.click('mpClose');release();await tick();

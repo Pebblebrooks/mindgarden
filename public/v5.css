@@ -43,7 +43,7 @@ html body{font-family:Arial,'Noto Sans SC',sans-serif;font-variant-numeric:norma
 #home #unifiedNav #navMenu summary{padding:10px 28px!important;min-height:48px!important;box-sizing:border-box}
 #home #unifiedNav #navMenu .nav-group>div{gap:6px!important}
 #home #unifiedNav #navMenu h3{margin:8px 0!important}
-#home #unifiedNav #navMenu #menuCards{justify-content:center!important;margin:4px 0!important}
+#home #unifiedNav #navMenu #menuCards{display:grid!important;grid-template-columns:48px minmax(0,1fr) 48px!important;justify-content:center!important;width:min(360px,100%)!important;margin:10px auto!important;background:transparent!important;border:0!important;color:inherit!important}
 #home #gameLibrary :is(.library-foot,#libraryCount,.library-heading h1){text-align:center!important;text-align-last:auto!important}
 #home .game-filterbar{display:flex!important;flex-wrap:wrap!important;gap:12px!important;align-items:end!important}
 #home .game-filterbar .search-field{flex:1 1 240px;min-width:0}
@@ -85,9 +85,9 @@ body:has(.game-ui-dialog[open]) #ov{visibility:hidden!important}
 #home #unifiedNav #navMenu .nav-group>div{height:auto!important;grid-auto-rows:auto!important}
 #ov #box .app-info-about :is(h1,h2,h3,h4,summary),#ov #box .app-info-about .app-info-heading{text-align:center!important;text-align-last:auto!important}
 #ov #box .app-info-about :is(p,li,ul,ol,.about-answer){text-align:left!important;text-align-last:auto!important}
-#home #unifiedNav #navMenu :where(.nav-group button,summary,#gardenPanelOpen,#menuCards){display:grid!important;grid-template-columns:28px minmax(0,1fr) 48px!important;align-items:center!important;gap:12px!important;width:min(260px,100%)!important;max-width:100%!important;min-width:0!important;margin:4px auto!important;padding:8px 0!important;text-align:left!important;text-align-last:auto!important;box-sizing:border-box;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:8px!important;color:inherit!important;position:relative!important}
-#home #unifiedNav #navMenu :where(.nav-group button,summary,#gardenPanelOpen,#menuCards)>:first-child{grid-column:1!important;grid-row:1;justify-self:center}
-#home #unifiedNav #navMenu :where(.nav-group button,summary,#gardenPanelOpen,#menuCards)>span:last-child{grid-column:2!important;grid-row:1;text-align:left!important;min-width:0;overflow-wrap:normal}
+#home #unifiedNav #navMenu :where(.nav-group button,.simple-menu-group button,summary,#gardenPanelOpen,#menuCards){display:grid!important;grid-template-columns:48px minmax(0,1fr) 48px!important;align-items:center!important;gap:12px!important;width:min(360px,100%)!important;max-width:100%!important;min-width:0!important;margin:4px auto!important;padding:8px 0!important;text-align:center!important;text-align-last:auto!important;box-sizing:border-box;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:8px!important;color:inherit!important;position:relative!important}
+#home #unifiedNav #navMenu :where(.nav-group button,.simple-menu-group button,summary,#gardenPanelOpen,#menuCards)>:first-child{grid-column:1!important;grid-row:1;justify-self:center}
+#home #unifiedNav #navMenu :where(.nav-group button,.simple-menu-group button,summary,#gardenPanelOpen,#menuCards)>span:last-child{grid-column:2!important;grid-row:1;text-align:center!important;min-width:0;overflow-wrap:normal}
 #home #unifiedNav #navMenu summary{list-style:none!important}
 #home #unifiedNav #navMenu summary::marker,#home #unifiedNav #navMenu summary::-webkit-details-marker{display:none;content:''}
 #home #unifiedNav #navMenu summary::after{content:'›';grid-column:3;grid-row:1;text-align:center;font-size:26px}
@@ -162,7 +162,7 @@ body :is(.mg-info-button,.mg-help-trigger):focus-visible{outline:2px solid var(-
 #progressDisplay .journey-heading{justify-content:center!important}
 .game-setting-controls .change-level{width:auto!important;padding:12px 20px!important;margin:16px auto!important}
 #home .mg-help-trigger,#ov #box .mg-info-button{background:none!important;border:0!important;box-shadow:none!important}
-#home #unifiedNav #navMenu .nav-group:has([data-go="daily"])>div{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(145px * var(--fs))),1fr))!important;gap:8px 16px!important;width:100%!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"])>div{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(130px * var(--fs))),1fr))!important;gap:8px 16px!important;width:100%!important}
 #home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button{display:grid!important;grid-template-columns:24px minmax(0,1fr)!important;gap:8px!important;min-height:48px!important;width:100%!important;margin:0!important;padding:8px 0!important}
 #home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button svg{width:24px!important;height:24px!important}
 #home #unifiedNav #navMenu{padding:16px 18px!important}
@@ -170,12 +170,12 @@ body :is(.mg-info-button,.mg-help-trigger):focus-visible{outline:2px solid var(-
 #home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button{grid-template-columns:24px minmax(0,1fr)!important;min-width:0!important;max-width:none!important;gap:8px!important;padding:6px 0!important}
 #home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button>span{max-width:none!important;width:auto!important}
 #home #unifiedNav #navMenu>details{border-bottom:1px solid var(--line)!important;margin:0!important;padding:4px 0!important}
-#home #unifiedNav #navMenu>details>summary{display:flex!important;justify-content:center!important;gap:5px!important;width:100%!important;margin:0!important;padding:12px 0!important;min-height:48px!important;text-align:center!important}
-#home #unifiedNav #navMenu>details>summary .v5-menu-icon{display:none!important}
-#home #unifiedNav #navMenu>details>summary .v5-menu-label{text-align:center!important;flex:0 1 auto!important}
-#home #unifiedNav #navMenu>details>summary::before{content:'▸'!important;display:inline-block!important;position:static!important;width:auto!important;height:auto!important;background:none!important;transform:none!important}
-#home #unifiedNav #navMenu>details[open]>summary::before{content:'▾'!important}
-#home #unifiedNav #navMenu>details>summary::after{display:none!important;content:none!important}
+#home #unifiedNav #navMenu details>summary{display:flex!important;justify-content:center!important;gap:5px!important;width:100%!important;margin:0!important;padding:12px 0!important;min-height:48px!important;text-align:center!important}
+#home #unifiedNav #navMenu details>summary .v5-menu-icon{display:none!important}
+#home #unifiedNav #navMenu details>summary .v5-menu-label{text-align:center!important;flex:0 1 auto!important}
+#home #unifiedNav #navMenu details>summary::before{content:'▸'!important;display:inline-block!important;position:static!important;width:auto!important;height:auto!important;background:none!important;transform:none!important}
+#home #unifiedNav #navMenu details[open]>summary::before{content:'▾'!important}
+#home #unifiedNav #navMenu details>summary::after{display:none!important;content:none!important}
 #home #unifiedNav #navMenu>details:last-child{border:0!important}
 #home #unifiedNav #navMenu>:is(#customiseDashboard,#menuAccountSettings){min-height:56px!important;margin:4px auto!important;padding:12px 0!important;width:100%!important;text-align:center!important}
 #localCopyList{display:grid;gap:12px;width:100%}
@@ -196,13 +196,14 @@ body :is(.mg-info-button,.mg-help-trigger):focus-visible{outline:2px solid var(-
 /* Component ownership: navigation, welcome and catalogue each have one rule set.
    !important bridges legacy theme sheets; do not append competing variants below. */
 :root{--mg-gap:16px;--mg-touch:48px;--mg-card-radius:20px;--mg-card-min:calc(155px * var(--fs));--mg-accent:#f3d88b}
-#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav,#home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav,#home #unifiedNav{display:flex!important;align-items:center!important;justify-content:space-between!important;position:relative!important;inset:auto!important;min-height:56px!important;height:auto!important;padding:4px 12px!important;gap:8px!important;box-sizing:border-box;margin:0 auto!important}
-#home #unifiedNav .nav-brand{display:flex!important;align-items:center;gap:6px;flex:0 0 auto!important;width:auto!important;max-width:none!important;min-height:48px;height:auto!important;padding:6px!important;font-size:calc(1rem * var(--fs))!important;line-height:1.35!important;white-space:nowrap!important}
+#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav,#home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav,#home #unifiedNav{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;justify-content:space-between!important;position:relative!important;inset:auto!important;min-height:56px!important;height:auto!important;padding:4px 12px!important;gap:8px!important;box-sizing:border-box;margin:0 auto!important}
+#home #unifiedNav .nav-brand{justify-self:start;display:flex!important;align-items:center;gap:6px;flex:0 0 auto!important;width:auto!important;max-width:none!important;min-height:48px;height:auto!important;padding:6px!important;font-size:calc(1rem * var(--fs))!important;line-height:1.35!important;white-space:nowrap!important}
 #home #unifiedNav[data-nav-compact="false"] .nav-brand>span:last-child{display:inline!important}
 #home #unifiedNav[data-nav-compact="true"] .nav-brand>span:last-child{display:none!important}
 #home #unifiedNav .nav-items{display:flex!important;flex:1 1 auto!important;justify-content:center;min-width:0;gap:5px}
 #home #unifiedNav[data-nav-empty="true"] .nav-items{display:none!important}
-#home #unifiedNav .nav-actions{display:flex!important;align-items:center;flex:0 0 auto!important;width:auto!important;max-width:none!important;gap:6px!important}
+#home #unifiedNav[data-nav-empty="true"]{display:flex!important}
+#home #unifiedNav .nav-actions{justify-self:end;display:flex!important;align-items:center;flex:0 0 auto!important;width:auto!important;max-width:none!important;gap:6px!important}
 #home #unifiedNav .nav-actions>:not([data-nav-hidden="true"]){display:inline-flex!important;align-items:center;justify-content:center}
 #home #unifiedNav :is(.nav-actions,.nav-items)>[data-nav-hidden="true"]{display:none!important}
 #home #unifiedNav .nav-actions #navMore{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;width:auto!important;min-width:48px!important;max-width:none!important;height:auto!important;min-height:48px!important;padding:6px 10px!important;font-size:calc(1rem * var(--fs))!important;line-height:1.35!important}
@@ -261,3 +262,11 @@ html #home #gameLibrary #libraryDisplay #gameCards .mg-info-button,html #ov #box
 html #ov #box #personalSelected .personal-remove-game{position:relative!important;display:block;margin:8px auto!important}
 html #home #gameLibrary #libraryDisplay #gameCards .display-choice-hidden{display:none!important}
 html[data-text-large="true"] #home #gameLibrary #libraryDisplay #gameCards,html[data-text-large="true"] #ov #box #personalSelected{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))!important}
+
+/* Shared secondary menu labels; reading paragraphs retain their own alignment. */
+#ov #box .simple-menu-group>summary,#ov #box .simple-menu-group button{text-align:center!important;text-align-last:auto!important}
+#home #unifiedNav #navMenu :is(select,label){text-align:center!important;text-align-last:center!important}
+
+/* Light-mode primary card: pale sage with readable opaque text. */
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard #dashStart{background:rgba(221,237,216,.94)!important;color:#174a42!important;border-color:#b1c8aa!important;box-shadow:0 2px 4px #174a421a!important}
+html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard #dashStart strong,html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard .welcome-choice:has(#dashStart) .mg-help-trigger{color:#174a42!important}

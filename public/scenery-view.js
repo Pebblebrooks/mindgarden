@@ -3,8 +3,14 @@
 const T=(a,b)=>window.MindGardenLocale.pair(a,b);
 const icon='<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="5" height="14" rx="1"/><rect x="10" y="5" width="5" height="14" rx="1"/><rect x="17" y="5" width="4" height="14" rx="1"/></svg>';
 let cardsHidden=me().dashboardPreferences?.welcomeVisible===false;
-window.MindGardenWelcomeCards={setVisible(value){cardsHidden=!value;mount()}};
-function toggle(){cardsHidden=!cardsHidden;me().dashboardPreferences={...me().dashboardPreferences,welcomeVisible:!cardsHidden};persist();mount()}
+window.MindGardenWelcomeCards={setVisible};
+function setVisible(value,{remember=false}={}){
+ cardsHidden=!value;
+ if(value)document.documentElement.dataset.v5Garden='false';
+ if(remember){me().dashboardPreferences={...me().dashboardPreferences,welcomeVisible:!!value};persist()}
+ mount();window.dispatchEvent(new Event('gardenCardsChange'));
+}
+function toggle(){setVisible(cardsHidden,{remember:true})}
 function mount(){
  const nav=document.getElementById('unifiedNav'),menu=document.getElementById('navMenu'),scene=document.querySelector('.welcome-scene');if(!nav||!menu||!scene)return;
  const hidden=cardsHidden;document.documentElement.dataset.welcomeCards=hidden?'hidden':'shown';

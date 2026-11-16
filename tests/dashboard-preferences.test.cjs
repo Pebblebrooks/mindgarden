@@ -12,6 +12,20 @@ el('displayWelcome').querySelector('[value="daily"]').checked=false;
 click('displayNone');el('displayGames').querySelector('[value="pairs"]').checked=true;click('displaySave');await tick();
 assert.equal(w.save.mode,'dark');assert.equal(w.save.sceneDark,'sakura');assert.equal(w.MindGardenPersonal.config().games.join(','),'num');assert(el('displaySavedNotice').textContent.includes(w.me().name));assert.equal(w.document.documentElement.dataset.welcomeCards,'shown');assert(el('dashStart').closest('.welcome-choice').classList.contains('display-choice-hidden'),'An unchecked primary shortcut is hidden, just like every other choice');
 assert(el('gardenProgressStrip').classList.contains('display-choice-hidden'));assert.equal(w.document.documentElement.dataset.progressVisible,'false');assert(el('v5GardenView').closest('.welcome-scene'));click('v5GardenView');assert.equal(w.document.documentElement.dataset.v5Garden,'true');click('v5GardenView');assert.equal(w.document.documentElement.dataset.v5Garden,'false');
+for(const lang of ['en','zh']){
+ w.save.lang=lang;click('navCards');await tick();
+ assert.equal(w.document.documentElement.dataset.welcomeCards,'hidden');
+ assert.equal(el('v5GardenView').textContent,lang==='en'?'Back to games':'返回游戏');
+ click('v5GardenView');await tick();
+ assert.equal(w.document.documentElement.dataset.welcomeCards,'shown');
+ assert.equal(w.document.documentElement.dataset.v5Garden,'false');
+ assert.equal(api.prefs().welcomeVisible,true);
+ assert.equal(el('navCards').getAttribute('aria-pressed'),'true');
+ assert(el('dashStart').closest('.welcome-choice').classList.contains('display-choice-hidden'),'Individual card choices are preserved');
+ click('v5GardenView');click('navCards');click('navCards');await tick();
+ assert.equal(w.document.documentElement.dataset.v5Garden,'false','Navbar show also exits scenery-only mode');
+}
+w.save.lang='en';
 w.MindGardenDashboard.library();await tick();assert(w.document.querySelector('#gameCards [data-game="num"]').closest('article').classList.contains('display-choice-hidden'));
 el('displayGameNotice').querySelector('button').click();assert(!w.document.querySelector('#gameCards [data-game="num"]').closest('article').classList.contains('display-choice-hidden'));
 const exported=w.MindGardenExport.backup();assert.equal(exported.profile.dashboardPreferences.welcomeVisible,true);assert.equal(w.MindGardenExport.validated(JSON.stringify(exported)).dashboardPreferences.gameCards[0],'pairs');

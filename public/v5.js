@@ -27,8 +27,8 @@ function mount(){
 
  const dash=document.getElementById('welcomeDashboard');if(dash&&!document.getElementById('v5GardenView')){
  const b=document.createElement('button');b.id='v5GardenView';b.className='btn';
- const update=()=>b.textContent=document.documentElement.dataset.v5Garden==='true'?T('Back to games','返回游戏'):T('Enjoy the garden','欣赏花园');
- b.onclick=()=>{document.documentElement.dataset.v5Garden=String(document.documentElement.dataset.v5Garden!=='true');update();dash.scrollIntoView?.({block:'start',behavior:'auto'})};update();dash.querySelector('.welcome-scene').append(b);
+ const update=()=>b.textContent=(document.documentElement.dataset.v5Garden==='true'||document.documentElement.dataset.welcomeCards==='hidden')?T('Back to games','返回游戏'):T('Enjoy the garden','欣赏花园');
+ b.onclick=()=>{const returning=document.documentElement.dataset.v5Garden==='true'||document.documentElement.dataset.welcomeCards==='hidden';if(returning)window.MindGardenWelcomeCards?.setVisible(true,{remember:true});document.documentElement.dataset.v5Garden=String(!returning);update();dash.scrollIntoView?.({block:'start',behavior:'auto'})};window.addEventListener('gardenCardsChange',update);update();dash.querySelector('.welcome-scene').append(b);
  }
  const scale=Number(document.documentElement.style.getPropertyValue('--fs'))||1;if(document.documentElement.dataset.textLarge!==String(scale>=1.5))document.documentElement.dataset.textLarge=String(scale>=1.5);
 }

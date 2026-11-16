@@ -18,7 +18,7 @@ function preference(){return me().narrationGender?.[language()]||'auto'}
 function matching(){const choice=preference();return voices().filter(v=>choice==='auto'||gender(v)===choice)}
 function rank(v){return (/natural|neural|premium|enhanced/i.test(v.name)?100:0)+(/google|samantha|karen|daniel|tingting|meijia/i.test(v.name)?30:0)+(v.default?5:0)}
 function selectedVoice(){const list=matching(),saved=me().narrationVoices?.[language()];return list.find(v=>v.voiceURI===saved)||list.sort((a,b)=>rank(b)-rank(a))[0]}
-function unavailableMessage(){return T('No matching voice is available. Choose Automatic or enable a matching language voice on this device.','此设备暂无符合选择的普通话语音。请选择“自动”，或在设备上启用对应的普通话语音。')}
+function unavailableMessage(){return T('Voice unavailable. Choose Automatic or enable a voice for this language.','语音不可用。选择“自动”或启用此语言的语音。')}
 function refresh(){
  const select=document.getElementById('storyVoice');if(!select)return;
  const all=voices(),list=matching(),saved=me().narrationVoices?.[language()]||'',choice=preference();

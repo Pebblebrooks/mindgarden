@@ -20,18 +20,18 @@ const rules={
  hawker:()=>T(d>=10?'Remember the order, then serve it in reverse.':'Remember and serve an increasingly varied food order.',d>=10?'记住餐单，然后按相反顺序出餐。':'记住并准备越来越多样的餐单。'),
  trail:()=>T(d>=10?'Remember the route, then retrace it in reverse.':'Remember a route with more stops.',d>=10?'记住路线，然后沿相反顺序返回。':'记住有更多站点的路线。'),
  melody:()=>T(d>=11?'Listen at the same pace, then repeat the notes backwards.':'Remember a longer note pattern; playback speed stays the same.',d>=11?'以相同速度聆听，然后倒序重复音符。':'记住更长的音符序列，播放速度保持不变。'),
- dots:()=>T('Plan a varied grid route through ordered checkpoints without crossing. Higher ranks add space, detours and fill requirements.','规划方格路线，按顺序经过检查点且不可交叉；高关卡增加空间、绕路与填满要求。'),
+ dots:()=>T('Connect checkpoints in order. Do not cross or reuse squares.','按顺序连接检查点，不可交叉或重复经过方格。'),
  jigsaw:()=>T('Swap pieces on a '+(r.native===1?3:4)+' × '+Math.min(6,2+Math.floor((d-1)/3))+' board. Preview and undo remain available.','在'+(r.native===1?3:4)+' × '+Math.min(6,2+Math.floor((d-1)/3))+'的棋盘交换拼图，随时可查看原图和撤销。'),
  spot:()=>T(d>=10?'Compare finer changes across varied garden scenes.':'Find '+Math.min(8,2+Math.ceil(d/2))+' changes across varied garden scenes.',d>=10?'比较不同花园场景中的细微变化。':'找出不同花园场景中的'+Math.min(8,2+Math.ceil(d/2))+'处变化。'),
  sounds:()=>T('Identify recordings among '+Math.min(5,2+Math.ceil(d/4))+' choices. Replay and skipping remain available.','从'+Math.min(5,2+Math.ceil(d/4))+'个选项辨认录音，可重听或跳过。'),
- today:()=>T('Practise dates and time using your selected time zone. Higher levels add calendar reasoning.','按所选时区练习日期和时间，较高关卡加入日历推理。'),
+ today:()=>T('Practise dates and time in your time zone.','按所选时区练习日期与时间。'),
  foodknow:()=>T(d>=8?'Apply kitchen knowledge and compare food groups.':'Recognise foods, groups and familiar ingredients.',d>=8?'应用厨房常识，比较食物类别。':'辨认食物、类别及常见原料。'),
- localnews:()=>T('Recall source-backed event details; later levels include time and event relationships. Content rotates only when a new verified pack is available.','回忆有来源的活动细节，后期加入时间和事件关系题。仅在有新核实资料时更新内容。'),
+ localnews:()=>T('Remember event details and their sequence.','记住活动细节与先后顺序。'),
  album:()=>T('Study familiar photos with names, then match them from a larger choice set.','学习熟悉照片与名字，然后从更多选项中配对。'),
  teamgarden:()=>T(d>=8?'Count only the requested flower among distractions; take turns without a timer.':'Take turns counting flowers and growing a shared garden.',d>=8?'只数指定的花朵，忽略干扰项，轮流进行且不限时。':'轮流数花，共同种植花园。')
 };
 text=rules[r.id]?.()||window.MindGardenDifficulty.describe(r.id);
-if(r.range==='gentle')text+=' '+T('Gentle mode revisits core skills with fresh content; advanced rules stay off.','轻松模式用新内容巩固基础技能，不启用高阶规则。');
+// The selected challenge is already labelled in setup; do not repeat it in the rule.
 return text;
 }
 window.MindGardenDepth={fresh,pairMode,preview};
