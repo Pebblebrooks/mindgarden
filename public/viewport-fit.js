@@ -5,6 +5,8 @@
  const height=window.visualViewport?.height||innerHeight,available=Math.max(180,height-mp.getBoundingClientRect().top-(mini.querySelector('.game-footer')?.getBoundingClientRect().height||90)-28);
  mp.style.setProperty('--play-space',available+'px');
  for(const grid of mp.querySelectorAll('.gridm')){
+  // Story answer columns belong to the responsive stylesheet, not picture/word board fitting.
+  if(grid.classList.contains('story-answer-grid'))continue;
   const cells=[...grid.children];if(!cells.length)continue;
   const text=cells.every(e=>e.classList.contains('txt')),width=grid.clientWidth;
   if(text){const longest=Math.max(...cells.map(e=>e.textContent.trim().length));const minimum=longest>24?200:longest>10?140:90;const cols=Math.max(1,Math.min(cells.length,4,Math.floor(width/minimum)));grid.style.setProperty('grid-template-columns',`repeat(${cols},minmax(0,1fr))`,'important')}

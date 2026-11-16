@@ -160,6 +160,7 @@
  function aboutContent(release){
  const sections=[
  ['Latest improvements','最新改进',[
+ ['Short story answers stack in one column on narrow screens, keeping labels readable and controls visible.','窄屏上的短篇故事答案按单列排列，保持文字清晰，控制按钮始终可见。'],
  ['Desktop games use a centred container with balanced text, answer spacing and consistent control icons. Long activities scroll inside the play area while footer controls remain visible. Distant birds use smaller silhouettes and scene-specific clear-sky flight paths; birds are hidden for personal photos and videos.','桌面游戏采用居中容器，均衡安排文字、答案间距及控制图标。较长内容在游戏区域内滚动，底部控件保持可见。远处鸟儿体型更小，并沿各景色的无遮挡天空路线飞行；个人照片与视频中隐藏鸟儿。'],
  ['Detailed birds and butterflies replace emoji wildlife. Birds alternate wingbeats with gliding; butterflies follow drifting paths. Gentle reduces travel and numbers; Off hides wildlife. Animation pauses during games, menus and hidden tabs.','细致的鸟类与蝴蝶取代表情图案。鸟儿交替振翅与滑翔，蝴蝶沿缓慢曲线飞行。轻柔模式减少数量与移动速度；关闭模式隐藏动物。游戏、菜单及后台标签页中动画暂停。'],
  ['Choose from 22 paired day/dusk sceneries, including restored gardens and neutral architectural scenes with plain roof details. Background colours are softer; dark-mode scenery has a warmer, less blue treatment.','可选择22组日间与黄昏景色，包括恢复的花园与采用素雅屋顶细节的中性建筑背景。背景色彩更柔和，深色景色更温暖，减少蓝色偏调。'],

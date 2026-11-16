@@ -15,6 +15,7 @@ const root=path.resolve(__dirname,'../public');
   for(const icon of boxes.icons)assert(icon.w>=44&&icon.h>=44&&icon.b<=viewport.height+1);
   if(viewport.width>=900){assert(boxes.panel.w<=820);assert(boxes.panel.x>=24);}
   await page.locator('#storyReady').click();await page.waitForSelector('.story-answer-grid');
+  if(viewport.width<=480)assert.equal(await page.locator('.story-answer-grid').evaluate(n=>getComputedStyle(n).gridTemplateColumns.split(' ').length),1,'Narrow story answers use one column');
   assert.equal(await page.locator('.story-answer-grid.viewport-grid').count(),0,'Story answers must not receive picture-board cell sizing');
   const answers=await page.locator('.story-answer-grid .big').evaluateAll(nodes=>nodes.map(n=>({h:n.clientHeight,overflow:n.scrollHeight>n.clientHeight+2||n.scrollWidth>n.clientWidth+2})));assert(answers.every(a=>a.h>=44&&!a.overflow));
  }
