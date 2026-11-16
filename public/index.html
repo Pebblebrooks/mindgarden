@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v5.0.7">
+<meta name="mind-garden-release" content="v5.0.8">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-507.css">
+<link rel="stylesheet" href="garden-ui-508.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -634,7 +634,7 @@ function numOpts(ans){var c=[ans],ds=shuffle([1,-1,2,-2,3,-3,10,-10]);for(var i=
 function isGamePicture(value){return /^(?:\p{Extended_Pictographic}|[\uFE0F\u200D●■▲◆★✚])+$/u.test(String(value).trim())}
 function gamePicture(value){return window.MindGardenArt?window.MindGardenArt.html(value):'<span class="game-picture">'+esc(value)+'</span>'}
 function gamePictureLine(values){return '<div class="picture-sequence" translate="no">'+values.map(function(v){return '<span class="picture-symbol">'+gamePicture(v)+'</span>'}).join('')+'</div>'}
-function gamePrompt(value){return esc(value).replace(/\p{Extended_Pictographic}(?:[\uFE0F\u200D]|\p{Extended_Pictographic})*/gu,function(v){return '<span class="inline-picture">'+gamePicture(v)+'</span>'})}
+function gamePrompt(value){return esc(value).replace(/[+−×÷]/g,function(c){return '<span class="number-operator tone-'+({'+':'gold','−':'orange','×':'rose','÷':'sage'}[c])+'">'+c+'</span>'}).replace(/\p{Extended_Pictographic}(?:[\uFE0F\u200D]|\p{Extended_Pictographic})*/gu,function(v){return '<span class="inline-picture">'+gamePicture(v)+'</span>'})}
 function ask(top,opts,ans,okm,badm,txt){
   mg.questionKey=$("mmsg").textContent+"|"+top+"|"+String(ans);
   $("mp").innerHTML=top+'<div class="gridm" style="--c:'+opts.length+'">'+opts.map(function(o){return '<button class="big'+(isGamePicture(o.h)?' picture-answer':txt?' txt'+(txt===2?' nm':''):'')+'" data-a="'+esc(o.v)+'"'+(/^[-+]?\d+(?:\.\d+)?$/.test(String(o.h))?' translate="no"':'')+' aria-label="'+esc(o.l||o.v)+'">'+(isGamePicture(o.h)?gamePicture(o.h):o.h)+'</button>'}).join("")+'</div>';
@@ -1058,7 +1058,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-507.js"></script>
+<script src="garden-ui-508.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

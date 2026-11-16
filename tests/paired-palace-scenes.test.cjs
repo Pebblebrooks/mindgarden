@@ -3,7 +3,7 @@ const root=__dirname+'/../public/',read=f=>fs.readFileSync(root+f,'utf8'),html=r
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true});const w=dom.window;w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};const errors=[];w.addEventListener('error',e=>errors.push(e.message));
 require('./dom-lifecycle.cjs')(w);w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);for(const f of ['language-catalog.js','language-runtime.js','artwork.js','info-help.js','upgrade.js','multiplayer.js','i18n.js','dashboard.js','ambient.js','identity.js','personal-progress.js','scenes.js'])w.eval(read(f));
 (async()=>{try{
-const ids=['cloud-palace','jade-terraces','lotus-palace','moon-palace','golden-sanctuary','celestial-waterfall','sunrise-causeway','mist-mountain','starlight-court','cloud-sea-harbour'];
+const ids=['fjord','sakura','classical','alpine','pavilion','plateau','autumn-lake','moon-gate','stone-bridge'];
 for(const id of ids){
 w.MindGardenScenes.choose(id);w.MindGardenScenes.apply();
 for(const mode of ['light','dark','light']){
@@ -17,5 +17,5 @@ assert(fs.existsSync(root+name),name+' must be packaged');
 assert.equal(w.eval('save.sceneLight'),id);assert.equal(w.eval('save.sceneDark'),id);
 }
 }
-assert.deepEqual(errors,[]);console.log('PASS: all ten palaces keep the same scenery through light/dark/light toggles, using matching packaged day/night artwork.');
+w.save.sceneLight='sunrise-causeway';w.save.heroLight='sunrise-causeway';w.MindGardenScenes.apply();assert.equal(w.save.sceneLight,'moon-gate');assert(!w.MindGardenScenes.scenes.some(s=>s.id==='sunrise-causeway'));assert.deepEqual(errors,[]);console.log('PASS: all nine sceneries keep the same scenery through light/dark/light toggles, using matching packaged day/night artwork.');
 }finally{setImmediate(()=>dom.window.close())}})();
