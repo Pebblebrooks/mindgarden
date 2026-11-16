@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v5.0.13">
+<meta name="mind-garden-release" content="v5.0.14">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-5013.css">
+<link rel="stylesheet" href="garden-ui-5014.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -825,7 +825,6 @@ function mdone(){
   overlay('<h2>Well done!</h2><p>You got '+g.ok+' of '+g.R+' right.</p><div class="row"><button class="btn main" id="ma">Play again</button><button class="btn" id="mm">Menu</button></div>');
   $("ma").onclick=function(){startMG(g.t)};$("mm").onclick=function(){mg=null;toHome()};
 }
-addEventListener("resize",function(){var g=$("grid");if($("game").classList.contains("hidden")||!g.children.length)return;var c=COLS[LEVELS[cur].p],rows=Math.ceil(g.children.length/c);g.style.setProperty("--mw",Math.min(1050,c*Math.min(190,(innerHeight-230)/rows))+"px")});
 
 function award(c,key,secs){var p=me();p.ok=(p.ok||0)+c;p.gp=(p.gp||0)+1;growUp(p);if(key){p.bt=p.bt||{};if(!p.bt[key]||secs<p.bt[key])p.bt[key]=Math.max(1,secs)}persist()}
 function avHtml(p){return p.av?'<img class="av" src="'+p.av+'" alt="">':p.ae?'<span class="av em" aria-hidden="true">'+p.ae+'</span>':'<span class="av" aria-hidden="true">'+esc((p.name||"?").trim().charAt(0).toUpperCase())+'</span>'}
@@ -1058,7 +1057,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-5013.js"></script>
+<script src="garden-ui-5014.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

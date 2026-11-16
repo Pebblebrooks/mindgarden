@@ -70,3 +70,34 @@ html body #mini:has(#gaPet) #mp{width:100%!important;max-width:none!important;mi
 html body #mini:has(#gaPet)>.hud{margin-bottom:8px!important}
 html body #mini:has(#gaPet)>.game-footer{gap:12px!important;margin-top:12px!important;padding-top:0}
 @media(min-width:700px){#gaPet.mochi-game .mochi-stage{width:min(380px,100%)}}
+/* Matching boards use explicit square tracks; card aspect ratios cannot overrun rows. */
+html body #game #grid{width:min(100%,720px)!important;max-width:none!important;grid-template-columns:repeat(var(--pair-columns,var(--c)),var(--pair-cell,80px))!important;grid-template-rows:repeat(var(--pair-rows,1),var(--pair-cell,80px))!important;grid-auto-rows:var(--pair-cell,80px)!important;gap:10px!important;justify-content:center;align-content:start;scrollbar-gutter:stable both-edges}
+html body #game #grid .card{width:100%;height:100%;min-width:48px;min-height:48px;aspect-ratio:auto;box-sizing:border-box}
+html body #game #grid .f{border-radius:min(22px,calc(var(--pair-cell,80px) * .16));box-sizing:border-box}
+html body #game #grid .f.a{font-size:clamp(24px,calc(var(--pair-cell,80px) * .58),88px)}
+html body #game #grid .f.b{border-width:3px}
+#mini #mp .viewport-grid>.big .game-picture{font-size:min(64px,calc(var(--fit-cell) - 14px));width:auto;max-width:100%;max-height:100%;line-height:1}
+/* Instructions and readable choices retain their size within one scrolling play area. */
+#mini #mp :is(.ga-game,.new-game,.cg-game,.ed-game,.exp-game){min-width:0;max-width:100%;box-sizing:border-box}
+#mini #mp :is(.route-board,.ga-linkboard,#gaCanvas,.ga-shape){box-sizing:border-box}
+body:has(#ov:not(.hidden)) #onlineInvitation{display:none!important}
+
+/* Wide boards sit beside their instructions, freeing the full height for the task. */
+@media(min-width:900px) and (min-height:600px){
+ #mini #mp :is(.ga-game:has(.route-board,.ga-linkboard),.new-game:has(.picture-grid,.path-grid,.bingo-grid)){
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(288px,1.15fr);gap:12px 24px;align-items:center;align-content:center;padding:0;min-height:100%;
+ }
+ #mini #mp :is(.ga-game:has(.route-board,.ga-linkboard),.new-game:has(.picture-grid,.path-grid,.bingo-grid))>*{grid-column:1;min-width:0;margin-block:0!important}
+ #mini #mp :is(.ga-game:has(.route-board,.ga-linkboard),.new-game:has(.picture-grid,.path-grid,.bingo-grid))>p{max-width:100%;width:100%;margin-inline:0!important;line-height:1.4!important}
+ #mini #mp :is(.route-board,.ga-linkboard,.picture-grid,.path-grid,.bingo-grid){grid-column:2!important;grid-row:1/10;width:100%!important;max-width:100%!important;align-self:center}
+ #mini #mp :is(.ga-notice,.new-notice):empty{display:none}
+ #mini #mp :is(.ga-actions,.new-actions){gap:8px}
+}
+
+/* Choice grids must keep the play-area width inside centered flex layouts. */
+#mini #mp>.gridm{width:min(100%,640px)!important;box-sizing:border-box}
+#mini #mp .gridm>.big.txt{height:auto!important;min-height:64px;aspect-ratio:auto!important;white-space:normal;overflow-wrap:break-word}
+
+#mini #mp .viewport-grid>.big{box-sizing:border-box}
+#mini #mp>.big.one{width:120px;max-width:100%;height:100px;min-height:80px;box-sizing:border-box;font-size:72px;line-height:1}
+#mini #mp>.big.one .game-picture{width:80px;height:80px;max-width:100%;max-height:100%;font-size:72px}
