@@ -29,8 +29,10 @@ function back(){
 function finish(){if(!back())window.closeOv()}
 function mount(){
  const bar=box.querySelector('.menu-exit-bar');if(!bar||ov.classList.contains('hidden'))return;decorate(bar);
- const fallback=$('personalEdit')||$('avb')||$('deviceBack');let b=$('menuBack');if((parents.length||fallback)&&!b){b=document.createElement('button');b.type='button';b.id='menuBack';b.className='btn';b.textContent='←';b.title=T('Back','返回');b.setAttribute('aria-label',T('Back to previous menu','返回上一级菜单'));b.onclick=e=>{e.preventDefault();e.stopPropagation();if(parents.length)back();else fallback?.click()};bar.prepend(b)}
- if(b){b.hidden=!parents.length&&!fallback;if(fallback)fallback.hidden=true;b.disabled=!!box.querySelector('[aria-busy="true"]');}
+ const localBack=box.querySelector('[data-menu-back]'),fallback=localBack||$('personalEdit')||$('avb')||$('deviceBack');let b=$('menuBack');
+ if((parents.length||fallback)&&!b){b=document.createElement('button');b.type='button';b.id='menuBack';b.className='btn';b.textContent='←';bar.prepend(b)}
+ if(b){b.title=T('Back','返回');b.setAttribute('aria-label',localBack?.textContent.trim()||T('Back to previous menu','返回上一级菜单'));b.onclick=e=>{e.preventDefault();e.stopPropagation();if(localBack)localBack.click();else if(parents.length)back();else fallback?.click()};b.hidden=!parents.length&&!fallback;if(fallback)fallback.hidden=true;b.disabled=!!box.querySelector('[aria-busy="true"]');}
+
 }
 const close=window.closeOv;window.closeOv=function(){if(!restoring)clear();window.MindGardenInfo?.hide();const result=close.apply(this,arguments);releaseOutside();const target=opener?.isConnected?opener:$('navMore');if(!restoring&&!target?.closest('#box'))target?.focus({preventScroll:true});return result};
 const previousOverlay=window.overlay;window.overlay=function(){if(ov.classList.contains('hidden'))opener=document.activeElement;box.classList.remove('standard-popup');for(const attr of ['role','aria-modal','aria-labelledby'])box.removeAttribute(attr);releaseOutside();return previousOverlay.apply(this,arguments)};
@@ -42,8 +44,8 @@ function decorate(bar){
  if(resultScreen){$('menuExit').setAttribute('aria-label',T('Close and return to games','关闭并返回游戏'));$('menuExit').title=T('Close and return to games','关闭并返回游戏');}
  const original=box.querySelector('h2'),account=box.querySelector('.account-panel[data-auth-view="connected"]'),isAccountHome=account&&account.dataset.accountView!=='settings';
  let text=isAccountHome?T('Account','账户'):$('pd')?T('Switch player','切换玩家'):(original?.querySelector('span')?.textContent||original?.textContent||T('Menu','菜单'));
- if(heading.textContent!==text)heading.textContent=text;
- if(original&&!isAccountHome){original.classList.add('popup-original-heading');original.setAttribute('aria-hidden','true');const help=original.querySelector('.mg-info-button');if(help&&!box.querySelector('.popup-heading-help')){const row=document.createElement('div');row.className='popup-heading-help';original.after(row);row.append(help);}}
+ let titleText=heading.querySelector('.popup-title-text');if(!titleText){titleText=document.createElement('span');titleText.className='popup-title-text';heading.prepend(titleText)}if(titleText.textContent!==text)titleText.textContent=text;
+ if(original&&!isAccountHome){original.classList.add('popup-original-heading');original.setAttribute('aria-hidden','true');const help=original.querySelector('.mg-info-button');if(help&&original.closest('.analytics-panel')){heading.classList.add('popup-title-with-info');heading.append(help)}else if(help&&!box.querySelector('.popup-heading-help')){const row=document.createElement('div');row.className='popup-heading-help';original.after(row);row.append(help);}}
  for(const brand of box.querySelectorAll('.menu-brand'))brand.hidden=true;
  // One Close control, always in the common header. Keep intentional Done/Continue actions.
  for(const id of ['infoClose','movementClose','historyClose','localCopyDone','mpClose'])if($(id))$(id).hidden=true;

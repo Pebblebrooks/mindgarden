@@ -14,7 +14,7 @@ for(const lang of ['en','zh']){
 w.save.lang=lang;w.MindGardenPersonal.myGames();await wait();
 assert($('gameCategory'));assert($('gameSearch'));assert($('ov').classList.contains('hidden'));assert(!$('personalCompactSelected'));
 const log=JSON.stringify(w.me().log),initial=[...w.MindGardenPersonal.config().games];
-$('personalAllGames').click();$('gameCategory').value='memory';$('gameCategory').dispatchEvent(new w.Event('change'));
+$('libraryAllGames').click();$('gameCategory').value='memory';$('gameCategory').dispatchEvent(new w.Event('change'));
 assert([...$('gameCards').querySelectorAll('[data-game]')].every(b=>w.MindGardenDashboard.category(b.dataset.game)==='memory'));
 w.document.querySelector('[data-save-game="seq"]').click();await wait();assert(w.MindGardenPersonal.config().games.includes('seq'));
 $('libraryMyGames').click();assert.equal($('gameCards').querySelectorAll('[data-game]').length,w.MindGardenPersonal.config().games.length);

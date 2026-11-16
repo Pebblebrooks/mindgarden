@@ -38,3 +38,35 @@ html body :is(#game,#mini) .game-controls>.game-icon svg{width:28px!important;he
  #mini #mp .story-answer-grid{gap:10px!important;margin:8px auto 16px!important}
  #mini #mp .story-answer-grid>.big{min-height:48px!important;padding:10px!important}
 }
+
+/* Garden Pets gets a full play surface rather than the compact home widget. */
+html body #mini:has(#gaPet) #mp{width:100%!important;max-width:none!important;min-height:0;justify-content:flex-start!important}
+#mini #mp:has(#gaPet) .ga-game{width:100%;max-width:none;padding:0}
+#mini #mp #gaPet{width:100%;max-width:none;padding:20px;overflow:visible}
+#gaPet.mochi-game :is(.mochi-show,[data-mochi=hide],.mochi-hint){display:none!important}
+#gaPet.mochi-game .mochi-heading{display:block}
+#gaPet.mochi-game .mochi-content{display:grid;gap:12px;align-content:center}
+#gaPet.mochi-game .mochi-picker{margin:0;font-size:1em}
+#gaPet.mochi-game .mochi-picker select{margin:0}
+#gaPet.mochi-game .mochi-stage{width:min(340px,100%);margin:0 auto!important}
+#gaPet.mochi-game :is(.mochi-status,.mochi-audio){margin:0;min-height:0}
+#gaPet.mochi-game .mochi-options{gap:12px}
+#mini:has(#gaPet) .ga-notice:empty{display:none}
+#mini:has(#gaPet) .ga-actions{margin:16px 0 0}
+@media(min-width:700px){
+ #gaPet.mochi-game .mochi-content{grid-template-columns:minmax(240px,1.2fr) minmax(240px,1fr);gap:16px 24px;align-items:center}
+ #gaPet.mochi-game .mochi-content>*{grid-column:2}
+ #gaPet.mochi-game .mochi-stage{grid-column:1;grid-row:1/7;width:min(440px,100%)}
+ #gaPet.mochi-game .mochi-heading h2{font-size:1.35em}
+}
+@media(min-width:900px) and (min-height:600px){
+ html body #mini:not(.hidden):has(#gaPet){width:min(1080px,calc(100% - 48px))!important;max-width:1080px!important;height:min(860px,calc(var(--game-viewport-height,100dvh) - 48px))!important}
+}
+@media(max-width:699px){
+ #mini #mp #gaPet{padding:12px}
+ #gaPet.mochi-game .mochi-stage{width:min(280px,65vw)}
+}
+
+html body #mini:has(#gaPet)>.hud{margin-bottom:8px!important}
+html body #mini:has(#gaPet)>.game-footer{gap:12px!important;margin-top:12px!important;padding-top:0}
+@media(min-width:700px){#gaPet.mochi-game .mochi-stage{width:min(380px,100%)}}
