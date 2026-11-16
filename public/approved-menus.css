@@ -323,15 +323,12 @@ html:not([data-hc="1"]) #ov #box.standard-popup .btn.main{background:var(--menu-
 }
 
 #ov #box .lbr .ranking-copy-note{grid-column:1/-1;display:flex;justify-content:center}
-/* Flying-only scenery fallback; motion and visibility switches still apply. */
-#gardenLife .scenery-flyers{display:none;position:absolute;inset:0;overflow:hidden;pointer-events:none}
-#gardenLife.wildlife-fallback .scenery-flyers{display:block}
-.scenery-flyers>span{position:absolute;left:15%;top:22%;font-size:26px;animation:scenery-flight 24s ease-in-out infinite alternate}
-.scenery-flyers>span:nth-child(2){left:55%;top:66%;font-size:22px;animation-duration:18s;animation-delay:-8s}
-.scenery-flyers>span:nth-child(3){left:68%;top:32%;font-size:20px;animation-delay:-14s;animation-duration:29s}
-@keyframes scenery-flight{from{transform:translate(-35px,10px) rotate(-8deg)}to{transform:translate(65px,-28px) rotate(8deg)}}
-html[data-ambient-paused="true"] .scenery-flyers>span,html[data-motion="off"] .scenery-flyers>span{animation-play-state:paused}
-@media(prefers-reduced-motion:reduce){html:not([data-motion-explicit="true"]) .scenery-flyers>span{animation:none}}
+/* Photographic wildlife: only transforms and atlas frames change during flight. */
+#gardenLife .scenery-flyers{display:block;position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#gardenLife .scenery-flyer{position:absolute;left:0;top:0;display:block;will-change:transform;animation:none;pointer-events:none}
+#gardenLife .scenery-flyer[hidden]{display:none!important}
+#gardenLife .wildlife-sprite{display:block;width:100%;height:100%;background-size:400% 400%;background-repeat:no-repeat;filter:saturate(.8);opacity:.9}
+html[data-garden-scene-mode="dark"] #gardenLife .wildlife-sprite{filter:saturate(.65) brightness(.78)}
 
 /* Approved result layout: two primary actions and one quiet utility footer. */
 #ov #box:has(#personalResult){width:min(560px,calc(100vw - 24px))}

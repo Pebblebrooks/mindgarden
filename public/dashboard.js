@@ -160,6 +160,7 @@
  function aboutContent(release){
  const sections=[
  ['Latest improvements','最新改进',[
+ ['Detailed birds and butterflies replace emoji wildlife. Birds alternate wingbeats with gliding; butterflies follow drifting paths. Gentle reduces travel and numbers; Off hides wildlife. Animation pauses during games, menus and hidden tabs.','细致的鸟类与蝴蝶取代表情图案。鸟儿交替振翅与滑翔，蝴蝶沿缓慢曲线飞行。轻柔模式减少数量与移动速度；关闭模式隐藏动物。游戏、菜单及后台标签页中动画暂停。'],
  ['New plateau and autumn-lake backgrounds, plus plain moon-gate and stone-bridge gardens, have paired day and dusk views. The ornate cloud-palace set has been retired.','新增高原、秋日山湖、素雅月门和石桥背景，均配有日间与黄昏版本。旧云宫雕饰背景已移除。'],
  ['My Progress and Leaderboard use game, difficulty and period filters, charts and paginated records. Scores are game results, not health measures. Arithmetic symbols and card icons use readable gold, orange, rose and sage tones.','我的进度与排行榜提供游戏、难度、时段筛选、图表及分页记录。分数反映游戏表现，不代表健康状况。运算符号与卡片图标采用清晰的金色、橙色、玫瑰色和鼠尾草绿。'],
  ['During online play, Begin and Leave or End room sit below the board. Open Room for players, rankings, room code and sharing. Invitations close after joining; × dismisses them. Info icons support hover, keyboard focus and tap.','在线游戏的开始、离开或结束房间按钮位于棋盘下方。展开“房间”查看玩家、排名、房间码和分享。加入后邀请自动关闭，也可点×关闭。说明图标支持悬停、键盘聚焦和点击。'],
