@@ -234,3 +234,37 @@ body:has(.game-ui-dialog[open]) #ov{visibility:hidden!important}
 #mini #mp .place-answers>button{overflow-wrap:normal!important}
 html[data-text-large="true"] #mini #mp .place-answers>button{width:min(240px,100%)!important}
 #mini:has(.place-pictures) #mp{max-height:none!important;height:auto!important;overflow:visible!important;scrollbar-gutter:auto;padding-bottom:0}
+
+/* v5.0.4: compact navigation grows with text, never clips controls. */
+#home #unifiedNav{min-height:56px!important;height:auto!important;padding:4px 12px!important;align-items:center!important;box-sizing:border-box}
+#home #unifiedNav :is(.nav-brand,#navMore){min-height:48px!important;height:auto!important;padding:6px 10px!important;line-height:1.35!important}
+#home #unifiedNav .nav-actions #navMore{padding:6px 10px!important}
+.library-heading h1 small{font-size:.65em;font-weight:400;white-space:nowrap}
+.bouquet-collection{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;max-height:60svh;overflow:auto}
+.bouquet-collection figure{margin:0;text-align:center}.bouquet-collection svg{width:140px;max-width:100%}
+
+/* Shared catalogue cards and one visible information ring. */
+#box #personalSelected{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))!important;gap:16px!important;width:100%!important}
+#home #gameCards .personal-game-card,#box #personalSelected .personal-picked-card{position:relative!important;display:block!important;width:100%!important;min-width:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+#home #gameCards .game-tile,#box #personalSelected .game-tile{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:16px!important;width:100%!important;min-width:0!important;height:100%!important;min-height:220px!important;padding:48px 20px 24px!important;box-sizing:border-box;text-align:center!important}
+#home #gameCards .game-art,#box #personalSelected .game-art{display:block!important;width:64px!important;height:64px!important;flex:0 0 64px!important;margin:0!important}
+#home #gameCards .game-info,#box #personalSelected .game-info{display:flex!important;flex-direction:column!important;gap:12px!important;text-align:center!important}
+#box #personalSelected .game-info strong{font-size:calc(1.1rem * var(--fs))!important}
+#box #personalSelected .game-desc{font-size:calc(1rem * var(--fs))!important;line-height:1.4!important}
+#box #personalSelected :is(.game-meta,.game-play){display:none!important}
+#box #personalSelected .mg-info-button,#home #gameCards .mg-info-button{position:absolute!important;top:8px!important;right:8px!important;left:auto!important}
+#box #personalSelected .personal-remove-game{position:relative!important;margin:8px!important}
+body :is(.mg-info-button,.mg-help-trigger){border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
+body :is(.mg-info-button,.mg-help-trigger)::before{display:none!important}
+body :is(.mg-info-button,.mg-help-trigger)>svg{display:none!important}
+body :is(.mg-info-button,.mg-help-trigger):focus-visible{outline:2px solid var(--ink)!important;outline-offset:2px!important}
+#progressDisplay :is(.journey-heading,.journey-heading>div,.journey-eyebrow,.journey-next,.journey-status,.journey-score){text-align:center!important}
+#progressDisplay .journey-heading{justify-content:center!important}
+.game-setting-controls .change-level{width:auto!important;padding:12px 20px!important;margin:16px auto!important}
+#ov #box #personalSelected{max-height:none!important;overflow:visible!important;padding:0!important;margin:20px 0!important}
+#ov #box #personalSelected .mg-info-button,#home .mg-help-trigger,#ov #box .mg-info-button{background:none!important;border:0!important;box-shadow:none!important}
+#ov #box #personalSelected .game-art .picture-symbol,#home #gameCards .game-art .picture-symbol{border:0!important;background:none!important;box-shadow:none!important;padding:0!important}
+/* Approved reference: two-column Play menu, full-width disclosures below. */
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"])>div{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(145px * var(--fs))),1fr))!important;gap:8px 16px!important;width:100%!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button{display:grid!important;grid-template-columns:24px minmax(0,1fr)!important;gap:8px!important;min-height:48px!important;width:100%!important;margin:0!important;padding:8px 0!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button svg{width:24px!important;height:24px!important}

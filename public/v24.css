@@ -14,7 +14,7 @@ body:has(#home:not(.hidden)) #gbg{display:none}
 #unifiedNav .nav-player{max-width:155px;overflow:hidden}
 #unifiedNav .nav-link.current{background:linear-gradient(120deg,#a6eaa1,#cbf6bd);color:#10353b}
 #welcomeDashboard{max-width:none;min-height:calc(100dvh - 78px);margin-top:-74px;justify-content:center;display:flex}
-.welcome-scene{width:100%;min-height:100dvh;border:0;border-radius:0;box-shadow:none;background: url('garden-landscape.webp') center center / cover no-repeat;align-items:center;justify-content:center;padding:100px 22px 45px;}
+.welcome-scene{width:100%;min-height:100dvh;border:0;border-radius:0;box-shadow:none;background: url('garden-sakura-day.webp') center center / cover no-repeat;align-items:center;justify-content:center;padding:100px 22px 45px;}
 .welcome-scene:before{display:none}.welcome-scene:after{display:none}
 .welcome-shade{max-width:820px;width:min(94%,820px);margin:0;position:relative;background:linear-gradient(160deg,rgba(5,69,74,.88),rgba(5,77,70,.82));border:2px solid #b4ecdb;border-radius:62px;padding:34px 38px 27px;box-shadow:0 22px 60px #052f3450;backdrop-filter:blur(4px)}
 .welcome-sprout{font-size:calc(3rem * var(--fs))}

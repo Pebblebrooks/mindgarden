@@ -50,7 +50,7 @@ After every app update, review the About documentation and update it wherever th
 ## Approved gameplay layout (November 15)
 
 - Gameplay uses a plain background, with no scenery toggle. The title, content and footer share a centred maximum 720px column. Home, Pause, Hint and Options are borderless icons in one centred row below progress. Leave 32px after answers, 16px between round label and dots, and 28px before controls. Exit confirmation has one border, centred Confirm Exit? / Game will not be saved text and icon-only cancel/exit actions; completed results retain truthful saved-result wording.
-- Home and Back request confirmation; cancellation preserves the current round. Settings pauses solo play and resumes when dismissed.
+- Any action that discards unfinished gameplay requires confirmation; cancellation preserves the round. Ordinary menu Back returns one step without confirmation. Use shared catalogue card markup and a single visible circled info icon. Settings pauses solo play and resumes when dismissed.
 - All games offer contextual help. Existing scored/assisted rules remain explicit; never silently give multiplayer answer advantages.
 - Domino opponent turns run automatically after a brief delay and stop while paused or after leaving.
 - Numbered grid routes replace outline tracing in Connect the Dots: ordered checkpoints, adjacent steps, no reused cells, validated solvability and varied ranks.

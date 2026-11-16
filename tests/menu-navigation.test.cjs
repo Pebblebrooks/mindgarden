@@ -21,7 +21,7 @@ async function boot({lang='en',saved=null,remote=null,signed=false,deferStartup=
  w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.HTMLElement.prototype.scrollIntoView=()=>{};
  w.isSecureContext=true;w.PublicKeyCredential=function(){};w.PasswordCredential=function(data){Object.assign(this,data)};w.navigator.credentials={store:()=>new Promise(resolve=>{managerResolve=resolve})};
  w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(root+bundle,'utf8'));await wait();
- const el=id=>w.document.getElementById(id),click=id=>{assert(el(id),id);el(id).click();if(id==='menuBack'){const confirm=w.document.querySelector('dialog.game-ui-dialog .main');assert(confirm,'Back confirmation');confirm.click()}};
+ const el=id=>w.document.getElementById(id),click=id=>{assert(el(id),id);el(id).click();if(id==='menuBack')assert(!w.document.querySelector('.game-exit-dialog'),'Back needs no confirmation')};
  return {w,el,click,remote,downloads,errors,lateStartup:()=>finishStartup?.(),finishManager:()=>managerResolve?.(),expire:()=>{signed=false},finishSignup:()=>finishSignup?.(),get signupCount(){return signupCount},allowSignup:()=>{signupFailure=false;deferSignup=false}};
 }
 
