@@ -14,7 +14,7 @@
  // Keep garden growth visible, but never let its large SVG appear before the welcome page.
  function closeNavMenu(focus=false){const menu=document.getElementById('navMenu'),button=document.getElementById('navMore');if(!menu||!button)return;const wasOpen=!menu.classList.contains('hidden');menu.classList.add('hidden');button.setAttribute('aria-expanded','false');button.setAttribute('aria-label',T('Open menu','打开菜单'));if(focus&&wasOpen)button.focus()}
  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeNavMenu(true)});
- document.addEventListener('click',e=>{if(!nav.contains(e.target))closeNavMenu()});
+ document.addEventListener('click',e=>{if(!e.composedPath().includes(nav))closeNavMenu()});
  const progressStrip=document.createElement('section');progressStrip.id='gardenProgressStrip';progressStrip.setAttribute('aria-label','My garden progress');home.insertBefore(progressStrip,library);progressStrip.appendChild(hero);
  const progressDisplay=document.createElement('div');progressDisplay.id='progressDisplay';progressDisplay.className='progress-summary';progressStrip.appendChild(progressDisplay);
  const T=(a,b)=>window.MindGardenLocale.pair(a,b);
@@ -160,9 +160,10 @@
  function aboutContent(release){
  const sections=[
  ['Latest improvements','最新改进',[
+ ['During online play, Begin and Leave or End room sit below the board. Open Room for players, rankings, room code and sharing. Invitations close after joining; × dismisses them. Info icons support hover, keyboard focus and tap.','在线游戏的开始、离开或结束房间按钮位于棋盘下方。展开“房间”查看玩家、排名、房间码和分享。加入后邀请自动关闭，也可点×关闭。说明图标支持悬停、键盘聚焦和点击。'],
  ['Shorter English and Chinese descriptions; centred submenus; room invitations above popups. Back to games restores cards hidden by the navbar toggle.','精简中英文说明、居中子菜单，房间邀请显示在弹窗上方。“返回游戏”恢复被导航栏隐藏的卡片。'],
  ['Today’s Games is the main welcome action. All welcome cards can be hidden in Customise my home. Enjoy the garden fills the view with scenery, with progress below and Back to games to restore your cards.','今日游戏是欢迎页的主要操作。定制我的主页可隐藏任意欢迎卡片。欣赏花园以整屏展示景色，进度保留在下方；返回游戏可恢复卡片。'],
- ['Menu contains account, language, appearance, text size, sound and motion controls. English / 中文 opens a language picker.','菜单包含账户、语言、外观、字号、声音和动画控件。English / 中文打开语言选择器。'],
+ ['Game controls stay below the play area. Long content scrolls separately. Adjust sound, animation, display and text size without closing the menu. English / 中文 opens a language picker.','游戏控件固定在游戏区域下方，较长内容可单独滚动。调整声音、动画、显示和字号时，菜单保持打开。English / 中文打开语言选择器。'],
  ['Confirmed account-player deletion also removes the matching saved device copy. Saved on this device offers separate restore and delete actions. Completed bouquets stay in My Garden. At Full Bloom, Grow another starts a fresh bouquet without changing scores. Back returns one menu step. Confirmation appears only if unsaved gameplay would be lost. All Games and My Games share compact cards that adapt to the screen and text size. Tap the information icon for details. Each preparation screen shows its instruction once. The Play menu uses two columns when space permits and stacks at larger text sizes. The slimmer navigation grows with text size. Retired scenery is replaced by Japanese Cherry Garden; newer scenery choices are retained. All Games has search and a compact category dropdown. My Games shows removal controls only after Edit my games; Undo restores the game without changing scores.','确认删除账户玩家后，也会删除此设备上对应的保存副本。已保存在此设备提供独立的恢复与删除操作。完成的花束保留在我的花园。盛开后，选择再种一束即可开始新花束，成绩不变。返回箭头返回上一级菜单；只有未保存的游戏会丢失时才需确认。所有游戏与我的游戏使用一致的紧凑卡片，并随屏幕及字号调整。点击信息图标查看详情。每个准备画面仅显示一次玩法说明。游戏菜单在空间足够时使用两列，字号较大时改为单列。精简导航栏随字号扩大。旧景色已替换为日本樱花园；保留较新的景色选择。所有游戏提供搜索和紧凑的类别下拉列表。我的游戏仅在编辑模式显示移除控件；撤销可恢复游戏，成绩不变。'],
  ['Today’s Games opens one preparation screen. Review your saved level, open Options if needed, then press Begin.','今日游戏打开一个准备页面。查看已保存的关卡，按需打开选项，然后点击开始。'],
  ['The menu uses aligned icons and compact sound and animation switches. Player cards have rename and delete icons. Home, Pause, Hint and Options share a centred icon row below progress. Exit confirmation uses one border and two icon buttons. Information buttons open a centred dialog. Enlarged text wraps and scrolls; the optional tagline is hidden at 150% and above.','菜单采用对齐图标和紧凑的声音及动画开关。玩家卡片提供改名和删除图标。主页、暂停、提示和选项图标在进度下方居中排列。退出确认采用单层边框和两个图标按钮。说明按钮打开居中对话框。放大文字后可自动换行和滚动；150%及以上时隐藏可选标语。']]],
@@ -195,13 +196,32 @@
  let nextHelp=0;
  function info(en,zh){const id="garden-help-"+(++nextHelp);return '<div class="mg-help"><button type="button" class="mg-help-trigger" aria-label="'+T('More information','更多信息')+'" aria-expanded="false" aria-describedby="'+id+'">ⓘ</button><div id="'+id+'" class="mg-help-text" role="tooltip">'+T(en,zh)+'</div></div>'}
  function buildNav(){
+  const previous=document.getElementById('navMenu');
+  const menuState=previous&&!previous.classList.contains('hidden')?{
+   scroll:previous.scrollTop,
+   groups:[...previous.querySelectorAll('details')].filter(d=>d.open).map(d=>d.id?'#'+d.id:d.dataset.menuGroup?'[data-menu-group="'+d.dataset.menuGroup+'"]':d.classList.contains('nav-preferences')?'.nav-preferences':null).filter(Boolean),
+   focus:previous.contains(document.activeElement)?document.activeElement:null
+  }:null;
+
   const links=[['library','▦','All Games','所有游戏'],['online','♧','Play Together','一起玩'],['progress','▥','My Progress','我的进度'],['leaderboard','♜','Leaderboard','排行榜']];
   nav.innerHTML='<button class="nav-brand" data-go="home" aria-label="'+T('Mind Garden home','心灵花园主页')+'"><span aria-hidden="true">'+icon('sprout')+'</span> <span>Mind Garden</span></button><div class="nav-items">'+links.map(v=>'<button class="nav-link'+((page==='dashboard'&&v[0]==='home'||page==='library'&&v[0]==='library')?' current':'')+'" data-go="'+v[0]+'"'+((page==='dashboard'&&v[0]==='home'||page==='library'&&v[0]==='library')?' aria-current="page"':'')+' aria-label="'+T(v[2],v[3])+'"><span aria-hidden="true">'+icon(({home:'home',library:'grid',online:'together',progress:'progress',leaderboard:'trophy'})[v[0]])+'</span>'+ (v[0]==='home'?'':' <span class="nav-label">'+T(v[2],v[3])+'</span>')+'</button>').join('')+
   '</div><div class="nav-actions"><button type="button" id="navAccount" class="nav-quiet nav-account" data-go="account">'+esc(window.MindGardenAccount?.navLabel()||T('Sign in','登录'))+'</button><button class="nav-quiet nav-symbol" data-go="music" aria-label="'+T('Music','音乐')+'">'+icon('music')+'</button><button class="nav-quiet nav-symbol" data-go="language" aria-label="'+T('Language','语言')+'">'+icon('language')+'</button><button type="button" id="navAppearance" class="nav-quiet nav-symbol nav-appearance" data-go="appearance"></button><button type="button" id="navMore" class="nav-more" aria-controls="navMenu" aria-expanded="false" aria-label="'+T('Open menu','打开菜单')+'">'+icon('menu')+'<span>'+T('Menu','菜单')+'</span></button></div><div id="navMenu" class="nav-menu hidden">'+menuGroup('Play','游戏',[['daily','✿','Today’s Games','今日游戏'],['mygames','♡','My Games','我的游戏'],['library','▦','All Games','所有游戏'],['online','♧','Play Together','一起玩'],['progress','▥','My Progress','我的进度'],['leaderboard','♜','Leaderboard','排行榜']])+menuGroup('Player','玩家',[['account','♙','Sign in / Account','登录 / 账户'],['family','♡','Players’ Progress','玩家进度'],['profile','♙','Switch Player','切换玩家']])+'<details class="nav-preferences"><summary>'+T('Preferences','偏好设置')+'</summary>'+menuGroup('Controls','控件',[['music','♫','Music','音乐'],['nature','◖','Background audio','背景声音'],['motion','Ⅱ','Animation','动画'],['language','文','English / 中文','English / 中文'],['settings','⚙','More settings','更多设置']])+'<fieldset class="nav-theme"><legend>'+T('Display mode','显示模式')+'</legend><div class="nav-theme-options">'+[['light',T('Light','浅色')],['dark',T('Dark','深色')],['auto',T('Auto','自动')]].map(v=>'<button type="button" data-mode="'+v[0]+'" aria-pressed="'+((save.mode||'auto')===v[0])+'">'+v[1]+'</button>').join('')+'</div></fieldset></details>'+menuGroup('Help','帮助',[['quickguide','?','Quick guide','快速指南'],['about','ⓘ','About','关于'],['contact','✉','Contact','联系']])+'</div>';
   syncAppearance();window.MindGardenAccount?.refreshUI();
-  nav.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{closeNavMenu();navAction(b.dataset.go)});
+  nav.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{if(!['nature','motion','appearance'].includes(b.dataset.go))closeNavMenu();navAction(b.dataset.go)});
   const more=document.getElementById('navMore'),menu=document.getElementById('navMenu');more.onclick=()=>{const isOpen=!menu.classList.toggle('hidden');more.setAttribute('aria-controls','navMenu');more.setAttribute('aria-expanded',String(isOpen));more.setAttribute('aria-label',isOpen?T('Close menu','关闭菜单'):T('Open menu','打开菜单'));if(isOpen)menu.querySelector('button')?.focus()};
-  menu.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{save.mode=b.dataset.mode;persist();applyPrefs();buildNav();document.getElementById('navMore')?.focus()});
+  menu.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{save.mode=b.dataset.mode;persist();applyPrefs();buildNav()});
+  if(menuState){
+   menu.classList.remove('hidden');more.setAttribute('aria-expanded','true');more.setAttribute('aria-label',T('Close menu','关闭菜单'));
+   // Other menu modules remount their controls in mutation observers.
+   queueMicrotask(()=>{
+    if(document.getElementById('navMenu')!==menu)return;
+    menuState.groups.forEach(selector=>{const group=menu.querySelector(selector);if(group)group.open=true});
+    const f=menuState.focus;
+    const target=f?.id?document.getElementById(f.id):f?.dataset.go?menu.querySelector('[data-go="'+f.dataset.go+'"]'):f?.dataset.mode?menu.querySelector('[data-mode="'+f.dataset.mode+'"]'):null;
+    target?.focus({preventScroll:true});menu.scrollTop=menuState.scroll;
+   });
+  }
+
  }
 
  const days=()=>{const t=new Date(today()+'T12:00:00').getTime()/86400000|0;return [['shopping','rem','miss','story'][Math.abs(t)%4],['visual','find','diff','count'][Math.abs(t)%4],['calendar','routine','related','same'][Math.abs(t)%4]]};

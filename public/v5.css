@@ -32,7 +32,7 @@ html body{font-family:Arial,'Noto Sans SC',sans-serif;font-variant-numeric:norma
 #box :is(.tip,small,.player-storage){font-size:calc(1rem * var(--fs))!important;line-height:1.45!important}
 #home button:focus-visible,#box button:focus-visible,.v5-dialog button:focus-visible{outline:3px solid #b87f17;outline-offset:3px}
 @media(hover:none){
-#gameIconHelp,.mg-info-tooltip{display:none!important}
+#gameIconHelp[hidden],.mg-info-tooltip[hidden]{display:none!important}
 }
 #box button,#navMenu button{word-break:normal!important;overflow-wrap:normal!important}
 .v5-language-options [aria-pressed="true"]{outline:3px solid #4b816a;outline-offset:2px}
@@ -270,3 +270,77 @@ html[data-text-large="true"] #home #gameLibrary #libraryDisplay #gameCards,html[
 /* Light-mode primary card: pale sage with readable opaque text. */
 html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard #dashStart{background:rgba(221,237,216,.94)!important;color:#174a42!important;border-color:#b1c8aa!important;box-shadow:0 2px 4px #174a421a!important}
 html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard #dashStart strong,html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard .welcome-choice:has(#dashStart) .mg-help-trigger{color:#174a42!important}
+
+/* Multiplayer: board first, optional room information and actions below play. */
+#ov #box.mp-playing{width:min(720px,calc(100vw - 24px))!important;max-height:calc(100dvh - 24px)!important;padding:12px!important;gap:8px!important}
+#ov #box.mp-playing>.menu-exit-bar{margin:0 0 8px!important;padding:4px 0 8px!important;min-height:44px!important}
+#ov #box.mp-playing>h2.popup-original-heading{display:none!important}
+#ov #box.mp-playing>p,#ov #box.mp-playing .mp-ready{margin:4px 0!important;padding:0!important}
+#ov #box.mp-playing>.row:empty,#ov #box.mp-playing>.mp-room-actions:empty,#ov #box.mp-playing #multiError:empty,#ov #box.mp-playing #mpConnection:empty{display:none!important}
+#ov #box.mp-playing .mp-pair-status{margin:4px 0!important;min-height:0!important;font-size:calc(.9rem * var(--fs))!important}
+#ov #box.mp-playing .mp-pair-status p{margin:0!important}
+#ov #box.mp-playing .mp-board{width:min(100%,480px)!important;gap:8px!important;margin:8px auto!important}
+#ov #box.mp-playing .mp-tile{height:clamp(48px,11dvh,80px)!important;min-height:48px!important;aspect-ratio:auto!important;padding:4px!important}
+#ov #box.mp-playing .mp-tile :is(img,svg){max-height:100%!important;max-width:100%!important}
+#ov #box.mp-playing .mp-play-footer{position:sticky;bottom:0;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;margin-top:12px;padding:10px 0;background:var(--panel);z-index:3}
+#ov #box.mp-playing .mp-live{border:0;padding:0;margin:0;min-width:90px}
+#ov #box.mp-playing .mp-live>summary{min-height:48px;padding:12px;box-sizing:border-box;cursor:pointer;text-align:center}
+#ov #box.mp-playing .mp-live[open]{flex-basis:100%;order:10}
+#ov #box.mp-playing .mp-room-details{max-height:45dvh;overflow:auto;padding:12px;border:1px solid var(--line);border-radius:12px}
+#ov #box.mp-playing .mp-pair-controls{margin:0!important;min-height:48px!important}
+#ov #box.mp-playing .mp-phase-reserve{display:none!important}
+#onlineInvitation #mpDismissInvite{min-width:48px!important;min-height:48px!important;flex:0 0 48px;touch-action:manipulation;pointer-events:auto}
+
+/* Keep essential controls in the viewport; only the task area may overflow.
+   Do not shrink readable text or 48px controls to force dense puzzles to fit. */
+html body #game:not(.hidden),html body #mini:not(.hidden){
+ position:fixed!important;inset:0!important;z-index:40;box-sizing:border-box;
+ width:100%!important;max-width:none!important;height:var(--game-viewport-height,100dvh)!important;
+ min-height:0!important;margin:0!important;padding:12px max(12px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+ display:flex!important;flex-direction:column!important;overflow:hidden!important;
+}
+html body :is(#game,#mini)>.hud{flex:0 0 auto;min-height:36px;margin:0 auto 8px!important}
+html body :is(#game,#mini)>:is(.msg,#sharedHintStatus){flex:0 0 auto;max-height:15dvh;overflow:auto;margin:4px auto!important}
+html body :is(#game,#mini)>:is(.msg,#sharedHintStatus):empty{display:none!important}
+html body #mini #mp,html body #mini:has(.place-pictures) #mp,html body #game #grid{
+ flex:1 1 0!important;min-height:0!important;max-height:none!important;overflow:auto!important;
+ overscroll-behavior:contain;width:min(100%,720px)!important;margin:0 auto!important;
+ padding:8px!important;box-sizing:border-box;scroll-padding:12px;align-content:start;
+}
+html body :is(#game,#mini)>.game-footer{
+ flex:0 0 auto;gap:16px!important;margin:12px auto 0!important;padding:8px 0 0;
+ background:var(--bg);z-index:2;
+}
+html body :is(#game,#mini) .game-controls{gap:clamp(8px,3vw,24px)}
+html body :is(#game,#mini) .game-progress .progress-label{margin-bottom:8px!important}
+html body :is(#game,#mini) .game-progress .bar{margin-top:8px}
+#ov #box.standard-popup :is(.popup-footer,.result-primary,.result-footer,.account-footer,.mp-play-footer){
+ position:sticky!important;bottom:0;z-index:16;background:var(--menu-surface,var(--panel));
+ padding:10px 4px max(10px,env(safe-area-inset-bottom))!important;box-sizing:border-box;
+}
+#ov #box.standard-popup{scroll-padding-bottom:100px}
+.game-ui-dialog{overflow:auto;box-sizing:border-box}
+.game-ui-dialog .game-dialog-actions{position:sticky;bottom:0;background:var(--bg);padding:8px 0}
+@media(max-height:550px){
+ html body :is(#game,#mini)>.hud{margin-bottom:4px!important;min-height:28px}
+ html body :is(#game,#mini)>.game-footer{flex-direction:row!important;align-items:center;gap:12px!important;margin-top:4px!important;padding-top:4px}
+ html body :is(#game,#mini) .game-progress{flex:1;min-width:0}
+ html body :is(#game,#mini) .game-controls{flex:0 0 auto;gap:6px;flex-wrap:nowrap}
+ #ov #box.standard-popup{padding:8px!important;max-height:calc(100dvh - 12px)!important}
+ #ov #box.standard-popup .menu-exit-bar{margin-bottom:8px;padding:4px 0}
+ #ov #box.standard-popup :is(.popup-footer,.result-primary,.result-footer,.account-footer,.mp-play-footer){margin-top:8px!important;padding-block:4px!important}
+}
+@media(max-height:550px) and (min-width:600px){
+ html body #mini #mp:has(.place-pictures){display:grid!important;grid-template-columns:minmax(120px,1fr) minmax(280px,2fr);align-items:center;gap:16px}
+ html body #mini .place-pictures{margin:0!important}
+ html body #mini .place-pictures .picture-symbol{width:100px!important}
+ html body #mini #mp .place-answers{gap:8px!important}
+ html body #mini #mp .place-answers>button{min-height:48px!important;padding:8px!important}
+}
+/* Invitations remain available in the lobby without covering active game controls. */
+body:has(#mini:not(.hidden),#game:not(.hidden),#box.mp-playing) #onlineInvitation{display:none!important}
+html body #game:has(>.personal-session)>.hud{display:none!important}
+html body :is(#game,#mini)>.personal-session{flex:0 0 auto;margin:4px auto!important;padding:0!important;line-height:1.25}
+html body #game #grid{align-content:start;grid-auto-rows:minmax(48px,auto)}
+html body #game .game-progress #hTime[hidden]{display:none!important}
+html body :is(#game,#mini)>.msg{font-size:calc(1rem * var(--fs))!important;line-height:1.25!important}

@@ -54,3 +54,9 @@ After every app update, review the About documentation and update it wherever th
 - All games offer contextual help. Existing scored/assisted rules remain explicit; never silently give multiplayer answer advantages.
 - Domino opponent turns run automatically after a brief delay and stop while paused or after leaving.
 - Numbered grid routes replace outline tracing in Connect the Dots: ordered checkpoints, adjacent steps, no reused cells, validated solvability and varied ranks.
+
+## Gameplay viewport contract
+- Keep essential game controls visible without scrolling on phone, tablet and desktop, including landscape. Reserve a separate control area; long task content must not push it out of view.
+- Preserve readable text and at least 44px touch targets. Use compact landscape layouts and disclosures for secondary information; never hide answers or clip essential actions to fake a fit.
+- Test enlarged text, short viewports, keyboard opening, popup primary actions and exit confirmation before release. Record unverified game-specific exceptions.
+- Do not let room invitation banners cover active game controls.

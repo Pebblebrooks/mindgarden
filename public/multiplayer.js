@@ -13,7 +13,7 @@ const storedSession=read(SESSION),validSession=storedSession&&/^[0-9a-f]{48}$/.t
 let session=validSession&&!storedSession.offline?storedSession:null,room=null,game=null,shownRound=0,screen='',generation=0,membershipRevision=0,busy=false,pollRequest=null,loungeBusy=false,last=null,loungeRooms=[],loungeTimer=null;
 const noticed=new Set();let view=null,checkpointTimer=null,mismatchTimer=null,previewTimer=null;
 // Each response belongs to the screen that initiated it. Other dialogs may replace it.
-function overlay(html){window.overlay(html);$('box').classList.add('mp-dialog');view=$('box').firstElementChild}
+function overlay(html){window.overlay(html);$('box').classList.remove('mp-playing');$('box').classList.add('mp-dialog');view=$('box').firstElementChild}
 function current(gen=generation){return gen===generation&&!!view?.isConnected&&!$('ov').classList.contains('hidden')}
 function clearPairTimers(){clearTimeout(mismatchTimer);clearInterval(previewTimer);mismatchTimer=previewTimer=null}
 function suspend(){checkpoint();clearPairTimers();generation++;room=null;game=null;shownRound=0;screen='';last=null;view=null}
@@ -24,7 +24,7 @@ function name(){let n=(me().name||'').replace(/[^\p{L}\p{N} ._'-]/gu,'').slice(0
 function invite(c=room?.code){const u=new URL(location.pathname,location.origin);u.hostname=u.hostname.replace(/^[a-f0-9]{8,}\.(?=[^.]+\.pages\.dev$)/i,'');u.searchParams.set('room',c);return u.href}
 function user(n){return '<span translate="no">'+esc(n)+'</span>'}
 function roomControls(s){const state=s?.host!==undefined?s:last;if(!state||state.closed||state.left)return '';return '<div class="mp-room-actions row">'+(state.host?(state.started&&!state.finished?'<button class="btn" id="mpCancelGame">'+T('Cancel game & close room','取消游戏并关闭房间')+'</button>':''):'<button class="btn" id="mpLeaveRoom">'+T('Leave room','退出此房间')+'</button>')+'</div>'}
-function base(s){return '<h2>'+T('Play Together','一起玩')+' · '+T('Up to 8 players','最多8人')+'</h2><p class="mp-room-code">'+T('Room code','房间码')+' <strong translate="no">'+esc(room.code)+'</strong>'+(s?.round?' · '+T('Round ','第 ')+s.round+((s.totalRounds||last?.totalRounds)?' / '+(s.totalRounds||last.totalRounds):'')+T('',' 轮'):'')+'</p>'+nameControls()+roomControls(s)+'<p id="mpConnection" class="tip" role="status"></p>'}
+function base(s){const playing=last?.started&&!last?.finished;return '<h2>'+(playing?T('Play Together','一起玩')+' · '+T('Round ','第')+(s?.round||last.round)+'/'+(last.totalRounds||'–')+T('','轮'):T('Play Together','一起玩')+' · '+T('Up to 8 players','最多8人'))+'</h2><p class="mp-room-code">'+T('Room code','房间码')+' <strong translate="no">'+esc(room.code)+'</strong>'+(s?.round?' · '+T('Round ','第 ')+s.round+((s.totalRounds||last?.totalRounds)?' / '+(s.totalRounds||last.totalRounds):'')+T('',' 轮'):'')+'</p>'+nameControls()+roomControls(s)+'<p id="mpConnection" class="tip" role="status"></p>'}
 function checkpoint(){clearTimeout(checkpointTimer);checkpointTimer=null;if(!game||!room)return;try{store(GAME,JSON.stringify({code:room.code,...game,done:game.done?[...game.done]:undefined}))}catch{}}
 function queueCheckpoint(){clearTimeout(checkpointTimer);checkpointTimer=setTimeout(checkpoint,80)}
 function exitScreen(){suspend();closeOv()}
@@ -58,9 +58,9 @@ async function lounge(){
   const list=$('mpOpenRooms');if(list){list.innerHTML=s.rooms.length?s.rooms.map(r=>'<div class="mp-open-room">'+user(r.host)+' · <strong translate="no">'+r.code+'</strong> · '+r.players+'/8 <button class="btn sm" data-join-room="'+r.code+'">'+T('Join','加入')+'</button></div>').join(''):'<p>'+T('No open rooms','无开放房间')+'</p>';list.querySelectorAll('[data-join-room]').forEach(b=>b.onclick=()=>action(()=>join(b.dataset.joinRoom)))}
   const fresh=s.rooms.filter(r=>!noticed.has(r.code)&&r.code!==s.activeRoom);
   if(fresh.length){let notice=$('onlineInvitation');if(!notice){notice=document.createElement('aside');notice.id='onlineInvitation';notice.setAttribute('role','status');document.body.appendChild(notice)}
-   notice.innerHTML='<span>'+T('New room invitations: ','新房间邀请：')+fresh.map(r=>user(r.host)+' <b translate="no">'+r.code+'</b>').join(' · ')+'</span><small id="mpInviteTip"></small><button class="btn sm" id="mpSeeInvite">'+(s.activeRoom?T('Room options','房间选项'):T('View lobby','查看大厅'))+'</button><button class="btn sm" id="mpDismissInvite" aria-label="'+T('Dismiss','关闭')+'">×</button>';
+   notice.dataset.codes=JSON.stringify(fresh.map(r=>r.code));notice.inert=false;notice.innerHTML='<span>'+T('New room invitations: ','新房间邀请：')+fresh.map(r=>user(r.host)+' <b translate="no">'+r.code+'</b>').join(' · ')+'</span><small id="mpInviteTip"></small><button class="btn sm" id="mpSeeInvite">'+(s.activeRoom?T('Room options','房间选项'):T('View lobby','查看大厅'))+'</button><button class="btn sm" id="mpDismissInvite" aria-label="'+T('Dismiss','关闭')+'">×</button>';
    if(s.activeRoom)$('mpInviteTip').textContent=T('Leave your current room first; hosts must finish or cancel it before joining another.','请先退出当前房间；房主须先结束或取消房间，才能加入其他房间。');
-   $('mpSeeInvite').onclick=()=>{const active=read(KEY)?.code;if(active){if(room?.code===active&&current()){$('mpLeaveRoom')?.focus();$('mpCancelGame')?.focus();$('mpCloseRoom')?.focus();$('mpCancelRoom')?.focus()}else{menu();action(()=>join(active))}}else menu();notice.remove()};$('mpDismissInvite').onclick=()=>notice.remove();
+   $('mpSeeInvite').onclick=()=>{const active=read(KEY)?.code;if(active){if(room?.code===active&&current()){$('mpLeaveRoom')?.focus();$('mpCancelGame')?.focus();$('mpCloseRoom')?.focus();$('mpCancelRoom')?.focus()}else{menu();action(()=>join(active))}}else menu();notice.remove()};$('mpDismissInvite').onclick=e=>{e.preventDefault();for(const r of fresh)noticed.add(r.code);notice.remove()};
   }
   // Acknowledge only after invitations have been rendered on the player's device.
   if(s.rooms.length){await api('ack',{codes:s.rooms.map(r=>r.code)});s.rooms.forEach(r=>noticed.add(r.code))}
@@ -84,7 +84,7 @@ function menu(notice=''){
  $('mpClose').onclick=exitScreen;if(session)lounge();
  if(/^[A-Z2-9]{6}$/.test(prefill))action(async()=>{if(!session&&!await login())return;await join(prefill)});
 }
-function claim(code,gen){membershipRevision++;store(KEY,JSON.stringify({code}));if(current(gen))enter(code)}
+function claim(code,gen){$('onlineInvitation')?.remove();noticed.add(code);membershipRevision++;store(KEY,JSON.stringify({code}));if(current(gen))enter(code)}
 async function join(code){const gen=generation;await api('join',{code});claim(code,gen);clearInvite()}
 function enter(code){clearPairTimers();generation++;room={code};store(KEY,JSON.stringify(room));shownRound=0;game=null;screen='loading';last=null;overlay(base()+'<p>'+T('Connecting…','正在连接……')+'</p><p id="multiError" role="alert"></p><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button>');$('mpExit').onclick=exitScreen;poll()}
 function shareControls(){return '<label class="lab">'+T('Invitation link','邀请链接')+'<input id="mpVisibleLink" readonly aria-label="'+T('Invitation link','邀请链接')+'" value="'+esc(invite())+'"></label><div class="row"><button class="btn" id="mpCopy">'+T('Copy link','复制链接')+'</button><button class="btn" id="mpShare">'+T('Share','分享')+'</button><button class="btn" id="mpExit">'+T('Back to garden · stay joined','返回花园 · 保留参与')+'</button></div>'}
@@ -104,7 +104,22 @@ async function poll(){if(!room||last?.sessionFinished||screen==='closed'||pollRe
 function endRound(){if(confirm(T('End this round? Unfinished players receive no points.','结束本轮？未完成的玩家本轮不得分。')))action(async()=>accept(await api('finishRound',{...room,round:last.round})))}
 function rankAward(rank,eligible=true){return (eligible&&rank>=1&&rank<=3?'<span class="rank-award" aria-label="'+T(['Gold','Silver','Bronze'][rank-1],['金奖','银奖','铜奖'][rank-1])+'">'+trophy(rank-1)+'</span> ':'')+rank}
 function liveScores(s){const players=[...s.players].sort((a,b)=>(b.total||0)-(a.total||0));return '<h3>'+T('Room rankings','房间排名')+'</h3><p>'+T('Saved points so far; this round updates when results are submitted.','已保存的积分；本轮成绩提交后更新。')+'</p><div class="mp-table-wrap"><table class="mp-table"><thead><tr><th>'+T('Rank','排名')+'</th><th>'+T('Player','玩家')+'</th><th>'+T('Total','总积分')+'</th></tr></thead><tbody>'+players.map(p=>'<tr><td>'+rankAward(1+players.filter(q=>(q.total||0)>(p.total||0)).length,(p.total||0)>0)+'</td><td>'+user(p.name)+'</td><td>'+(p.total||0)+'</td></tr>').join('')+'</tbody></table></div>'}
-function livePanel(){if(!last)return;const panel=document.createElement('section');panel.className='mp-live';panel.innerHTML='<h3>'+T('Room players · live status','房间玩家 · 实时状态')+'</h3><div id="mpRoster">'+people(last)+'</div><div id="mpLiveScores">'+liveScores(last)+'</div>'+(last.host?'<button class="btn sm" id="mpEndRound">'+T('End current round','结束本轮')+'</button>':'');const target=$('box').querySelector('.mp-board,.gridm,#onlineBingo,.mp-ready');(target||$('multiError')).before(panel);if($('mpEndRound'))$('mpEndRound').onclick=endRound}
+function livePanel(){
+ if(!last)return;
+ const box=$('box');box.classList.add('mp-playing');
+ const panel=document.createElement('details');panel.className='mp-live';
+ panel.innerHTML='<summary>'+T('Room','房间')+'</summary><div class="mp-room-details"><div id="mpRoster">'+people(last)+'</div><div id="mpLiveScores">'+liveScores(last)+'</div>'+(last.host?'<button class="btn sm" id="mpEndRound">'+T('End round','结束本轮')+'</button>':'')+'</div>';
+ const details=panel.querySelector('.mp-room-details');
+ for(const node of [...box.querySelectorAll('.mp-room-code,.mp-name-editor,.mp-invitation-details')])details.prepend(node);
+ for(const id of ['mpVisibleLink','mpCopy','mpShare','mpExit']){const b=$(id);if(b&&!details.contains(b))details.append(id==='mpVisibleLink'?b.closest('label'):b)}
+ const footer=document.createElement('div');footer.className='mp-play-footer';
+ const begin=$('mpPairPreview')||$('mpBeginGame');if(begin)footer.append(begin);
+ footer.append(panel);
+ const leave=$('mpLeaveRoom')||$('mpCancelGame');if(leave){leave.textContent=last.host?T('End room','结束房间'):T('Leave','离开');footer.append(leave)}
+ box.append(footer);
+ if($('mpEndRound'))$('mpEndRound').onclick=endRound;
+}
+
 
 function accept(s){if(!current()||!room||s.code!==room.code)return;last=s;if(s.players&&$('mpLiveScores'))$('mpLiveScores').innerHTML=liveScores(s);if(s.players&&s.round)rememberResult(s);if(s.left||(s.closed&&!s.sessionFinished)){releaseRoom(s.code,s.left?T('You have left the room. Enter another room code below. Other players can continue.','您已退出房间，可在下方输入其他房间码。其他玩家可以继续。'):T('The host closed this room. You can join or create another room.','房主已关闭此房间。您可以加入或创建其他房间。'));return}if(s.players&&$('mpRoster'))$('mpRoster').innerHTML=people(s);
  if(!s.started){if(screen!=='lobby')renderLobby(s);else updateLobby(s);return}

@@ -18,6 +18,7 @@ function sharedHint(){if(window.MindGardenExpansion?.current){window.MindGardenE
  let note=$('sharedHintStatus');if(!note){note=document.createElement('p');note.id='sharedHintStatus';note.setAttribute('role','status');$('sharedHint')?.before(note)}note.textContent=text;
 }
 function mount(){
+ const time=$('hTime');if(time)time.hidden=/^(At your pace|按自己的节奏)$/.test(time.textContent.trim());
  for(const id of ['game','mini']){const host=$(id),hud=host.querySelector('.hud');let footer=host.querySelector('.game-footer');if(!footer){footer=document.createElement('footer');footer.className='game-footer';footer.innerHTML='<div class="game-progress"></div>';host.append(footer);const gear=button('settings',T('Settings','设置'));gear.dataset.gameSettings='';gear.onclick=settings;footer.append(gear)}
  const home=$(id==='game'?'bHome':'bMn'),pause=$(id==='game'?'bPause':'bPause2');decorateButton(home,'home',T('Home','主页'));decorateButton(pause,'pause',T('Pause','暂停'));
  for(const el of hud.querySelectorAll('.v4-game-tools'))el.remove();
@@ -56,7 +57,7 @@ let queued=false;function queue(){if(queued)return;queued=true;queueMicrotask(()
 // One tooltip for all icon controls: hover, keyboard focus, or long press on touch.
 const tip=document.createElement('div');tip.id='gameIconHelp';tip.setAttribute('role','tooltip');tip.hidden=true;document.body.append(tip);let owner=null,hold=null,suppress=null;
 function hide(){tip.hidden=true;if(owner)owner.removeAttribute('aria-describedby');owner=null;}
-function help(b){if(!b?.dataset.help||b.classList.contains('mg-info-button'))return;owner=b;tip.textContent=b.dataset.help;tip.hidden=false;b.setAttribute('aria-describedby',tip.id);const r=b.getBoundingClientRect();tip.style.left=Math.max(8,Math.min(innerWidth-tip.offsetWidth-8,r.left+r.width/2-tip.offsetWidth/2))+'px';tip.style.top=Math.max(8,r.top-tip.offsetHeight-8)+'px';}
+function help(b){if(!b?.dataset.help||b.matches('.mg-info-button,.mg-help-trigger'))return;owner=b;tip.textContent=b.dataset.help;tip.hidden=false;b.setAttribute('aria-describedby',tip.id);const r=b.getBoundingClientRect();tip.style.left=Math.max(8,Math.min(innerWidth-tip.offsetWidth-8,r.left+r.width/2-tip.offsetWidth/2))+'px';tip.style.top=Math.max(8,r.top-tip.offsetHeight-8)+'px';}
  document.addEventListener('pointerover',e=>{if(e.pointerType!=='touch')help(e.target.closest('[data-help]'))});document.addEventListener('pointerout',e=>{if(owner&&!owner.contains(e.relatedTarget))hide()});document.addEventListener('focusin',e=>{if(matchMedia('(hover:hover)').matches)help(e.target.closest('[data-help]'))});document.addEventListener('focusout',hide);document.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){const b=e.target.closest('[data-help]');hold=setTimeout(()=>{help(b);suppress=b},550)}});for(const name of ['pointerup','pointercancel','pointermove'])document.addEventListener(name,()=>clearTimeout(hold));document.addEventListener('click',e=>{if(suppress&&suppress.contains(e.target)){e.preventDefault();e.stopImmediatePropagation();suppress=null;}},true);document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});window.addEventListener('scroll',hide,true);
 window.MindGardenGameUI={icon,button,decorate:mount,confirm:confirmExit,settings};mount();
 })();
