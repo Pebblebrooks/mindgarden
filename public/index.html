@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v5.0.16">
+<meta name="mind-garden-release" content="v5.0.17">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-5016.css">
+<link rel="stylesheet" href="garden-ui-5017.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -741,7 +741,7 @@ function rTime(){var r=Math.max(mg.r,Math.ceil((mg.difficulty||1)/2)),h=rnd(1,12
 function rCount(){var r=mg.difficulty||1,tot=5+r*2,n=rnd(2,Math.min(tot-2,3+r)),it=pick(allItems(),3),t=it[0],cells=[];
  for(var i=0;i<n;i++)cells.push(t.e);for(var j=n;j<tot;j++)cells.push(it[1+j%2].e);
  $("mmsg").textContent="How many of this picture can you see?";
- ask('<div class="big st one">'+gamePicture(t.e)+'</div><div class="gridm" style="--c:4">'+shuffle(cells).map(function(e){return'<div class="big st sm">'+gamePicture(e)+'</div>'}).join("")+'</div>',numOpts(n),n,"Yes – "+n+"!","The answer was "+n+". Well tried!",2)}
+ ask('<div class="big st one">'+gamePicture(t.e)+'</div><div class="gridm count-pictures" style="--c:4">'+shuffle(cells).map(function(e){return'<div class="big st sm">'+gamePicture(e)+'</div>'}).join("")+'</div>',numOpts(n),n,"Yes – "+n+"!","The answer was "+n+". Well tried!",2)}
 function rFind(){var r=mg.difficulty||1,n=4+r,it=pick(allItems(),n),a=it[0];
  $("mmsg").textContent="Find the "+a.n+".";say(a.n);
  ask('',shuffle(it.slice()).map(function(x){return{v:x.e,h:x.e,l:x.n}}),a.e,"Yes – you spotted it!","It was the "+a.n+". Well tried!");
@@ -1058,7 +1058,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-5016.js"></script>
+<script src="garden-ui-5017.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

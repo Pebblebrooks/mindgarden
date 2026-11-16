@@ -60,3 +60,9 @@ After every app update, review the About documentation and update it wherever th
 - Preserve readable text and at least 44px touch targets. Use compact landscape layouts and disclosures for secondary information; never hide answers or clip essential actions to fake a fit.
 - Test enlarged text, short viewports, keyboard opening, popup primary actions and exit confirmation before release. Record unverified game-specific exceptions.
 - Do not let room invitation banners cover active game controls.
+
+## Gameplay copy and normal-size layout (November 16)
+
+- Keep the immediate task instruction short. Put longer optional rules and explanations behind a labelled info control or collapsed disclosure when they interfere with gameplay. Never hide the actual question, answers or essential progress/actions.
+- At 100% text size, every desktop/tablet game must fit its available play area. Adapt board/card sizes and placement before allowing essential content to overflow; retain readable text and comfortable targets.
+- Report the exact live viewport, language, difficulty and state coverage. Do not certify every possible state from a sampled sweep.

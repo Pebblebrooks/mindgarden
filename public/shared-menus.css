@@ -184,3 +184,9 @@ html:not([data-hc="1"]) #ov #box #addGamesChoices .personal-game-card:has([aria-
  #ov #box .analytics-panel[data-leader=true] #personalProgressDone{grid-row:1}
  #ov #box .analytics-panel[data-leader=true] :is(th,td){padding-block:8px}
 }
+
+/* Ten history entries per page; use available height without hiding the footer. */
+#ov #box:has(.analytics-panel[data-leader=false]){display:flex!important;flex-direction:column!important;height:min(1000px,calc(100dvh - 20px))!important}
+#ov #box .analytics-panel[data-leader=false]{display:flex!important;flex-direction:column!important;max-height:none!important;flex:1;min-height:0}
+#ov #box .analytics-panel[data-leader=false] #levelScoreChart{flex:1;min-height:0;overflow:auto}
+#ov #box .analytics-panel[data-leader=false] .analytics-footer{flex:0 0 auto}
