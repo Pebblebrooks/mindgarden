@@ -26,7 +26,7 @@ function fit(){
  for(const [key,value]of Object.entries({'--pair-columns':layout.columns,'--pair-rows':layout.rows,'--pair-cell':layout.size+'px'}))if(grid.style.getPropertyValue(key)!==String(value))grid.style.setProperty(key,value);
  grid.dataset.boardOverflow=String(layout.overflow);
 }
-function schedule(){if(!queued){queued=true;queueMicrotask(fit)}}
+function schedule(){if(!queued){queued=true;requestAnimationFrame(fit)}}
 new MutationObserver(schedule).observe(game,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
 if(window.ResizeObserver)new ResizeObserver(schedule).observe(grid);
 window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);document.fonts?.ready.then(schedule);schedule();

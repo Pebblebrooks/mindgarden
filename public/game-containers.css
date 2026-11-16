@@ -96,8 +96,34 @@ body:has(#ov:not(.hidden)) #onlineInvitation{display:none!important}
 
 /* Choice grids must keep the play-area width inside centered flex layouts. */
 #mini #mp>.gridm{width:min(100%,640px)!important;box-sizing:border-box}
-#mini #mp .gridm>.big.txt{height:auto!important;min-height:64px;aspect-ratio:auto!important;white-space:normal;overflow-wrap:break-word}
+#mini #mp .gridm>.big.txt{height:auto!important;min-height:64px;aspect-ratio:auto!important;white-space:normal;overflow-wrap:anywhere;grid-template-columns:minmax(0,1fr)}
 
 #mini #mp .viewport-grid>.big{box-sizing:border-box}
 #mini #mp>.big.one{width:120px;max-width:100%;height:96px;min-height:80px;box-sizing:border-box;font-size:72px;line-height:1}
 #mini #mp>.big.one .game-picture{width:80px;height:80px;max-width:100%;max-height:100%;font-size:72px}
+
+/* Short screens retain complete answers while reclaiming decorative spacing. */
+@media(max-height:550px){
+ #mini #mp>.seqline{margin-bottom:8px!important}
+ #mini #mp>.gridm{margin-bottom:0!important}
+ #mini #mp .gridm>.big.txt{min-height:48px;padding:8px!important}
+}
+
+/* Number answers run across the page, with at least two columns on narrow screens. */
+#mini #mp>.number-answer-grid{align-items:stretch;gap:10px!important}
+#mini #mp>.number-answer-grid>.big.txt{padding:8px!important;white-space:nowrap;overflow-wrap:normal;font-variant-numeric:tabular-nums}
+
+/* Put review actions beside the comparison on short landscape screens. */
+@media(max-height:550px) and (min-width:500px){
+ #mini #mp .round-review{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;width:100%;padding:4px;margin:0 auto}
+ #mini #mp .round-review>h3{grid-column:1/-1;margin:0!important}
+ #mini #mp .round-review>.answer-comparison{grid-column:1;margin:0!important;min-width:0}
+ #mini #mp .round-review>.row{grid-column:2;margin:0!important}
+ #mini #mp .round-review .answer-outcome{margin-bottom:2px}
+ #mini #mp .round-review .answer-pair{padding:4px;gap:4px}
+ #mini #mp .round-review .answer-player{padding:4px}
+ #mini #mp .round-review .answer-value{gap:2px}
+ #mini #roundContinue{min-height:48px;max-width:180px;padding:8px 12px;white-space:normal}
+}
+/* The first paint is multi-column too, before the size observer runs. */
+#mini #mp>.number-answer-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
