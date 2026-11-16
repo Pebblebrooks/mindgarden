@@ -12,13 +12,13 @@ w.document.querySelector('[data-language="zh"]').click();await wait();assert.equ
 $('dashStart').click();await wait();assert(!w.document.querySelector('#dailyDifficulty'),'No preliminary daily setup');assert(w.document.querySelector('.daily-progress').textContent.includes('1 / 3'));assert(w.document.querySelector('.v5-game-options'));assert.equal(w.MindGardenPersonal.session,null,'Reading preparation does not start a game');const begin=['startExtra','newGameStart','gaStart','cgBegin','edBegin','personalPairStart'].map($).find(Boolean);assert(begin);assert.equal(begin.textContent,'Begin');begin.click();await wait();assert(w.MindGardenPersonal.session,'Begin starts saved game directly');$('bHome').click();await wait();let exit=w.document.querySelector('.game-exit-dialog');assert(exit);assert.equal(exit.querySelector('h2').textContent,'Confirm Exit?');assert.equal(exit.querySelector('p').textContent,'Game will not be saved');exit.querySelector('button').click();await wait();assert(!w.document.querySelector('.game-exit-dialog'));assert(w.MindGardenPersonal.session);assert.equal($('bHome').getAttribute('aria-label'),'Home');assert($('bHome').closest('.game-controls'));w.toHome();w.closeOv();await wait();
 for(const lang of ['en','zh']){
 w.save.lang=lang;w.MindGardenPersonal.myGames();await wait();
-assert($('personalCategory'));assert($('personalGame'));assert(!$('personalPicker'));
+assert($('gameCategory'));assert($('gameSearch'));assert($('ov').classList.contains('hidden'));assert(!$('personalCompactSelected'));
 const log=JSON.stringify(w.me().log),initial=[...w.MindGardenPersonal.config().games];
-$('personalCategory').value='memory';$('personalCategory').dispatchEvent(new w.Event('change'));
-assert([...$('personalGame').options].every(o=>w.MindGardenDashboard.category(o.value)==='memory'));
-$('personalGame').value='seq';$('personalGame').dispatchEvent(new w.Event('change'));$('personalAdd').click();await wait();assert(w.MindGardenPersonal.config().games.includes('seq'));
-$('personalCategory').value='numbers';$('personalCategory').dispatchEvent(new w.Event('change'));assert(w.MindGardenPersonal.config().games.includes('seq'));
-const remove=w.document.querySelector('[data-remove-game]'),id=remove.dataset.removeGame;remove.click();await wait();assert(!w.MindGardenPersonal.config().games.includes(id));$('personalUndo').click();await wait();assert(w.MindGardenPersonal.config().games.includes(id));assert.equal(JSON.stringify(w.me().log),log);
+$('personalAllGames').click();$('gameCategory').value='memory';$('gameCategory').dispatchEvent(new w.Event('change'));
+assert([...$('gameCards').querySelectorAll('[data-game]')].every(b=>w.MindGardenDashboard.category(b.dataset.game)==='memory'));
+w.document.querySelector('[data-save-game="seq"]').click();await wait();assert(w.MindGardenPersonal.config().games.includes('seq'));
+$('libraryMyGames').click();assert.equal($('gameCards').querySelectorAll('[data-game]').length,w.MindGardenPersonal.config().games.length);
+const remove=w.document.querySelector('[data-save-game]'),id=remove.dataset.saveGame;remove.click();await wait();assert(!w.MindGardenPersonal.config().games.includes(id));$('personalUndo').click();await wait();assert(w.MindGardenPersonal.config().games.includes(id));assert.equal(JSON.stringify(w.me().log),log);
 w.me().myGames.games=initial;w.closeOv();
 }w.save.lang='en';w.toHome();await wait();
 

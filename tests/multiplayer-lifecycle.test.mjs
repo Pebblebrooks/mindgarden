@@ -12,7 +12,7 @@ async function boot(){
  const user=await api('login',{name:'Tester'});w.localStorage.setItem('mindGardenLobby',JSON.stringify(user));let gate;
  w.fetch=async(url,options)=>{const action=new URL(url,w.location.href).searchParams.get('action');if(gate?.action===action){const current=gate;gate=null;await current.promise;if(current.response)return current.response}return onRequest({env:{DB},request:new Request(new URL(url,w.location.href),options)})};
  w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(read('language-catalog.js'));w.eval(read('language-runtime.js'));w.eval(read('player-preferences.js'));w.eval(read('identity.js'));w.eval(read('info-help.js'));w.eval(read('multiplayer.js'));await tick();w.document.getElementById('bOnline').click();await tick();
- return {w,user,intervals,click:id=>w.document.getElementById(id).click(),hold(action,response){let release;gate={action,response,promise:new Promise(r=>release=r)};return release}};
+ return {w,user,intervals,click:id=>{if(id==='mpCreate'&&!w.document.getElementById(id))w.document.getElementById('mpCreateOpen').click();if(['mpHistory','mpLogout','mpSaveName'].includes(id)&&!w.document.getElementById(id))w.document.getElementById('mpOptions').click();w.document.getElementById(id).click()},hold(action,response){let release;gate={action,response,promise:new Promise(r=>release=r)};return release}};
 }
 try{
  {
@@ -37,7 +37,7 @@ try{
   assert(a.w.document.querySelector('[data-info]').dataset.info.includes('Clearing browser data'));
  }
  for(const action of ['create','join']){
-  const a=await boot();if(action==='join'){const host=await api('login',{name:'Other host'}),r=await api('create',host);a.w.document.getElementById('mpCode').value=r.code}
+  const a=await boot();if(action==='join'){a.click('mpJoinOpen');const host=await api('login',{name:'Other host'}),r=await api('create',host);a.w.document.getElementById('mpCode').value=r.code}
   const release=a.hold(action);a.click(action==='create'?'mpCreate':'mpJoin');await tick();a.click('mpClose');release();await tick();
   assert(a.w.document.getElementById('ov').classList.contains('hidden'),'Late '+action+' must not reopen a closed lobby');
   assert(a.w.localStorage.getItem('mindGardenRoom8'),'Successful membership remains resumable');
@@ -63,7 +63,7 @@ try{
   const copying=a.w.document.getElementById('mpCopy').onclick();a.click('mpExit');a.w.overlay('<h2 id="otherScreen">Settings</h2>');reject(Error('Permission denied'));await copying;assert(a.w.document.getElementById('otherScreen'));
  }
  {
-  const a=await boot();const first=a.w.eval('save.cp');a.w.document.querySelector('.mp-name-editor').open=true;a.w.document.getElementById('mpRenameName').value='Renamed first';const release=a.hold('login');a.click('mpSaveName');await tick();
+  const a=await boot();a.click('mpOptions');const first=a.w.eval('save.cp');a.w.document.querySelector('.mp-name-editor').open=true;a.w.document.getElementById('mpRenameName').value='Renamed first';const release=a.hold('login');a.click('mpSaveName');await tick();
   a.w.eval("save.pr.second=newP('Second');save.cp='second';load()");a.w.overlay('<h2 id="otherScreen">Second player</h2><span class="mp-self-name">Second</span>');release();await tick();
   assert.equal(a.w.eval('me().name'),'Second');assert.equal(a.w.document.querySelector('.mp-self-name').textContent,'Second');assert.equal(a.w.eval('save.pr')[first].name,'Renamed first');
  }

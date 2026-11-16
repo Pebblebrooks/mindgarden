@@ -1,0 +1,83 @@
+/* Both collections use the same page, grid and growing content container. */
+html #home #gameLibrary #libraryDisplay{min-height:0!important;height:auto!important;max-height:none!important;padding-bottom:24px!important;overflow:visible!important}
+html #home #gameLibrary #libraryDisplay #gameCards{grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--mg-card-min)),1fr))!important}
+html #home #gameLibrary #libraryDisplay #gameCards .catalogue-card-tools{position:absolute;top:4px;right:4px;display:flex;gap:4px;align-items:center}
+html #home #gameLibrary #libraryDisplay #gameCards .catalogue-card-tools .mg-info-button{position:static!important;inset:auto!important;width:44px!important;height:44px!important;margin:0!important}
+html #home #gameLibrary #libraryDisplay #gameCards .catalogue-save{width:44px;min-width:44px;min-height:44px;padding:4px!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;font-size:1.35em;line-height:1}
+html #home #gameLibrary #libraryDisplay #gameCards .game-tile{padding-top:56px!important}
+.catalogue-footer{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);text-align:center}
+.catalogue-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.catalogue-actions .btn{min-height:48px;margin:0}
+.catalogue-footer #personalSummary:empty{display:none}
+html[data-text-large="true"] #home #gameLibrary #libraryDisplay #gameCards{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))!important}
+/* A stable shell: tabs and actions stay put; only the middle area scrolls. */
+#ov #box:has(>.mp-shell){display:flex!important;flex-direction:column!important;width:min(920px,calc(100vw - 20px))!important;max-width:calc(100vw - 20px)!important;height:min(640px,calc(100dvh - 20px))!important;max-height:calc(100dvh - 20px)!important;min-height:0!important;padding:16px!important;gap:0!important;overflow:hidden!important;box-sizing:border-box}
+#ov #box:has(>.mp-shell)>.menu-exit-bar{flex:0 0 auto!important;min-height:48px!important;padding:0!important;margin:0 0 12px!important;grid-template-columns:44px minmax(0,1fr) 44px!important}
+#ov #box:has(>.mp-shell)>h2{flex:0 0 auto;margin:0 0 12px!important}
+#ov #box .mp-shell{display:flex!important;flex-direction:column!important;flex:1 1 auto!important;min-height:0!important;max-height:none!important;gap:0!important;overflow:hidden!important;margin:0!important;padding:0!important;width:100%}
+#ov #box .mp-shell .mp-directory-tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px!important;flex:0 0 auto;margin:0 0 12px!important}
+#ov #box .mp-shell .mp-directory-tabs .btn{white-space:normal!important;line-height:1.25;min-height:48px!important;margin:0!important}
+#ov #box .mp-shell .mp-directory-tabs [aria-selected=true]{background:var(--gold,#ffd044)!important;color:#163e37!important}
+#ov #box .mp-shell-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:4px 8px 12px!important;margin:0!important}
+#ov #box .mp-shell :is(label,.mp-form){display:grid;gap:8px;min-width:0}
+#ov #box .mp-shell :is(input,select){width:100%;max-width:100%;min-width:0;min-height:48px!important;box-sizing:border-box;font:inherit}
+#ov #box .mp-shell .mp-directory-list{display:grid;align-content:start;gap:12px!important}
+#ov #box .mp-shell .mp-directory-room{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px!important;padding:16px!important;margin:0!important}
+#ov #box .mp-shell .mp-room-summary{display:flex!important;flex-direction:column;align-items:flex-start;gap:4px}
+#ov #box .mp-shell .mp-directory-room .mp-room-players{grid-column:1/-1;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:16px;text-align:left}
+#ov #box .mp-shell .mp-directory-room button{min-height:48px!important;padding:8px 16px!important;align-self:center}
+#ov #box .mp-shell .mp-person-row{padding:16px;border:1px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;gap:16px}
+#ov #box .mp-shell .mp-person-row>span:first-child{overflow-wrap:anywhere}
+#ov #box .mp-shell .mp-person-row>span:last-child{flex:none}
+#ov #box .mp-shell-footer{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;margin:0!important;padding:12px 0 0!important;border-top:1px solid var(--line)}
+#ov #box .mp-shell-footer>.btn{flex:1;min-width:0;min-height:48px!important;margin:0!important;white-space:normal!important;line-height:1.3}
+#ov #box .mp-shell-footer>.mp-options{flex:0 0 48px;font-size:1.3em}
+#ov #box:has(.menu-exit-bar) .mp-close-fallback{display:none!important}
+#ov #box .mp-shell #multiError{flex:none;margin:0!important;font-size:.9em;max-height:4.5em;overflow:auto}
+#ov #box .mp-shell #multiError:not(:empty){padding:8px 4px}
+#ov #box .mp-shell .mp-form-heading{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:20px}
+#ov #box .mp-shell .mp-form-heading h3{margin:0;flex:1;text-align:center}
+#ov #box .mp-shell :is(.mp-form,.mp-entry){max-width:520px;margin:auto;gap:16px}
+#ov #box .mp-shell .mp-form>.btn{min-height:48px}
+#ov #box .mp-shell .mp-room-heading{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin:0 0 24px}
+#ov #box .mp-shell .mp-room-heading .mp-room-code{margin:0!important;letter-spacing:.12em;white-space:nowrap}
+#ov #box .mp-shell #mpCopyCode{justify-self:end;min-width:48px}
+#ov #box .mp-shell #mpRoomsBack{justify-self:start}
+#ov #box .mp-shell .mp-room-setup{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+#ov #box .mp-shell .mp-room-setup>div{min-width:0}
+#ov #box .mp-shell .mp-room-setup label{margin-bottom:8px}
+#ov #box .mp-shell .mp-player-detail{margin:8px 0!important;min-height:1.5em}
+#ov #box .mp-shell .mp-share-options>summary{min-height:48px;padding:12px;text-align:center}
+#ov #box .mp-shell .mp-empty{padding:32px 12px;text-align:center}
+@media(max-width:600px){
+ #ov #box:has(>.mp-shell){padding:10px!important}
+ #ov #box .mp-shell .mp-directory-tabs{gap:4px!important}
+ #ov #box .mp-shell .mp-directory-tabs .btn{padding:8px 4px!important}
+ #ov #box .mp-shell-body{padding:2px 2px 10px!important}
+ #ov #box .mp-shell .mp-directory-room{padding:12px!important}
+ #ov #box .mp-shell .mp-room-setup{grid-template-columns:1fr;gap:16px}
+ #ov #box .mp-shell .mp-room-heading{gap:6px;grid-template-columns:1fr auto auto}
+ #ov #box .mp-shell-footer{gap:8px}
+}
+@media(max-height:450px){
+ #ov #box:has(>.mp-shell){padding:8px!important}
+ #ov #box:has(>.mp-shell)>.menu-exit-bar{margin-bottom:4px!important;min-height:44px!important}
+ #ov #box .mp-shell .mp-directory-tabs{margin-bottom:4px!important}
+ #ov #box .mp-shell-footer{padding-top:4px!important}
+}
+
+html #home #gameLibrary #libraryDisplay #personalUndo[hidden]{display:none!important}
+
+html[data-v4-mode="light"]:not([data-hc="1"]) #ov #box .mp-shell :is(#mpTab-rooms,#mpTab-lobby,#mpTab-mine)[aria-selected="true"]{background:#c5e2da!important;color:#174a42!important;box-shadow:inset 0 -3px 0 #24685b!important}
+html[data-v4-mode="dark"] #ov #box .mp-shell :is(#mpTab-rooms,#mpTab-lobby,#mpTab-mine)[aria-selected="true"]{background:#ffda4b!important;color:#143c36!important;box-shadow:inset 0 -3px 0 #ad8e16!important}
+
+/* Room invitations are already visible in this directory; keep its footer unobstructed. */
+body:has(#ov:not(.hidden) .mp-shell) #onlineInvitation{display:none!important}
+@media(max-width:600px){
+ html[data-text-large="true"] #ov #box .mp-shell .mp-directory-room{grid-template-columns:minmax(0,1fr)}
+ html[data-text-large="true"] #ov #box .mp-shell .mp-directory-room>button{width:100%}
+ html[data-text-large="true"] #ov #box .mp-shell .mp-directory-room .mp-room-players{grid-template-columns:minmax(0,1fr);gap:8px}
+ html[data-text-large="true"] #ov #box .mp-shell .mp-room-summary{align-items:center}
+ html[data-text-large="true"] #ov #box .mp-shell .mp-room-heading{grid-template-columns:minmax(0,1fr) auto}
+ html[data-text-large="true"] #ov #box .mp-shell #mpRoomsBack{grid-column:1/-1}
+}

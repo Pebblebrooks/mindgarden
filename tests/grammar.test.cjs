@@ -9,7 +9,7 @@ try{
  w.save.lang='en';assert.equal(T('Remember: 1 seconds','记忆时间：1 秒'),'Remember: 1 second');assert.equal(T('1 players online','1 位玩家在线'),'1 player online');
  w.save.lang='zh';assert.equal(T('Remember: 1 seconds','记忆时间：1 秒'),'记忆时间：1 秒');
  w.save.lang='en';w.me().name='1 games';w.me().last=w.dstr();w.me().streak=1;w.me().gp=1;w.me().log=[{d:w.dstr(),g:'num',r:1,s:60}];w.MindGardenDashboard.refresh();assert.equal(w.me().name,'1 games');assert(!/1\s+days/.test(w.document.getElementById('gardenProgressStrip').textContent));
- w.openMyProgress();assert(w.document.getElementById('box').textContent.includes('Game played'));
+ w.openMyProgress();assert.equal(w.document.getElementById('analysisStats').firstElementChild.textContent,'1Session');
  const review=w.MindGardenFeedback.compare(['20'],['21'],{sequence:false});assert(review.includes('Answer differs'));assert(!review.includes('Review this one'));assert(!review.includes('↻'));assert(review.includes('21'));assert(review.includes('20'));
  console.log('PASS grammar: 0/1/2/11/21/101, decimals/ranges, bilingual text, unchanged player names, one-day streak, game totals and honest answer feedback');
 }finally{setImmediate(()=>d.window.close())}

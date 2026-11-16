@@ -31,7 +31,8 @@
     "light-theme.css",
     "v5.css",
     "game-containers.css",
-    "scenery-tone.css"
+    "scenery-tone.css",
+    "shared-menus.css"
   ],
   "scripts": [
     "grammar.js",

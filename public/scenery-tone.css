@@ -1,7 +1,9 @@
-/* Tone only the supplied scenery, never the interface or personal media. */
+/* Preserve source colours and detail. Never filter the interface or personal media. */
 html:not([data-garden-scene="personal"]) #home #welcomeDashboard .welcome-scene{background-image:none!important}
-html:not([data-garden-scene="personal"]) #home #welcomeDashboard .welcome-scene::before{content:"";display:block;position:absolute;inset:0;z-index:-2;pointer-events:none;background:var(--garden-art) center/cover no-repeat;filter:saturate(.76) contrast(.91)}
-html[data-garden-scene-mode="dark"]:not([data-garden-scene="personal"]) #home #welcomeDashboard .welcome-scene::before{filter:saturate(.42) sepia(.32) contrast(.90)}
+html:not([data-garden-scene="personal"]) #home #welcomeDashboard .welcome-scene::before{content:"";display:block;position:absolute;inset:0;z-index:-2;pointer-events:none;background:var(--garden-art) center/cover no-repeat;filter:none}
 html[data-garden-scene="personal"] #home #welcomeDashboard .welcome-scene::before{display:none}
-.scene-choice[data-for-mode="light"] img{filter:saturate(.76) contrast(.91)}
-.scene-choice[data-for-mode="dark"] img{filter:saturate(.42) sepia(.32) contrast(.90)}
+.scene-choice img{filter:none}
+/* Static, low-opacity sky grain disguises gradient steps without softening edges. */
+#home #welcomeDashboard .scenery-gradient-grain{display:none;position:absolute!important;inset:0;z-index:-1;pointer-events:none;opacity:.022;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath filter='url(%23n)' opacity='.8' d='M0 0h180v180H0z'/%3E%3C/svg%3E");mask-image:linear-gradient(#000,#000 35%,transparent 70%)}
+html[data-garden-scene-mode="dark"]:not([data-garden-scene="personal"]) #home #welcomeDashboard .scenery-gradient-grain{display:block}
+#home #welcomeDashboard .welcome-scene.has-welcome-video .scenery-gradient-grain{display:none}

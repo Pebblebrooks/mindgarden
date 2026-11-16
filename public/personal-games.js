@@ -34,34 +34,14 @@ function preview(r){if(window.MindGardenExpansion?.has(r.id)){const rank=r.rank;
 }
 function select(id,label,values,value){return '<label>'+label+'<select id="'+id+'">'+values.map(([v,n])=>'<option value="'+v+'"'+(String(value)===String(v)?' selected':'')+'>'+n+'</option>').join('')+'</select></label>'}
 function button(id,en,zh,main=false){return '<button type="button" class="btn'+(main?' main':'')+'" id="'+id+'">'+T(en,zh)+'</button>'}
-function pickedCard(id){if(id!=='pairs')return window.MindGardenDashboard.gameCard(id).replace('data-game=', 'data-configure=');return '<button class="game-tile" data-configure="pairs"><span class="game-art" aria-hidden="true">'+gamePicture('🌺')+'</span><span class="game-info"><strong>'+esc(gameName(id))+'</strong><span class="game-desc">'+T('Find the matching picture cards.','找出相同的图片卡片。')+'</span></span></button>';}
 function myGames(){
- resultNavigation=null;window.MindGardenMenuHistory?.enter('my-games',()=>myGames());
- stopSession();result=null;queue=[];scope='my';
- const c=config(),games=['pairs',...Object.keys(MG)];if(!me().myGames)c.games=['pairs','num','gardenrhythm'];
- let selected=[...c.games],page=0;
- const categories=window.MindGardenDashboard.categories();
- overlay('<section class="personal-panel personal-simple compact-my-games"><h2>'+T('My Games','我的游戏')+'</h2><div class="library-tabs">'+button('personalAllGames','All Games','所有游戏')+'<button class="btn main" aria-current="page">'+T('My Games','我的游戏')+'</button></div><div class="personal-dropdowns">'+select('personalCategory',T('Category','类别'),[['all',T('All Games','所有游戏')],...categories],'all')+'<label>'+T('Game','游戏')+'<select id="personalGame"></select></label></div>'+button('personalAdd','+ Add to My Games','＋ 添加到我的游戏')+'<h3 id="personalSelectionCount"></h3><div id="personalCompactSelected"></div><div class="compact-pager" id="personalPages"></div><p id="personalSummary" role="status"></p><button class="btn" id="personalUndo" hidden>'+T('Undo','撤销')+'</button><div class="personal-actions">'+button('personalStart','Play my selection','按顺序开始',true)+'</div></section>');
- const capacity=()=>Math.max(1,Math.min(3,Math.floor(((window.visualViewport?.height||innerHeight)-410)/(100*(Number(document.documentElement.style.getPropertyValue('--fs'))||1)))));
- function saveSelection(){me().myGames={...c,games:[...selected]};persist()}
- function fill(){const cat=$('personalCategory').value;$('personalGame').innerHTML=games.filter(id=>cat==='all'||window.MindGardenDashboard.category(id)===cat).map(id=>'<option value="'+id+'">'+esc(gameName(id))+'</option>').join('');syncAdd()}
- function syncAdd(){const exists=selected.includes($('personalGame').value);$('personalAdd').disabled=exists||!$('personalGame').value;$('personalAdd').textContent=exists?T('Added','已添加'):T('+ Add to My Games','＋ 添加到我的游戏')}
- function refresh(){
-  const size=capacity(),pages=Math.max(1,Math.ceil(selected.length/size));page=Math.min(page,pages-1);
-  $('personalSelectionCount').textContent=T('My selection','我的选择')+' ('+selected.length+')';
-  $('personalCompactSelected').innerHTML=selected.slice(page*size,(page+1)*size).map(id=>'<div class="personal-compact-row"><button class="btn" data-configure="'+id+'">'+esc(gameName(id))+'</button>'+info(id)+'<button class="btn" data-remove-game="'+id+'" aria-label="'+esc(T('Remove ','移除 ')+gameName(id))+'">×</button></div>').join('')||'<p>'+T('No games selected','未选择游戏')+'</p>';
-  $('personalPages').innerHTML=pages>1?'<button class="btn" id="personalPrev" aria-label="'+T('Previous page','上一页')+'"'+(!page?' disabled':'')+'>‹</button><span>'+(page+1)+' / '+pages+'</span><button class="btn" id="personalNextPage" aria-label="'+T('Next page','下一页')+'"'+(page===pages-1?' disabled':'')+'>›</button>':'';
-  if($('personalPrev'))$('personalPrev').onclick=()=>{page--;refresh()};if($('personalNextPage'))$('personalNextPage').onclick=()=>{page++;refresh()};
-  $('personalStart').disabled=!selected.length;syncAdd();
-  $('personalCompactSelected').querySelectorAll('[data-configure]').forEach(b=>b.onclick=()=>setup(b.dataset.configure,undefined,'my'));
-  $('personalCompactSelected').querySelectorAll('[data-remove-game]').forEach(b=>b.onclick=()=>{const old=[...selected];selected=selected.filter(id=>id!==b.dataset.removeGame);saveSelection();refresh();$('personalUndo').hidden=false;$('personalUndo').onclick=()=>{selected=old;saveSelection();refresh();$('personalUndo').hidden=true}});
- }
- $('personalCategory').onchange=fill;$('personalGame').onchange=syncAdd;
- $('personalAdd').onclick=()=>{const id=$('personalGame').value;if(!games.includes(id)||selected.includes(id))return;selected.push(id);saveSelection();page=Math.floor((selected.length-1)/capacity());refresh()};
- $('personalAllGames').onclick=()=>{closeOv();toHome();window.MindGardenDashboard.library()};
- $('personalStart').onclick=()=>{saveSelection();queue=[...selected];if(queue.length)setup(queue.shift(),undefined,'my')};fill();refresh();
- const panel=$('personalCompactSelected');const resize=()=>{if(!panel.isConnected){window.removeEventListener('resize',resize);return}refresh()};window.addEventListener('resize',resize);
+ resultNavigation=null;stopSession();result=null;queue=[];scope='my';
+ if(!me().myGames){me().myGames={...config(),games:['pairs','num','gardenrhythm']};persist()}
+ closeOv();toHome();window.MindGardenDashboard.myGames();
 }
+function selectGame(id,include){if(id!=='pairs'&&!MG[id])return;const c=config();c.games=include?[...new Set([...c.games,id])]:c.games.filter(k=>k!==id);me().myGames=c;persist()}
+function play(id,context){queue=[];setup(id,undefined,context)}
+function playSelection(){queue=[...config().games];if(queue.length)setup(queue.shift(),undefined,'my')}
 
 function category(id){if(window.MindGardenMovement?.has(id))return 'movement';if(['pairs','seq','miss','rem','shopping','story','recall','drawmemory','hawker','album','trail','melody'].includes(id))return 'memory';if(['num','sum','tbl','add','sub','cnt','money','calendar','time','clk','count'].includes(id))return 'numbers';return 'other';}
 
@@ -174,5 +154,5 @@ function decorate(){
 }
 const clock=setInterval(()=>{if(!session||result||document.hidden||paused||!$('ov').classList.contains('hidden'))return;const g=window.MindGardenExpansion?.current||window.MindGardenActivities?.current||window.MindGardenNewGames?.current||window.MindGardenCommercial?.current||window.MindGardenEveryday?.current;if(g?.paused)return;session.elapsed++;if(session.timed)decorateSession()},1000);window.addEventListener('pagehide',()=>clearInterval(clock));
 new MutationObserver(decorate).observe(document.body,{childList:true,subtree:true});decorate();
-window.MindGardenPersonal={closeResultMenu,config,settings,saveGame,recipe,setup,myGames,preview,benefit,pairDeck,get session(){return session},get result(){return result},challenge(id){return session?.id===id?session:null}};
+window.MindGardenPersonal={closeResultMenu,config,settings,saveGame,recipe,setup,myGames,selectGame,play,playSelection,info,preview,benefit,pairDeck,get session(){return session},get result(){return result},challenge(id){return session?.id===id?session:null}};
 })();
