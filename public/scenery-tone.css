@@ -1,0 +1,7 @@
+/* Tone only the supplied scenery, never the interface or personal media. */
+html:not([data-garden-scene="personal"]) #home #welcomeDashboard .welcome-scene{background-image:none!important}
+html:not([data-garden-scene="personal"]) #home #welcomeDashboard .welcome-scene::before{content:"";display:block;position:absolute;inset:0;z-index:-2;pointer-events:none;background:var(--garden-art) center/cover no-repeat;filter:saturate(.76) contrast(.91)}
+html[data-garden-scene-mode="dark"]:not([data-garden-scene="personal"]) #home #welcomeDashboard .welcome-scene::before{filter:saturate(.42) sepia(.32) contrast(.90)}
+html[data-garden-scene="personal"] #home #welcomeDashboard .welcome-scene::before{display:none}
+.scene-choice[data-for-mode="light"] img{filter:saturate(.76) contrast(.91)}
+.scene-choice[data-for-mode="dark"] img{filter:saturate(.42) sepia(.32) contrast(.90)}

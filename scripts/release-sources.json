@@ -29,7 +29,9 @@
     "game-ui.css",
     "first-release-games.css",
     "light-theme.css",
-    "v5.css"
+    "v5.css",
+    "game-containers.css",
+    "scenery-tone.css"
   ],
   "scripts": [
     "grammar.js",

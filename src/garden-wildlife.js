@@ -4,26 +4,40 @@ window.createGardenWildlife=async function(host){
  const atlas=new Image();atlas.src=window.MindGardenAssets?.['wildlife-flight-atlas.png']||'wildlife-flight-atlas.png';
  let disposed=false,paused=true,mode='gentle',time=0,last=0,frame=0,width=1,height=1;
  const flyers=[];
- for(let i=0;i<6;i++){
-  const bird=i<2,node=document.createElement('span'),sprite=document.createElement('i');
+ for(let i=0;i<9;i++){
+  const bird=i<2||i>=6,node=document.createElement('span'),sprite=document.createElement('i');
   node.className='scenery-flyer';sprite.className='wildlife-sprite';sprite.style.backgroundImage='url("'+atlas.src+'")';node.append(sprite);layer.append(node);
-  flyers.push({node,sprite,kind:bird?'swallow':'butterfly',phase:i*7.31,frame:0,x:0,y:0,size:0,visible:false});
+  flyers.push({node,sprite,kind:bird?'swallow':'butterfly',distant:i>=6,phase:i*7.31,frame:0,x:0,y:0,size:0,visible:false});
+ }
+ // Clear-sky bounds are authored against the source image, then projected using
+ // the same centred cover crop as the background. Never infer sky from viewport height.
+ function skyBounds(){
+  const id=document.documentElement.dataset.gardenScene,scene=window.MindGardenScenes?.scenes.find(s=>s.id===id);
+  if(!scene?.sky||host.closest('.has-welcome-video'))return null;
+  const [left,right,top,bottom]=scene.sky,ratio=scene.aspect||16/9,h=Math.max(height,width/ratio),w=h*ratio;
+  const x=(width-w)/2,y=(height-h)/2;
+  const bounds={left:Math.max(0,x+left*w),right:Math.min(width,x+right*w),top:Math.max(0,y+top*h),bottom:Math.min(height,y+bottom*h)};
+  return bounds.right-bounds.left>30&&bounds.bottom-bounds.top>12?bounds:null;
  }
  function draw(){
-  const gentle=mode==='gentle',speed=gentle?.65:1;
+  const gentle=mode==='gentle',speed=gentle?.65:1,sky=skyBounds();
   flyers.forEach((f,i)=>{
-   f.visible=mode!=='off'&&(mode==='standard'||i===0||i===2||i===3);
+   const bird=f.kind==='swallow';
+   f.visible=mode!=='off'&&(mode==='standard'||[0,2,3,6,7].includes(i))&&(!bird||!!sky);
    f.node.hidden=!f.visible;if(!f.visible)return;
-   const t=time*speed+f.phase,bird=f.kind==='swallow';let x,y,scale,angle,flip=1,row,col;
+   const t=time*speed+f.phase;let x,y,scale,angle,flip=1,row,col;
    if(bird){
-    // Cross entirely offscreen before starting another pass; never reverse in place.
-    const duration=29+i*8,u=((t%duration)+duration)%duration/duration;
-    x=-.13+1.26*u;if(i===1){x=1-x;flip=-1;}
-    y=.29+i*.16+.035*Math.sin(u*Math.PI*2)+.014*Math.sin(u*Math.PI*4);
-    scale=.76+.22*Math.sin(u*Math.PI);angle=flip*(5*Math.cos(u*Math.PI*2));
+    const duration=(f.distant?50:29)+i*3,u=((t%duration)+duration)%duration/duration;
+    const sw=sky.right-sky.left,sh=sky.bottom-sky.top;
+    f.size=Math.min(f.distant?19:54,Math.max(f.distant?9:26,width*(f.distant?.014:.043)),sh*.38,sw*.12);
+    const pad=f.size*.75+2,travel=i%2?1-u:u;flip=i%2?-1:1;
+    x=(sky.left+pad+(sw-2*pad)*travel)/width;
+    y=(sky.top+pad+(sh-2*pad)*(.25+(i%3)*.22+.08*Math.sin(u*Math.PI*2)))/height;
+    angle=flip*4*Math.cos(u*Math.PI*2);
+    // Fade out well before roof/vegetation boundaries; restart only while invisible.
+    f.node.style.opacity=String(Math.min(1,u/.12,(1-u)/.12)*(f.distant?.56:.88));
     const beat=time*5.2+i*.37,glide=(t%8)>3.2;
     row=glide?1:0;col=glide?Math.floor((t%3)/3*4):Math.floor(beat*4)%4;
-    f.size=Math.min(72,Math.max(40,width*.051))*scale;
    }else{
     // Slow drifting arcs with smaller irregular flutters, separated from sky birds.
     const side=i%2===0?-1:1,base=side<0?.18:.82;
@@ -33,6 +47,7 @@ window.createGardenWildlife=async function(host){
     angle=Math.max(-28,Math.min(28,dx*600+dy*240));scale=.80+.18*Math.sin(t*.19);
     row=i%2===0?2:3;col=Math.floor(time*(6.4+i*.3)*4+i)%4;
     f.size=Math.min(43,Math.max(28,width*.031))*scale;
+    f.node.style.opacity='1';
    }
    f.x=x*width;f.y=y*height;f.frame=row*4+col;
    f.node.style.width=f.node.style.height=f.size+'px';
@@ -52,9 +67,10 @@ window.createGardenWildlife=async function(host){
  if(!observer)window.addEventListener('resize',resize);
  const api={
   setMode(value,shouldPause){mode=value;paused=!!shouldPause||value==='off';host.dataset.paused=String(paused);draw();if(paused){cancelAnimationFrame(frame);frame=0;last=0;}else if(!frame){last=0;frame=requestAnimationFrame(tick);}},
-  snapshot(){return {time,paused,renderer:'sprite',loaded:atlas.complete&&atlas.naturalWidth>0,actors:[],flyers:flyers.length,spacing:flyers.map((f,i)=>({id:'flyer-'+i,x:f.x,y:f.y,r:f.size/2,visible:f.visible,frame:f.frame}))};},
-  dispose(){disposed=true;cancelAnimationFrame(frame);observer?.disconnect();window.removeEventListener('resize',resize);layer.remove();}
+  snapshot(){return {time,paused,renderer:'sprite',loaded:atlas.complete&&atlas.naturalWidth>0,actors:[],flyers:flyers.length,sky:skyBounds(),spacing:flyers.map((f,i)=>({id:'flyer-'+i,kind:f.kind,distant:f.distant,x:f.x,y:f.y,r:f.size/2,visible:f.visible,frame:f.frame}))};},
+  dispose(){disposed=true;cancelAnimationFrame(frame);observer?.disconnect();window.removeEventListener('resize',resize);window.removeEventListener('gardenSceneChange',resize);layer.remove();}
  };
- atlas.onload=()=>{host.dataset.ready='6';resize();};atlas.onerror=()=>{host.dataset.ready='unavailable';layer.hidden=true;};
- if(atlas.complete&&atlas.naturalWidth)host.dataset.ready='6';resize();return api;
+ window.addEventListener('gardenSceneChange',resize);
+ atlas.onload=()=>{host.dataset.ready='9';resize();};atlas.onerror=()=>{host.dataset.ready='unavailable';layer.hidden=true;};
+ if(atlas.complete&&atlas.naturalWidth)host.dataset.ready='9';resize();return api;
 };

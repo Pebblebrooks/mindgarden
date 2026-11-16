@@ -9,7 +9,7 @@
   const text=cells.every(e=>e.classList.contains('txt')),width=grid.clientWidth;
   if(text){const longest=Math.max(...cells.map(e=>e.textContent.trim().length));const minimum=longest>24?200:longest>10?140:90;const cols=Math.max(1,Math.min(cells.length,4,Math.floor(width/minimum)));grid.style.setProperty('grid-template-columns',`repeat(${cols},minmax(0,1fr))`,'important')}
   const cols=getComputedStyle(grid).gridTemplateColumns.split(' ').length||1,rows=Math.ceil(cells.length/cols);
-  if(!text&&cells.every(e=>e.matches('.big'))){const top=grid.getBoundingClientRect().top;const cell=Math.max(44,Math.min(100,(mp.clientHeight-(top-mp.getBoundingClientRect().top)-16-(rows-1)*6)/rows));grid.style.setProperty('--fit-cell',cell+'px');if(!grid.classList.contains('viewport-grid'))grid.classList.add('viewport-grid')}
+  if(!text&&!grid.classList.contains('story-answer-grid')&&cells.every(e=>e.matches('.big'))){const top=grid.getBoundingClientRect().top;const cell=Math.max(44,Math.min(100,(mp.clientHeight-(top-mp.getBoundingClientRect().top)-16-(rows-1)*6)/rows));grid.style.setProperty('--fit-cell',cell+'px');if(!grid.classList.contains('viewport-grid'))grid.classList.add('viewport-grid')}
  }
  }
  function schedule(){if(!queued){queued=true;queueMicrotask(fit)}}

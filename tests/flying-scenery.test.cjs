@@ -3,7 +3,7 @@ const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),d=ne
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+html.match(/src="(garden-ui-\d+\.js)"/)[1],'utf8'));
 try{
 assert.equal(w.document.querySelectorAll('#gardenCat,#progressPetPeeks,.wildlife-poster,.zoo .wk,.zoo .pk,.zoo .cr').length,0);
-assert.equal(w.document.querySelectorAll('#gardenLife .scenery-flyers>span').length,6);
+assert.equal(w.document.querySelectorAll('#gardenLife .scenery-flyers>span').length,9);
 w.openSet();assert.equal(w.document.querySelectorAll('#menuPetToggle').length,0);w.closeOv();
 w.eval("me().dashboardPreferences={petsVisible:true};renderHome();window.dispatchEvent(new Event('gardenPlayerChange'))");
 assert.equal(w.document.querySelectorAll('#gardenCat,#progressPetPeeks').length,0);
