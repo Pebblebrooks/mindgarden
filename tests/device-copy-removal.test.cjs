@@ -1,0 +1,12 @@
+const {JSDOM}=require('./test-dom.cjs'),fs=require('fs'),assert=require('node:assert/strict');
+const d=new JSDOM('<div id="box"></div>',{url:'https://copy.test',runScripts:'outside-only'}),w=d.window,key='mindGardenAccountCopies';
+w.MindGardenLocale={pair:a=>a};w.save={pr:{},cp:'a'};w.persist=()=>true;w.reportStorageFailure=()=>{};w.esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;');w.overlay=s=>w.document.getElementById('box').innerHTML=s;w.closeOv=()=>{};w.MindGardenAccount={connected:false};
+w.localStorage.setItem(key,JSON.stringify({one:{username:'tan',profiles:{a:{name:'Lilian',log:[]},b:{name:'Lilian',log:[{g:'num'}]}}},two:{username:'other',profiles:{a:{name:'Lilian',log:[]}}}}));
+w.eval(fs.readFileSync(__dirname+'/../public/local-player-records.js','utf8'));const api=w.MindGardenLocalRecords,read=()=>JSON.parse(w.localStorage.getItem(key));
+api.panel();assert.equal(w.document.querySelectorAll('.device-copy-delete').length,3);
+w.document.querySelector('.device-copy-delete').click();w.document.getElementById('copyDeleteCancel').click();assert(read().one.profiles.a);
+w.document.querySelector('.device-copy-delete').click();w.document.getElementById('copyDeleteName').value='wrong';w.document.getElementById('copyDeleteConfirm').click();assert(read().one.profiles.a);
+w.document.getElementById('copyDeleteName').value='Lilian';w.document.getElementById('copyDeleteConfirm').click();assert(!read().one.profiles.a);assert(read().one.profiles.b);assert(read().two.profiles.a);assert.equal(w.document.querySelectorAll('.device-copy-delete').length,2);
+const original=w.Storage.prototype.setItem;w.Storage.prototype.setItem=()=>{throw Error('quota')};assert.equal(api.remove({id:'one'},'b'),false);api.panel();assert.equal(w.document.querySelectorAll('.device-copy-delete').length,2);w.Storage.prototype.setItem=original;
+assert(api.reconcileRemoval({id:'one',username:'tan'},{b:read().one.profiles.b},{b:{name:'Lilian',log:[]}}));assert.equal(read().one.profiles.b.log.length,0);assert(read().two.profiles.a);
+w.close();console.log('PASS saved-copy delete: cancel, exact name, same-name isolation, list refresh, quota rollback and history reset.');

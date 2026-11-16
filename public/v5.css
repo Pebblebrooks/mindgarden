@@ -1,37 +1,11 @@
-/* v5 application shell. Game boards retain their own layouts. */
+/* Shared shell components. Gameplay and approved menu rules retained. */
 html body{font-family:Arial,'Noto Sans SC',sans-serif;font-variant-numeric:normal;font-feature-settings:'zero' 0}
-#home #unifiedNav{display:flex!important;justify-content:space-between!important;gap:12px!important;position:relative!important;top:auto!important;min-height:72px!important;padding:12px!important}
-#home #unifiedNav .nav-items,#home #unifiedNav .nav-actions>:not(#navMore){display:none!important}
-#home #unifiedNav .nav-brand{display:flex!important;max-width:calc(100% - 105px)!important;width:auto!important;font-size:calc(1rem * var(--fs))!important;white-space:normal!important}
-#home #unifiedNav .nav-brand>span:last-child{display:inline!important}
-#home #unifiedNav #navMore{display:flex!important;gap:8px!important;width:auto!important;min-width:96px!important;min-height:48px!important;font-size:calc(1rem * var(--fs))!important;padding:10px!important}
-#home #unifiedNav #navMore svg{width:24px;flex-shrink:0}
 #home #unifiedNav #navMenu{position:absolute!important;top:100%!important;right:0!important;left:auto!important;width:min(520px,calc(100vw - 24px))!important;max-height:75svh!important;overflow:auto!important;box-sizing:border-box;padding:20px!important;z-index:200}
 #navMenu .nav-group>div{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
 #home #navMenu button,#home #navMenu summary{min-height:48px!important;font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;white-space:normal!important}
 #navMenu button svg{width:26px;height:26px;flex:0 0 26px}
 #navMenu .nav-group,#navMenu details{margin:0 0 18px!important;padding:10px 0!important;clear:both}
 #navMenu #menuCards{position:static!important;display:flex!important;width:100%!important;margin:12px 0!important;gap:12px}
-#home #welcomeDashboard .welcome-scene{min-height:0!important;height:auto!important;display:flex!important;flex-direction:column!important;padding:32px 20px 24px!important;gap:16px!important;overflow:visible!important;border-radius:24px!important}
-#home .welcome-heading{position:relative!important;margin:0!important;padding:8px!important}
-#home .welcome-heading h1{font-size:calc(2rem * var(--fs))!important;line-height:1.15!important;overflow-wrap:normal!important;margin:0!important}
-#home .welcome-heading p{font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;margin:10px 0!important}
-#home #welcomeName{position:relative!important;margin:0 auto 16px!important;font-size:calc(1.25rem * var(--fs))!important;line-height:1.4!important;background:var(--panel)!important;color:var(--ink)!important;max-width:100%!important;white-space:normal!important}
-#home #welcomeDashboard .welcome-ctas,html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-ctas{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:min(680px,100%)!important;margin:0 auto!important;padding:16px!important;background:var(--panel)!important;border-radius:20px;box-sizing:border-box}
-#home #welcomeDashboard .welcome-group-title{display:none!important}
-#home #welcomeDashboard .welcome-choice{min-width:0!important;width:auto!important;height:auto!important;position:relative;display:flex!important;align-items:stretch}
-#home #welcomeDashboard .welcome-choice:has(#dashStart),#home #welcomeDashboard .welcome-choice:has(#dashBrowse){grid-column:1/-1}
-#home #welcomeDashboard .welcome-feature{width:100%!important;min-width:0!important;min-height:84px!important;height:auto!important;padding:14px 48px 14px 14px!important;display:flex!important;flex-direction:row!important;gap:12px!important;justify-content:center!important;font-size:calc(1rem * var(--fs))!important;white-space:normal!important;line-height:1.4!important;box-sizing:border-box}
-#home #welcomeDashboard .welcome-feature strong{font-size:inherit!important;line-height:inherit!important;white-space:normal!important;word-break:normal!important;overflow:visible!important}
-#home #welcomeDashboard .feature-icon{width:32px!important;height:32px!important;flex:0 0 32px!important;margin:0!important}
-#home #welcomeDashboard .feature-icon svg{width:32px!important;height:32px!important}
-#home #welcomeDashboard #dashStart{background:#215d45!important;color:white!important;border:2px solid #215d45!important;font-size:calc(1.25rem * var(--fs))!important}
-#home #welcomeDashboard .welcome-choice:has(#dashStart) .mg-help-trigger{color:white!important}
-html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-choice:not(:has(#dashStart,#dashBrowse)){display:none!important}
-#home #welcomeDashboard .welcome-choice.display-choice-hidden:not(:has(#dashStart,#dashBrowse)){display:none!important}
-#v5GardenView{display:block;margin:12px auto;min-height:48px;font-size:calc(1rem * var(--fs))}
-html[data-v5-garden="true"] #home #welcomeDashboard .welcome-ctas{display:none!important}
-html[data-v5-garden="true"] #home #welcomeDashboard .welcome-scene{min-height:75svh!important}
 #home .mg-help{position:absolute!important;inset:12px 6px auto auto!important;width:40px!important}
 #home .mg-help-text{display:none!important}
 .mg-info-button,.mg-help-trigger{border-radius:50%!important;min-width:44px!important;min-height:48px!important;background:transparent!important;border:0!important;font-size:24px!important;color:inherit}
@@ -39,25 +13,16 @@ html[data-v5-garden="true"] #home #welcomeDashboard .welcome-scene{min-height:75
 .v5-dialog::backdrop{background:#071c1688}
 .v5-dialog h2{font-size:calc(1.4rem * var(--fs));margin:30px 0 24px}
 .v5-dialog-close{position:absolute;top:8px;right:8px;min-width:48px;min-height:48px}
-.v5-language-options{display:grid;gap:16px}.v5-language-options .btn{min-height:64px;font-size:inherit}
-#home #gameCards{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr))!important;gap:12px!important}
-#home #gameCards .personal-game-card{min-height:0!important;position:relative!important}
-#home #gameCards .game-tile{min-height:100px!important;height:auto!important;padding:14px 48px 14px 12px!important;display:flex!important;align-items:center!important;gap:14px!important;box-sizing:border-box}
-#home #gameCards .game-art{width:56px!important;height:56px!important;flex:0 0 56px!important;margin:0!important}
-#home #gameCards .game-info{min-width:0!important;text-align:left!important}
-#home #gameCards .game-info strong{font-size:calc(1.1rem * var(--fs))!important;white-space:normal!important}
-#home #gameCards .game-desc{display:block!important;font-size:calc(1rem * var(--fs))!important;line-height:1.4!important}
-#home #gameCards .game-play{display:none!important}
+.v5-language-options{display:grid;gap:16px}
+.v5-language-options .btn{min-height:64px;font-size:inherit}
 #home .library-category{display:none!important}
 #home .game-filterbar{display:block!important}
-.v5-category-chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.v5-category-chips button{min-height:48px;font-size:calc(1rem * var(--fs))}
-.v5-recent-list{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}.v5-recent-list button{min-height:48px}
+.v5-category-chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.v5-category-chips button{min-height:48px;font-size:calc(1rem * var(--fs))}
+.v5-recent-list{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.v5-recent-list button{min-height:48px}
 #box .personal-remove-game{position:static!important;width:auto!important;height:auto!important;min-height:48px!important;font-size:calc(1rem * var(--fs))!important;order:2}
 #box .personal-remove-game[hidden]{display:none!important}
-#box .personal-picked-card{display:flex!important;flex-wrap:wrap!important;align-items:center;gap:8px!important;padding:12px!important}
-#box .personal-picked-card .personal-picked{flex:1;min-width:140px;padding:12px!important}
-#box .personal-picked-card>.mg-info-button{position:static!important;order:3}
-#box .personal-selected-grid{grid-template-columns:1fr!important}
 #box .v5-game-options{border:1px solid var(--line);border-radius:14px;padding:12px;margin:20px 0}
 #box .v5-game-options>summary{min-height:48px;cursor:pointer;text-align:center;font-size:calc(1rem * var(--fs))}
 #box .v5-game-options .personal-more-options>summary{display:none}
@@ -66,60 +31,25 @@ html[data-v5-garden="true"] #home #welcomeDashboard .welcome-scene{min-height:75
 #box :is(.progress-tabs,.menu-view-tabs,.library-tabs) button{flex:1 0 auto!important;white-space:nowrap!important;word-break:normal!important;min-height:48px!important}
 #box :is(.tip,small,.player-storage){font-size:calc(1rem * var(--fs))!important;line-height:1.45!important}
 #home button:focus-visible,#box button:focus-visible,.v5-dialog button:focus-visible{outline:3px solid #b87f17;outline-offset:3px}
-html[data-text-large="true"] #home .welcome-heading p{display:none!important}
-@media(max-width:600px){#home #welcomeDashboard .welcome-scene{padding:16px 8px!important}#home .welcome-heading h1{font-size:calc(1.5rem * var(--fs))!important}#home #welcomeDashboard .welcome-ctas{padding:10px!important;gap:10px!important}#home #welcomeDashboard .welcome-feature{min-height:76px!important}#home #welcomeDashboard .feature-icon{display:none!important}#home #gameCards{grid-template-columns:1fr!important}}
-html[data-text-large="true"] #home #welcomeDashboard .welcome-ctas{grid-template-columns:1fr!important}
-@media(hover:none){#gameIconHelp,.mg-info-tooltip{display:none!important}}
-#home #welcomeDashboard #dashStart strong{color:#fff!important}
-#home #welcomeDashboard .welcome-choice{grid-column:auto!important;grid-row:auto!important}
-#home #welcomeDashboard .welcome-choice:has(#dashStart),#home #welcomeDashboard .welcome-choice:has(#dashBrowse){grid-column:1/-1!important}
-#home #welcomeDashboard .feature-icon{position:static!important;inset:auto!important;transform:none!important}
-#home #welcomeDashboard .welcome-heading{display:block!important;order:0!important;background:var(--panel);color:var(--ink);border-radius:16px;align-self:center}
-#home #welcomeDashboard .welcome-heading h1,#home #welcomeDashboard .welcome-heading p{color:var(--ink)!important}
-#home #welcomeDashboard .welcome-heading h1{display:block!important}
-#home #welcomeDashboard #welcomeName{order:1!important}#home #welcomeDashboard .welcome-ctas{order:2!important}
-#home #welcomeDashboard .welcome-name::before{display:none!important}
-#home #welcomeDashboard .welcome-heading h1 svg{display:none}
+@media(hover:none){
+#gameIconHelp,.mg-info-tooltip{display:none!important}
+}
 #box button,#navMenu button{word-break:normal!important;overflow-wrap:normal!important}
 .v5-language-options [aria-pressed="true"]{outline:3px solid #4b816a;outline-offset:2px}
-#home #welcomeDashboard{margin:0!important;min-height:0!important;display:block!important}
-#home #unifiedNav .nav-actions #navMore{width:auto!important;min-width:96px!important;max-width:none!important;flex:0 0 auto!important;height:auto!important;padding:10px!important}
-#home #unifiedNav .nav-actions{width:auto!important;max-width:none!important;flex:0 0 auto!important}
-#home #welcomeDashboard .welcome-scene>#sceneFooter{order:3!important;font-size:calc(1rem * var(--fs))!important;margin:8px auto!important}
-#home #welcomeDashboard .welcome-scene>.garden-breathing-space{display:none!important}
-#home #welcomeDashboard .welcome-scene{justify-content:flex-start!important}
-#home #welcomeDashboard .welcome-heading{background:var(--panel)!important;text-shadow:none!important}
-#home #welcomeDashboard .welcome-heading h1{font-size:calc(1.5rem * var(--fs))!important;line-height:1.2!important}
-#home #welcomeDashboard .welcome-heading>p{font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;color:var(--ink)!important;text-shadow:none!important}
-#home #welcomeDashboard .welcome-choice .welcome-feature .feature-icon{position:static!important;transform:none!important;inset:auto!important;align-self:center!important}
-#home #welcomeDashboard .welcome-choice .welcome-feature{justify-content:center!important;align-items:center!important}
-#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav,#home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav{position:relative!important;top:auto!important;left:auto!important;right:auto!important;margin:0 auto!important}
-@media(max-width:600px){#home #welcomeDashboard .welcome-choice:not(:has(#dashStart,#dashBrowse)) .welcome-feature{padding:38px 8px 10px!important;min-height:100px!important}#home #welcomeDashboard .welcome-feature strong{overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}}
 #home #libraryDisplay h2{margin:20px 0 12px!important;font-size:calc(1.2rem * var(--fs))!important}
 #home #libraryDisplay .library-heading{margin:0 0 16px!important}
 #home #libraryDisplay{padding-top:24px!important}
-#home #gameCards .game-info{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:6px!important}
-#home #gameCards .game-info>strong,#home #gameCards .game-info>.game-desc{text-align:left!important}
-
-/* v5.0.1: approved centred labels and controls near the board. */
 #home #unifiedNav #navMenu :is(.nav-group,details){margin:0 0 8px!important;padding:4px 0!important;min-height:0!important}
 #home #unifiedNav #navMenu summary{padding:10px 28px!important;min-height:48px!important;box-sizing:border-box}
 #home #unifiedNav #navMenu .nav-group>div{gap:6px!important}
 #home #unifiedNav #navMenu h3{margin:8px 0!important}
 #home #unifiedNav #navMenu #menuCards{justify-content:center!important;margin:4px 0!important}
-#home #welcomeDashboard .welcome-choice .welcome-feature{display:grid!important;grid-template-columns:32px minmax(0,1fr) 32px!important;gap:8px!important;padding:14px 12px!important;text-align:center!important}
-#home #welcomeDashboard .welcome-feature strong{grid-column:2;grid-row:1;text-align:center!important}
-#home #welcomeDashboard .welcome-feature .feature-icon{grid-column:1;grid-row:1}
-#home #gameCards .game-tile{display:grid!important;grid-template-columns:56px minmax(0,1fr) 56px!important;padding:12px!important;gap:8px!important}
-#home #gameCards .game-info{align-items:center!important;text-align:center!important}
-#home #gameCards .game-info :is(strong,.game-desc,.game-meta){text-align:center!important}
 #home #gameLibrary :is(.library-foot,#libraryCount,.library-heading h1){text-align:center!important;text-align-last:auto!important}
 #home .game-filterbar{display:flex!important;flex-wrap:wrap!important;gap:12px!important;align-items:end!important}
 #home .game-filterbar .search-field{flex:1 1 240px;min-width:0}
 #home .game-filterbar .library-category{display:flex!important;flex:0 1 260px;flex-direction:column;gap:6px;text-align:center!important;margin:0!important}
 #home #gameCategory{min-height:48px;width:100%;font-size:calc(1rem * var(--fs));text-align:center}
 #home .v5-category-chips{display:none!important}
-/* Shared solo-game column and one quiet control row. */
 #game>.hud,#mini>.hud{width:min(100%,720px)!important;margin:0 auto 24px!important;box-sizing:border-box;display:flex!important;justify-content:center!important;text-align:center}
 #game>.hud>div,#mini>.hud>div{margin:auto!important;text-align:center!important}
 #mini>#mp,#mini>#mmsg,#mini>#mhint{max-width:720px!important;width:100%;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}
@@ -133,11 +63,12 @@ html[data-text-large="true"] #home #welcomeDashboard .welcome-ctas{grid-template
 #game .game-controls>.game-icon,#mini .game-controls>.game-icon{display:inline-flex!important;justify-content:center;align-items:center;width:48px!important;min-width:48px!important;height:48px!important;padding:8px!important;margin:0!important;border:0!important;border-radius:12px!important;box-shadow:none!important;background:transparent!important}
 #game .game-controls>.game-icon[hidden],#mini .game-controls>.game-icon[hidden]{display:none!important}
 #game .game-controls>.game-icon:focus-visible,#mini .game-controls>.game-icon:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-@media(hover:hover){#game .game-controls>.game-icon:hover,#mini .game-controls>.game-icon:hover{background:color-mix(in srgb,var(--ink) 12%,transparent)!important}}
+@media(hover:hover){
+#game .game-controls>.game-icon:hover,#mini .game-controls>.game-icon:hover{background:color-mix(in srgb,var(--ink) 12%,transparent)!important}
+}
 #mini .place-pictures{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin:24px auto 28px}
 #mini .place-answers{width:min(100%,540px)!important;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr))!important;gap:12px!important;margin:0 auto!important}
 #mini .place-answers>button{min-width:0!important;min-height:52px!important;height:auto!important;padding:12px 16px!important;font-size:calc(1rem * var(--fs))!important;line-height:1.4;white-space:normal!important;overflow-wrap:normal;border-width:2px!important}
-/* Suspending a game opens the pause overlay. Hide its shell behind the native dialog. */
 body:has(.game-ui-dialog[open]) #ov{visibility:hidden!important}
 .game-ui-dialog.game-exit-dialog{width:min(460px,calc(100vw - 32px));max-width:calc(100vw - 32px);box-sizing:border-box;border-width:1px!important;padding:28px 24px!important}
 .game-exit-dialog>div{border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important}
@@ -146,32 +77,17 @@ body:has(.game-ui-dialog[open]) #ov{visibility:hidden!important}
 .game-exit-dialog :is(h2,p,.game-dialog-actions){text-align:center!important;text-align-last:auto!important}
 .game-exit-dialog .game-dialog-actions{gap:20px!important}
 @media(max-width:600px){
- #home #welcomeDashboard .welcome-choice:not(:has(#dashStart,#dashBrowse)) .welcome-feature{display:flex!important;padding:38px 8px 10px!important}
- #home #welcomeDashboard .welcome-choice:has(#dashStart,#dashBrowse) .welcome-feature{grid-template-columns:32px minmax(0,1fr) 32px!important}
- #home .game-filterbar .library-category{flex:1 1 180px}
+#home .game-filterbar .library-category{flex:1 1 180px}
 }
-/* Menu sections size to their contents; never shrink them inside the scroll panel. */
 #home #unifiedNav #navMenu{display:block!important}
 #home #unifiedNav #navMenu.hidden{display:none!important}
 #home #unifiedNav #navMenu>*{flex:none!important;height:auto!important}
 #home #unifiedNav #navMenu .nav-group>div{height:auto!important;grid-auto-rows:auto!important}
-/* About uses centred headings and left-aligned reading text. */
 #ov #box .app-info-about :is(h1,h2,h3,h4,summary),#ov #box .app-info-about .app-info-heading{text-align:center!important;text-align-last:auto!important}
 #ov #box .app-info-about :is(p,li,ul,ol,.about-answer){text-align:left!important;text-align-last:auto!important}
-
-/* Approved open-garden title: live text over the selected scenery. */
-#home #welcomeDashboard .welcome-heading{position:relative!important;isolation:isolate;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:12px 16px!important;margin:0 auto!important;width:min(880px,100%)!important;box-sizing:border-box;text-align:center!important}
-#home #welcomeDashboard .welcome-heading::before{content:'';position:absolute;inset:-12px -20px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at center,rgba(8,31,35,.65) 0%,rgba(8,31,35,.3) 48%,transparent 72%);border:0;border-radius:0}
-#home #welcomeDashboard .welcome-heading h1{font-size:calc(clamp(2.1rem,4.6vw,4rem) * var(--fs))!important;font-weight:750!important;line-height:1.12!important;letter-spacing:-.025em!important;color:#fff!important;text-shadow:0 2px 8px #102a3080!important;text-align:center!important;overflow-wrap:normal!important}
-#home #welcomeDashboard .welcome-heading>p{font-size:calc(clamp(1rem,2vw,1.5rem) * var(--fs))!important;font-weight:400!important;color:#fff!important;text-shadow:0 1px 6px #102a30!important;margin:10px auto 4px!important;width:100%!important;text-align:center!important}
-#home #welcomeDashboard #welcomeName{background:transparent!important;border:0!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 5px #102a30,0 0 14px #102a3090!important;font-size:calc(clamp(1.15rem,2vw,1.5rem) * var(--fs))!important;margin:4px auto 12px!important}
-#home #welcomeDashboard .welcome-scene>#sceneFooter{align-self:center!important;margin: auto auto 0!important;text-align:center!important;font-size:calc(1rem * var(--fs))!important;font-weight:400!important;color:#fff!important;text-shadow:0 1px 5px #102a30!important}
-@media(max-width:600px){#home #welcomeDashboard .welcome-heading{padding:8px!important}#home #welcomeDashboard .welcome-heading::before{inset:-8px 0}#home #welcomeDashboard .welcome-heading h1{font-size:calc(2.1rem * var(--fs))!important}}
-
-/* v5.0.2: approved compact menu, account controls and readable About. */
-#home #unifiedNav #navMenu :is(.nav-group button,summary,#gardenPanelOpen,#menuCards){display:grid!important;grid-template-columns:28px minmax(0,1fr) 48px!important;align-items:center!important;gap:12px!important;width:min(260px,100%)!important;max-width:100%!important;min-width:0!important;margin:4px auto!important;padding:8px 0!important;text-align:left!important;text-align-last:auto!important;box-sizing:border-box;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:8px!important;color:inherit!important;position:relative!important}
-#home #unifiedNav #navMenu :is(.nav-group button,summary,#gardenPanelOpen,#menuCards)>:first-child{grid-column:1!important;grid-row:1;justify-self:center}
-#home #unifiedNav #navMenu :is(.nav-group button,summary,#gardenPanelOpen,#menuCards)>span:last-child{grid-column:2!important;grid-row:1;text-align:left!important;min-width:0;overflow-wrap:normal}
+#home #unifiedNav #navMenu :where(.nav-group button,summary,#gardenPanelOpen,#menuCards){display:grid!important;grid-template-columns:28px minmax(0,1fr) 48px!important;align-items:center!important;gap:12px!important;width:min(260px,100%)!important;max-width:100%!important;min-width:0!important;margin:4px auto!important;padding:8px 0!important;text-align:left!important;text-align-last:auto!important;box-sizing:border-box;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:8px!important;color:inherit!important;position:relative!important}
+#home #unifiedNav #navMenu :where(.nav-group button,summary,#gardenPanelOpen,#menuCards)>:first-child{grid-column:1!important;grid-row:1;justify-self:center}
+#home #unifiedNav #navMenu :where(.nav-group button,summary,#gardenPanelOpen,#menuCards)>span:last-child{grid-column:2!important;grid-row:1;text-align:left!important;min-width:0;overflow-wrap:normal}
 #home #unifiedNav #navMenu summary{list-style:none!important}
 #home #unifiedNav #navMenu summary::marker,#home #unifiedNav #navMenu summary::-webkit-details-marker{display:none;content:''}
 #home #unifiedNav #navMenu summary::after{content:'›';grid-column:3;grid-row:1;text-align:center;font-size:26px}
@@ -193,7 +109,6 @@ body:has(.game-ui-dialog[open]) #ov{visibility:hidden!important}
 #ov #box [data-menu-group="pets"] .motion-options{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;border:0;padding:12px}
 #ov #box [data-menu-group="pets"] .motion-options legend{display:none}
 #ov #box [data-menu-group="pets"] .motion-options button{flex:1 1 100px;min-height:48px;margin:0}
-/* Explicit circle independent of the selected font's circled-i glyph. */
 .mg-info-button,.mg-help-trigger{font-size:0!important;position:relative;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:48px!important;height:48px!important;min-width:48px!important;padding:0!important;flex:none!important}
 .mg-info-button>span{display:none!important}
 .mg-info-button::after,.mg-help-trigger::after{content:'i';display:flex;align-items:center;justify-content:center;width:25px;height:25px;border:1.5px solid currentColor;border-radius:50%;font:700 18px/1 Georgia,serif;box-sizing:border-box}
@@ -216,11 +131,12 @@ body:has(.game-ui-dialog[open]) #ov{visibility:hidden!important}
 #ov #box .app-info-about .about-version{text-align:center!important;width:100%;margin:16px 0}
 #ov #box .app-info-about :is(.about-copyright,.about-artwork){text-align:center!important;font-size:calc(1rem * var(--fs))!important}
 #ov #box .app-info-about .about-copyright{width:100%;white-space:normal!important}
-#home #welcomeDashboard .welcome-scene>#sceneFooter{width:100%!important;position:relative!important;inset:auto!important;transform:none!important;flex:none!important;order:99!important;text-align:center!important;box-sizing:border-box}
-@media(max-width:480px){#ov #box:has(#pd) .prow{grid-template-columns:48px minmax(0,1fr)!important}.player-card-actions{grid-column:1/-1;justify-content:center}#home #unifiedNav #navMenu{padding:16px!important}}
-
+@media(max-width:480px){
+#ov #box:has(#pd) .prow{grid-template-columns:48px minmax(0,1fr)!important}
+.player-card-actions{grid-column:1/-1;justify-content:center}
+#home #unifiedNav #navMenu{padding:16px!important}
+}
 #home #unifiedNav #navMenu :is(.nav-group,details){margin:0 0 8px!important;padding:4px 0!important}
-
 #home #unifiedNav #navMenu>details{margin:0!important;padding:0!important;border:0!important}
 #home #unifiedNav #navMenu summary{min-height:48px!important;height:auto!important;line-height:1.4!important}
 #mini .place-pictures .picture-sequence{margin:0!important;gap:24px!important}
@@ -234,26 +150,10 @@ body:has(.game-ui-dialog[open]) #ov{visibility:hidden!important}
 #mini #mp .place-answers>button{overflow-wrap:normal!important}
 html[data-text-large="true"] #mini #mp .place-answers>button{width:min(240px,100%)!important}
 #mini:has(.place-pictures) #mp{max-height:none!important;height:auto!important;overflow:visible!important;scrollbar-gutter:auto;padding-bottom:0}
-
-/* v5.0.4: compact navigation grows with text, never clips controls. */
-#home #unifiedNav{min-height:56px!important;height:auto!important;padding:4px 12px!important;align-items:center!important;box-sizing:border-box}
-#home #unifiedNav :is(.nav-brand,#navMore){min-height:48px!important;height:auto!important;padding:6px 10px!important;line-height:1.35!important}
-#home #unifiedNav .nav-actions #navMore{padding:6px 10px!important}
 .library-heading h1 small{font-size:.65em;font-weight:400;white-space:nowrap}
 .bouquet-collection{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;max-height:60svh;overflow:auto}
-.bouquet-collection figure{margin:0;text-align:center}.bouquet-collection svg{width:140px;max-width:100%}
-
-/* Shared catalogue cards and one visible information ring. */
-#box #personalSelected{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))!important;gap:16px!important;width:100%!important}
-#home #gameCards .personal-game-card,#box #personalSelected .personal-picked-card{position:relative!important;display:block!important;width:100%!important;min-width:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
-#home #gameCards .game-tile,#box #personalSelected .game-tile{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:16px!important;width:100%!important;min-width:0!important;height:100%!important;min-height:220px!important;padding:48px 20px 24px!important;box-sizing:border-box;text-align:center!important}
-#home #gameCards .game-art,#box #personalSelected .game-art{display:block!important;width:64px!important;height:64px!important;flex:0 0 64px!important;margin:0!important}
-#home #gameCards .game-info,#box #personalSelected .game-info{display:flex!important;flex-direction:column!important;gap:12px!important;text-align:center!important}
-#box #personalSelected .game-info strong{font-size:calc(1.1rem * var(--fs))!important}
-#box #personalSelected .game-desc{font-size:calc(1rem * var(--fs))!important;line-height:1.4!important}
-#box #personalSelected :is(.game-meta,.game-play){display:none!important}
-#box #personalSelected .mg-info-button,#home #gameCards .mg-info-button{position:absolute!important;top:8px!important;right:8px!important;left:auto!important}
-#box #personalSelected .personal-remove-game{position:relative!important;margin:8px!important}
+.bouquet-collection figure{margin:0;text-align:center}
+.bouquet-collection svg{width:140px;max-width:100%}
 body :is(.mg-info-button,.mg-help-trigger){border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
 body :is(.mg-info-button,.mg-help-trigger)::before{display:none!important}
 body :is(.mg-info-button,.mg-help-trigger)>svg{display:none!important}
@@ -261,10 +161,103 @@ body :is(.mg-info-button,.mg-help-trigger):focus-visible{outline:2px solid var(-
 #progressDisplay :is(.journey-heading,.journey-heading>div,.journey-eyebrow,.journey-next,.journey-status,.journey-score){text-align:center!important}
 #progressDisplay .journey-heading{justify-content:center!important}
 .game-setting-controls .change-level{width:auto!important;padding:12px 20px!important;margin:16px auto!important}
-#ov #box #personalSelected{max-height:none!important;overflow:visible!important;padding:0!important;margin:20px 0!important}
-#ov #box #personalSelected .mg-info-button,#home .mg-help-trigger,#ov #box .mg-info-button{background:none!important;border:0!important;box-shadow:none!important}
-#ov #box #personalSelected .game-art .picture-symbol,#home #gameCards .game-art .picture-symbol{border:0!important;background:none!important;box-shadow:none!important;padding:0!important}
-/* Approved reference: two-column Play menu, full-width disclosures below. */
+#home .mg-help-trigger,#ov #box .mg-info-button{background:none!important;border:0!important;box-shadow:none!important}
 #home #unifiedNav #navMenu .nav-group:has([data-go="daily"])>div{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(145px * var(--fs))),1fr))!important;gap:8px 16px!important;width:100%!important}
 #home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button{display:grid!important;grid-template-columns:24px minmax(0,1fr)!important;gap:8px!important;min-height:48px!important;width:100%!important;margin:0!important;padding:8px 0!important}
 #home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button svg{width:24px!important;height:24px!important}
+#home #unifiedNav #navMenu{padding:16px 18px!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"])>div{column-gap:16px!important;row-gap:4px!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button{grid-template-columns:24px minmax(0,1fr)!important;min-width:0!important;max-width:none!important;gap:8px!important;padding:6px 0!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button>span{max-width:none!important;width:auto!important}
+#home #unifiedNav #navMenu>details{border-bottom:1px solid var(--line)!important;margin:0!important;padding:4px 0!important}
+#home #unifiedNav #navMenu>details>summary{display:flex!important;justify-content:center!important;gap:5px!important;width:100%!important;margin:0!important;padding:12px 0!important;min-height:48px!important;text-align:center!important}
+#home #unifiedNav #navMenu>details>summary .v5-menu-icon{display:none!important}
+#home #unifiedNav #navMenu>details>summary .v5-menu-label{text-align:center!important;flex:0 1 auto!important}
+#home #unifiedNav #navMenu>details>summary::before{content:'▸'!important;display:inline-block!important;position:static!important;width:auto!important;height:auto!important;background:none!important;transform:none!important}
+#home #unifiedNav #navMenu>details[open]>summary::before{content:'▾'!important}
+#home #unifiedNav #navMenu>details>summary::after{display:none!important;content:none!important}
+#home #unifiedNav #navMenu>details:last-child{border:0!important}
+#home #unifiedNav #navMenu>:is(#customiseDashboard,#menuAccountSettings){min-height:56px!important;margin:4px auto!important;padding:12px 0!important;width:100%!important;text-align:center!important}
+#localCopyList{display:grid;gap:12px;width:100%}
+.device-copy-row{display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:12px;align-items:center}
+.device-copy-restore{width:100%;min-width:0}
+.device-copy-restore small{display:block;font-size:.75em;font-weight:400;overflow-wrap:anywhere;margin-top:4px}
+.device-copy-delete{width:48px!important;min-height:48px;background:none!important;border:0!important;padding:10px!important}
+.copy-delete-actions{display:flex;justify-content:center;gap:16px}
+#home #unifiedNav #navMenu:not(.hidden){display:flex!important;flex-direction:column!important;gap:0!important;height:auto!important;min-height:0!important;width:min(420px,calc(100vw - 24px))!important;padding:12px 18px!important}
+#home #unifiedNav #navMenu>details:not(.unused){margin:0!important;padding:4px 0!important}
+#home #unifiedNav #navMenu>#customiseDashboard{order:1!important}
+#home #unifiedNav #navMenu>#menuAccountSettings{order:2!important}
+#home #unifiedNav #navMenu>details[data-menu-group="help"]{order:3!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button{display:flex!important;justify-content:center!important;box-sizing:border-box!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button>span:first-child{flex:0 0 24px!important}
+#home #unifiedNav #navMenu .nav-group:has([data-go="daily"]) button>span:last-child{flex:0 1 auto!important}
+
+/* Component ownership: navigation, welcome and catalogue each have one rule set.
+   !important bridges legacy theme sheets; do not append competing variants below. */
+:root{--mg-gap:16px;--mg-touch:48px;--mg-card-radius:20px;--mg-card-min:calc(155px * var(--fs));--mg-accent:#f3d88b}
+#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav,#home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav,#home #unifiedNav{display:flex!important;align-items:center!important;justify-content:space-between!important;position:relative!important;inset:auto!important;min-height:56px!important;height:auto!important;padding:4px 12px!important;gap:8px!important;box-sizing:border-box;margin:0 auto!important}
+#home #unifiedNav .nav-brand{display:flex!important;align-items:center;gap:6px;flex:0 0 auto!important;width:auto!important;max-width:none!important;min-height:48px;height:auto!important;padding:6px!important;font-size:calc(1rem * var(--fs))!important;line-height:1.35!important;white-space:nowrap!important}
+#home #unifiedNav[data-nav-compact="false"] .nav-brand>span:last-child{display:inline!important}
+#home #unifiedNav[data-nav-compact="true"] .nav-brand>span:last-child{display:none!important}
+#home #unifiedNav .nav-items{display:flex!important;flex:1 1 auto!important;justify-content:center;min-width:0;gap:5px}
+#home #unifiedNav[data-nav-empty="true"] .nav-items{display:none!important}
+#home #unifiedNav .nav-actions{display:flex!important;align-items:center;flex:0 0 auto!important;width:auto!important;max-width:none!important;gap:6px!important}
+#home #unifiedNav .nav-actions>:not([data-nav-hidden="true"]){display:inline-flex!important;align-items:center;justify-content:center}
+#home #unifiedNav :is(.nav-actions,.nav-items)>[data-nav-hidden="true"]{display:none!important}
+#home #unifiedNav .nav-actions #navMore{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;width:auto!important;min-width:48px!important;max-width:none!important;height:auto!important;min-height:48px!important;padding:6px 10px!important;font-size:calc(1rem * var(--fs))!important;line-height:1.35!important}
+#home #unifiedNav #navMore svg{width:24px;height:24px;flex:none}
+#home #unifiedNav #navCards{order:98}#home #unifiedNav #navMore{order:99}
+@media(max-width:740px){
+ #home #unifiedNav{gap:4px!important;padding-inline:6px!important}
+ #home #unifiedNav .nav-items,#home #unifiedNav .nav-actions>:is(#homeAnimationToggle,#homeNatureToggle,#navTextSize,[data-go="music"]){display:none!important}
+ #home #unifiedNav .nav-actions{gap:4px!important}
+ #home #unifiedNav #navMore>span{display:none!important}
+ #home #unifiedNav .nav-actions #navMore{width:var(--nav-touch-width,40px)!important;min-width:var(--nav-touch-width,40px)!important;padding:4px!important}
+}
+
+/* Welcome: one primary action, icons visible, no outer box around the cards. */
+#home #welcomeDashboard{display:block!important;margin:0!important;min-height:0!important}
+#home #welcomeDashboard .welcome-scene{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:16px!important;height:auto!important;min-height:calc(100svh - 96px)!important;padding:28px 16px 20px!important;overflow:visible!important;border-radius:24px!important;box-sizing:border-box}
+#home #welcomeDashboard .welcome-heading{display:block!important;order:0!important;position:relative!important;isolation:isolate;width:min(880px,100%)!important;margin:0 auto!important;padding:12px 8px!important;background:transparent!important;border:0!important;box-shadow:none!important;text-align:center!important}
+#home #welcomeDashboard .welcome-heading::before{content:'';position:absolute;inset:-8px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse,#102a30a6,transparent 72%)}
+#home #welcomeDashboard .welcome-heading h1{display:block!important;font-size:calc(clamp(2.1rem,4.6vw,4rem) * var(--fs))!important;font-weight:750;line-height:1.15!important;margin:0!important;color:white!important;text-align:center!important;text-shadow:0 2px 8px #102a30;overflow-wrap:normal!important}
+#home #welcomeDashboard .welcome-heading h1 svg{display:none}
+#home #welcomeDashboard .welcome-heading p{font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;margin:10px auto 0!important;width:100%!important;color:white!important;text-shadow:0 1px 6px #102a30;text-align:center!important}
+#home #welcomeDashboard #welcomeName{position:relative!important;order:1!important;margin:0 auto 8px!important;padding:0!important;max-width:100%!important;background:transparent!important;border:0!important;box-shadow:none!important;font-size:calc(1.25rem * var(--fs))!important;line-height:1.4!important;color:white!important;text-shadow:0 1px 5px #102a30;white-space:normal!important}
+#home #welcomeDashboard .welcome-name::before{display:none!important}
+#home #welcomeDashboard .welcome-ctas{display:grid!important;order:2!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:min(680px,100%)!important;margin:0 auto!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;box-sizing:border-box}
+#home #welcomeDashboard .welcome-group-title,#home #welcomeDashboard .garden-breathing-space{display:none!important}
+#home #welcomeDashboard .welcome-choice{position:relative!important;display:flex!important;align-items:stretch;grid-column:auto!important;grid-row:auto!important;width:auto!important;min-width:0!important;height:auto!important}
+#home #welcomeDashboard .welcome-choice:has(#dashStart){grid-column:1/-1!important}
+#home #welcomeDashboard .welcome-choice.welcome-unpaired{grid-column:1/-1!important;width:calc((100% - 12px)/2)!important;justify-self:center}
+html[data-text-large="true"] #home #welcomeDashboard .welcome-choice.welcome-unpaired{width:100%!important}
+#home #welcomeDashboard .welcome-feature{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:10px!important;width:100%!important;min-width:0!important;height:auto!important;min-height:104px!important;padding:32px 10px 14px!important;box-sizing:border-box;border-radius:var(--mg-card-radius)!important;font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;text-align:center!important;white-space:normal!important}
+#home #welcomeDashboard .welcome-feature strong{font:inherit!important;font-weight:700!important;width:auto!important;flex:0 1 auto!important;white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important;overflow:visible!important;text-align:center!important}
+#home #welcomeDashboard .feature-icon{display:block!important;position:static!important;inset:auto!important;transform:none!important;width:32px!important;height:32px!important;flex:0 0 32px!important;margin:0!important}
+#home #welcomeDashboard .feature-icon svg{width:32px!important;height:32px!important}
+#home #welcomeDashboard #dashStart{flex-direction:row!important;min-height:88px!important;padding:20px 48px!important;background:#22574b!important;color:#fff!important;border:2px solid var(--mg-accent)!important;box-shadow:0 4px 0 #163e37!important;font-size:calc(1.15rem * var(--fs))!important}
+#home #welcomeDashboard #dashStart strong,#home #welcomeDashboard .welcome-choice:has(#dashStart) .mg-help-trigger{color:white!important}
+#home #welcomeDashboard .welcome-choice.display-choice-hidden{display:none!important}
+html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-ctas,html[data-v5-garden="true"] #home #welcomeDashboard .welcome-ctas{display:none!important}
+#home #welcomeDashboard .welcome-scene>#sceneFooter{position:relative!important;inset:auto!important;transform:none!important;order:3!important;flex:none!important;align-self:center!important;width:100%!important;margin:auto auto 0!important;padding-top:16px!important;text-align:center!important;font-size:calc(1rem * var(--fs))!important;line-height:1.4;color:white!important;text-shadow:0 1px 5px #102a30;box-sizing:border-box}
+#home #welcomeDashboard #v5GardenView{display:block;order:4;margin:0 auto;min-height:48px;font-size:calc(1rem * var(--fs))}
+html[data-v5-garden="true"] #home #welcomeDashboard .welcome-scene{min-height:calc(100svh - 88px)!important}
+html[data-text-large="true"] #home #welcomeDashboard .welcome-ctas{grid-template-columns:1fr!important}
+html[data-text-large="true"] #home #welcomeDashboard .welcome-heading p{display:none!important}
+@media(max-width:600px){#home #welcomeDashboard .welcome-scene{padding:20px 10px 16px!important}}
+
+/* All Games and My Games share the same adaptive card geometry. */
+html #home #gameLibrary #libraryDisplay #gameCards,html #ov #box #personalSelected{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--mg-card-min)),1fr))!important;gap:12px!important;width:100%!important}
+html #home #gameLibrary #libraryDisplay #gameCards .personal-game-card,html #ov #box #personalSelected .personal-picked-card{position:relative!important;display:block!important;width:100%!important;min-width:0!important;margin:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+html #home #gameLibrary #libraryDisplay #gameCards .game-tile,html #ov #box #personalSelected .game-tile{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:12px!important;width:100%!important;min-width:0!important;height:100%!important;min-height:176px!important;padding:44px 10px 18px!important;box-sizing:border-box;text-align:center!important}
+html #home #gameLibrary #libraryDisplay #gameCards .game-art,html #ov #box #personalSelected .game-art{display:block!important;width:56px!important;height:56px!important;flex:0 0 56px!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important}
+html #home #gameLibrary #libraryDisplay #gameCards .game-art :is(.game-picture,.game-illustration),html #ov #box #personalSelected .game-art :is(.game-picture,.game-illustration){display:block!important;width:56px!important;height:56px!important;max-width:none!important;max-height:none!important;min-width:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;object-fit:contain}
+html #home #gameLibrary #libraryDisplay #gameCards .game-art .picture-symbol,html #ov #box #personalSelected .game-art .picture-symbol{border:0!important;background:none!important;box-shadow:none!important;padding:0!important}
+html #home #gameLibrary #libraryDisplay #gameCards .game-info,html #ov #box #personalSelected .game-info{display:flex!important;flex-direction:column!important;align-items:center!important;gap:8px!important;min-width:0!important;text-align:center!important}
+html #home #gameLibrary #libraryDisplay #gameCards .game-info strong,html #ov #box #personalSelected .game-info strong{font-size:calc(1rem * var(--fs))!important;line-height:1.4!important;white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important;text-align:center!important}
+html #home #gameLibrary #libraryDisplay #gameCards :is(.game-desc,.game-meta,.game-play),html #ov #box #personalSelected :is(.game-desc,.game-meta,.game-play){display:none!important}
+html #home #gameLibrary #libraryDisplay #gameCards .mg-info-button,html #ov #box #personalSelected .mg-info-button{position:absolute!important;top:2px!important;right:2px!important;left:auto!important}
+html #ov #box #personalSelected .personal-remove-game{position:relative!important;display:block;margin:8px auto!important}
+html #home #gameLibrary #libraryDisplay #gameCards .display-choice-hidden{display:none!important}
+html[data-text-large="true"] #home #gameLibrary #libraryDisplay #gameCards,html[data-text-large="true"] #ov #box #personalSelected{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))!important}

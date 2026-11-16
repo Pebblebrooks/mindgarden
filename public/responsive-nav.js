@@ -27,7 +27,7 @@ function layout(){
  const style=getComputedStyle(nav),available=nav.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
  nav.style.setProperty('--nav-touch-width',available<=260?'36px':'40px');
  const brandWidth=width(brand),gap=parseFloat(style.columnGap)||12;
- const options={available,brand:brandWidth,compactBrand:48,main:mainButtons.map(el=>({key:el.dataset.go,width:width(el)})),tools:toolButtons.map(el=>({key:el.id==='navTextSize'?'text':el.dataset.go,width:width(el)})),toggle:width(more),gap,mainGap:parseFloat(getComputedStyle(main).gap)||5,toolGap:parseFloat(getComputedStyle(actions).gap)||6};
+ const options={available,brand:brandWidth,compactBrand:48,main:mainButtons.map(el=>({key:el.dataset.go,width:width(el)})).filter(x=>x.width>0),tools:toolButtons.map(el=>({key:el.id==='navTextSize'?'text':el.dataset.go,width:width(el)})).filter(x=>x.width>0),toggle:width(more),gap,mainGap:parseFloat(getComputedStyle(main).gap)||5,toolGap:parseFloat(getComputedStyle(actions).gap)||6};
  const result=fit(options);
  for(const el of all)el.dataset.navHidden=String(result.hidden.includes(el.id==='navTextSize'?'text':el.dataset.go));
  nav.dataset.navCompact=String(result.compact);

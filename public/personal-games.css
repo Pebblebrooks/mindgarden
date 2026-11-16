@@ -312,8 +312,7 @@ body:has(#ov:not(.hidden) .personal-setup) #ov{background:var(--bg)!important;ba
 #box .personal-picked-card>.mg-info-button{width:44px;height:44px;min-height:44px;padding:0;font-size:20px;line-height:1}
 #libraryDisplay .personal-game-card .game-tile{padding-right:62px}
 #libraryDisplay .personal-game-card>.mg-info-button{width:44px;height:44px;padding:0;font-size:20px;line-height:1}
-#home #welcomeDashboard .welcome-choice:has(>.mg-info-button) .welcome-feature,
-#home #welcomeDashboard .welcome-choice:has(.mg-help) .welcome-feature{padding-right:60px!important;box-sizing:border-box;overflow-wrap:anywhere}
+/* Card help is absolutely positioned; it must not reserve asymmetric content padding. */
 #box .pair-result-stars{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;padding-right:0}
 #box .pair-result-stars>.mg-info-button{position:static;margin:0;flex:none}
 

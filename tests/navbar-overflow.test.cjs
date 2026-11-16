@@ -14,7 +14,7 @@ const pause=()=>new Promise(r=>setTimeout(r,35));
  assert.equal(fit({available:700,brand:150,compactBrand:44,main:[],tools:[],toggle:48}).compact,false,'Show brand text when it fits on a tablet');
  for(const lang of ['en','zh']){
   w.eval('save.lang='+JSON.stringify(lang)+';persist();load();renderHome()');await pause();
-  assert(w.document.querySelector('#navMore svg[aria-hidden="true"]'));assert.equal(w.document.getElementById('navMore').textContent,'');
+  assert(w.document.querySelector('#navMore svg[aria-hidden="true"]'));assert.equal(w.document.getElementById('navMore').textContent,lang==='en'?'Menu':'菜单');
   assert.equal(w.document.querySelectorAll('#navTextSize').length,1);assert.equal(w.document.querySelectorAll('#menuTextSize').length,1);
   for(const action of ['daily','mygames','library','online','progress','leaderboard','family','profile','settings','music','language','about','contact'])assert(w.document.querySelector('#navMenu [data-go="'+action+'"]'),action);
   assert(w.document.getElementById('gardenPanelOpen'),'Garden settings remain reachable');assert(w.document.getElementById('homeNatureToggle'),'Master sound remains reachable');w.document.getElementById('navMore').click();assert.equal(w.document.getElementById('navMore').getAttribute('aria-expanded'),'true');

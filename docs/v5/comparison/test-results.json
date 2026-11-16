@@ -1,0 +1,114 @@
+[
+  {
+    "repo": "mindgarden",
+    "test": "review-ui.test.cjs",
+    "exit": 1,
+    "seconds": 1.9,
+    "log": "/workspace/scratch/ea2eb74e9e7d/mindgarden/tests/review-ui.test.cjs:24\n }catch(e){w.close();throw e}},60);\n                     ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'dashStart',\n+   'dashBrowse',\n    'myGames',\n-   'dashBrowse',\n    'dashTogether',\n    'dashProgress',\n    'dashLeaders'\n  ]\n\n    at Timeout._onTimeout (/workspace/scratch/ea2eb74e9e7d/mindgarden/tests/review-ui.test.cjs:10:9)\n    at listOnTimeout (node:internal/timers:685:17)\n    at process.processTimers (node:internal/timers:618:7) {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: [\n    'dashStart',\n    'dashBrowse',\n    'myGames',\n    'dashTogether',\n    'dashProgress',\n    'dashLeaders'\n  ],\n  expected: [\n    'dashStart',\n    'myGames',\n    'dashBrowse',\n    'dashTogether',\n    'dashProgress',\n    'dashLeaders'\n  ],\n  operator: 'deepStrictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.22.1\n"
+  },
+  {
+    "repo": "mindgarden",
+    "test": "navbar-overflow.test.cjs",
+    "exit": 1,
+    "seconds": 2.1,
+    "log": "node:internal/process/promises:394\n    triggerUncaughtException(err, true /* fromPromise */);\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'Menu' !== ''\n\n    at /workspace/scratch/ea2eb74e9e7d/mindgarden/tests/navbar-overflow.test.cjs:17:79 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'Menu',\n  expected: '',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.22.1\n"
+  },
+  {
+    "repo": "mindgarden",
+    "test": "menu-navigation.test.cjs",
+    "exit": 0,
+    "seconds": 14.8,
+    "log": "PASS bilingual menu Back/Done: account/player/rename, settings/music, game settings, About, device sign-in; disclosure/scroll restoration; rerender deduplication; auth boundary; Close/Escape; independent help controls.\n"
+  },
+  {
+    "repo": "mindgarden",
+    "test": "profile-restoration.test.cjs",
+    "exit": 0,
+    "seconds": 9.5,
+    "log": "PASS account sign-in restores display, games and difficulty; player/account isolation, rename, 310 retained games, sign-out copies, reload/restore and quota protection.\n"
+  },
+  {
+    "repo": "mindgarden",
+    "test": "release-cache.test.cjs",
+    "exit": 0,
+    "seconds": 0.1,
+    "log": "PASS: atomic offline install, correct release assets, scoped cache cleanup, no API caching, no HTML fallback for CSS/JS, reject incomplete deployment.\n"
+  },
+  {
+    "repo": "mindgarden",
+    "test": "about-documentation.test.cjs",
+    "exit": 0,
+    "seconds": 3.5,
+    "log": "PASS About: bilingual latest changes, progression, quiet startup, rest guidance and generated version.\n"
+  },
+  {
+    "repo": "mindgarden",
+    "test": "account-api.test.mjs",
+    "exit": 0,
+    "seconds": 1.3,
+    "log": "PASS account isolation, authenticated export, cookie flags, CSRF, optimistic revisions, cross-device retrieval, signout, recovery revocation, malformed input, rate limiting and repeatable migration.\n"
+  },
+  {
+    "repo": "mindgarden",
+    "test": "room8.test.mjs",
+    "exit": 0,
+    "seconds": 0.2,
+    "log": "PASS: 8-player cap, delivery receipts, host-only launch, launch acknowledgements, rejoin, two rounds, totals, idempotent scores, skipped results, closure, authorization and repeatable migration.\n"
+  },
+  {
+    "repo": "mindgarden-v5-review",
+    "test": "review-ui.test.cjs",
+    "exit": 0,
+    "seconds": 2.8,
+    "log": "PASS: simplified welcome, grouped menu, navbar sound/motion, keyboard/tap information, rebuild without duplicates and animation toggle.\n"
+  },
+  {
+    "repo": "mindgarden-v5-review",
+    "test": "navbar-overflow.test.cjs",
+    "exit": 0,
+    "seconds": 4.9,
+    "log": "PASS: fitted width budget at 36 size combinations; English/Chinese menu destinations; percentage/reset synchronization; Escape focus; About/Contact; appearance rebuilds; no duplicated controls.\n"
+  },
+  {
+    "repo": "mindgarden-v5-review",
+    "test": "menu-navigation.test.cjs",
+    "exit": 0,
+    "seconds": 13.0,
+    "log": "PASS bilingual menu Back/Done: account/player/rename, settings/music, game settings, About, device sign-in; disclosure/scroll restoration; rerender deduplication; auth boundary; Close/Escape; independent help controls.\n"
+  },
+  {
+    "repo": "mindgarden-v5-review",
+    "test": "profile-restoration.test.cjs",
+    "exit": 0,
+    "seconds": 7.8,
+    "log": "PASS account sign-in restores display, games and difficulty; player/account isolation, rename, 310 retained games, sign-out copies, reload/restore and quota protection.\n"
+  },
+  {
+    "repo": "mindgarden-v5-review",
+    "test": "release-cache.test.cjs",
+    "exit": 0,
+    "seconds": 0.1,
+    "log": "PASS: atomic offline install, correct release assets, scoped cache cleanup, no API caching, no HTML fallback for CSS/JS, reject incomplete deployment.\n"
+  },
+  {
+    "repo": "mindgarden-v5-review",
+    "test": "about-documentation.test.cjs",
+    "exit": 0,
+    "seconds": 3.7,
+    "log": "PASS About: bilingual latest changes, progression, quiet startup, rest guidance and generated version.\n"
+  },
+  {
+    "repo": "mindgarden-v5-review",
+    "test": "account-api.test.mjs",
+    "exit": 0,
+    "seconds": 1.3,
+    "log": "PASS account isolation, authenticated export, cookie flags, CSRF, optimistic revisions, cross-device retrieval, signout, recovery revocation, malformed input, rate limiting and repeatable migration.\n"
+  },
+  {
+    "repo": "mindgarden-v5-review",
+    "test": "room8.test.mjs",
+    "exit": 0,
+    "seconds": 0.1,
+    "log": "PASS: 8-player cap, delivery receipts, host-only launch, launch acknowledgements, rejoin, two rounds, totals, idempotent scores, skipped results, closure, authorization and repeatable migration.\n"
+  }
+]

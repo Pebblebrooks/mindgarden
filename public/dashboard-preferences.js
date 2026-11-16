@@ -9,8 +9,11 @@ const prefs=()=>clean(me().dashboardPreferences);
 let showAll=false;
 function apply(){const p=prefs();
  $('welcomeCustomise')?.remove();
- for(const [id,selector]of shortcuts){const b=selector.startsWith(' ')?document.querySelector('#welcomeDashboard'+selector):$(selector);b?.closest('.welcome-choice')?.classList.toggle('display-choice-hidden',!['daily','all'].includes(id)&&!p.welcomeCards.includes(id))}
+ for(const [id,selector]of shortcuts){const b=selector.startsWith(' ')?document.querySelector('#welcomeDashboard'+selector):$(selector);b?.closest('.welcome-choice')?.classList.toggle('display-choice-hidden',!p.welcomeCards.includes(id))}
+ const secondary=[...document.querySelectorAll('#welcomeDashboard .welcome-choice')].filter(c=>!c.querySelector('#dashStart')&&!c.classList.contains('display-choice-hidden'));
+ for(const c of document.querySelectorAll('#welcomeDashboard .welcome-choice'))c.classList.toggle('welcome-unpaired',secondary.length%2===1&&c===secondary.at(-1));
  document.querySelectorAll('#welcomeDashboard .welcome-group-title').forEach(h=>{let n=h.nextElementSibling,visible=false;while(n&&!n.classList.contains('welcome-group-title')){if(n.classList.contains('welcome-choice')&&!n.classList.contains('display-choice-hidden'))visible=true;n=n.nextElementSibling}h.classList.toggle('display-choice-hidden',!visible)});
+ document.documentElement.dataset.progressVisible=String(p.progressVisible);
  $('gardenProgressStrip')?.classList.toggle('display-choice-hidden',!p.progressVisible);
  document.querySelectorAll('#gameCards [data-game]').forEach(b=>(b.closest('.personal-game-card')||b).classList.toggle('display-choice-hidden',!showAll&&p.gameCards!==null&&!p.gameCards.includes(b.dataset.game)));
  const grid=$('gameCards');if(grid&&!$('displayGameNotice')){const row=document.createElement('div');row.id='displayGameNotice';row.className='row';grid.before(row)}
@@ -24,7 +27,7 @@ function panel(){
  function checkbox(host,key,label,checked){const l=document.createElement('label');l.className='display-option';const c=document.createElement('input');c.type='checkbox';c.value=key;c.checked=checked;l.append(c,document.createTextNode(label));$(host).append(l);return c}
  const favourites=me().myGames?.games||['pairs','num','gardenrhythm'];ids().forEach(id=>checkbox('displayFavourites',id,id==='pairs'?T('Matching Pairs','配对游戏'):MG[id].n,favourites.includes(id)));
  $('displayScene').innerHTML='<option value="keep">'+T('Keep current background','保留当前背景')+'</option>'+MindGardenScenes.scenes.map(s=>'<option value="'+s.id+'">'+T(s.en,s.zh)+'</option>').join('');$('displayTheme').value=save.mode||'auto';
- const launch={};for(const [key,en,zh]of [['welcomeVisible','More game cards','更多游戏卡片'],['progressVisible','Progress bouquet','进度花束']])launch[key]=checkbox('displayLaunch',key,T(en,zh),p[key]);
+ const launch={};for(const [key,en,zh]of [['welcomeVisible','Game cards','游戏卡片'],['progressVisible','Progress bouquet','进度花束']])launch[key]=checkbox('displayLaunch',key,T(en,zh),p[key]);
  shortcuts.forEach(([id,,en,zh])=>checkbox('displayWelcome',id,T(en,zh),p.welcomeCards.includes(id)));
  ids().forEach(id=>checkbox('displayGames',id,id==='pairs'?T('Matching Pairs','配对游戏'):MG[id].n,p.gameCards===null||p.gameCards.includes(id)));
  for(const [search,host]of [['displaySearch','displayGames'],['favouriteSearch','displayFavourites']])$(search).oninput=()=>{const q=$(search).value.trim().toLocaleLowerCase();$(host).querySelectorAll('label').forEach(l=>l.hidden=!l.textContent.toLocaleLowerCase().includes(q))};

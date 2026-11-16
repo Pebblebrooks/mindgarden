@@ -88,7 +88,7 @@ async function saveRemoval(document,password,selected){
  if(account?.id!==owner||JSON.stringify(save.pr)!==before)throw Error(T('Players changed during sync. Review them before deleting.','同步期间玩家资料已改变，请核对后再删除。'));
  const result=await api('save',{document,revision:save.accountSync.revision,password});
  save.accountSync.revision=result.revision;save.accountSync.dirty=false;save.pr=copy(document.profiles);save.cp=selected;load();baseline=JSON.stringify(save.pr);
- const saved=local();window.MindGardenLocalRecords?.capture(account);renderHome();if(!saved)throw Error(T('Deleted from the account, but this device could not save the update. Free storage and retry.','账户资料已删除，但设备无法保存更新，请释放存储空间后重试。'));
+ const copiesSaved=window.MindGardenLocalRecords?.reconcileRemoval(account,JSON.parse(before),save.pr)!==false;const saved=local();renderHome();if(!saved||!copiesSaved)throw Error(T('Deleted from the account, but this device could not save the update. Free storage and retry.','账户资料已删除，但设备无法保存更新，请释放存储空间后重试。'));
 }
 async function logout(){
  clearTimeout(timer);

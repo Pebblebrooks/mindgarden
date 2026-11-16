@@ -1,0 +1,59 @@
+combined-about-documentation.log
+PASS About: bilingual latest changes, progression, quiet startup, rest guidance and generated version.
+
+
+combined-account-sync.log
+PASS initial upload, preferences, new players, fresh switch retrieval, offline retry, conflict protection, account-free exports and local-player restoration on signout.
+
+
+combined-dashboard-preferences.log
+PASS dashboard selections, show-all escape, player isolation, restore, backup round-trip, cancel and bilingual menu access.
+
+
+combined-device-copy-removal.log
+PASS saved-copy delete: cancel, exact name, same-name isolation, list refresh, quota rollback and history reset.
+
+
+combined-device-signin.log
+PASS device sign-in capability gating, cancellation, rejected assertion, verified account loading, setup/password handling, saved-key list and Escape.
+
+
+combined-game-ui-approved.log
+Approved UI: bilingual hints, footer layout, cancel/confirm exits, automatic paused domino turn, 180 route solutions, final-level result passed.
+
+
+combined-live-language.log
+PASS: live en language round trip preserves active story, buttons and answer values.
+PASS: live zh language round trip preserves active story, buttons and answer values.
+
+
+combined-menu-navigation.log
+PASS bilingual menu Back/Done: account/player/rename, settings/music, game settings, About, device sign-in; disclosure/scroll restoration; rerender deduplication; auth boundary; Close/Escape; independent help controls.
+
+
+combined-navbar-overflow.log
+PASS: fitted width budget at 36 size combinations; English/Chinese menu destinations; percentage/reset synchronization; Escape focus; About/Contact; appearance rebuilds; no duplicated controls.
+
+
+combined-popup-shell.log
+PASS approved popup shell: bilingual headers, symbol controls and labels, grouped account screens, primary/quiet action order, player management disclosure, parent returns, inert background cleanup and game-result isolation.
+
+
+combined-profile-restoration.log
+PASS account sign-in restores display, games and difficulty; player/account isolation, rename, 310 retained games, sign-out copies, reload/restore and quota protection.
+
+
+combined-release-cache.log
+PASS: atomic offline install, correct release assets, scoped cache cleanup, no API caching, no HTML fallback for CSS/JS, reject incomplete deployment.
+
+
+combined-review-ui.log
+PASS: simplified welcome, grouped menu, navbar sound/motion, keyboard/tap information, rebuild without duplicates and animation toggle.
+
+
+combined-v5-flow.log
+PASS v5: defaults, explicit language choices, one daily preparation, Begin launch, edit/remove/undo preserves scores, catalogue search and categories.
+
+
+combined-v504-consistency.log
+PASS consistency: both languages, all game preparation descriptions, shared My Games artwork, Change level cancellation preserves play.
