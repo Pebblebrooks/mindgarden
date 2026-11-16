@@ -145,7 +145,7 @@ html[data-hc="1"] #libraryDisplay::before,html[data-hc="1"] #libraryDisplay::aft
 #mini .bingo-picture .game-picture{font-size:clamp(32px,50cqi,60px)}
 #mini .domino-chain{padding:8px;margin:8px 0}
 #mini .domino-hand{margin:8px 0}
-#mini #mp .gridm:has(>.big:not(.txt)){grid-template-columns:repeat(var(--c),minmax(44px,1fr))!important}
+#mini #mp .gridm:not(.story-answer-grid):has(>.big:not(.txt)){grid-template-columns:repeat(var(--c),minmax(44px,1fr))!important}
 #mini #mp .big.one{width:min(180px,24vh,50%);margin:8px auto}
 #mini #mp .gridm>.big.st.sm{min-height:44px;height:clamp(44px,8vh,76px);aspect-ratio:auto}
 #mini #mp .dp .gridm>.big{min-height:44px;height:clamp(44px,8vh,72px);aspect-ratio:auto;padding:2px}
