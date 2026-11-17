@@ -112,7 +112,7 @@ function completion(){if(!result||$('personalResult'))return;const host=$('ma')?
  const r=result;for(const id of ['miniNextLevel','nx','newNextLevel','gaNext','edLevelUp'])$(id)?.remove();
  const section=document.createElement('section');section.id='personalResult';section.className='personal-result';let prompt='';
  if(r.practice)prompt=T('Practice complete. No score or progress has been changed.','练习完成，成绩与进度未改变。');
- else{if([3,6,9,12].includes(r.rank))prompt=T('Replay, rest or try the next level.','重玩、休息或挑战下一关。');const recent=me().log.filter(x=>x.g===r.id&&x.challengeRange===r.range&&x.challengeRank===r.rank&&!x.shared).slice(-3);if(recent.length>=2&&recent.every(x=>x.r<.5)&&r.step>1)prompt=T('Would a gentler level feel better?','尝试轻松一点的关卡如何？');else if(recent.length===3&&recent.every(x=>x.r>=.85)&&r.step<r.count)prompt=T('Ready to try a little more challenge?','准备好尝试更有挑战的关卡吗？');}
+
  const award=host.parentElement.querySelector('.pair-award-label'),stars=host.parentElement.querySelector('.pair-result-stars');if(award&&stars){const help=award.querySelector('.mg-info-button');if(help){stars.removeAttribute('role');stars.append(help);award.remove()}}
  const next=r.step<r.count&&!r.practice;
  section.innerHTML=(prompt?'<p>'+prompt+'</p>':'')+'<div class="result-done">'+resultButton('personalReturn','close','Done','完成',true)+'</div><div class="personal-actions result-primary">'+resultButton('personalReplay',r.practice?'play':'reset',r.practice?'Start':'Replay',r.practice?'开始':'重玩',false)+(next?resultButton('personalNext','next','Next level','下一关',false):'')+'</div><footer class="result-footer">'+resultButton('personalChangeSettings','options','Settings','设置')+resultButton('personalHome','home','Home','主页',false,true)+'</footer>';

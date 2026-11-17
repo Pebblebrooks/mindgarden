@@ -80,3 +80,11 @@ This newer approval supersedes the earlier icon-only result and exit guidance ab
 - Keep Language, Background sound and Game sound centred; space rows according to available width and height. Question text must be at least the answer-text size.
 - Completion actions remain visible: Done, Replay, conditional Next level, Settings and Home. Do not hide navigation in More options or show active Pause after completion. Replay/Next level use the same icon-above-label treatment as gameplay.
 - Never suppress the Matching Pairs header when session metadata is present. Reduced-motion petting retains static heart feedback.
+
+## Approved group walkthrough (November 17)
+- Use one group directory, host-named groups and visible player rows. Do not restore Room/Rooms/Lobby/My rooms tabs or player dropdowns.
+- Offer a searchable, categorised catalogue of supported group games; variants belong in Game options. Do not offer unsupported solo levels as group difficulty.
+- Guests confirm Ready for the chosen setup. Host Start game uses one server timestamp and a shared countdown. Setup changes invalidate readiness; old rooms keep their legacy Begin flow.
+- Keep codes and sharing under Invite. Named arrival notices replace generic Player joined / I’m here messages.
+- Keep hosting dismisses only the confirmation and preserves the current group. Closing ends only the current hosted group; completed scores remain saved.
+- Results offer Choose game, Replay and Finish. Continuing retains members and scores, with a fresh ready check.

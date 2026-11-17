@@ -1,3 +1,4 @@
+import {ensureGroupFlow} from '../lib/group-flow.js';
 import {ensureRoomAvailability,expireWaitingRooms,availability} from '../lib/room-availability.js';
 import {ensureRoomMemberships} from '../lib/room-memberships.js';
 import {onlineActivities,makeOnlineQuestions} from '../../shared/online-activities.js';
@@ -35,6 +36,7 @@ export async function onRequest({request,env}){
   const session=await one(db,'SELECT * FROM mg_sessions WHERE token=?',b.token);
   if(!session)fail('Sign in to the online lobby first.',401);
   await ensureRoomMemberships(db);
+  await ensureGroupFlow(db);
   await ensureRoomAvailability(db,now);
   await expireWaitingRooms(db,now);
   await query(db,'UPDATE mg_sessions SET last_seen=? WHERE token=?',now,b.token).run();
@@ -44,7 +46,7 @@ export async function onRequest({request,env}){
    const hosting=Array.isArray(b.hosting)?b.hosting.filter(c=>typeof c==='string').slice(0,30):[];
    if(hosting.length)await db.batch(hosting.map(c=>query(db,"UPDATE mg_room_availability SET host_seen=? WHERE code=? AND EXISTS(SELECT 1 FROM mg_rooms WHERE code=? AND host_token=? AND status='lobby')",now,c,c,b.token)));
 
-   const rooms=await all(db,`SELECT r.code,s.name AS host,r.status,r.created_at,a.host_seen,a.pending_since,a.acknowledged_at,
+   const rooms=await all(db,`SELECT r.code,s.name AS host,r.status,r.mode,r.created_at,a.host_seen,a.pending_since,a.acknowledged_at,
     (SELECT COUNT(*) FROM mg_room_memberships m WHERE m.code=r.code) AS players
     FROM mg_rooms r JOIN mg_sessions s ON s.token=r.host_token LEFT JOIN mg_room_availability a ON a.code=r.code
     WHERE r.status!='closed' AND r.created_at>? ORDER BY r.created_at DESC,r.code`,now-86400000);
@@ -62,7 +64,8 @@ export async function onRequest({request,env}){
    return json({ok:true});
   }
   if(a==='create'){
-   const rounds=b.rounds===undefined?3:b.rounds;
+   const rounds=b.groupFlow?20:b.rounds===undefined?3:b.rounds;
+   if(b.groupFlow&&!Object.hasOwn(modes,b.mode))fail('Choose an available activity.');
    if(!Number.isInteger(rounds)||rounds<1||rounds>20)fail('Choose 1 to 20 rounds.');
    const requestId=typeof b.requestId==='string'&&/^[a-zA-Z0-9-]{8,80}$/.test(b.requestId)?b.requestId:'legacy';
    if(requestId==='legacy')await query(db,"DELETE FROM mg_room_requests WHERE token=? AND request_id='legacy' AND code IN (SELECT code FROM mg_rooms WHERE status='closed')",b.token).run();
@@ -76,7 +79,8 @@ export async function onRequest({request,env}){
      query(db,'INSERT INTO mg_room_requests(token,request_id,code) VALUES(?,?,?)',b.token,requestId,c),
      query(db,'INSERT INTO mg_room_memberships(token,code) VALUES(?,?)',b.token,c),
      query(db,'INSERT INTO mg_members(code,token,joined_at) VALUES(?,?,?)',c,b.token,now),
-     query(db,'INSERT INTO mg_invites(code,token) SELECT ?,token FROM mg_sessions WHERE last_seen>? AND token!=?',c,now-45000,b.token)
+     query(db,'INSERT INTO mg_invites(code,token) SELECT ?,token FROM mg_sessions WHERE last_seen>? AND token!=?',c,now-45000,b.token),
+     ...(b.groupFlow?[query(db,'INSERT INTO mg_group_flow(code) VALUES(?)',c),query(db,'UPDATE mg_rooms SET mode=? WHERE code=?',b.mode,c)]:[])
     ]);return json({code:c})}catch(e){if(!String(e).includes('UNIQUE'))throw e;const won=await one(db,'SELECT code FROM mg_room_requests WHERE token=? AND request_id=?',b.token,requestId);if(won)return json({code:won.code})}
    }fail('Unable to create room. Please retry.',503);
   }
@@ -129,32 +133,58 @@ export async function onRequest({request,env}){
   }
   if(!await one(db,'SELECT token FROM mg_members WHERE code=? AND token=?',c,b.token))fail('Join this room first.',403);
   const host=room.host_token===b.token;
+  let flow=await one(db,'SELECT * FROM mg_group_flow WHERE code=?',c);
   if(a==='leave'){
    if(host)fail('The host must cancel the room for everyone before leaving.',409);
    await db.batch([query(db,'INSERT OR IGNORE INTO mg_departures(code,token,left_at) VALUES(?,?,?)',c,b.token,now),query(db,'UPDATE mg_results SET skipped=1 WHERE code=? AND token=? AND score IS NULL',c,b.token),query(db,'DELETE FROM mg_room_memberships WHERE token=? AND code=?',b.token,c),query(db,'DELETE FROM mg_active_rooms WHERE token=? AND code=?',b.token,c)]);return json({code:c,left:true});
   }
   if(await one(db,'SELECT token FROM mg_departures WHERE code=? AND token=?',c,b.token)){if(a==='status')return json({code:c,left:true});fail('You have left this room.',403)}
-  if(['hostReady','launch','advance','close','finishRound','finishSession','bingoCall'].includes(a)&&!host)fail('Only the host can do this.',403);
+  if(['configure','hostReady','launch','advance','close','finishRound','finishSession','bingoCall'].includes(a)&&!host)fail('Only the host can do this.',403);
   if(a==='close'){await db.batch([
    query(db,"UPDATE mg_room_sessions SET ended_at=?,end_reason='cancelled' WHERE code=? AND ended_at IS NULL",now,c),
    query(db,"UPDATE mg_rooms SET status='closed',closed_at=COALESCE(closed_at,?) WHERE code=?",now,c)
   ]);return json({code:c,closed:true})}
   if(room.status==='closed'&&!(plan?.end_reason==='finished'&&['status','finishSession'].includes(a)))return json({code:c,closed:true,closeReason:closeReason||plan?.end_reason});
   if(host&&room.status==='lobby')await query(db,'UPDATE mg_room_availability SET host_seen=? WHERE code=?',now,c).run();
-  if(a==='hostReady'){
+  if(a==='configure'){
+   if(!flow||!Object.hasOwn(modes,b.mode))fail('Choose an available activity.');
+   if(room.round!==b.round||flow.revision!==b.revision)fail('Group changed. Try again.',409);
+   if(room.status==='playing'&&(await one(db,'SELECT COUNT(*) AS n FROM mg_results WHERE code=? AND round=? AND score IS NULL AND skipped=0',c,room.round)).n)fail('Finish the current round first.',409);
+   const changed=await query(db,`UPDATE mg_rooms SET status='lobby',mode=? WHERE code=? AND round=? AND status!='closed'
+    AND EXISTS(SELECT 1 FROM mg_group_flow f WHERE f.code=mg_rooms.code AND revision=?)
+    AND NOT EXISTS(SELECT 1 FROM mg_results q WHERE q.code=mg_rooms.code AND q.round=mg_rooms.round AND score IS NULL AND skipped=0)`,b.mode,c,b.round,b.revision).run();
+   if(!changed.meta.changes)fail('Group changed. Try again.',409);
+   await query(db,'UPDATE mg_room_availability SET host_seen=?,pending_since=NULL,acknowledged_at=? WHERE code=?',now,now,c).run();
+  }else if(a==='ready'){
+   if(!flow||room.status!=='lobby'||b.revision!==flow.revision)fail('Game changed. Check the selected game.',409);
+   const changed=await query(db,`INSERT INTO mg_group_ready(code,token,revision) SELECT f.code,?,f.revision FROM mg_group_flow f JOIN mg_rooms r ON r.code=f.code WHERE f.code=? AND f.revision=? AND r.status='lobby' ON CONFLICT(code,token) DO UPDATE SET revision=excluded.revision`,b.token,c,b.revision).run();
+   if(!changed.meta.changes)fail('Game changed. Check the selected game.',409);
+  }else if(a==='hostReady'){
    if(room.status!=='lobby')fail('This room has already launched.',409);
    await query(db,'UPDATE mg_room_availability SET pending_since=NULL,acknowledged_at=? WHERE code=?',now,c).run();
   }else if(a==='launch'||a==='advance'){
    if(!Object.hasOwn(modes,b.mode))fail('Choose an available activity.');
-   if(plan&&room.round>=plan.total_rounds)fail('This session has reached its planned number of rounds.',409);
+   if(plan&&!flow&&room.round>=plan.total_rounds)fail('This session has reached its planned number of rounds.',409);
    const count=(await one(db,'SELECT COUNT(*) AS n FROM mg_room_memberships WHERE code=?',c)).n;
    if(count<2)fail('At least two players must join before launch.');
    const pending=(await one(db,'SELECT COUNT(*) AS n FROM mg_results WHERE code=? AND round=? AND score IS NULL AND skipped=0',c,room.round)).n;
    if(a==='advance'&&pending)fail('Wait for everyone, or end the current round.');
    if(a==='launch'&&room.status!=='lobby')fail('This room has already launched.',409);
    if(a==='advance'&&room.status!=='playing')fail('Launch the room first.',409);
-   const r=await query(db,"UPDATE mg_rooms SET status='playing',round=round+1,mode=?,started_at=? WHERE code=? AND round=? AND status=?",b.mode,now,c,Number(b.round),a==='launch'?'lobby':'playing').run();
-   if(r.meta.changes!==1)fail('Room advanced already. Refresh its status.',409);
+   if(flow&&(a!=='launch'||b.mode!==room.mode||b.revision!==flow.revision))fail('Game changed. Check the selected game.',409);
+   // The readiness predicate is in the launch write, so a simultaneous join cannot be missed.
+   const readyGuard=flow?` AND NOT EXISTS(SELECT 1 FROM mg_room_memberships m JOIN mg_sessions s ON s.token=m.token LEFT JOIN mg_group_ready g ON g.code=m.code AND g.token=m.token WHERE m.code=mg_rooms.code AND m.token!=mg_rooms.host_token AND (g.revision IS NULL OR g.revision!=? OR s.last_seen<?)) AND EXISTS(SELECT 1 FROM mg_group_flow f WHERE f.code=mg_rooms.code AND f.revision=?)`:'';
+   const startAt=flow?now+4000:now;
+   const launch=query(db,"UPDATE mg_rooms SET status='playing',round=round+1,mode=?,started_at=? WHERE code=? AND round=? AND status=?"+readyGuard,b.mode,startAt,c,Number(b.round),a==='launch'?'lobby':'playing',...(flow?[flow.revision,now-45000,flow.revision]:[]));
+   const launched=`EXISTS(SELECT 1 FROM mg_rooms WHERE code=? AND round=? AND started_at=? AND status='playing')`;
+   const r=flow?(await db.batch([
+    launch,
+    query(db,'UPDATE mg_group_flow SET start_at=? WHERE code=? AND '+launched,startAt,c,c,room.round+1,startAt),
+    query(db,'INSERT OR IGNORE INTO mg_round_starts(code,round,token,began_at) SELECT code,round,token,? FROM mg_results WHERE code=? AND round=? AND '+launched,startAt,c,room.round+1,c,room.round+1,startAt),
+    query(db,'UPDATE mg_room_availability SET pending_since=NULL,acknowledged_at=? WHERE code=? AND '+launched,now,c,c,room.round+1,startAt),
+    query(db,"INSERT OR IGNORE INTO mg_bingo_rounds(code,round) SELECT code,round FROM mg_rooms WHERE code=? AND round=? AND started_at=? AND mode='bingo9'",c,room.round+1,startAt)
+   ]))[0]:await launch.run();
+   if(r.meta.changes!==1)fail(flow?'Wait for every player to be ready.':'Room advanced already. Refresh its status.',409);
    if(b.mode==='bingo9')await query(db,'INSERT OR IGNORE INTO mg_bingo_rounds(code,round) VALUES(?,?)',c,room.round+1).run();
   }else if(a==='begin'){
    if(room.status!=='playing'||b.round!==room.round)fail('Round has changed; reopen the room.',409);
@@ -164,6 +194,7 @@ export async function onRequest({request,env}){
     SELECT code,round,token,? FROM mg_results WHERE code=? AND round=? AND token=? AND score IS NULL AND skipped=0
     AND EXISTS(SELECT 1 FROM mg_rooms WHERE code=? AND round=? AND status='playing')`,now,c,room.round,b.token,c,room.round).run();
   }else if(a==='bingoCall'||a==='bingoMark'){
+   if(flow&&now<room.started_at)fail('The game starts shortly.',409);
    if(plan&&(await one(db,`SELECT COUNT(*) AS n FROM mg_results q LEFT JOIN mg_round_starts t
     ON t.code=q.code AND t.round=q.round AND t.token=q.token WHERE q.code=? AND q.round=?
     AND q.score IS NULL AND q.skipped=0 AND t.began_at IS NULL`,c,room.round)).n)fail('Wait for every remaining player to press Begin before calling or marking pictures.',409);
@@ -200,6 +231,7 @@ export async function onRequest({request,env}){
    if(Number(b.round)!==room.round)fail('Round has changed; reopen the room.',409);
    await query(db,'UPDATE mg_results SET skipped=1 WHERE code=? AND round=? AND score IS NULL',c,room.round).run();
   }else if(a==='submit'){
+   if(flow&&now<room.started_at)fail('The game starts shortly.',409);
    if(room.mode==='bingo9')fail('Mark the called bingo pictures to complete this round.');
    if(room.status!=='playing'||Number(b.round)!==room.round)fail('Round has changed; reopen the room.',409);
    if(plan&&!await one(db,'SELECT began_at FROM mg_round_starts WHERE code=? AND round=? AND token=?',c,room.round,b.token))fail('Press Begin before submitting a result.',409);
@@ -219,7 +251,7 @@ export async function onRequest({request,env}){
   }else if(a!=='status')fail('Unknown action.',404);
   // Finish the configured session once the final round has no pending players.
   // The guarded write also handles the last guest leaving during that round.
-  if(plan&&room.status==='playing'&&room.round>=plan.total_rounds)await db.batch([
+  if(plan&&!flow&&room.status==='playing'&&room.round>=plan.total_rounds)await db.batch([
    query(db,`UPDATE mg_room_sessions SET ended_at=?,end_reason='finished' WHERE code=? AND ended_at IS NULL
     AND EXISTS(SELECT 1 FROM mg_rooms r WHERE r.code=? AND r.status='playing' AND r.round>=mg_room_sessions.total_rounds
      AND NOT EXISTS(SELECT 1 FROM mg_results q WHERE q.code=r.code AND q.round=r.round AND q.score IS NULL AND q.skipped=0))`,now,c,c),
@@ -238,10 +270,12 @@ export async function onRequest({request,env}){
    LEFT JOIN mg_round_starts rs ON rs.code=m.code AND rs.token=m.token AND rs.round=r.round
    LEFT JOIN mg_bingo_marks bm ON bm.code=m.code AND bm.token=m.token AND bm.round=r.round
    WHERE m.code=? ORDER BY m.joined_at,s.id`,c);
+  flow=await one(db,'SELECT * FROM mg_group_flow WHERE code=?',c);
+  if(flow){const ready=await all(db,'SELECT token FROM mg_group_ready WHERE code=? AND revision=?',c,flow.revision);const ids=await all(db,'SELECT token,id FROM mg_sessions WHERE token IN (SELECT token FROM mg_members WHERE code=?)',c);for(const p of players)p.ready=!!p.host||ready.some(r=>ids.some(i=>i.token===r.token&&i.id===p.id));}
   const invitations=host?await all(db,`SELECT s.id,s.name,i.received_at AS receivedAt,s.last_seen AS lastSeen FROM mg_invites i JOIN mg_sessions s ON s.token=i.token WHERE i.code=? AND i.token!=?`,c,b.token):[];
   const bingo=room.mode==='bingo9'?await one(db,'SELECT called FROM mg_bingo_rounds WHERE code=? AND round=?',c,room.round):null;
-  return json({...availability(await one(db,'SELECT * FROM mg_room_availability WHERE code=?',c),now),bingo,code:c,round:room.round,mode:room.mode,seed:room.seed,status:room.status,started:room.round>0,closed:room.status==='closed'||undefined,sessionFinished:plan?.end_reason==='finished',totalRounds:plan?.total_rounds||null,requiresBegin:!!plan,allReady:!plan||players.every(p=>p.departed||p.skipped||p.score!==null||p.beganAt!==null),host,me:session.id,players,invitations,serverTime:now,
-   finished:room.round>0&&players.every(p=>p.departed||p.score!==null||p.skipped===1)});
+  return json({...availability(await one(db,'SELECT * FROM mg_room_availability WHERE code=?',c),now),groupFlow:!!flow,revision:flow?.revision,startsAt:flow?.start_at,bingo,code:c,round:room.round,mode:room.mode,seed:room.seed,status:room.status,started:flow?(room.status==='playing'||plan?.end_reason==='finished'):room.round>0,closed:room.status==='closed'||undefined,sessionFinished:plan?.end_reason==='finished',totalRounds:plan?.total_rounds||null,requiresBegin:!!plan,allReady:!plan||players.every(p=>p.departed||p.skipped||p.score!==null||p.beganAt!==null),host,me:session.id,players,invitations,serverTime:now,
+   finished:room.status!=='lobby'&&room.round>0&&players.every(p=>p.departed||p.score!==null||p.skipped===1)});
  }catch(e){
   let msg=String(e.message||e),status=e.status||500;
   if(msg.includes('mg_room_memberships.token')){msg='Leave or close your rooms before going offline.';status=409}

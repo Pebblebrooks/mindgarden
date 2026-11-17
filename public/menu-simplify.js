@@ -162,3 +162,9 @@ function mountExit(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!e.defaultPrevented&&!$('ov').classList.contains('hidden')&&exitEligible()){e.preventDefault();exitMenu()}});
 })();
+
+// Reveal expanded navigation groups within the menu's own scrolling area.
+document.addEventListener('toggle',e=>{
+ const group=e.target;if(!(group instanceof HTMLElement)||!group.matches('#navMenu details')||!group.open)return;
+ requestAnimationFrame(()=>{if(!group.isConnected||!group.open)return;const menu=document.getElementById('navMenu'),g=group.getBoundingClientRect(),m=menu.getBoundingClientRect();const bottom=Math.min(m.bottom,window.visualViewport?.height||innerHeight);const shift=Math.min(Math.max(0,g.bottom-bottom+12),Math.max(0,g.top-m.top-8));if(shift>0)menu.scrollBy({top:shift,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});
+},true);

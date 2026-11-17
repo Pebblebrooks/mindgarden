@@ -142,3 +142,48 @@ html body #mini #mp .cg-grid>*{min-width:0;overflow-wrap:anywhere}
 html body #mini #mp .cg-game input{min-width:0;max-width:100%;box-sizing:border-box}
 html body #personalResult>p{margin:4px 0!important;font-size:calc(.85rem * var(--fs));line-height:1.3}
 @media(max-width:699px){html body #mini #mp .bingo-card{min-height:60px!important}html body #mini #mp .bingo-card :is(.game-picture,.game-illustration){width:32px!important;height:32px!important}}
+
+/* Keep the task instruction with its sequence, with readable hint copy. */
+html body #mini #mp>.pattern-question{font-size:var(--task-font)!important;line-height:1.4;margin:0!important;text-align:center}
+html body #mini>.msg:empty{display:none!important}
+html body #sharedHintStatus:not(:empty){font-size:var(--task-font)!important;line-height:1.4!important;padding-inline:12px}
+html body #ov #box:has(#personalResult){max-height:calc(100dvh - 24px)!important;gap:clamp(8px,1.8dvh,20px)!important}
+@media(min-height:800px){html body #ov #box:has(#personalResult){padding-block:clamp(20px,3dvh,40px)!important}html body #personalResult :is(.result-primary,.result-footer){padding-block:12px!important}}
+/* One action glyph size across gameplay and completion, with a larger Hint. */
+html body :is(.game-controls,.game-header-controls,#personalResult,.menu-exit-bar) button svg{width:26px!important;height:26px!important;flex:0 0 26px!important}
+html body :is(.game-controls,.game-header-controls,#personalResult,.menu-exit-bar) button.hint-icon svg{width:32px!important;height:32px!important;flex-basis:32px!important}
+
+/* Approved group walkthrough: shared touch targets, readable rows, reserved actions. */
+#ov #box.mp-dialog:has(.mp-catalog,.mp-results){display:flex!important;flex-direction:column;gap:clamp(12px,2dvh,24px);width:min(760px,calc(100vw - 20px));max-height:calc(100dvh - 20px);overflow:hidden}
+#ov #box .mp-catalog{display:flex;flex-direction:column;gap:16px;min-height:0;overflow:auto;overscroll-behavior:contain;padding:4px;width:100%;box-sizing:border-box}
+#ov #box .mp-catalog :is(input,select){font:inherit;width:100%;min-height:48px;box-sizing:border-box}
+#ov #box .mp-game-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#ov #box .mp-game-card{min-height:88px;white-space:normal;line-height:1.35;font:inherit;padding:12px}
+#ov #box .mp-game-card[aria-pressed=true]{border-color:var(--sun);box-shadow:0 0 0 2px var(--sun)}
+#ov #box .mp-game-card[hidden]{display:none!important}
+#ov #box .mp-catalog .mp-shell-footer{position:sticky;bottom:0;background:var(--card,var(--bg));padding:12px 0!important}
+#ov #box .mp-selected-game{text-align:center;display:grid;justify-items:center;gap:12px;margin-bottom:20px}
+#ov #box .mp-selected-game h3{margin:0}
+#ov #box .mp-share-options{margin:12px auto 20px;max-width:640px}
+#ov #box .mp-share-options summary{min-height:48px;display:flex;justify-content:center;align-items:center;cursor:pointer}
+#ov #box.mp-dialog .mp-roster li{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;padding:12px;border:1px solid var(--line);border-radius:12px;margin:8px 0;font-size:1em}
+#ov #box.mp-dialog .mp-roster li>span:last-child{font-size:1em;margin:0}
+#ov #box .mp-score-list{list-style:none;padding:0;display:grid;gap:12px;margin:0}
+#ov #box .mp-score-list li{display:flex;justify-content:space-between;gap:16px;padding:16px;border:1px solid var(--line);border-radius:12px}
+#ov #box .mp-results{display:flex;flex-direction:column;gap:clamp(16px,3dvh,32px);overflow:auto;min-height:0}
+#ov #box .mp-result-actions{display:grid;gap:16px;margin-top:auto}
+#ov #box .mp-countdown{display:grid;place-content:center;min-height:30dvh;text-align:center}
+#ov #box #mpCountdown{font-size:clamp(3rem,12dvh,6rem)}
+#ov #box.mp-playing>.v4-game-tools{display:flex;justify-content:center;gap:16px;margin:clamp(12px,2dvh,24px) auto}
+#ov #box.mp-playing .seqline{font-size:max(1.35em,var(--game-task-size,1.35rem));margin-block:clamp(16px,3dvh,32px)}
+#ov #box.mp-playing .mp-round-progress{text-align:center;margin:16px 0}
+#ov #box.mp-dialog :is(button,summary){touch-action:manipulation}
+#ov #box #mpHostNotice{position:static;margin:0 0 12px;padding:12px;max-width:100%;box-sizing:border-box}
+#ov #box .mp-shell-footer>#mpLaunch,#ov #box .mp-shell-footer>#mpReady{flex:0 1 320px}
+@media(min-width:700px){#ov #box .mp-game-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-height:500px){#ov #box .mp-selected-game{gap:6px;margin-bottom:8px}#ov #box.mp-dialog .mp-roster li{padding:6px;margin:4px 0}#ov #box .mp-share-options{margin:4px auto}#ov #box .mp-game-card{min-height:64px}}
+#ov #box.mp-playing>.v4-game-tools[hidden]{display:none!important}
+#ov #box.mp-playing>.game-header-controls{display:flex;justify-content:center;gap:16px;margin:clamp(12px,2dvh,24px) auto}
+#ov #box .mp-result-actions .labelled-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:80px;min-height:64px}
+#ov #box .mp-result-actions .labelled-action svg{width:26px;height:26px}
+#ov #box .mp-catalog{flex:1 1 auto}
