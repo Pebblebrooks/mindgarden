@@ -75,3 +75,8 @@ This newer approval supersedes the earlier icon-only result and exit guidance ab
 - Confirm unfinished exits with labelled Keep playing and Exit. Completed activities close immediately.
 - Use small consistent circled information glyphs within 48px touch areas: welcome-card top-right; catalogue-card top-centre. Remove favourite uses minus-in-circle, not Close or Delete.
 - Keep sign-in identity separate from save status. Account photos are optional device-local media, keyed separately from players; never imply cross-device photo sync.
+
+## Gameplay review follow-up (November 17)
+- Keep Language, Background sound and Game sound centred; space rows according to available width and height. Question text must be at least the answer-text size.
+- Completion actions remain visible: Done, Replay, conditional Next level, Settings and Home. Do not hide navigation in More options or show active Pause after completion. Replay/Next level use the same icon-above-label treatment as gameplay.
+- Never suppress the Matching Pairs header when session metadata is present. Reduced-motion petting retains static heart feedback.

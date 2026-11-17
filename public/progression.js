@@ -30,9 +30,26 @@ function pattern(n,random=Math.random){
   if(family==='squares')q.push(a+Math.pow(i+1,2)*(1+Math.floor(n/4)));
   if(family==='mixed-cycle')q.push(i?i%3===1?q[i-1]+d:i%3===2?q[i-1]*2:q[i-1]-d:a);
  }
- return{family,shown:q.slice(0,-1),answer:q.at(-1),level:n};
+ return{family,shown:q.slice(0,-1),answer:q.at(-1),level:n,a,d,e,sequence:q};
 }
-window.rNum=function(){const p=pattern(L());mg.patternFamily=p.family;const sequence=[...p.shown,p.answer],at=L()>=4?rnd(1,sequence.length-1):sequence.length-1,answer=sequence[at];sequence[at]='?';numberQuestion(sequence.join(' , '),answer)};
+function patternClue(p,i){
+ const {family:f,a,d,e,sequence:q,level:n}=p,prev=q[i-1],prev2=q[i-2],k=1+Math.floor(n/5),sq=1+Math.floor(n/4);
+ const rules={add:T('Add '+d+' each time.','每次加 '+d+'。'),subtract:T('Subtract '+d+' each time.','每次减 '+d+'。'),multiply:T('Multiply by '+(n<7?2:3)+' each time.','每次乘 '+(n<7?2:3)+'。'),alternating:T('Alternate adding '+d+' and '+e+'.','交替加 '+d+' 和 '+e+'。'),growing:T('Start by adding '+d+'; increase the step by '+k+'.','先加 '+d+'，每次增加的数再加 '+k+'。'),'two-step':T('Alternate adding '+d+' and doubling.','交替加 '+d+' 和乘 2。'),fibonacci:T('Add the previous two numbers.','将前两个数相加。'),'weighted-fibonacci':T('Add the previous number to twice the number before it.','前一个数，加上前第二个数的两倍。'),interleaved:T('Two alternating lists: add '+d+' in one, '+e+' in the other.','两列交替：一列加 '+d+'，另一列加 '+e+'。'),'interleaved-geometric':T('Two alternating lists: add '+d+' in one, double the other.','两列交替：一列加 '+d+'，另一列乘 2。'),'alternating-growing':T('Add '+d+', '+e+', '+(2*d)+', '+(2*e)+'…','依次加 '+d+'、'+e+'、'+(2*d)+'、'+(2*e)+'…'),squares:T('Use 1², 2², 3²… × '+sq+', then add '+a+'.','用 1²、2²、3²… 乘 '+sq+'，再加 '+a+'。'),'mixed-cycle':T('Repeat: add '+d+', double, subtract '+d+'.','重复：加 '+d+'、乘 2、减 '+d+'。')};
+ let calc='';
+ if(f==='add')calc=prev+' + '+d;
+ if(f==='subtract')calc=prev+' − '+d;
+ if(f==='multiply')calc=prev+' × '+(n<7?2:3);
+ if(f==='alternating')calc=prev+' + '+(i%2?d:e);
+ if(f==='growing')calc=prev+' + '+(d+(i-1)*k);
+ if(f==='two-step')calc=prev+(i%2?' + '+d:' × 2');
+ if(f==='fibonacci'||f==='weighted-fibonacci')calc=i===1?q[2]+' − '+(f==='weighted-fibonacci'?'(2 × '+q[0]+')':q[0]):prev+' + '+(f==='weighted-fibonacci'?'(2 × '+prev2+')':prev2);
+ if(f==='interleaved'||f==='interleaved-geometric')calc=i===1?q[3]+(f==='interleaved'?' − '+e:' ÷ 2'):q[i-2]+(i%2?(f==='interleaved'?' + '+e:' × 2'):' + '+d);
+ if(f==='alternating-growing')calc=prev+' + '+((i%2?d:e)*Math.ceil(i/2));
+ if(f==='squares')calc=a+' + ('+(i+1)+'² × '+sq+')';
+ if(f==='mixed-cycle')calc=prev+(i%3===1?' + '+d:i%3===2?' × 2':' − '+d);
+ return {rule:rules[f],worked:calc+' = '+q[i]};
+}
+window.rNum=function(){const p=pattern(L());mg.patternFamily=p.family;const sequence=[...p.sequence],at=L()>=4?rnd(1,sequence.length-1):sequence.length-1,answer=sequence[at],clue=patternClue(p,at);sequence[at]='?';numberQuestion(sequence.join(' , '),answer);let count=0;mg.patternHint=()=>{count++;if(count>=3){const b=[...$('mp').querySelectorAll('[data-a]')].find(b=>String(b.dataset.a)===String(answer));b?.classList.add('game-hint-target')}return count===1?clue.rule:clue.rule+' '+clue.worked};const note=$('sharedHintStatus');if(note)note.textContent='';};
 window.rSum=function(){const n=L(),a=rnd(2+n*2,10+n*n),b=rnd(1,4+n*3),c=rnd(1,n*2),subtract=n>2&&rnd(0,1);if(n>=11){const first=a+b;numberQuestion(a+' + '+b+' − '+c+' = ?',first-c)}else if(n>=7){numberQuestion(a+' + '+b+' + '+c+' = ?',a+b+c)}else if(subtract){numberQuestion((a+b)+' − '+b+' = ?',a)}else numberQuestion(a+' + '+b+' = ?',a+b)};
 window.rTbl=function(){const n=L(),a=rnd(2,3+n),b=rnd(2,Math.min(12,3+n)),c=rnd(1,n);if(n>=11)numberQuestion(a+' × '+b+' + '+c+' = ?',a*b+c);else if(n>=7)numberQuestion(a+' × ? = '+a*b,b);else numberQuestion(a+' × '+b+' = ?',a*b)};
 window.rAdd=function(){const n=L(),a=rnd(n,10+n*8),b=rnd(1,3+n*3),c=rnd(1,n+1);numberQuestion(n<8?a+' + ? = '+(a+b):a+' + ? + '+c+' = '+(a+b+c),b)};
@@ -117,5 +134,5 @@ Object.assign(window.MindGardenExtras,{shopping,routine,related,calendar,money,s
 const descriptions={numbers:['Larger numbers, closer alternatives and multi-step rules.','更大的数字、更接近的选项与多步规律。'],memory:['Longer sequences and more details to remember.','更长的顺序与更多需要记住的细节。'],words:['Longer words, related alternatives and analogies.','更长的词语、相关选项与类比。'],other:['More items, finer categories and longer patterns.','更多项目、更细的分类与更长的规律。']};
 function describe(type){return T(...descriptions[['num','sum','tbl','add','sub','cnt','money','calendar','time','clk'].includes(type)?'numbers':['seq','miss','rem','shopping','story'].includes(type)?'memory':['wrd','pic','wm','related'].includes(type)?'words':'other'])}
 const oldChoose=window.chooseMiniLevel;window.chooseMiniLevel=function(type){oldChoose(type);const select=$('difficultyChoice');if(select){const p=document.createElement('p');p.className='difficulty-guide';p.textContent=describe(type);select.closest('label').after(p)}};
-window.MindGardenDifficulty={level,options,pattern,patternFamilies,describe};
+window.MindGardenDifficulty={level,options,pattern,patternClue,patternFamilies,describe};
 })();

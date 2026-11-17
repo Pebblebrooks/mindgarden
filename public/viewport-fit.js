@@ -32,7 +32,7 @@
   const cols=getComputedStyle(grid).gridTemplateColumns.split(' ').length||1,rows=Math.ceil(cells.length/cols);
   if((!text||grid.classList.contains('word-letter-grid'))&&!grid.classList.contains('story-answer-grid')&&cells.every(e=>e.matches('.big'))){const gs=getComputedStyle(grid),number=k=>parseFloat(gs[k])||0,gap=number('rowGap');
    let space=available-(grid.getBoundingClientRect().top-mp.getBoundingClientRect().top);
-   if(grid.parentElement===mp){const outer=e=>{const s=getComputedStyle(e);return e.getBoundingClientRect().height+(parseFloat(s.marginTop)||0)+(parseFloat(s.marginBottom)||0)};space=available-[...mp.children].filter(e=>e!==grid).reduce((sum,e)=>sum+outer(e),0)-number('marginTop')-number('marginBottom')}
+   if(grid.parentElement===mp){const outer=e=>{const s=getComputedStyle(e);return e.getBoundingClientRect().height+(parseFloat(s.marginTop)||0)+(parseFloat(s.marginBottom)||0)};space=available-[...mp.children].filter(e=>e!==grid).reduce((sum,e)=>sum+outer(e),0)-number('marginTop')-number('marginBottom')-(parseFloat(getComputedStyle(mp).rowGap)||0)*Math.max(0,mp.children.length-1)-8}
    const cell=Math.max(44,Math.min(100,(space-number('paddingTop')-number('paddingBottom')-(rows-1)*gap)/rows));grid.style.setProperty('--fit-cell',cell+'px');if(!grid.classList.contains('viewport-grid'))grid.classList.add('viewport-grid')}
  }
  }
@@ -41,7 +41,7 @@
  new MutationObserver(()=>{mp.scrollTop=0;schedule()}).observe(mp,{childList:true});
  if(window.ResizeObserver)new ResizeObserver(schedule).observe(mp);
  new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['lang','data-text-large']});
- window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);document.fonts?.ready.then(schedule);schedule();
+ mp.addEventListener('load',schedule,true);window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);document.fonts?.ready.then(schedule);schedule();
 })();
 
 /* Word cards scale with their own card and fit long translated labels. */

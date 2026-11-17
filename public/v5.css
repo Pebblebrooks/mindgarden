@@ -339,7 +339,7 @@ html body :is(#game,#mini) .game-progress .bar{margin-top:8px}
 }
 /* Invitations remain available in the lobby without covering active game controls. */
 body:has(#mini:not(.hidden),#game:not(.hidden),#box.mp-playing) #onlineInvitation{display:none!important}
-html body #game:has(>.personal-session)>.hud{display:none!important}
+
 html body :is(#game,#mini)>.personal-session{flex:0 0 auto;margin:4px auto!important;padding:0!important;line-height:1.25}
 html body #game #grid{align-content:start;grid-auto-rows:minmax(48px,auto)}
 html body #game .game-progress #hTime[hidden]{display:none!important}

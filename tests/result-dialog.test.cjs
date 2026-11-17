@@ -10,13 +10,13 @@ for(const lang of ['en','zh'])for(const context of ['all','my']){
  const history=JSON.stringify(w.me().log),growth=w.me().gr;
  assert.deepEqual([...el('personalResult').querySelector('.result-primary').children].map(n=>n.id),['personalReplay','personalNext']);
  assert.equal(el('personalNext').getAttribute('aria-label'),lang==='en'?'Next level':'下一关');assert(!el('personalEasier'));assert(!el('personalNextGame'));assert(!el('menuBack'));assert(el('menuExit'));
- for(const icon of ['personalRest','personalHome']){assert(el(icon).querySelector('svg'));assert.equal(el(icon).textContent,'');assert(el(icon).getAttribute('aria-label'));}
+ assert(!el('personalRest'));assert(!el('personalResult').querySelector('details'));for(const icon of ['personalChangeSettings','personalHome']){assert(el(icon).querySelector('svg'));assert(el(icon).textContent.trim());assert(el(icon).getAttribute('aria-label'));}
  click('personalChangeSettings');await wait();assert(el('personalEasier'));assert(el('menuBack'));assert(el('personalResultOptions'));assert(!el('personalResult'));
  click('menuBack');await wait();assert(el('personalResult'));assert(!el('menuBack'));assert.equal(JSON.stringify(w.me().log),history);assert.equal(w.me().gr,growth);
- click('personalRest');await wait();assert(el('personalRestScreen'));assert(el('menuBack'));click('personalRestResume');await wait();assert(el('personalResult'));assert.equal(JSON.stringify(w.me().log),history);
+
  click('personalChangeSettings');await wait();el('box').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));await wait();assert(!el('personalResult'));assert(!el('personalResultOptions')||el('ov').classList.contains('hidden'));assert.equal(JSON.stringify(w.me().log),history);if(context==='my')assert(el('personalStart'));else assert(!el('gameLibrary').classList.contains('hidden'));
  w.closeOv();w.toHome();
 }
 api.setup('num',api.settings('num').count,'all',true);w.mdone();await wait();assert(!el('personalNext'));assert(el('personalReturn').classList.contains('main'));assert(!el('personalReplay').classList.contains('main'));assert(el('personalReturn').textContent.includes('完成')||el('personalReturn').textContent.includes('Done'));click('menuExit');await wait();assert(el('ov').classList.contains('hidden'));
-api.setup('num',1);click('personalPractice');const before=JSON.stringify(w.me());w.mdone();await wait();assert(!el('personalNext'));click('personalRest');await wait();click('menuBack');await wait();assert.equal(JSON.stringify(w.me()),before);assert(el('personalResult'));assert.deepEqual(errors,[]);console.log('PASS result header/footer, bilingual options/back/break/close, final level, practice and no duplicate scoring.');process.exit(0);
+api.setup('num',1);click('personalPractice');const before=JSON.stringify(w.me());w.mdone();await wait();assert(!el('personalNext'));click('personalChangeSettings');await wait();click('menuBack');await wait();assert.equal(JSON.stringify(w.me()),before);assert(el('personalResult'));assert.deepEqual(errors,[]);console.log('PASS result header/footer, bilingual options/back/break/close, final level, practice and no duplicate scoring.');process.exit(0);
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -1,7 +1,7 @@
 /* v3.1: one living garden, clear daily action and a readable progress dashboard. */
-:root{--journey-bg:#eff6ef;--journey-card:#fbfdf7;--journey-ink:#173e37;--journey-muted:#49665d;--journey-line:#cad9ca;--journey-accent:#147766;--garden-art:url('garden-sakura-day.webp')}
-:root[data-theme="dark"]{--journey-bg:#102d2d;--journey-card:#193c3a;--journey-ink:#f2f7e9;--journey-muted:#c0d6cc;--journey-line:#50736b;--journey-accent:#9fdbb0;--garden-art:url('garden-sakura-night.webp')}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="dark"]){--journey-bg:#102d2d;--journey-card:#193c3a;--journey-ink:#f2f7e9;--journey-muted:#c0d6cc;--journey-line:#50736b;--journey-accent:#9fdbb0;--garden-art:url('garden-sakura-night.webp')}}
+:root{--journey-bg:#eff6ef;--journey-card:#fbfdf7;--journey-ink:#173e37;--journey-muted:#49665d;--journey-line:#cad9ca;--journey-accent:#147766;--garden-art:none}
+:root[data-theme="dark"]{--journey-bg:#102d2d;--journey-card:#193c3a;--journey-ink:#f2f7e9;--journey-muted:#c0d6cc;--journey-line:#50736b;--journey-accent:#9fdbb0;--garden-art:none}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="dark"]){--journey-bg:#102d2d;--journey-card:#193c3a;--journey-ink:#f2f7e9;--journey-muted:#c0d6cc;--journey-line:#50736b;--journey-accent:#9fdbb0;--garden-art:none}}
 #home:not(.hidden):has(#welcomeDashboard:not(.hidden)){height:auto!important;min-height:100dvh!important;display:flex!important}
 #home #welcomeDashboard:not(.hidden){height:auto!important;min-height:0!important;flex:0 0 auto!important;overflow:hidden!important;margin:0!important}
 #home .welcome-scene{height:auto!important;min-height:max(640px,72dvh)!important;max-height:none!important;padding:94px 24px 14px!important;gap:0!important;justify-content:flex-start!important;background:var(--garden-art) center center/cover no-repeat!important;overflow:hidden}

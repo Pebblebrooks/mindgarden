@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v5.0.19">
+<meta name="mind-garden-release" content="v5.0.20">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-5019.css">
+<link rel="stylesheet" href="garden-ui-5020.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -513,7 +513,8 @@ $("grid").addEventListener("click",function(ev){
   }
 });
 $("bHint").onclick=function(){
-  if(lock||paused||hints<1)return;
+  if(hints<1){$("msg").textContent=window.MindGardenLocale.pair('No hints left','提示已用完');return;}
+  if(lock||paused){$("msg").textContent=window.MindGardenLocale.pair('Wait for the cards','请等待卡片翻回');return;}
   var cs=[].filter.call($("grid").children,function(c){return!c.classList.contains("ok")&&!c.classList.contains("up")});
   if(cs.length<2)return;
   var e=cs[0].dataset.e,pair=cs.filter(function(c){return c.dataset.e===e});
@@ -1058,7 +1059,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-5019.js"></script>
+<script src="garden-ui-5020.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>
