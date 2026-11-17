@@ -221,7 +221,6 @@ html[data-welcome-cards="hidden"] #home #welcomeDashboard .welcome-ctas{display:
 
 /* A settings screen must not expose the completed board or old scenery. */
 body:has(#ov:not(.hidden) .personal-setup) :is(#game,#mini){visibility:hidden!important}
-body:has(#ov:not(.hidden) .personal-setup) #gbg{display:none!important}
 body:has(#ov:not(.hidden) .personal-setup) #ov{background:var(--bg)!important;backdrop-filter:none}
 
 /* Compact account forms and direct player-row controls. */

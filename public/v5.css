@@ -272,23 +272,36 @@ html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard #dashStart
 html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard #dashStart strong,html[data-v4-mode="light"]:not([data-hc="1"]) #home #welcomeDashboard .welcome-choice:has(#dashStart) .mg-help-trigger{color:#174a42!important}
 
 /* Multiplayer: board first, optional room information and actions below play. */
-#ov #box.mp-playing{width:min(720px,calc(100vw - 24px))!important;max-height:calc(100dvh - 24px)!important;padding:12px!important;gap:8px!important}
+#ov #box.mp-playing{display:flex!important;flex-direction:column!important;width:min(720px,calc(100vw - 24px))!important;height:calc(100dvh - 24px);max-height:calc(100dvh - 24px)!important;padding:12px!important;gap:8px!important;overflow:hidden}
 #ov #box.mp-playing>.menu-exit-bar{margin:0 0 8px!important;padding:4px 0 8px!important;min-height:44px!important}
 #ov #box.mp-playing>h2.popup-original-heading{display:none!important}
 #ov #box.mp-playing>p,#ov #box.mp-playing .mp-ready{margin:4px 0!important;padding:0!important}
 #ov #box.mp-playing>.row:empty,#ov #box.mp-playing>.mp-room-actions:empty,#ov #box.mp-playing #multiError:empty,#ov #box.mp-playing #mpConnection:empty{display:none!important}
 #ov #box.mp-playing .mp-pair-status{margin:4px 0!important;min-height:0!important;font-size:calc(.9rem * var(--fs))!important}
 #ov #box.mp-playing .mp-pair-status p{margin:0!important}
-#ov #box.mp-playing .mp-board{width:min(100%,480px)!important;gap:8px!important;margin:8px auto!important}
-#ov #box.mp-playing .mp-tile{height:clamp(48px,11dvh,80px)!important;min-height:48px!important;aspect-ratio:auto!important;padding:4px!important}
+#ov #box.mp-playing .mp-board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:repeat(var(--pair-rows,5),minmax(44px,1fr));width:min(100%,480px)!important;gap:8px!important;margin:0 auto!important;flex:1 1 0;min-height:calc(var(--pair-rows,5)*44px + (var(--pair-rows,5) - 1)*8px);max-height:calc(var(--pair-rows,5)*76px + (var(--pair-rows,5) - 1)*8px)}
+#ov #box.mp-playing .mp-tile{height:100%!important;min-height:44px!important;aspect-ratio:auto!important;padding:4px!important}
 #ov #box.mp-playing .mp-tile :is(img,svg){max-height:100%!important;max-width:100%!important}
 #ov #box.mp-playing .mp-play-footer{position:sticky;bottom:0;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;margin-top:12px;padding:10px 0;background:var(--panel);z-index:3}
 #ov #box.mp-playing .mp-live{border:0;padding:0;margin:0;min-width:90px}
 #ov #box.mp-playing .mp-live>summary{min-height:48px;padding:12px;box-sizing:border-box;cursor:pointer;text-align:center}
 #ov #box.mp-playing .mp-live[open]{flex-basis:100%;order:10}
 #ov #box.mp-playing .mp-room-details{max-height:45dvh;overflow:auto;padding:12px;border:1px solid var(--line);border-radius:12px}
-#ov #box.mp-playing .mp-pair-controls{margin:0!important;min-height:48px!important}
-#ov #box.mp-playing .mp-phase-reserve{display:none!important}
+#ov #box.mp-playing .mp-pair-controls{margin:0!important;min-height:0!important}
+#ov #box.mp-playing :is(.mp-phase-reserve,.mp-message-reserve,[hidden]){display:none!important}
+#ov #box.mp-playing>.menu-exit-bar{order:0;flex-shrink:0}
+#ov #box.mp-playing>.mp-round-progress{order:1;flex-shrink:0}
+#ov #box.mp-playing>.game-header-controls{order:2;flex-shrink:0}
+#ov #box.mp-playing>.mp-play-content{order:3;display:flex;flex-direction:column;gap:16px;min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;padding:4px}
+#ov #box.mp-playing>.mp-play-content>p{margin:0;flex-shrink:0}
+#ov #box.mp-playing>.mp-play-content>.row:has(>#mpExit:only-child){display:none}
+#ov #box.mp-playing>#mpPairCount{order:4;flex-shrink:0}
+#ov #box.mp-playing>.game-footer{order:5;display:flex;justify-content:center;flex-shrink:0;margin:0!important;gap:16px}
+#ov #box.mp-playing>.game-footer .hint-icon{border:0;background:transparent!important;box-shadow:none}
+#ov #box.mp-playing>#multiError{order:6}
+#ov #box.mp-playing>#mpConnection{order:1}
+@media(min-width:700px){#ov #box.mp-playing .mp-board{grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-template-rows:repeat(var(--pair-wide-rows,4),minmax(44px,1fr));min-height:calc(var(--pair-wide-rows,4)*44px + (var(--pair-wide-rows,4) - 1)*8px)}}
+@media(min-width:700px) and (max-height:500px){#ov #box.mp-playing{width:calc(100vw - 24px)!important;gap:4px!important}#ov #box.mp-playing .mp-board{width:100%!important;grid-template-columns:repeat(var(--pair-landscape-cols,10),minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(44px,1fr));min-height:96px}#ov #box.mp-playing>.mp-play-content{gap:8px}}
 #onlineInvitation #mpDismissInvite{min-width:48px!important;min-height:48px!important;flex:0 0 48px;touch-action:manipulation;pointer-events:auto}
 
 /* Keep essential controls in the viewport; only the task area may overflow.

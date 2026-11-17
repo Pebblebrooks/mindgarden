@@ -4,7 +4,10 @@ w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requ
 const el=id=>w.document.getElementById(id);
 (async()=>{try{
  w.MindGardenDashboard.library();w.document.querySelector('[data-game="pairs"]').click();
- const standard=el('box').querySelector('[data-pair-mode="0"]'),timed=el('box').querySelector('[data-pair-mode="1"]');assert(standard);assert.equal(standard.getAttribute('aria-pressed'),'true');timed.click();assert.equal(w.save.timed,1);assert.equal(timed.getAttribute('aria-pressed'),'true');standard.click();assert.equal(w.save.timed,0);
+ const timing=el('gameTimed');assert(timing);assert.equal(timing.value,'0');
+ timing.value='1';timing.dispatchEvent(new w.Event('change'));assert.equal(el('gameTimed').value,'1');
+ el('gameTimed').value='0';el('gameTimed').dispatchEvent(new w.Event('change'));assert.equal(el('gameTimed').value,'0');
+ w.save.timed=0;
  let tick,ends=[];w.pt=()=>{};w.setInterval=fn=>{tick=fn;return 991};w.clearInterval=()=>{};w.end=ok=>ends.push(ok);
  w.start(0);w.run();w.left=.1;tick();assert(w.left<0);assert.equal(ends.length,0,'Standard must not end at the old countdown deadline');assert(el('tb').parentElement.hidden);assert.equal(el('hTime').textContent,'At your pace');
  w.paused=true;const left=w.left;tick();assert.equal(w.left,left);

@@ -1,0 +1,102 @@
+[
+  {
+    "test": "group-flow.test.mjs",
+    "status": "pass",
+    "output": "PASS all 17 group variants with eight players, including Bingo countdown guard.\nPASS group readiness, stale revisions, permission checks, late joins, shared start, early submission guard, replay setup, retained players/results and finish.\n"
+  },
+  {
+    "test": "startup-scenery.test.cjs",
+    "status": "pass",
+    "output": "PASS: obsolete startup illustration removed; pending photo neutral; missing photo fallback; video selection preserved; explicit scenery selection works.\n"
+  },
+  {
+    "test": "paired-palace-scenes.test.cjs",
+    "status": "pass",
+    "output": "PASS: all 22 sceneries keep the same scenery through light/dark/light toggles, using matching packaged day/night artwork.\n"
+  },
+  {
+    "test": "group-flow-ui.test.mjs",
+    "status": "pass",
+    "output": "PASS catalogue/search, named arrivals, visible readiness, Keep hosting preservation, changed-game readiness reset and shared quiz start.\n"
+  },
+  {
+    "test": "media-lifecycle.test.cjs",
+    "status": "pass",
+    "output": "PASS: photo/video completion and errors after Settings closes; deletion across player changes; no modal reopening or preference leakage.\n"
+  },
+  {
+    "test": "profile-restoration.test.cjs",
+    "status": "pass",
+    "output": "PASS account sign-in restores display, games and difficulty; player/account isolation, rename, 310 retained games, sign-out copies, reload/restore and quota protection.\n"
+  },
+  {
+    "test": "result-dialog.test.cjs",
+    "status": "pass",
+    "output": "PASS result header/footer, bilingual options/back/break/close, final level, practice and no duplicate scoring.\n"
+  },
+  {
+    "test": "review-ui.test.cjs",
+    "status": "pass",
+    "output": "PASS: simplified welcome, grouped menu, navbar sound/motion, keyboard/tap information, rebuild without duplicates and animation toggle.\n"
+  },
+  {
+    "test": "game-ui-approved.test.cjs",
+    "status": "pass",
+    "output": "Approved UI: bilingual hints, footer layout, cancel/confirm exits, automatic paused domino turn, 180 route solutions, final-level result passed.\n"
+  },
+  {
+    "test": "release-cache.test.cjs",
+    "status": "pass",
+    "output": "PASS: atomic offline install, correct release assets, scoped cache cleanup, no API caching, no HTML fallback for CSS/JS, reject incomplete deployment.\n"
+  },
+  {
+    "test": "release-cleanup.test.cjs",
+    "status": "pass",
+    "output": "PASS compact release: active source manifest, smaller bundles, removed code absent, artwork generation retained.\n"
+  },
+  {
+    "test": "about-documentation.test.cjs",
+    "status": "pass",
+    "output": "PASS About: bilingual latest changes, progression, quiet startup, rest guidance and generated version.\n"
+  },
+  {
+    "test": "matching-mode.test.cjs",
+    "status": "pass",
+    "output": "PASS explicit Standard/Timed selection, persisted state, no untimed deadline, preserved pause and timed expiry.\n"
+  },
+  {
+    "test": "menu-navigation.test.cjs",
+    "status": "pass",
+    "output": "PASS bilingual menu Back/Done: account/player/rename, settings/music, game settings, About, device sign-in; disclosure/scroll restoration; rerender deduplication; auth boundary; Close/Escape; independent help controls.\n"
+  },
+  {
+    "test": "game-language-stages.test.cjs",
+    "status": "pass",
+    "output": "{\n  \"checks\": 1240,\n  \"issues\": []\n}\n"
+  },
+  {
+    "test": "multiplayer-lifecycle.test.mjs",
+    "status": "pass",
+    "output": "Late create/join, expiry, polling navigation, logout, clipboard and profile switch."
+  },
+  {
+    "test": "info-help.test.cjs",
+    "status": "pass",
+    "output": "Current dialog interaction, focus and dismissal."
+  },
+  {
+    "test": "final build and syntax",
+    "status": "pass",
+    "output": "npm run build and npm run check."
+  },
+  {
+    "test": "final startup/review/About",
+    "status": "pass",
+    "output": "Rerun after legacy bouquet renderer removal."
+  },
+  {
+    "test": "final release cache/cleanup",
+    "status": "pass",
+    "output": "Manifest and compact release verified."
+  }
+]

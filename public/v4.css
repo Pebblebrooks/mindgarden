@@ -52,7 +52,6 @@ html[data-v4-mode="light"]:not([data-hc="1"]) #libraryDisplay:before,html[data-v
 #home .hero-media-controls .hero-arrow{position:static;transform:none;margin:0;flex:0 0 48px;width:48px;height:48px;min-height:48px;font-size:36px;background:transparent;color:inherit;border:1px solid currentColor;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:none;line-height:1}
 #home .hero-media-controls #heroMediaCaption{position:static;transform:none;flex:1 1 120px;min-width:0;max-width:350px;text-align:center;margin:0;padding:4px;background:none;color:inherit;font-size:calc(.85rem * var(--fs));line-height:1.5;overflow-wrap:anywhere}
 #home .hero-media-controls #heroVideoPlay{position:static;transform:none;flex:1 0 100%;margin:0;font-size:calc(.85rem * var(--fs));min-height:48px}
-html[data-game-active="1"][data-game-view="quiet"] #gbg{display:none!important}
 html[data-game-active="1"][data-game-view="quiet"] body{background:var(--bg)!important;background-image:none!important}
 html[data-game-view="quiet"] #box.v4-online-game{background:var(--panel)!important;backdrop-filter:none}
 .v4-game-tools{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;margin:16px auto 20px;max-width:100%;font-size:calc(.85rem * var(--fs));color:var(--ink)}

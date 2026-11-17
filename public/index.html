@@ -217,9 +217,6 @@ html[data-still="1"] .z,html[data-still="1"] .z *{animation:none!important}html[
 :root{--gs1:#CFE8F1;--gs2:#EDF3E4;--gc:#fff;--g1:#BFE0B4;--g2:#A6D49C;--g3:#8CC580;--g4:#74B76C;--gt:#6AA96A;--gtr:#8B6B47;--gfo:.95}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--gs1:#17394B;--gs2:#1E4B55;--gc:#8FB5C4;--g1:#1E4A45;--g2:#1D5047;--g3:#205A4A;--g4:#246650;--gt:#2B7556;--gtr:#5A4630;--gfo:.6}}
 :root[data-theme="dark"]{--gs1:#17394B;--gs2:#1E4B55;--gc:#8FB5C4;--g1:#1E4A45;--g2:#1D5047;--g3:#205A4A;--g4:#246650;--gt:#2B7556;--gtr:#5A4630;--gfo:.6}
-#gbg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-#gbg svg{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:max(100vw,1100px);height:auto;display:block;opacity:.9}
-html[data-hc="1"] #gbg{display:none}
 .sub,h2.sec,.tip{background:color-mix(in srgb,var(--bg) 80%,transparent);border-radius:18px}
 .sub{padding:10px 18px}.tip{padding:10px 18px}
 h2.sec{width:fit-content;max-width:100%;margin-left:auto;margin-right:auto;padding:6px 22px 8px}
@@ -239,7 +236,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v5.0.21">
+<meta name="mind-garden-release" content="v6.0.0">
 
 
 
@@ -322,10 +319,10 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-5021.css">
+<link rel="stylesheet" href="garden-ui-600.css">
 </head>
 <body>
-<div id="gbg" aria-hidden="true"></div>
+
 <div class="wrap">
 <section id="home">
   <div class="tools" id="nav">
@@ -870,42 +867,9 @@ function boat(){return'<g transform="translate(0,126)"><g>'+mot("M-70 0 H790",11
  +'<path d="M-26 6 q-9 2 -18 0" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".7"/><path d="M-24 10 q-8 2 -14 0" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".5"/>'
  +'<line x1="0" y1="-4" x2="0" y2="-38" stroke="#6B4A2B" stroke-width="2" stroke-linecap="round"/><path d="M2.5 -36 L2.5 -8 L24 -8Z" fill="#FFFFFF"/><path d="M-2.5 -30 L-2.5 -8 L-17 -8Z" fill="#F7E3B5"/><path d="M0 -38 l9 3 l-9 3Z" fill="#E0393E"/>'
  +'<path d="M-24 -4 H24 L16 9 H-16Z" fill="#C2573D"/><path d="M-22 0 H22 L19 3.5 H-19Z" fill="#FFF8E7"/></g></g></g></g></g>'}
-function heroSvg(pts,full,f,g,o,gh){
- var ex="",i,sea="",gl="";
- for(i=0;i<5;i++)sea+=wline(112+i*26,2+i*.6,6+i*1.4,i%2,.34-i*.04);
- for(i=0;i<6;i++)gl+='<line x1="'+(618+(i%3)*8)+'" y1="'+(104+i*5)+'" x2="'+(660-(i%3)*8)+'" y2="'+(104+i*5)+'"><animate attributeName="opacity" values=".15;.9;.15" dur="'+(2+i*.37)+'s" begin="-'+i*.6+'s" repeatCount="indefinite"/></line>';
- if(pts>=6)ex+=bfly("#E85D75","#F2A03A","M70 175 C140 120 210 190 290 150 S420 110 380 185 S160 215 70 175Z",26,4,1.5);
- if(pts>=12)ex+=dragon("M-40 135 C100 100 200 170 320 140 S520 110 600 165 S760 130 800 150",22,7,"#1F9AA8");
- if(pts>=24)ex+=bfly("#8C6BE8","#F2C94C","M520 160 C470 110 400 150 440 195 S620 205 600 140 S560 115 520 160Z",31,12,1.4);
- if(pts>=30)ex+=bee("M200 192 C240 160 280 210 320 182 S250 150 200 192Z",9,2);
- if(pts>=36)ex+=dragon("M780 182 C650 130 520 200 400 160 S180 140 -40 172",30,11,"#C2573D");
- if(pts>=42)ex+=bird("M-30 74 C150 24 300 94 450 48 S700 34 780 64",26,5)+bird("M-30 52 C180 14 340 70 520 38 S720 28 780 44",34,19);
- return'<svg class="gsvg" viewBox="0 0 720 300" role="img" aria-label="Your garden: '+pts+' of 60"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky1)"/><stop offset="1" style="stop-color:var(--sky2)"/></linearGradient><linearGradient id="seag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sea1)"/><stop offset="1" style="stop-color:var(--sea2)"/></linearGradient><clipPath id="seac"><rect y="95" width="720" height="127"/></clipPath></defs>'
- +'<rect width="720" height="300" fill="url(#sky)"/>'
- +'<g transform="translate(640,52)"><circle r="34" fill="#F2B632" opacity=".22"><animate attributeName="r" values="32;40;32" dur="5s" repeatCount="indefinite"/></circle><g fill="#F2B632" opacity=".6"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="90s" repeatCount="indefinite"/>'+[0,1,2,3,4,5,6,7,8,9,10,11].map(function(k){return'<path d="M0 -33 L4.5 -45 L-4.5 -45Z" transform="rotate('+k*30+')"/>'}).join("")+'</g><circle r="22" fill="#F2B632"/></g>'
- +'<g style="fill:var(--cloud)" opacity=".9">'+cloud(30,1.3,120,25)+cloud(64,.9,160,95)+cloud(44,1.1,200,150)+'</g>'
- +'<rect y="95" width="720" height="127" fill="url(#seag)"/><rect y="95" width="720" height="2" fill="#fff" opacity=".45"/><g clip-path="url(#seac)">'+sea+'<g stroke="#FFE9A6" stroke-width="2" stroke-linecap="round">'+gl+'</g></g>'+boat()
- +'<g><path d="'+wv(220,3,36,24)+'" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"><animateTransform attributeName="transform" type="translate" values="0 0;-36 -3;-72 0" dur="7s" repeatCount="indefinite"/></path></g>'
- +'<g transform="translate(0,20) scale(2)"><rect y="100" width="360" height="20" style="fill:var(--land)"/>'
- +(full?'<g fill="none" stroke-width="3" opacity=".55"><path d="M96 112A84 84 0 0 1 264 112" stroke="#E0393E"/><path d="M102 112A78 78 0 0 1 258 112" stroke="#F2A03A"/><path d="M108 112A72 72 0 0 1 252 112" stroke="#F2D63A"/><path d="M114 112A66 66 0 0 1 246 112" stroke="#5DAE5A"/><path d="M120 112A60 60 0 0 1 240 112" stroke="#4A8FD6"/></g>':'')
- +'<path d="M0 112Q60 74 130 104T260 100T360 102V122H0Z" fill="#8FC585" opacity=".55"/><path d="M0 118Q90 92 180 114T360 110V124H0Z" fill="#6DB36A" opacity=".7"/>'
- +'<g fill="#EADFC6" opacity=".9">'+f+'<rect y="103" width="360" height="2"/><rect y="110" width="360" height="2"/></g>'
- +'<rect y="116" width="360" height="34" fill="#6B4A2B"/><rect y="114" width="360" height="5" fill="#66B15F"/><g fill="#4FA25A">'+g+'</g>'
- +'<g transform="translate(0,22)"><g opacity=".16">'+gh+'</g>'+o+'</g></g>'+ex+'</svg>'}
-function motion(){var rm=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;var s=window.MindGardenMotion?window.MindGardenMotion.effectiveMode()==="off":!!save.still||save.motionMode==="off"||(rm&&!save.motionExplicit);document.documentElement.setAttribute("data-still",s?"1":"0");[].forEach.call(document.querySelectorAll("#hero svg,#gbg svg"),function(sv){try{if(sv.pauseAnimations){s?sv.pauseAnimations():sv.unpauseAnimations()}}catch(e){}})}
-function renderHero(){var p=me(),pts=Math.min(60,p.gr||0),ty=p.fl||"mixed",st=gstage(pts),full=pts>=60,tk=function(i){return ty==="mixed"?FLK[i%6]:ty},o="",gh="",i,k,sn=curStreak(p),t=dstr(),
- tm=Math.round(p.log.filter(function(x){return x.d===t}).reduce(function(a,x){return a+x.s},0)/60),f="",g="",ex="";
- for(i=0;i<12;i++){if(st[i]<5)gh+=flower(i,5,tk(i));if(!st[i])o+='<ellipse cx="'+(20+i*30)+'" cy="97" rx="9" ry="2.6" fill="#553819"/>';var fx=20+i*30,fq=flower(i,st[i],tk(i));o+=st[i]>=2?'<g>'+fq+'<animateTransform attributeName="transform" type="rotate" values="-2.4 '+fx+' 96;2.4 '+fx+' 96;-2.4 '+fx+' 96" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="'+(4+i%4*.7).toFixed(1)+'s" begin="-'+(i*.9).toFixed(1)+'s" repeatCount="indefinite"/></g>':fq}
- for(k=0;k<24;k++)f+='<rect x="'+(k*15+3)+'" y="98" width="4" height="18" rx="1"/>';
- for(k=0;k<18;k++)g+='<path d="M'+(k*21+7)+' 118 l2 -7 l2 7z"/>';
- 
- var m=(Math.floor(pts/12)+1)*12,msg=full?"Your garden is in full bloom!":!pts?"Play a game to plant your first seed!":"Next: "+STG[Math.floor(pts/12)]+" – "+(m-pts)+" more "+(m-pts===1?"point":"points");
- var tr=[12,24,36,48,60].map(function(v,j){return'<span class="nd'+(pts>=v?" on":"")+'" style="left:'+(v/60*100)+'%"><b aria-hidden="true">'+STE[j]+'</b><small>'+STG[j]+'</small></span>'}).join("");
- $("hero").innerHTML=heroSvg(pts,full,f,g,o,gh)
-  +'<div class="hbody"><div class="hmsg">'+msg+'</div><div class="gtxt">Garden growth: '+pts+' of 60</div><div class="trkw"><div class="trk"><i style="width:'+Math.round(pts/60*100)+'%"></i></div>'+tr+'</div>'
-  +'<div class="hchips">'+(sn?'<span class="chip"><span aria-hidden="true">🔥</span> '+sn+'-day streak</span>':'')+(tm?'<span class="chip">Today: '+tm+' min</span>':'')+'<span class="chip">'+(p.last===t?"Today’s game is done ✓":"Your first game today counts double!")+'</span>'+(p.gs?'<span class="chip">🌼 × '+p.gs+'</span>':'')+'</div>'
-  +'<div class="hrow"><button class="btn sm" id="bFlw">Choose flowers</button>'+(full?'<button class="btn sm" id="bNewG">Plant a new garden</button>':'')+'</div></div>';
- motion();$("bFlw").onclick=openFlw;if(full)$("bNewG").onclick=function(){p.gr=0;p.gs=(p.gs||0)+1;persist();renderHero()}}
+function motion(){var rm=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;var s=window.MindGardenMotion?window.MindGardenMotion.effectiveMode()==="off":!!save.still||save.motionMode==="off"||(rm&&!save.motionExplicit);document.documentElement.setAttribute("data-still",s?"1":"0");[].forEach.call(document.querySelectorAll("#hero svg"),function(sv){try{if(sv.pauseAnimations){s?sv.pauseAnimations():sv.unpauseAnimations()}}catch(e){}})}
+// The current dashboard owns bouquet rendering; no legacy scenery during bootstrap.
+function renderHero(){}
 function openFlw(){
  window.MindGardenMenuHistory?.enter('flowers',()=>window.openFlw());var cur=me().fl||"mixed";overlay('<h2>Choose your flowers</h2><div class="flgrid">'+FLK.concat(["mixed"]).map(function(k){var m=k==="mixed",pv=m?FLK.slice(0,3).map(function(t,i){return head(t,12+i*18,18,.5)}).join(""):head(k,18,18,.85);return'<button class="btn tg" data-fl="'+k+'" aria-pressed="'+(cur===k)+'"><svg viewBox="0 0 '+(m?54:36)+' 36" width="'+(m?54:36)+'" height="36" aria-hidden="true">'+pv+'</svg><span>'+(m?"Mixed":FL[k].n)+'</span></button>'}).join("")+'</div><p class="tip">Full bloom takes about 60 growth points. Each finished game adds one, plus one for your first game each day: about four weeks at one game a day, three weeks at two, or two weeks at three. Missed days never harm your garden.</p><div class="row"><button class="btn main" id="fld">Done</button></div>');$("fld").onclick=closeOv}
 function breakHtml(){return '<b>Remind me to rest every</b><div class="prow">'+[10,15,20,30].map(function(m){return '<button class="btn tg" data-bn="'+m+'" aria-pressed="'+((save.bn||15)===m)+'">'+m+' min</button>'}).join("")+'</div>'}
@@ -947,25 +911,6 @@ zs.forEach(function(el,gi){
  el.innerHTML=h});
 if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle("zoff",!e.isIntersecting)})});zs.forEach(function(el){io.observe(el)})}
 })();
-function gardenBg(){
- var s=7,r=function(){s=(s*1664525+1013904223)%4294967296;return s/4294967296},o="",i,x,y,k,
-  cols=["#F28CA6","#F7C948","#FFFFFF","#B58AE8","#FF9A62","#E85D75","#8FC5F2"],
-  tree=function(x,y,k,bl){var c=bl?"#EBA9C2":"var(--gt)";return'<g transform="translate('+x+','+y+') scale('+k+')"><rect x="-6" y="-70" width="12" height="72" rx="4" style="fill:var(--gtr)"/><circle cx="0" cy="-98" r="44" style="fill:'+c+'"/><circle cx="-32" cy="-72" r="31" style="fill:'+c+'"/><circle cx="32" cy="-74" r="33" style="fill:'+c+'"/></g>'},
-  cloud=function(y,k,d,b){return'<g transform="translate(0,'+y+')"><g><animateTransform attributeName="transform" type="translate" from="-260 0" to="1700 0" dur="'+d+'s" begin="-'+b+'s" repeatCount="indefinite"/><ellipse rx="'+90*k+'" ry="'+26*k+'"/><ellipse cx="'+45*k+'" cy="'+-20*k+'" rx="'+56*k+'" ry="'+30*k+'"/><ellipse cx="'+-42*k+'" cy="'+-14*k+'" rx="'+44*k+'" ry="'+22*k+'"/></g></g>'};
- o+='<defs><linearGradient id="gbs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gs1)" stop-opacity="0"/><stop offset=".55" style="stop-color:var(--gs1)" stop-opacity=".9"/><stop offset="1" style="stop-color:var(--gs2)"/></linearGradient><radialGradient id="gbu"><stop offset="0" stop-color="#FFE9A6" stop-opacity=".9"/><stop offset="1" stop-color="#FFE9A6" stop-opacity="0"/></radialGradient></defs>';
- o+='<rect width="1600" height="900" fill="url(#gbs)"/><circle cx="1290" cy="230" r="170" fill="url(#gbu)"/><circle cx="1290" cy="230" r="46" fill="#F7D060" opacity=".85"/>';
- o+='<g style="fill:var(--gc)" opacity=".85">'+cloud(170,1.2,170,40)+cloud(290,.9,230,150)+cloud(110,.7,200,95)+'</g>';
- o+='<path d="M0 560Q200 470 420 540T820 520T1250 540T1600 500V900H0Z" style="fill:var(--g1)"/>';
- [[150,545,.55],[390,535,.5,1],[700,528,.6],[1010,538,.5,1],[1400,525,.6]].forEach(function(t){o+=tree(t[0],t[1],t[2],t[3])});
- o+='<path d="M0 650Q250 570 520 640T1000 620T1600 650V900H0Z" style="fill:var(--g2)"/>';
- [[90,640,.9],[560,642,1,1],[1180,630,.95],[1490,640,.85,1]].forEach(function(t){o+=tree(t[0],t[1],t[2],t[3])});
- o+='<g fill="#F4EBD3" opacity=".92">';for(x=-10;x<1620;x+=36)o+='<rect x="'+x+'" y="688" width="16" height="52" rx="3"/>';o+='<rect y="702" width="1600" height="5"/><rect y="722" width="1600" height="5"/></g>';
- o+='<path d="M0 745Q300 700 650 740T1250 730T1600 745V900H0Z" style="fill:var(--g3)"/><path d="M0 830Q400 790 800 825T1600 815V900H0Z" style="fill:var(--g4)"/>';
- o+='<g style="opacity:var(--gfo)">';
- for(i=0;i<170;i++){y=752+Math.pow(r(),.8)*140;x=r()*1600;k=3.5+(y-750)/145*7.5;o+='<line x1="'+f1(x)+'" y1="'+f1(y)+'" x2="'+f1(x)+'" y2="'+f1(y+k*2.4)+'" stroke="#4E9A5A" stroke-width="2"/><circle cx="'+f1(x)+'" cy="'+f1(y)+'" r="'+f1(k)+'" fill="'+cols[Math.floor(r()*cols.length)]+'"/><circle cx="'+f1(x)+'" cy="'+f1(y)+'" r="'+f1(k*.38)+'" fill="#F2B632"/>'}
- o+='</g>';
- return'<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">'+o+'</svg>'}
-$("gbg").innerHTML=gardenBg();if(window.motion)motion();
 save.cl7=save.cl7||{};if(save.brk===undefined)save.brk=1;
 [].forEach.call(document.querySelectorAll("#home h2.sec"),function(h,i){
  var body=[],n=h.nextElementSibling;while(n&&n.tagName!=="H2"&&!n.classList.contains("tip")){body.push(n);n=n.nextElementSibling}
@@ -1059,7 +1004,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-5021.js"></script>
+<script src="garden-ui-600.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

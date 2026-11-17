@@ -37,7 +37,7 @@ html[data-v4-mode]:not([data-hc="1"]) #ov #box button[aria-pressed="true"],
 html[data-v4-mode]:not([data-hc="1"]) #home #unifiedNav #navMenu button[aria-pressed="true"],
 html[data-v4-mode]:not([data-hc="1"]) #home .category-pill[aria-pressed="true"],
 html[data-v4-mode]:not([data-hc="1"]) [role="tab"][aria-selected="true"]{background:var(--selection-bg)!important;background-image:none!important;color:var(--selection-ink)!important;border-color:var(--selection-edge)!important;outline:2px solid var(--selection-edge);outline-offset:1px;box-shadow:inset 0 1px 0 #ffffff55,0 3px 0 #6d471a33!important;}
-#box button[aria-pressed="true"]::before,#navMenu button[aria-pressed="true"]::before,.category-pill[aria-pressed="true"]::before{content:'✓';font-weight:800;flex:none;margin-inline-end:.3em;}
+#box button[aria-pressed="true"]:not(.game-icon)::before,#navMenu button[aria-pressed="true"]::before,.category-pill[aria-pressed="true"]::before{content:'✓';font-weight:800;flex:none;margin-inline-end:.3em;}
 html[data-v4-mode]:not([data-hc="1"]) #ov #box button[aria-pressed="true"]:focus-visible,html[data-v4-mode]:not([data-hc="1"]) #home #unifiedNav #navMenu button[aria-pressed="true"]:focus-visible{outline:3px solid var(--ink);outline-offset:4px;}
 .matching-mode{padding:18px;border-radius:20px;}.matching-mode legend{font-weight:750;}.matching-mode .row{margin:12px auto;}.matching-mode p{font-size:.9em;}
 #game .bar[hidden]{display:none!important;}

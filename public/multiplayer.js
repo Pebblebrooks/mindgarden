@@ -25,7 +25,7 @@ function name(){let n=(me().name||'').replace(/[^\p{L}\p{N} ._'-]/gu,'').slice(0
 function invite(c=room?.code){const u=new URL(location.pathname,location.origin);u.hostname=u.hostname.replace(/^[a-f0-9]{8,}\.(?=[^.]+\.pages\.dev$)/i,'');u.searchParams.set('room',c);return u.href}
 function user(n){return '<span translate="no">'+esc(n)+'</span>'}
 function roomControls(s){const state=s?.host!==undefined?s:last;if(!state||state.closed||state.left)return '';return '<div class="mp-room-actions row">'+(state.host?(state.started&&!state.finished?'<button class="btn" id="mpCancelGame">'+T('Cancel game & close room','取消游戏并关闭房间')+'</button>':''):'<button class="btn" id="mpLeaveRoom">'+T('Leave room','退出此房间')+'</button>')+'</div>'}
-function base(s){const state=s||last;return '<h2>'+((state?.started&&!state.finished)?esc(activityName(state.mode).split(' · ')[0]):state?.players?groupName(state):T('Play Together','一起玩'))+'</h2><p id="mpConnection" class="tip" role="status"></p>'}
+function base(s){const state={...last,...s};return '<h2>'+((state?.started&&!state.finished)?esc(activityName(state.mode).split(' · ')[0]):state?.players?groupName(state):T('Play Together','一起玩'))+'</h2><p id="mpConnection" class="tip" role="status"></p>'}
 const roomGameKey=c=>GAME+':'+(session?.id||'local')+':'+c;
 function checkpoint(){clearTimeout(checkpointTimer);checkpointTimer=null;if(!game||!room)return;try{store(roomGameKey(room.code),JSON.stringify({code:room.code,...game,done:game.done?[...game.done]:undefined}))}catch{}}
 function queueCheckpoint(){clearTimeout(checkpointTimer);checkpointTimer=setTimeout(checkpoint,80)}
@@ -224,6 +224,9 @@ function livePanel(){
  const tools=box.querySelector('.v4-game-tools'),heading=box.querySelector('h2');if(tools&&heading)heading.after(tools);
  const progress=document.createElement('p');progress.className='mp-round-progress';progress.textContent=T('Round ','第 ')+last.round+T('','轮');box.append(progress);
  const begin=$('mpPairPreview');if(begin&&last.groupFlow){$('mpBeginPairs').hidden=true;begin.hidden=game?.phase!=='preview'}
+ // Header and controls reserve their own space; task content flows between them.
+ let body=box.querySelector('.mp-play-content');if(!body){body=document.createElement('div');body.className='mp-play-content';const excluded='h2,.menu-exit-bar,.v4-game-tools,.game-header-controls,.game-footer,.mp-round-progress,#mpPairCount,#mpConnection,#multiError';for(const node of [...box.children])if(!node.matches(excluded))body.append(node);box.append(body)}
+ const board=box.querySelector('.mp-board');if(board){const cards=board.querySelectorAll('[data-tile]').length;board.style.setProperty('--pair-rows',Math.ceil(cards/4));board.style.setProperty('--pair-wide-rows',Math.ceil(cards/5));board.style.setProperty('--pair-landscape-cols',Math.ceil(cards/2));}
 }
 let countdownTimer=null;
 function sharedCountdown(s){
@@ -360,7 +363,7 @@ setInterval(poll,1500);
   updatePairControls(g);
  }
  function updatePairControls(g){
-  const controls=$('mpPairPreview');if(!controls)return;
+  const controls=$('mpPairPreview');if(!controls)return;if(last?.groupFlow){controls.hidden=g.phase!=='preview';$('mpBeginPairs').hidden=true;}
   if(controls.dataset.phase!==g.phase)controls.dataset.phase=g.phase;
   const begin=$('mpBeginPairs'),disabled=g.phase!=='ready';if(begin.disabled!==disabled)begin.disabled=disabled;
   const phase=$('mpPairPhase'),text=g.phase==='preview'?T('Remember: '+Math.max(0,Math.ceil((g.previewEndsAt-Date.now())/1000))+' seconds','记忆时间：'+Math.max(0,Math.ceil((g.previewEndsAt-Date.now())/1000))+' 秒'):T('Matching','配对中');if(phase.textContent!==text)phase.textContent=text;

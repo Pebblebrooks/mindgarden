@@ -2,3 +2,6 @@
 functions/lib/webauthn-server.js -whitespace linguist-generated=true
 third-party/webauthn/licenses/** -whitespace linguist-vendored=true
 public/vendor/simplewebauthn-browser-13.3.0.min.js -whitespace linguist-vendored=true
+
+*.pdf binary
+*.jpg binary

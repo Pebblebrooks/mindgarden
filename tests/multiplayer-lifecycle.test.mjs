@@ -12,14 +12,14 @@ async function boot(){
  const user=await api('login',{name:'Tester'});w.localStorage.setItem('mindGardenLobby',JSON.stringify(user));let gate;
  w.fetch=async(url,options)=>{const action=new URL(url,w.location.href).searchParams.get('action');if(gate?.action===action){const current=gate;gate=null;await current.promise;if(current.response)return current.response}return onRequest({env:{DB},request:new Request(new URL(url,w.location.href),options)})};
  w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(read('language-catalog.js'));w.eval(read('language-runtime.js'));w.eval(read('player-preferences.js'));w.eval(read('identity.js'));w.eval(read('info-help.js'));w.eval(read('multiplayer.js'));await tick();w.document.getElementById('bOnline').click();await tick();
- return {w,user,intervals,click:id=>{if(id==='mpCreate'&&!w.document.getElementById(id))w.document.getElementById('mpCreateOpen').click();if(['mpHistory','mpLogout','mpSaveName'].includes(id)&&!w.document.getElementById(id))w.document.getElementById('mpOptions').click();w.document.getElementById(id).click()},hold(action,response){let release;gate={action,response,promise:new Promise(r=>release=r)};return release}};
+ return {w,user,intervals,click:id=>{if(id==='mpClose'&&!w.document.getElementById(id)){w.MindGardenMultiplayer.exit();return}if(id==='mpCreate'&&!w.document.getElementById(id)){w.document.getElementById('mpCreateOpen').click();id='mpUseGame'}if(['mpHistory','mpLogout','mpSaveName'].includes(id)&&!w.document.getElementById(id))w.document.getElementById('mpOptions').click();w.document.getElementById(id).click()},hold(action,response){let release;gate={action,response,promise:new Promise(r=>release=r)};return release}};
 }
 try{
  {
   const recipient=await boot();recipient.w.overlay('<h2 id="recipientSettings">Settings</h2>');
   const host=await api('login',{name:'Invitation host'}),created=await api('create',host);
   await recipient.intervals.get(2500)();
-  assert(recipient.w.document.getElementById('onlineInvitation').textContent.includes(created.code),'Code must arrive without opening the lobby again');
+  assert(recipient.w.document.getElementById('onlineInvitation').dataset.codes.includes(created.code),'Named invitation must arrive without opening the lobby again');
   assert(recipient.w.document.getElementById('recipientSettings'),'Invitation must preserve the current popup');
   const status=await api('status',{...host,code:created.code});
   assert(status.invitations.find(i=>i.id===recipient.user.id)?.receivedAt,'Host receives delivery acknowledgement');
@@ -50,7 +50,7 @@ try{
  }
  {
   const a=await boot();a.click('mpCreate');await tick();const code=JSON.parse(a.w.localStorage.getItem('mindGardenRoom8')).code;
-  const guest=await api('login',{name:'Other player'});await api('join',{...guest,code});a.w.overlay('<h2 id="otherScreen">Settings</h2>');await api('launch',{...a.user,code,round:0,mode:'sums'});await a.intervals.get(1500)();
+  const guest=await api('login',{name:'Other player'});await api('join',{...guest,code});a.w.overlay('<h2 id="otherScreen">Settings</h2>');const flow=sqlite.prepare('SELECT f.revision,r.mode FROM mg_group_flow f JOIN mg_rooms r ON r.code=f.code WHERE f.code=?').get(code);await api('ready',{...guest,code,revision:flow.revision});await api('launch',{...a.user,code,round:0,mode:flow.mode,revision:flow.revision});await a.intervals.get(1500)();
   assert(a.w.document.getElementById('otherScreen'),'Background polling must not replace another screen');
  }
  {

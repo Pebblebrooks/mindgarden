@@ -176,14 +176,28 @@ html body :is(.game-controls,.game-header-controls,#personalResult,.menu-exit-ba
 #ov #box #mpCountdown{font-size:clamp(3rem,12dvh,6rem)}
 #ov #box.mp-playing>.v4-game-tools{display:flex;justify-content:center;gap:16px;margin:clamp(12px,2dvh,24px) auto}
 #ov #box.mp-playing .seqline{font-size:max(1.35em,var(--game-task-size,1.35rem));margin-block:clamp(16px,3dvh,32px)}
-#ov #box.mp-playing .mp-round-progress{text-align:center;margin:16px 0}
+#ov #box.mp-playing .mp-round-progress{text-align:center;margin:0!important;font-size:1rem;line-height:1.4}
 #ov #box.mp-dialog :is(button,summary){touch-action:manipulation}
 #ov #box #mpHostNotice{position:static;margin:0 0 12px;padding:12px;max-width:100%;box-sizing:border-box}
 #ov #box .mp-shell-footer>#mpLaunch,#ov #box .mp-shell-footer>#mpReady{flex:0 1 320px}
 @media(min-width:700px){#ov #box .mp-game-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-height:500px){#ov #box .mp-selected-game{gap:6px;margin-bottom:8px}#ov #box.mp-dialog .mp-roster li{padding:6px;margin:4px 0}#ov #box .mp-share-options{margin:4px auto}#ov #box .mp-game-card{min-height:64px}}
 #ov #box.mp-playing>.v4-game-tools[hidden]{display:none!important}
-#ov #box.mp-playing>.game-header-controls{display:flex;justify-content:center;gap:16px;margin:clamp(12px,2dvh,24px) auto}
+#ov #box.mp-playing>.game-header-controls{display:flex;justify-content:center;gap:16px;margin:0 auto;width:100%}
 #ov #box .mp-result-actions .labelled-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:80px;min-height:64px}
 #ov #box .mp-result-actions .labelled-action svg{width:26px;height:26px}
 #ov #box .mp-catalog{flex:1 1 auto}
+
+/* PRD 1.1 LAY-06/07: measured text height precedes the next object. */
+#ov #box .mp-directory-list{display:grid;gap:16px;margin-block-start:24px}
+#ov #box .mp-directory-room{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;padding:16px}
+#ov #box .mp-room-summary{display:flex;flex-direction:column;gap:12px;min-width:0;overflow-wrap:anywhere}
+#mini .game-progress[hidden],#mini.game-reviewing #bPause2{display:none!important}
+#mini.game-reviewing .game-footer{margin-top:8px!important}
+#mini #mp .route-board{flex-shrink:0;margin-block:16px;position:relative}
+#mini #mp:has(.route-board)>:is(h2,h3,p){flex-shrink:0;height:auto;line-height:1.4;margin-bottom:16px!important}
+.game-header-controls>.game-icon{box-sizing:border-box;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:10px!important}
+
+/* Keep puzzle actions in flow: a sticky toolbar covered cells on short phones. */
+#mini #mp .ga-game:has(.route-board) .ga-actions{position:static;flex-shrink:0}
+#mini #mp .ga-game:has(.route-board)>p{flex-shrink:0}

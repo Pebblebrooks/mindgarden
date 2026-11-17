@@ -1,0 +1,1686 @@
+{
+  "baseline": "c31de96",
+  "method": "jsdom DOM launch only; not rendered layout or full gameplay",
+  "games": [
+    {
+      "id": "pairs",
+      "name": "Matching Pairs",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "seq",
+      "name": "Remember the order",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "miss",
+      "name": "What’s missing?",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "sort",
+      "name": "Sort it",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "num",
+      "name": "Number patterns",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "sum",
+      "name": "Mental sums",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "odd",
+      "name": "Odd one out",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "shp",
+      "name": "Shape patterns",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "tbl",
+      "name": "Times tables",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "clk",
+      "name": "Read the clock",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "diff",
+      "name": "Spot the difference",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "wrd",
+      "name": "Word builder",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "rem",
+      "name": "Remember the picture",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "cnt",
+      "name": "Count down",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "add",
+      "name": "Missing number",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "same",
+      "name": "Same group",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "time",
+      "name": "Time later",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "count",
+      "name": "Count it",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "find",
+      "name": "Find it",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "pic",
+      "name": "Find the picture",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "sub",
+      "name": "Take away",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "wm",
+      "name": "Match the word",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "shopping",
+      "name": "Shopping basket",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "routine",
+      "name": "Daily routines",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "related",
+      "name": "Word connections",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar day",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "money",
+      "name": "Market change",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "story",
+      "name": "Short story memory",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "visual",
+      "name": "Garden detective",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "order",
+      "name": "Picture order",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "place",
+      "name": "Where does it belong?",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "jigsaw",
+      "name": "Garden picture puzzles",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "dominoes",
+      "name": "Gentle dominoes",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "bingo",
+      "name": "Picture bingo",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "pathways",
+      "name": "Garden pathways",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "sayings",
+      "name": "Complete the saying",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "dots",
+      "name": "Connect the Dots",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "pets",
+      "name": "Garden Pets",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "spot",
+      "name": "Spot the Difference · Garden",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "links",
+      "name": "Colour Links",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "drawmemory",
+      "name": "Remember & Draw",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "recall",
+      "name": "Number & Word Recall",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "today",
+      "name": "Today & Here",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "foodknow",
+      "name": "Food & Kitchen",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "localnews",
+      "name": "Around Us",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "hawker",
+      "name": "Hawker Memory",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "album",
+      "name": "My Life Album",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "trail",
+      "name": "Neighbourhood Trail",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "sounds",
+      "name": "Sound Detective",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "teamgarden",
+      "name": "Team Garden",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "melody",
+      "name": "Melody Moments",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "gardenrhythm",
+      "name": "Move & Remember",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": true
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": true
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": true
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": true
+        }
+      ]
+    },
+    {
+      "id": "sudoku",
+      "name": "Sudoku",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "stroop",
+      "name": "Stroop Colour Match",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "flags",
+      "name": "Flag Match",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    },
+    {
+      "id": "scene",
+      "name": "Scene Recall",
+      "checks": [
+        {
+          "lang": "en",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "en",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 1,
+          "status": "launched",
+          "iframe": false
+        },
+        {
+          "lang": "zh",
+          "level": 15,
+          "status": "launched",
+          "iframe": false
+        }
+      ]
+    }
+  ]
+}

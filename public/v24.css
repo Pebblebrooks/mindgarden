@@ -1,7 +1,6 @@
 /* v2.4: faithful implementation of the TWO approved mockups. Single navbar on both pages. */
 :root{--vforest:#073c43;--vteal:#0b7176;--vmint:#cdf2c9;--vcream:#fffaf0}
 body:has(#home:not(.hidden)){background:#eef9ee}
-body:has(#home:not(.hidden)) #gbg{display:none}
 .wrap{max-width:none;padding:0 0 30px}
 #home{position:relative}
 #unifiedNav{position:sticky;top:8px;z-index:8;max-width:calc(100% - 30px);margin:10px 15px 0;padding:5px 10px;border:2px solid #8bc9c0;border-radius:28px;background:linear-gradient(110deg,#063b43,#0a5360 60%,#063944);box-shadow:0 7px 22px #0b343848}

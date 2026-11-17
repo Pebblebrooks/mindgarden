@@ -1,0 +1,61 @@
+[
+  {
+    "test": "account-status.test.cjs",
+    "status": "pass",
+    "output": "PASS account outcomes, adjacent download feedback, pending password-manager prompt, verified session vs cached players, late startup response, reload, orientation/rebuild state, and sign-out preserving named device players and account copies.\n"
+  },
+  {
+    "test": "player-name-validation.test.cjs",
+    "status": "pass",
+    "output": "PASS bilingual name availability: case, whitespace, width variants, Chinese duplicates, add/rename/account creation, correction feedback, own-name save and record preservation.\n"
+  },
+  {
+    "test": "gameplay-regressions.test.cjs",
+    "status": "pass",
+    "output": "PASS: ten separate profiles; final melody note at all levels; immediate pass/skip; current player and next player labels; drawing pointer isolation and feedback; delayed/failed image fallback.\n"
+  },
+  {
+    "test": "matching-mode.test.cjs",
+    "status": "fail",
+    "output": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(standard)\n\n    at /workspace/scratch/a146f5a3872c/mindgarden/tests/matching-mode.test.cjs:7:119\n    at Object.<anonymous> (/workspace/scratch/a146f5a3872c/mindgarden/tests/matching-mode.test.cjs:13:79)\n    at Module._compile (node:internal/modules/cjs/loader:1929:14)\n    at Object..js (node:internal/modules/cjs/loader:2060:10)\n    at Module.load (node:internal/modules/cjs/loader:1651:32)\n    at Module._load (node:internal/modules/cjs/loader:1443:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: null,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n"
+  },
+  {
+    "test": "game-language-stages.test.cjs",
+    "status": "timeout"
+  },
+  {
+    "test": "info-help.test.cjs",
+    "status": "fail",
+    "output": "TypeError: Cannot read properties of null (reading 'hidden')\n    at /workspace/scratch/a146f5a3872c/mindgarden/tests/info-help.test.cjs:8:236\n    at Object.<anonymous> (/workspace/scratch/a146f5a3872c/mindgarden/tests/info-help.test.cjs:9:67)\n    at Module._compile (node:internal/modules/cjs/loader:1929:14)\n    at Object..js (node:internal/modules/cjs/loader:2060:10)\n    at Module.load (node:internal/modules/cjs/loader:1651:32)\n    at Module._load (node:internal/modules/cjs/loader:1443:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47\n"
+  },
+  {
+    "test": "menu-controls-stay-open.test.cjs",
+    "status": "pass",
+    "output": "PASS bilingual menu switches, display, text size, navigation, outside click and Escape\n"
+  },
+  {
+    "test": "group-flow.test.mjs",
+    "status": "pass",
+    "output": "PASS all 17 group variants with eight players, including Bingo countdown guard.\nPASS group readiness, stale revisions, permission checks, late joins, shared start, early submission guard, replay setup, retained players/results and finish.\n"
+  },
+  {
+    "test": "multiplayer-lifecycle.test.mjs",
+    "status": "fail",
+    "output": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Code must arrive without opening the lobby again\n    at file:///workspace/scratch/a146f5a3872c/mindgarden/tests/multiplayer-lifecycle.test.mjs:22:3 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.22.1\n"
+  },
+  {
+    "test": "release-cleanup.test.cjs",
+    "status": "pass",
+    "output": "PASS compact release: active source manifest, smaller bundles, removed code absent, artwork generation retained.\n"
+  },
+  {
+    "test": "about-documentation.test.cjs",
+    "status": "pass",
+    "output": "PASS About: bilingual latest changes, progression, quiet startup, rest guidance and generated version.\n"
+  },
+  {
+    "test": "grammar.test.cjs",
+    "status": "pass",
+    "output": "PASS grammar: 0/1/2/11/21/101, decimals/ranges, bilingual text, unchanged player names, one-day streak, game totals and honest answer feedback\n"
+  }
+]
