@@ -66,3 +66,12 @@ After every app update, review the About documentation and update it wherever th
 - Keep the immediate task instruction short. Put longer optional rules and explanations behind a labelled info control or collapsed disclosure when they interfere with gameplay. Never hide the actual question, answers or essential progress/actions.
 - At 100% text size, every desktop/tablet game must fit its available play area. Adapt board/card sizes and placement before allowing essential content to overflow; retain readable text and comfortable targets.
 - Report the exact live viewport, language, difficulty and state coverage. Do not certify every possible state from a sampled sweep.
+
+## Approved icon and layout revision (November 17)
+
+This newer approval supersedes the earlier icon-only result and exit guidance above.
+- Back and Close have distinct destinations and sit in the gameplay header. Pause, Hint and Settings use one labelled footer row; the gear opens Settings, including Change level.
+- Completed solo results put labelled Done first, followed by Replay and conditional Next level. Additional result actions stay in More options. Movement completion has no active-game toolbar.
+- Confirm unfinished exits with labelled Keep playing and Exit. Completed activities close immediately.
+- Use small consistent circled information glyphs within 48px touch areas: welcome-card top-right; catalogue-card top-centre. Remove favourite uses minus-in-circle, not Close or Delete.
+- Keep sign-in identity separate from save status. Account photos are optional device-local media, keyed separately from players; never imply cross-device photo sync.

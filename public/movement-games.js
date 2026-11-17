@@ -9,10 +9,11 @@ function close(){cancelSpeech();active=null;closeOv()}
 function exitToGames(){const leave=active?.leave;close();leave?.()}
 function setup(id,c,next,hasNext,leave){cancelSpeech();const stored=c.movementPreferences||me().movementPreferences;const options=clean(stored||{count:c.count,level:c.start,challenge:c.range,voice:c.movementVoice});const profile=save.cp;
  overlay('<section class="movement-integrated"><div class="movement-toolbar"><h2>'+MG.gardenrhythm.n+'</h2><button class="btn" id="movementClose">'+T('Close','关闭')+'</button></div><iframe id="movementFrame" title="'+MG.gardenrhythm.n+'" src="move-remember/index.html?embedded=1" allow="autoplay"></iframe></section>');
- active={id,frame:$('movementFrame'),profile,options,next,hasNext,leave,lang:save.lang,last:JSON.stringify(options)};$('movementClose').onclick=exitToGames;}
+ active={id,frame:$('movementFrame'),profile,options,next,hasNext,leave,lang:save.lang,last:JSON.stringify(options)};$('movementClose').onclick=()=>{const api=active?.frame.contentWindow?.MindGardenMovementActivity;if(!api||['setup','finished'].includes(api.phase)){exitToGames();return}const paused=api.paused;api.pause(true);window.MindGardenGameUI.confirm(T('Your unfinished activity will end.','尚未完成的活动将结束。'),exitToGames,()=>api.pause(paused))};}
 window.addEventListener('message',e=>{const a=active;if(!a||e.source!==a.frame.contentWindow||e.origin!==location.origin||e.data?.source!=='mind-garden-movement')return;
  if(save.cp!==a.profile){close();return}const d=e.data;
  if(d.type==='ready')send({type:'init',theme:document.documentElement.dataset.v4Mode||'light',hasNextGame:a.hasNext(),lang:save.lang,options:a.options,voiceURI:window.MindGardenNarration?.selectedVoice()?.voiceURI||'',nextLabel:a.hasNext()?T('Next chosen game','下一个已选游戏'):T('My Games','我的游戏'),textScale:save.textScale||1});
+ if(d.type==='phase')active.phase=d.phase;
  if(d.type==='settings'){const v=clean(d.options),key=JSON.stringify(v);if(key!==a.last){window.MindGardenPersonal.saveGame(a.id||'gardenrhythm',{movementPreferences:v,count:v.count,range:v.challenge==='advanced'?'challenging':v.challenge,start:v.level});a.options=v;a.last=key;if(persist()===false)send({type:'save-error'})}}
  if(d.type==='language'&&['en','zh'].includes(d.lang)){save.lang=d.lang;persist();applyPrefs()}
  if(d.type==='next'){cancelSpeech();active=null;a.next()}

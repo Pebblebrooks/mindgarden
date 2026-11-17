@@ -31,7 +31,7 @@ try{
  // Open invitations remain visible to players who already have another room.
  const a=await api('create',h);await api('join',{...g,code:a.code});await api('launch',{...h,code:a.code,round:0,mode:'patterns'});
  const b=await api('create',o);const lounge=await api('lounge',g);assert.equal(lounge.activeRoom,a.code);assert(lounge.rooms.some(r=>r.code===b.code));
- await api('logout',g,409);await api('join',{...g,code:b.code},409);await api('leave',{...g,code:a.code});await api('join',{...g,code:b.code});
+ await api('logout',g,409);await api('join',{...g,code:b.code});assert.equal((await api('lounge',g)).myRooms.length,2,'Joined rooms coexist');await api('leave',{...g,code:a.code});await api('join',{...g,code:b.code});
  await api('close',{...h,code:a.code});assert.equal(sqlite.prepare('SELECT end_reason FROM mg_room_sessions WHERE code=?').get(a.code).end_reason,'cancelled');
  await api('logout',h);assert.equal(sqlite.prepare('SELECT last_seen FROM mg_sessions WHERE token=?').get(h.token).last_seen,0);
  // Migration can run again without modifying limits, starts or completed scores.
