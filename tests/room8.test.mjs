@@ -21,8 +21,10 @@ export function client(DB){return async(action,data={},status=200)=>{const res=a
 async function test(){const {DB,sqlite}=database(),api=client(DB),users=[];
  for(let i=0;i<10;i++)users.push(await api('login',{name:'Player '+i}));
  const host=users[0];const created=await Promise.all([api('create',host),api('create',host)]);assert.equal(created[0].code,created[1].code);const {code}=created[0];
- for(const u of users.slice(1)){const l=await api('lounge',u);assert.equal(l.rooms[0].code,code);await api('ack',{...u,codes:[code]})}
- let s=await api('status',{...host,code});assert.equal(s.invitations.length,9);assert(s.invitations.every(i=>i.receivedAt));assert(!JSON.stringify(s).includes(host.token));
+ // v6.1 invite-only: other online players never see the group, its host or who is online.
+ for(const u of users.slice(1)){const l=await api('lounge',u);assert.equal(l.rooms.length,0);assert.deepEqual(l.lobby,[]);assert.equal(l.online,undefined);assert(!JSON.stringify(l).includes('Player 0'))}
+ assert.equal((await api('lounge',host)).rooms[0].code,code);assert((await api('lounge',host)).rooms[0].hosting);
+ let s=await api('status',{...host,code});assert.equal(s.invitations,undefined);assert(!JSON.stringify(s).includes(host.token));
  await api('launch',{...host,code,round:0,mode:'pairs6'},400);
  await Promise.all(users.slice(1,8).map(u=>api('join',{...u,code})));
  await Promise.all([api('join',{...users[8],code},409),api('join',{...users[9],code},409)]);await api('join',{...users[1],code});
@@ -49,6 +51,6 @@ async function test(){const {DB,sqlite}=database(),api=client(DB),users=[];
  assert.equal((await api('login',{...host,name:'Renamed'})).id,host.id);await api('status',{token:'bad',code},401);
  // Migration can be applied twice and retains legacy tables.
  sqlite.exec(readFileSync(new URL('../migrate-v3.sql',import.meta.url),'utf8'));sqlite.close();
- console.log('PASS: 8-player cap, delivery receipts, host-only launch, launch acknowledgements, rejoin, two rounds, totals, idempotent scores, skipped results, closure, authorization and repeatable migration.');
+ console.log('PASS: 8-player cap, invite-only privacy, host-only launch, launch acknowledgements, rejoin, two rounds, totals, idempotent scores, skipped results, closure, authorization and repeatable migration.');
 }
 if(process.argv[1]?.endsWith('room8.test.mjs'))await test();

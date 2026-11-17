@@ -19,12 +19,11 @@ try{
   const recipient=await boot();recipient.w.overlay('<h2 id="recipientSettings">Settings</h2>');
   const host=await api('login',{name:'Invitation host'}),created=await api('create',host);
   await recipient.intervals.get(2500)();
-  assert(recipient.w.document.getElementById('onlineInvitation').dataset.codes.includes(created.code),'Named invitation must arrive without opening the lobby again');
-  assert(recipient.w.document.getElementById('recipientSettings'),'Invitation must preserve the current popup');
+  // v6.1 invite-only (decision record GROUP-01, 18 Nov 2026): nobody else is told about a new group.
+  assert.equal(recipient.w.document.getElementById('onlineInvitation'),null,'No broadcast invitation to other online players');
+  assert(recipient.w.document.getElementById('recipientSettings'),'Lounge refresh must preserve the current popup');
   const status=await api('status',{...host,code:created.code});
-  assert(status.invitations.find(i=>i.id===recipient.user.id)?.receivedAt,'Host receives delivery acknowledgement');
-  const style=recipient.w.document.createElement('style');style.textContent=read('v30.css')+read('v37.css');recipient.w.document.head.append(style);
-  assert(Number(recipient.w.getComputedStyle(recipient.w.document.getElementById('onlineInvitation')).zIndex)>Number(recipient.w.getComputedStyle(recipient.w.document.getElementById('ov')).zIndex),'Invitation must be above the popup');
+  assert.equal(status.invitations,undefined,'Host status no longer lists everyone who was online');
   const release=recipient.hold('lounge',new Response(JSON.stringify({error:'Session expired'}),{status:401}));
   const pending=recipient.intervals.get(2500)();release();await pending;
   assert(recipient.w.document.getElementById('mpReconnect'),'An expired session must show a reconnect action');

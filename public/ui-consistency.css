@@ -201,3 +201,25 @@ html body :is(.game-controls,.game-header-controls,#personalResult,.menu-exit-ba
 /* Keep puzzle actions in flow: a sticky toolbar covered cells on short phones. */
 #mini #mp .ga-game:has(.route-board) .ga-actions{position:static;flex-shrink:0}
 #mini #mp .ga-game:has(.route-board)>p{flex-shrink:0}
+
+/* v6.1 group presence (GROUP-04): Remove keeps a full touch target; the away note wraps. */
+#ov #box.mp-dialog .mp-roster .mp-remove{min-height:44px;min-width:44px;padding-inline:12px;font-size:.9em}
+#ov #box.mp-dialog .mp-away-note{margin:8px 0;padding:8px 12px;border-radius:12px;background:var(--sun);color:var(--sunink);text-align:left;overflow-wrap:anywhere}
+#ov #box.mp-dialog .mp-away-note[hidden]{display:none}
+#ov #box.mp-dialog .mp-room-summary small{display:block}
+/* v6.1: the next step and any host-away note stay visible above the actions, outside the scrolling list. */
+#ov #box.mp-dialog .mp-lobby-status{flex:none;margin:8px 0 0}
+#ov #box.mp-dialog .mp-lobby-status>p{margin:0 0 8px}
+#ov #box.mp-dialog .mp-lobby-status>p:empty{display:none}
+/* v6.1 (GROUP-05, LAY-05): on short screens the score list scrolls; results actions, waiting text,
+   host-away note and Leave stay reachable instead of being clipped by the dialog. */
+#ov #box.mp-dialog .mp-results{flex:1 1 auto;min-height:0;overflow:hidden}
+#ov #box.mp-dialog .mp-results .mp-score-list{flex:1 1 auto;min-height:72px;overflow:auto}
+#ov #box.mp-dialog .mp-results .mp-result-actions{flex:none;gap:8px}
+#ov #box.mp-dialog .mp-results .mp-result-actions>p{margin:0}
+@media (orientation:landscape) and (max-height:500px){
+ #ov #box.mp-dialog .mp-results{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);align-items:stretch;gap:16px}
+ #ov #box.mp-dialog .mp-results>p{display:none}
+ #ov #box.mp-dialog .mp-results .mp-score-list{min-height:0;align-content:start}
+ #ov #box.mp-dialog .mp-results .mp-result-actions{min-height:0;overflow:auto;margin-top:0;align-content:start}
+}
