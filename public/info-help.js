@@ -9,7 +9,7 @@ function show(button){const text=helpText(button);if(!text)return;if(owner!==but
 document.addEventListener('pointerover',e=>{const b=e.target.closest?.(selector);if(b&&e.pointerType!=='touch')show(b)});
 document.addEventListener('pointerout',e=>{if(owner&&!pinned&&e.target.closest?.(selector)===owner&&!owner.contains(e.relatedTarget)&&!tip?.contains(e.relatedTarget)&&document.activeElement!==owner)hide()});
 document.addEventListener('pointerout',e=>{if(owner&&!pinned&&tip?.contains(e.target)&&!tip.contains(e.relatedTarget)&&!owner.contains(e.relatedTarget)&&document.activeElement!==owner)hide()});
-document.addEventListener('focusin',e=>{if(e.target.matches?.(selector))show(e.target)});
+document.addEventListener('focusin',e=>{if(e.target.matches?.(selector)&&e.target.matches(':focus-visible')&&matchMedia('(hover:hover)').matches)show(e.target)});
 document.addEventListener('focusout',e=>{if(e.target===owner&&!pinned)hide()});
 document.addEventListener('click',e=>{const b=e.target.closest?.(selector);if(b){if(owner===b&&pinned)hide();else{show(b);pinned=true}}else if(!tip?.contains(e.target))hide()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&owner){e.stopPropagation();hide()}},true);

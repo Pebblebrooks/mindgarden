@@ -239,7 +239,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 
-<meta name="mind-garden-release" content="v5.0.17">
+<meta name="mind-garden-release" content="v5.0.18">
 
 
 
@@ -322,7 +322,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
 
 
 <meta name="google" content="notranslate">
-<link rel="stylesheet" href="garden-ui-5017.css">
+<link rel="stylesheet" href="garden-ui-5018.css">
 </head>
 <body>
 <div id="gbg" aria-hidden="true"></div>
@@ -451,7 +451,7 @@ function renderHome(){
   $("levels").innerHTML=h;renderExtra();
 }
 function show(id){$("home").classList.toggle("hidden",id!=="home");$("game").classList.toggle("hidden",id!=="game");$("mini").classList.toggle("hidden",id!=="mini")}
-function overlay(html){var was=!$("ov").classList.contains("hidden"),st=$("box").scrollTop;$("box").innerHTML=html;$("ov").classList.remove("hidden");if(was)$("box").scrollTop=st;var b=$("box").querySelector("button");if(b)try{b.focus({preventScroll:true})}catch(e){b.focus()}}
+function overlay(html){var was=!$("ov").classList.contains("hidden"),st=$("box").scrollTop;$("box").innerHTML=html;$("ov").classList.remove("hidden");if(was)$("box").scrollTop=st;var b=$("box").querySelector("h2")||$("box");b.tabIndex=-1;try{b.focus({preventScroll:true})}catch(e){b.focus()}}
 function closeOv(){$("ov").classList.add("hidden")}
 
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
@@ -712,7 +712,7 @@ function rWrd(){
   if(r>=6){var extra=pick("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").filter(function(c){return L.indexOf(c)<0}),Math.min(4,1+Math.floor((r-6)/3)));sc=shuffle(sc.concat(extra))}
   g.hint=function(){if(pos>=L.length)return window.MindGardenLocale.pair("Word complete.","单词已完成。");var b=Array.from($("mp").querySelectorAll("[data-a]")).find(function(b){return !b.disabled&&sc[+b.dataset.a]===L[pos]});if(b)b.classList.add("game-hint-target");return window.MindGardenLocale.pair("Next letter: ","下一个字母：")+L[pos]};
   function slots(){return L.map(function(c,i){return i<pos?c:"_"}).join(" ")}
-  $("mp").innerHTML='<div class="big st one">'+gamePicture(it.e)+'</div><div class="seqline" id="sl">'+slots()+'</div><div class="gridm" style="--c:'+Math.min(L.length,4)+'">'+sc.map(function(c,i){return '<button class="big txt nm" data-a="'+i+'" aria-label="Letter '+c+'">'+c+'</button>'}).join("")+'</div>';
+  $("mp").innerHTML='<div class="big st one">'+gamePicture(it.e)+'</div><div class="seqline" id="sl">'+slots()+'</div><div class="gridm word-letter-grid" style="--c:'+Math.min(L.length,4)+'">'+sc.map(function(c,i){return '<button class="big txt nm" data-a="'+i+'" aria-label="Letter '+c+'">'+c+'</button>'}).join("")+'</div>';
   $("mmsg").textContent="Tap the letters in the right order to spell the word.";say(it.n);
   g.h=function(b){if(b.disabled)return;var c=sc[+b.dataset.a];if(c===L[pos]){pos++;b.disabled=true;b.style.opacity=.35;$("sl").textContent=slots();if(pos===L.length)res(bad<3,"Yes – “"+it.n+"”!")}else{bad++;$("sharedHintStatus")?$("sharedHintStatus").textContent=window.MindGardenLocale.pair("Try another letter. Hint can help.","请尝试其他字母，也可使用提示。"):$("mmsg").textContent="Not that letter – try another."}};
 }
@@ -1058,7 +1058,7 @@ load();applyPrefs();renderHome();
 
 
 
-<script src="garden-ui-5017.js"></script>
+<script src="garden-ui-5018.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
 </body>
 </html>

@@ -110,6 +110,8 @@ function players(){const box=$('box');if(!$('pn')||!$('pa')||box.dataset.simpleP
  box.querySelector('h2').textContent=T('Players','玩家');
  const more=disclosure(T('Add player','添加玩家'),'players','players'),done=$('pd'),footer=document.createElement('div');footer.className='row';footer.append(done);const name=$('pn').closest('label'),add=$('pa');box.append(more);more.append(name,$('playerNameStatus'),add);
  for(const row of box.querySelectorAll('.prow')){const select=row.querySelector('[data-p]');if(!select)continue;const id=select.dataset.p,player=save.pr[id];select.textContent=player.name;
+ row.onclick=e=>{if(e.target.closest('button,a,input,select'))return;if(!select.disabled)select.click()};
+
  const nameBlock=document.createElement('div');nameBlock.className='player-card-name';select.before(nameBlock);nameBlock.append(select);
  const records=document.createElement('small');records.className='player-record-count';records.textContent=(player.log||[]).length+' '+T((player.log||[]).length===1?'game played':'games played','局游戏');nameBlock.append(records);
  const actions=document.createElement('div');actions.className='player-card-actions';

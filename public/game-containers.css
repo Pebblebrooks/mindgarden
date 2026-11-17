@@ -234,3 +234,112 @@ html body :is(#game,#mini)>.game-header-controls{display:flex;justify-content:ce
  #mini #mp:has(>#sl)>.gridm{gap:8px!important;margin:8px auto!important}
  #mini #mp:has(>#sl)>.gridm>.big.txt{min-height:56px!important;padding:8px!important}
 }
+
+/* Approved mobile gameplay review: compact chrome, reserved actions, legible targets. */
+#mini #mp .exp-game #expNotice{width:100%;max-width:none;margin:12px auto!important;text-align:center!important;box-sizing:border-box;min-height:1.4em}
+#mini #mp .exp-choices .btn.right{background:#c5e2da!important;color:#174a42!important;border-color:#24685b!important;opacity:1!important}
+#mini #mp .exp-choices .btn.wrong{background:#f7d4cc!important;color:#752d22!important;border-color:#a74938!important;opacity:1!important}
+#mini #mp .exp-choices .answer-selected{outline:3px solid currentColor;outline-offset:-4px}
+.answer-mark{display:inline-block;margin-inline-start:6px;font-weight:700}
+#mini #mp .word-letter-grid{gap:8px!important;margin:8px auto!important}
+#mini #mp .word-letter-grid>.big.txt{height:var(--fit-cell,52px)!important;min-height:44px!important;padding:4px!important;line-height:1.1;font-size:calc(1.25rem * var(--fs))!important;border-width:2px!important;border-radius:14px!important;box-shadow:none!important}
+#mini #mp:has(>.word-letter-grid){justify-content:flex-start!important}
+#mini #mp:has(>.word-letter-grid)>.seqline{margin:4px auto!important;font-size:calc(1.2rem * var(--fs));line-height:1.3}
+#mini #mp:has(>.word-letter-grid)>.big.one{width:clamp(60px,14dvh,112px)!important;height:clamp(60px,14dvh,112px)!important;min-height:0!important;margin:4px auto!important;padding:4px!important}
+#mini #mp:has(>.word-letter-grid)>.big.one .game-picture{font-size:clamp(44px,10dvh,80px)!important;max-width:100%;max-height:100%}
+#mini #mp .ga-game:has(.route-board){padding:0!important}
+#mini #mp .ga-game:has(.route-board) .game-rules{margin:0 auto 4px}
+#mini #mp .ga-game:has(.route-board) .game-rules summary{min-height:44px;display:grid;place-items:center}
+#mini #mp .ga-game:has(.route-board)>p{margin:4px auto!important;line-height:1.25!important;min-height:0}
+#mini #mp .ga-game:has(.route-board) .route-board{width:var(--route-fit,100%);max-width:420px;min-width:0;margin:4px auto!important}
+#mini #mp .ga-game:has(.route-board) .ga-actions{display:flex;justify-content:center;gap:12px;margin:4px 0!important;position:sticky;bottom:0;background:var(--bg);z-index:3;padding:4px 0}
+#mini #mp .ga-game:has(.route-board) .ga-actions button{min-width:44px!important;min-height:44px!important;margin:0!important}
+#mini #mp .ga-notice:empty{display:none!important}
+html body #mini #gaPet .mochi-stage{touch-action:none!important;overscroll-behavior:contain}
+html body #mini #gaPet{padding:4px!important}
+html body #mini #gaPet .mochi-content{gap:6px}
+html body #mini #gaPet .mochi-stage{width:min(280px,60vw,32dvh)!important}
+#ov #box .prow{cursor:pointer}
+#ov #box .prow:has([data-p]:focus-visible){outline:3px solid var(--ink);outline-offset:-3px}
+#playerSwitchStatus{width:100%;text-align:center;line-height:1.4}
+#gameIconHelp{pointer-events:none;max-width:calc(100vw - 16px)}
+.game-ui-dialog label{display:block;margin:8px auto;text-align:center}
+.game-ui-dialog select{display:block;min-height:44px;font:inherit;margin:8px auto;width:min(100%,240px)}
+@media(max-width:699px),(max-height:550px){
+ html body #game:not(.hidden),html body #mini:not(.hidden){padding:6px max(8px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))!important}
+ html body :is(#game,#mini)>.hud{min-height:24px;padding:0!important;margin:0 auto 2px!important;line-height:1.2}
+ html body :is(#game,#mini)>.personal-session{margin:2px auto!important;padding:0!important;line-height:1.2;font-size:calc(.9rem * var(--fs));min-height:0}
+ html body :is(#game,#mini)>.game-header-controls{position:static;gap:4px;margin:0 auto!important;height:44px}
+ html body #mini #mp{padding:4px!important;scrollbar-gutter:auto}
+ html body :is(#game,#mini)>:is(.msg,#sharedHintStatus){margin:2px auto!important;line-height:1.25!important}
+ html body :is(#game,#mini)>.game-footer{gap:4px!important;margin:4px auto 0!important;padding:0!important}
+ html body :is(#game,#mini) .game-progress .progress-label{margin:0 0 3px!important;font-size:calc(.9rem * var(--fs));line-height:1.2}
+ html body :is(#game,#mini) .game-controls{gap:12px;flex-wrap:nowrap}
+ html body :is(#game,#mini) .game-controls>.game-icon{width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;padding:6px!important}
+ #mini #mp .exp-game{padding:0!important}
+ #mini #mp .exp-game h2{margin:8px 0;font-size:calc(1.1rem * var(--fs));line-height:1.3}
+ #mini #mp .exp-flag{max-height:22dvh;width:auto}
+ #mini #mp .exp-choices{margin:10px 0}
+ #mini #mp .exp-choices .btn{min-height:44px;padding:8px}
+}
+@media(min-width:700px) and (max-height:550px){
+ html body :is(#game,#mini)>.game-header-controls{position:absolute;top:4px;right:8px;width:auto!important}
+ html body :is(#game,#mini)>.hud{padding-inline:144px!important;min-height:24px}
+ html body :is(#game,#mini)>.personal-session{padding-inline:144px!important;min-height:20px}
+ html body :is(#game,#mini)>.game-footer{flex-direction:row!important;min-height:44px}
+ #mini #mp:has(>.word-letter-grid){display:grid;grid-template-columns:120px 1fr;gap:4px 16px;align-content:center}
+ #mini #mp:has(>.word-letter-grid)>.big.one{grid-column:1;grid-row:1/3}
+ #mini #mp:has(>.word-letter-grid)>.seqline,#mini #mp>.word-letter-grid{grid-column:2}
+ #mini #mp .ga-game:has(.route-board){display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+ #mini #mp .ga-game:has(.route-board)>*{grid-column:1}
+ #mini #mp .ga-game:has(.route-board)>.route-board{grid-column:2;grid-row:1/6}
+}
+@media(min-width:900px) and (min-height:800px){
+ #mini #mp .exp-game{min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.8vh,20px)}
+ #mini #mp .exp-game>*{flex-shrink:0}
+ #mini #mp .exp-game .exp-choices{width:100%;margin:8px auto}
+ #mini #mp .exp-game>h2{margin:8px auto}
+ #mini #mp .exp-game>.exp-flag{width:280px;max-height:220px}
+}
+@media(max-width:699px) and (max-height:650px){
+ #mini #mp:has(>.word-letter-grid)>.big.st.one{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;font-size:44px!important;margin:2px auto!important;padding:2px!important}
+ #mini #mp:has(>.word-letter-grid)>.seqline{margin:2px auto!important}
+ #mini #mp .word-letter-grid{margin:4px 0!important;gap:6px!important}
+}
+@media(max-width:699px) and (max-height:650px){
+ #mini #mp .ga-game:has(.route-board) .game-rules,#mini #mp .ga-game:has(.route-board) .route-board,#mini #mp .ga-game:has(.route-board)>p,#mini #mp .ga-game:has(.route-board) .ga-actions{margin:0 auto!important}
+ #mini #mp .ga-game:has(.route-board) .ga-actions{padding:0}
+}
+@media(max-height:550px){
+ html body #mini #mp:has(.route-board){padding:0!important}
+ #mini #mp .ga-game:has(.route-board) .route-board{margin:0 auto!important}
+}
+@media(max-width:699px) and (max-height:650px){
+ #mini #mp:has(>.word-letter-grid)>.big.one .game-picture{font-size:44px!important;line-height:1}
+}
+#mini #mp #expNext{align-self:center;margin-inline:auto!important}
+@media(min-width:900px) and (min-height:800px){
+ #mini #mp .exp-game{gap:clamp(8px,1vh,12px);min-height:100%;justify-content:center}
+ #mini #mp .exp-game>*{margin-top:0!important;margin-bottom:0!important}
+ #mini #mp .exp-game>.exp-flag{max-height:18vh;width:auto;max-width:280px}
+}
+@media(max-width:699px),(max-height:550px){
+ html body #mini #gaPet .mochi-content{gap:4px}
+ html body #mini #gaPet .mochi-heading h2{font-size:1rem;line-height:1.2;margin:0}
+ html body #mini #gaPet :is(.mochi-status,.mochi-audio){margin:0!important}
+ html body #mini #gaPet .mochi-stage{width:min(240px,55vw,25dvh)!important}
+ #mini #mp .ga-game:has(#gaPet)>.ga-actions{margin:4px 0!important}
+}
+@media(min-width:700px) and (max-height:550px){
+ html body #mini #gaPet .mochi-content{grid-template-columns:1fr 1fr;gap:4px 16px}
+ html body #mini #gaPet .mochi-content>*{grid-column:2}
+ html body #mini #gaPet .mochi-stage{grid-column:1;grid-row:1/8;width:min(240px,55dvh)!important}
+}
+@media(max-width:699px){
+ html body #mini #gaPet .mochi-stage{width:clamp(90px,calc(var(--play-space,480px) - 320px),min(240px,55vw,25dvh))!important}
+}
+@media(min-width:700px) and (max-height:550px){
+ #mini #mp .ga-game:has(#gaPet){position:relative}
+ html body #mini #gaPet .mochi-stage{width:min(200px,40dvh)!important;align-self:start}
+ #mini #mp .ga-game:has(#gaPet)>.ga-actions{position:absolute;left:0;bottom:0;width:48%;margin:0!important}
+}

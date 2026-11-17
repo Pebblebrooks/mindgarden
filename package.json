@@ -1,6 +1,6 @@
 {
   "name": "mind-garden-cloudflare",
-  "version": "5.0.17",
+  "version": "5.0.18",
   "private": true,
   "scripts": {
     "dev": "wrangler pages dev public --local",
@@ -23,7 +23,8 @@
     "test:approved": "node tests/game-ui-approved.test.cjs",
     "test:expansion": "node tests/first-release.test.cjs",
     "test:v5": "node tests/v5-flow.test.cjs",
-    "test:v502": "node tests/v502-layout.test.cjs && node tests/v5-flow.test.cjs && node tests/account-sync.test.cjs && node tests/device-signin.test.cjs && node tests/about-documentation.test.cjs && node tests/dashboard-preferences.test.cjs && node tests/popup-shell.test.cjs && node tests/menu-navigation.test.cjs && node tests/live-language.test.cjs && node tests/multiplayer-lifecycle.test.mjs && node tests/shared-menus.test.mjs && node tests/pet-game.test.cjs && node tests/grammar.test.cjs && node tests/release-cache.test.cjs && node tests/release-cleanup.test.cjs && node tests/board-layout.test.cjs && node tests/analytics-dashboard.test.cjs"
+    "test:v502": "node tests/v502-layout.test.cjs && node tests/v5-flow.test.cjs && node tests/account-sync.test.cjs && node tests/device-signin.test.cjs && node tests/about-documentation.test.cjs && node tests/dashboard-preferences.test.cjs && node tests/popup-shell.test.cjs && node tests/menu-navigation.test.cjs && node tests/live-language.test.cjs && node tests/multiplayer-lifecycle.test.mjs && node tests/shared-menus.test.mjs && node tests/pet-game.test.cjs && node tests/grammar.test.cjs && node tests/release-cache.test.cjs && node tests/release-cleanup.test.cjs && node tests/board-layout.test.cjs && node tests/analytics-dashboard.test.cjs",
+    "test:mobile-review": "node tests/mobile-gameplay-review.test.cjs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0",

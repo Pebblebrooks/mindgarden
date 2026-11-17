@@ -3,7 +3,7 @@ const p=__dirname+'/../public/',html=fs.readFileSync(p+'index.html','utf8'),bund
 const dom=new JSDOM(html.replace(/<script[\s\S]*?<\/script>/g,'').replace(/<style[\s\S]*?<\/style>/g,''),{url:'https://garden.test',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:new VirtualConsole()}),w=dom.window,el=id=>w.document.getElementById(id),errors=[];
 w.matchMedia=()=>({matches:false,addEventListener(){}});w.scrollTo=()=>{};w.requestAnimationFrame=()=>0;w.addEventListener('error',e=>errors.push(e.message));w.eval(html.match(/<script>([\s\S]*?)<\/script>/)[1]);w.eval(fs.readFileSync(p+bundle,'utf8'));
 
-const tick=()=>new Promise(r=>setImmediate(r)),wait=async()=>{for(let i=0;i<4;i++)await tick()},click=id=>{assert(el(id),'Missing '+id);el(id).click();if(id==='menuBack'){const confirm=w.document.querySelector('dialog.game-ui-dialog .main');assert(confirm,'Back confirmation');confirm.click()}};
+const tick=()=>new Promise(r=>setImmediate(r)),wait=async()=>{for(let i=0;i<4;i++)await tick()},click=id=>{assert(el(id),'Missing '+id);el(id).click();if(id==='menuBack'){assert(!w.document.querySelector('dialog.game-ui-dialog'),'Back from a saved result must not ask to discard gameplay')}};
 (async()=>{const api=w.MindGardenPersonal;w.beep=w.chime=w.say=()=>{};
 for(const lang of ['en','zh'])for(const context of ['all','my']){
  w.save.lang=lang;api.setup('num',2,context,true);w.mg.ok=w.mg.R;w.mdone();await wait();

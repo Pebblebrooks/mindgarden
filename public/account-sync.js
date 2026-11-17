@@ -45,7 +45,7 @@ async function sync({pull=false}={}){
  pending=Promise.resolve().then(async()=>{let confirmedSave=false;try{
   if(conflict)throw Object.assign(Error(T('Resolve the saved-profile conflict in Account settings.','请在“账户设置”中处理保存冲突。')),{code:'CONFLICT'});
   if(save.accountSync?.dirty){const document=snapshot(),sent=JSON.stringify(save.pr);message(T('Saving to account…','正在保存至账户…'));const result=await api('save',{document,revision:save.accountSync.revision});confirmedSave=true;save.accountSync.revision=result.revision;save.accountSync.dirty=JSON.stringify(save.pr)!==sent;baseline=sent;local();}
-  if((pull||!confirmedSave)&&!save.accountSync?.dirty){const remote=await api('state');if(remote.account.id!==account.id)throw Error(T('The signed-in account changed. Sign in again.','登录账户已改变，请重新登录。'));if(remote.revision!==save.accountSync.revision)apply(remote)}
+  if((pull||!confirmedSave)&&!save.accountSync?.dirty){const remote=await api('state');if(remote.account.id!==account.id)throw Error(T('The signed-in account changed. Sign in again.','登录账户已改变，请重新登录。'));if(remote.revision!==save.accountSync.revision){if(save.accountSync?.dirty){conflict=remote;throw Object.assign(Error(T('Review changes from the other device in Account settings.','请在账户设置中核对另一设备的更改。')),{code:'CONFLICT'})}apply(remote)}}
   syncFailed=false;needsSignin=false;message(T('Saved to your account.','已保存至您的账户。'));return true;
  }catch(e){syncFailed=true;if(e.status===401){needsSignin=true;sessionAccount=null;authRevision++}if(e.code==='CONFLICT'){try{conflict=await api('state')}catch{}}message(e.status===401?T('Sign in again to save. Local changes are kept.','请重新登录以保存，本地更改已保留。'):e.message);return false}finally{pending=null;if(account&&save.accountSync?.dirty&&!conflict&&navigator.onLine&&status===T('Saved to your account.','已保存至您的账户。'))schedule()}});return pending;
 }
@@ -189,7 +189,21 @@ function choosePlayers(remote,initial){
 }
 function addButton(){if($('accountOpen'))return;const host=$('pd')?.parentElement||$('settingsPlayers')?.parentElement;if(!host)return;const b=document.createElement('button');b.id='accountOpen';b.className='btn';b.dataset.accountOpen='';b.onclick=()=>panel();host.append(b);message(status)}
 const oldPlayers=window.openPl;window.openPl=function(){oldPlayers();addButton()};const oldSettings=window.openSet;window.openSet=function(){oldSettings();addButton()};$('bSet').onclick=window.openSet;$('bPl').onclick=window.openPl;
-$('box').addEventListener('click',async e=>{const b=e.target.closest('[data-p]');if(!b||!account)return;e.stopImmediatePropagation();e.preventDefault();const id=b.dataset.p,seq=++sequence;b.disabled=true;persist();const ok=await sync({pull:true});if(seq!==sequence)return;if(conflict){panel();return}if(!save.pr[id]){openPl();return}save.cp=id;load();persist();renderHome();window.MindGardenIdentity?.syncSelected();openPl();if(!ok)message(T('Using this device’s saved profile. Sync is pending.','正在使用此设备保存的资料，等待同步。'))},true);
+$('box').addEventListener('click',async e=>{
+ const b=e.target.closest('[data-p]');if(!b||!account)return;e.stopImmediatePropagation();e.preventDefault();
+ const id=b.dataset.p,seq=++sequence,accountId=account.id,previous=save.cp;
+ if(!save.pr[id])return;
+ if(persist()===false){message(T('Could not save. Please retry.','无法保存，请重试。'));return}
+ const wasDirty=save.accountSync?.dirty;applying=true;try{save.cp=id;load();if(local()===false){save.cp=previous;load();message(T('Could not save. Please retry.','无法保存，请重试。'));return}if(!wasDirty)baseline=JSON.stringify(save.pr)}finally{applying=false}
+ renderHome();window.MindGardenIdentity?.syncSelected();openPl();
+ let note=document.createElement('p');note.id='playerSwitchStatus';note.setAttribute('role','status');note.textContent=T('Selected: ','已选择：')+me().name+T(' · Checking saved progress…',' · 正在检查已保存进度…');$('box').querySelector('.list')?.before(note);
+ const ok=navigator.onLine===false?false:await sync({pull:true});
+ if(seq!==sequence||account?.id!==accountId||save.cp!==id)return;
+ if(conflict){if(note.isConnected)note.textContent=T('Player selected. Review the saved-profile conflict in Account settings.','已选择玩家。请在账户设置中核对资料冲突。');return}
+ if(!save.pr[id]){if($('pd'))openPl();return}
+ if(ok&&$('pd')){openPl();return}
+ if(note.isConnected)note.textContent=ok?T('Player ready.','玩家已就绪。'):T('Using this device’s saved profile. Sync is pending.','正在使用此设备保存的资料，等待同步。');
+},true);
 window.addEventListener('online',()=>sync({pull:true}));window.addEventListener('pagehide',()=>{if(account&&save.accountSync?.dirty)local()});
 window.MindGardenAccount={panel,settings:()=>{panel(undefined,'settings');if(!account&&$('accountOptions'))$('accountOptions').open=true},sync,saveRemoval,snapshot,infoButton,refreshUI,navLabel,get signedIn(){return signedIn()},deviceContext:()=>pendingConnection?{username:pendingConnection.auth.account.username,password:loginDetails?.password}:account?{username:account.username,password:loginDetails?.password}:null,async acceptDeviceSignin(auth){window.MindGardenMenuHistory?.clear();authRevision++;sessionAccount=auth.account;needsSignin=false;loginDetails=null;recoverySlip=null;accountNotice=T('Signed in with this device.','已使用此设备登录。');await loadConnected(auth)},get connected(){return !!account},get status(){return status},get username(){return account?.username||''}};
 window.addEventListener('resize',refreshUI);window.addEventListener('orientationchange',refreshUI);window.addEventListener('gardenLanguageChange',refreshUI);
