@@ -27,7 +27,7 @@ try{
   const release=recipient.hold('lounge',new Response(JSON.stringify({error:'Session expired'}),{status:401}));
   const pending=recipient.intervals.get(2500)();release();await pending;
   assert(recipient.w.document.getElementById('mpReconnect'),'An expired session must show a reconnect action');
-  recipient.click('mpReconnect');assert(recipient.w.document.getElementById('mpLogin'),'Reconnect returns to lobby entry');
+  recipient.click('mpReconnect');assert(recipient.w.document.getElementById('mpCreateOpen')&&recipient.w.document.getElementById('mpJoinOpen'),'Reconnect returns to the Play Together home (v6.2: no separate lobby entry)');
  }
  {
   const a=await boot();a.click('mpHistory');await tick();
@@ -36,7 +36,7 @@ try{
   assert(a.w.document.querySelector('[data-info]').dataset.info.includes('Clearing browser data'));
  }
  for(const action of ['create','join']){
-  const a=await boot();if(action==='join'){a.click('mpJoinOpen');const host=await api('login',{name:'Other host'}),r=await api('create',host);a.w.document.getElementById('mpCode').value=r.code}
+  const a=await boot();if(action==='join'){a.click('mpJoinOpen');const host=await api('login',{name:'Other host'}),r=await api('create',host);a.w.document.getElementById('mpCode').value=r.code;a.w.document.getElementById('mpCode').dispatchEvent(new a.w.Event('input'))}
   const release=a.hold(action);a.click(action==='create'?'mpCreate':'mpJoin');await tick();a.click('mpClose');release();await tick();
   assert(a.w.document.getElementById('ov').classList.contains('hidden'),'Late '+action+' must not reopen a closed lobby');
   assert(a.w.localStorage.getItem('mindGardenRoom8'),'Successful membership remains resumable');

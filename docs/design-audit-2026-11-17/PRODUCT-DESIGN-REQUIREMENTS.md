@@ -1,6 +1,6 @@
 # Mind Garden product design requirements
 
-Revision: 1.2 APPROVED BASELINE, 18 November 2026 (1.1 of 17 November plus product-owner decisions D-01 and D-02 on group play; see APPROVAL-RECORD.md). Owner: product owner. Applies to every future conversation and release. User approved the PRD, requested the two preview spacing corrections, and authorized the next implementation steps. Deployment remains gated on actual rendered review. See APPROVAL-RECORD.md.
+Revision: 1.3 APPROVED BASELINE, 18 November 2026 (1.1 of 17 November plus product-owner decisions D-01, D-02 and D-03 on group play; see APPROVAL-RECORD.md). Owner: product owner. Applies to every future conversation and release. User approved the PRD, requested the two preview spacing corrections, and authorized the next implementation steps. Deployment remains gated on actual rendered review. See APPROVAL-RECORD.md.
 
 ## Authority and change control
 
@@ -60,7 +60,7 @@ GAME-07 Word Builder packs letter tiles into a readable grid; all letters, undo 
 
 ## Group play
 
-GROUP-01 One host-named group directory listing only the groups the player belongs to (invite-only, D-01). Others join only with the group code or invite link; no broadcast invitations, no list of online players. No Rooms/Lobby/My rooms tabs, duplicate Room buttons or player dropdown. Create group -> choose game -> wait/ready -> shared countdown -> play -> results. Joined names remain visible; notify 'Boris joined' rather than an unnamed arrival. Invite disclosure holds code/sharing.
+GROUP-01 One host-named group directory listing only the groups the player belongs to (invite-only, D-01). Others join only with the group code or invite link; no broadcast invitations, no list of online players. No Rooms/Lobby/My rooms tabs, duplicate Room buttons or player dropdown. Create group -> choose game -> wait/ready -> shared countdown -> play -> results. Joined names remain visible; notify 'Boris joined' rather than an unnamed arrival. Invite disclosure holds code/sharing. D-03 (approved preview, 18 Nov 2026): the Play Together home explains the feature in one line and offers two paths, Start a group and Join a group, plus a three-step How it works; a first visit needs no separate lobby entry; returning players see Your groups first, each card naming its host with Open group on its own row. Join uses one large 6-character code field. A host alone sees the invite open (large code, Send on WhatsApp first, Copy link, Share), folding into Invite more once someone joins. Players show Ready / Not ready yet / Away chips. Guests see the group, the game and How to play before tapping I’m ready. The shared countdown states the first step and that everyone starts together.
 
 GROUP-02 Searchable categorised supported-game catalogue, with genuine variants in Game options. Current inventory: 13 types/17 variants. Do not present solo 1-15 difficulty choices until the server and game generation support them. Expanding supported games is a separate functional feature, not a cosmetic dropdown change.
 
@@ -68,7 +68,7 @@ GROUP-03 Guests mark Ready; host starts once every present guest is Ready and at
 
 GROUP-04 Keep hosting dismisses only confirmation and preserves the current room and screen. Close group ends only that group; guest Leave does not close it. Lost host/presence states must resolve visibly, with a way to leave; no indefinite unexplained waiting. Timeout behaviour (D-02): an unacknowledged arrival never closes a group; guests may join while the host is briefly away; guests see when the host is away and how long until closure; any open group closes after its host is away for 10 minutes, keeping saved scores. Further timeout changes require explicit approval and tests.
 
-GROUP-05 Results offer Choose game, Replay and Finish (host); guests see their result and a concise waiting/leave action. Continue retains members and saved scores and rechecks readiness. Group standings belong in results, not as a large table during active play.
+GROUP-05 Results name the round and the round winner, list rank, round score and running total, and offer Choose another game, Play again and End group (host, D-03); guests see their result and a concise waiting/leave action. Continue retains members and saved scores and rechecks readiness. Group standings belong in results, not as a large table during active play.
 
 ## Accounts, home and supporting screens
 

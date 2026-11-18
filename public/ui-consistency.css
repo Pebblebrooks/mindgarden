@@ -211,15 +211,110 @@ html body :is(.game-controls,.game-header-controls,#personalResult,.menu-exit-ba
 #ov #box.mp-dialog .mp-lobby-status{flex:none;margin:8px 0 0}
 #ov #box.mp-dialog .mp-lobby-status>p{margin:0 0 8px}
 #ov #box.mp-dialog .mp-lobby-status>p:empty{display:none}
-/* v6.1 (GROUP-05, LAY-05): on short screens the score list scrolls; results actions, waiting text,
-   host-away note and Leave stay reachable instead of being clipped by the dialog. */
-#ov #box.mp-dialog .mp-results{flex:1 1 auto;min-height:0;overflow:hidden}
-#ov #box.mp-dialog .mp-results .mp-score-list{flex:1 1 auto;min-height:72px;overflow:auto}
-#ov #box.mp-dialog .mp-results .mp-result-actions{flex:none;gap:8px}
-#ov #box.mp-dialog .mp-results .mp-result-actions>p{margin:0}
+
+/* v6.2 Play Together redesign (D-03, approved 18 Nov 2026). Cards, chips and actions reuse theme variables. */
+#ov #box.mp-dialog .mp-icon{flex:none;vertical-align:middle}
+#ov #box.mp-dialog :is(.btn,a.btn):has(.mp-icon){display:inline-flex;align-items:center;justify-content:center;gap:10px}
+#ov #box.mp-dialog .mp-card{display:flex;flex-direction:column;gap:10px;padding:16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.05);text-align:left}
+#ov #box.mp-dialog .mp-card.mp-plain{background:transparent}
+#ov #box.mp-dialog .mp-card :is(h3,h4,p,ol){margin:0}
+#ov #box.mp-dialog .mp-card h3{display:flex;align-items:center;gap:10px;font-size:1.1em}
+#ov #box.mp-dialog .mp-card ol{padding-left:1.4em;display:grid;gap:6px}
+#ov #box.mp-dialog .mp-intro,#ov #box.mp-dialog .mp-privacy,#ov #box.mp-dialog .mp-notice{margin:0 0 4px;text-align:center}
+#ov #box.mp-dialog .mp-privacy{opacity:.85;font-size:.95em}
+#ov #box.mp-dialog .mp-paths{display:grid;gap:12px}
+@media (min-width:720px){#ov #box.mp-dialog .mp-paths{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#ov #box.mp-dialog .mp-path .btn{width:100%;margin-top:auto}
+#ov #box.mp-dialog .mp-home .mp-shell-body,#ov #box.mp-dialog .mp-room .mp-shell-body{display:flex;flex-direction:column;gap:14px}
+#ov #box.mp-dialog .mp-home .mp-shell-body>h3,#ov #box.mp-dialog .mp-room .mp-shell-body>h3{margin:4px 0 0;text-align:left}
+#ov #box.mp-dialog .mp-divider{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
+#ov #box.mp-dialog .mp-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:340px){#ov #box.mp-dialog .mp-two{grid-template-columns:minmax(0,1fr)}}
+#ov #box.mp-dialog .mp-directory-list{display:grid;gap:12px}
+#ov #box.mp-dialog .mp-directory-room .mp-room-summary{display:grid;gap:4px}
+#ov #box.mp-dialog .mp-directory-room .mp-room-summary p{opacity:.85;font-size:.95em}
+#ov #box.mp-dialog .mp-directory-room .btn{width:100%}
+#ov #box.mp-dialog .mp-chip{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;padding:4px 10px;border-radius:999px;font-weight:600;font-size:.9em;line-height:1.3;white-space:nowrap}
+#ov #box.mp-dialog .mp-chip-ready{background:#cfe9c9;color:#173e37}
+#ov #box.mp-dialog .mp-chip-wait{border:1px dashed var(--line);background:transparent}
+#ov #box.mp-dialog .mp-chip-away{background:rgba(128,146,140,.3)}
+#ov #box.mp-dialog .mp-identity{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;width:100%}
+#ov #box.mp-dialog .mp-identity .btn{min-height:44px}
+#ov #box.mp-dialog .mp-join{display:flex;flex-direction:column;gap:12px;text-align:left}
+#ov #box.mp-dialog .mp-code-label{font-weight:600}
+#ov #box.mp-dialog .mp-code-input{width:100%;box-sizing:border-box;min-height:64px;font-size:30px;font-weight:700;letter-spacing:.35em;text-align:center;text-transform:uppercase;border-radius:14px}
+#ov #box.mp-dialog .mp-code-input::placeholder{opacity:.35}
+#ov #box.mp-dialog .mp-note{flex-direction:row;align-items:flex-start;background:transparent}
+#ov #box.mp-dialog .mp-game-summary{flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
+#ov #box.mp-dialog .mp-game-summary>div:first-child{display:grid;gap:2px;min-width:0}
+#ov #box.mp-dialog .mp-game-summary small{opacity:.85}
+#ov #box.mp-dialog .mp-game-summary strong{font-size:1.08em}
+#ov #box.mp-dialog .mp-summary-actions{display:flex;flex-direction:column;gap:8px;flex:none}
+#ov #box.mp-dialog .mp-summary-actions .btn{min-height:44px}
+#ov #box.mp-dialog .mp-invite .mp-big-code{margin:0;padding:10px;border:2px dashed var(--sun,#f3d88b);border-radius:14px;text-align:center;font-size:2.3em;font-weight:800;letter-spacing:.18em;line-height:1.15}
+#ov #box.mp-dialog .mp-invite>.btn,#ov #box.mp-dialog .mp-invite .mp-two .btn{width:100%;min-height:52px}
+#ov #box.mp-dialog .mp-link-details summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
+#ov #box.mp-dialog .mp-check{display:flex;align-items:center;gap:10px;min-height:44px}
+#ov #box.mp-dialog [hidden]{display:none!important}
+#ov #box.mp-dialog .mp-roster{list-style:none;margin:0;padding:0}
+#ov #box.mp-dialog .mp-roster li{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;min-height:52px;padding:8px 12px}
+#ov #box.mp-dialog .mp-roster .mp-player-name{flex:1 1 120px;min-width:0;text-align:left;overflow-wrap:anywhere}
+#ov #box.mp-dialog .mp-roster .mp-player-name small{opacity:.85;font-weight:500}
+#ov #box.mp-dialog .mp-roster .mp-chip{align-self:center}
+#ov #box.mp-dialog .mp-shell-footer.mp-stack{display:flex;flex-direction:column;gap:10px}
+#ov #box.mp-dialog .mp-shell-footer.mp-stack .btn{width:100%;min-height:52px}
+#ov #box.mp-dialog .mp-ghost{background:transparent!important;border:1px solid var(--line)!important;box-shadow:none!important;color:inherit!important}
+#ov #box.mp-dialog #mpHostNotice{display:flex;align-items:center;justify-content:flex-start;gap:8px;padding:10px 14px;border:0;border-radius:12px;background:#cfe9c9;color:#173e37;font-weight:600}
+#ov #box.mp-dialog .mp-lobby-status #mpHostStatus{text-align:center}
+#ov #box.mp-dialog .mp-countdown{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:12px 0}
+#ov #box.mp-dialog .mp-countdown>p{margin:0}
+#ov #box.mp-dialog .mp-count-ring{width:clamp(110px,30vmin,150px);aspect-ratio:1;border-radius:50%;border:6px solid var(--sun,#f3d88b);display:flex;align-items:center;justify-content:center}
+#ov #box.mp-dialog .mp-count-ring strong{font-size:clamp(52px,16vmin,76px);font-weight:800;line-height:1}
+#ov #box.mp-dialog .mp-first-step{font-size:1.15em;font-weight:500}
+#ov #box.mp-dialog .mp-fair{opacity:.85;font-size:.95em}
+#ov #box.mp-dialog .mp-results{display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0;overflow:hidden}
+#ov #box.mp-dialog .mp-winner{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+#ov #box.mp-dialog .mp-winner p{margin:0}
+#ov #box.mp-dialog .mp-winner-line{font-size:1.3em;font-weight:700}
+#ov #box.mp-dialog .mp-score-scroll{flex:1 1 auto;min-height:72px;overflow:auto}
+#ov #box.mp-dialog .mp-score-table{width:100%;border-collapse:separate;border-spacing:0 6px}
+#ov #box.mp-dialog .mp-score-table :is(th,td){padding:8px 6px;text-align:right;font-weight:500}
+#ov #box.mp-dialog .mp-score-table thead th{font-size:.85em;opacity:.85;font-weight:600;padding-block:0}
+#ov #box.mp-dialog .mp-score-table :is(th,td):nth-child(2){text-align:left;font-weight:600;overflow-wrap:anywhere}
+#ov #box.mp-dialog .mp-score-table td:first-child{width:40px;text-align:center}
+#ov #box.mp-dialog .mp-score-table td:last-child{font-weight:700}
+#ov #box.mp-dialog .mp-score-table tbody tr>*{border-top:1px solid var(--line)}
+#ov #box.mp-dialog .mp-score-table tr.mp-me>*{background:rgba(255,255,255,.07)}
+#ov #box.mp-dialog .mp-rank{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;font-weight:800}
+#ov #box.mp-dialog .mp-rank-1{background:#f3d88b;color:#2b2410}
+#ov #box.mp-dialog .mp-rank-2{background:#dfe6e3;color:#2b2410}
+#ov #box.mp-dialog .mp-rank-3{background:#e8c4a0;color:#2b2410}
+#ov #box.mp-dialog .mp-result-actions{flex:none;display:grid;gap:8px;margin-top:0}
+#ov #box.mp-dialog .mp-result-actions>p{margin:0;text-align:center}
+#ov #box.mp-dialog .mp-result-actions .btn{width:100%;min-height:52px}
 @media (orientation:landscape) and (max-height:500px){
- #ov #box.mp-dialog .mp-results{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);align-items:stretch;gap:16px}
- #ov #box.mp-dialog .mp-results>p{display:none}
- #ov #box.mp-dialog .mp-results .mp-score-list{min-height:0;align-content:start}
- #ov #box.mp-dialog .mp-results .mp-result-actions{min-height:0;overflow:auto;margin-top:0;align-content:start}
+ #ov #box.mp-dialog .mp-results{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:8px 16px}
+ #ov #box.mp-dialog .mp-winner{grid-column:1;grid-row:1}
+ #ov #box.mp-dialog .mp-score-scroll{grid-column:1;grid-row:2;min-height:0}
+ #ov #box.mp-dialog .mp-result-actions{grid-column:2;grid-row:1/3;overflow:auto;align-content:start}
+ #ov #box.mp-dialog .mp-winner .mp-icon{display:none}
 }
+/* Override the older shared footer rule (flex:1) so stacked actions keep their own height. */
+#ov #box.mp-dialog .mp-shell-footer.mp-stack>.btn,#ov #box.mp-dialog .mp-shell-footer.mp-stack>#mpLaunch,#ov #box.mp-dialog .mp-shell-footer.mp-stack>#mpReady{flex:0 0 auto!important;width:100%}
+#ov #box.mp-dialog .mp-shell .mp-directory-room{display:flex!important;flex-direction:column;align-items:stretch}
+#ov #box.mp-dialog .mp-shell .mp-directory-room .mp-room-summary{align-items:stretch}
+#ov #box.mp-dialog .mp-shell .mp-form{flex:none;margin:0 auto!important;width:100%}
+#ov #box.mp-dialog .mp-shell .mp-form-heading{margin:0 0 8px}
+#ov #box.mp-dialog .mp-shell .mp-roster li{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;justify-content:stretch}
+#ov #box.mp-dialog .mp-shell .mp-roster .mp-player-name{text-align:left!important;justify-self:start}
+#ov #box.mp-dialog .mp-roster .mp-player-name small{all:unset;font-size:.9em;font-weight:500;opacity:.85}
+#ov #box.mp-dialog .mp-roster .mp-player-name strong{display:inline}
+#ov #box.mp-dialog .mp-roster .mp-remove{justify-self:end}
+/* Cards never shrink below their content; the body scrolls instead (no overlapping buttons on small phones). */
+#ov #box.mp-dialog :is(.mp-home,.mp-room) .mp-shell-body>*{flex-shrink:0}
+@media (max-height:620px) and (orientation:portrait){
+ #ov #box.mp-dialog .mp-results{overflow:auto}
+ #ov #box.mp-dialog .mp-score-scroll{flex:none;overflow:visible}
+ #ov #box.mp-dialog .mp-winner .mp-icon,#ov #box.mp-dialog .mp-result-actions>p:first-child:not(:only-child){display:none}
+}
+#ov #box.mp-dialog .mp-shell .mp-roster li>span{margin-inline:0!important}
