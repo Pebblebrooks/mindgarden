@@ -17,8 +17,14 @@ try{
  // D-04: the host chooses who can join after picking the game; private is selected by default.
  const host=await boot('Alexander');host.click('mpCreateOpen');host.click('mpUseGame');
  assert.equal(host.w.document.querySelector('[data-visibility="private"]').getAttribute('aria-checked'),'true');
+ // D-11: Keep playing is the default; the host picks 3 rounds here.
+ assert.equal(host.w.document.querySelector('[data-new-rounds="keep"]').getAttribute('aria-checked'),'true');
+ host.w.document.querySelector('[data-new-rounds="3"]').click();
  host.w.document.querySelector('[data-visibility="public"]').click();host.click('mpCreateGroup');await tick();await host.poll();
  const code=JSON.parse(host.w.localStorage.getItem('mindGardenRoom8')).code;
+ assert.equal(host.w.document.querySelector('#mpRounds [data-rounds="3"]').getAttribute('aria-checked'),'true','planned rounds shown in the group');
+ host.w.document.querySelector('#mpRounds [data-rounds="5"]').click();await tick();await host.poll();
+ assert.equal(host.w.document.querySelector('#mpRounds [data-rounds="5"]').getAttribute('aria-checked'),'true','host changes rounds in the group');
  assert(host.$('mpVisibilityText').textContent.includes('Anyone using Mind Garden'));assert.equal(host.$('mpVisibilityToggle').textContent,'Make private');
  // Someone else sees it under Open groups (host name, game, count) and joins after one confirmation.
  const mei=await boot('Mei Ling');await mei.intervals.get(2500)();await tick();
@@ -35,7 +41,7 @@ try{
  sqlite.prepare('UPDATE mg_sessions SET last_seen=? WHERE token=?').run(Date.now()-60000,boris.user.token);await host.poll();
  assert(host.$('mpHostStatus').textContent.includes('Boris is away'));host.click('mpLaunch');await tick();await tick();
  assert(host.w.__confirms.at(-1).includes('Boris is away. Start without them?'));
- assert(host.$('box').textContent.includes('Round 1 is starting'));
+ assert(host.$('box').textContent.includes('Round 1 of 5 is starting'));
  for(const c of [host,mei,kow,boris])assert.deepEqual(c.errors,[]);
  console.log('PASS who-can-join step (private default), open-group listing and join confirmation, host privacy switch, start-without warning, round-starting countdown.');
 }finally{clients.forEach(c=>c.window.close());sqlite.close()}

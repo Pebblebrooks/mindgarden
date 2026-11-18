@@ -72,6 +72,9 @@ export async function onRequest({request,env}){
    const rounds=b.groupFlow?20:b.rounds===undefined?3:b.rounds,visible=b.groupFlow&&b.visibility==='public'?1:0;
    if(b.groupFlow&&!Object.hasOwn(modes,b.mode))fail('Choose an available activity.');
    if(!Number.isInteger(rounds)||rounds<1||rounds>20)fail('Choose 1 to 20 rounds.');
+   // v6.3.1 (D-11): a group may have a planned number of rounds; none means keep playing.
+   const planned=b.groupFlow&&b.plannedRounds!=null?b.plannedRounds:null;
+   if(planned!==null&&(!Number.isInteger(planned)||planned<1||planned>20))fail('Choose 1 to 20 rounds.');
    const requestId=typeof b.requestId==='string'&&/^[a-zA-Z0-9-]{8,80}$/.test(b.requestId)?b.requestId:'legacy';
    if(requestId==='legacy')await query(db,"DELETE FROM mg_room_requests WHERE token=? AND request_id='legacy' AND code IN (SELECT code FROM mg_rooms WHERE status='closed')",b.token).run();
    const existing=await one(db,'SELECT code FROM mg_room_requests WHERE token=? AND request_id=?',b.token,requestId);
@@ -86,7 +89,8 @@ export async function onRequest({request,env}){
      query(db,'INSERT INTO mg_members(code,token,joined_at) VALUES(?,?,?)',c,b.token,now),
      // v6.1 invite-only: no invitation is broadcast to other online players.
      ...(b.groupFlow?[query(db,'INSERT INTO mg_group_flow(code) VALUES(?)',c),query(db,'UPDATE mg_rooms SET mode=? WHERE code=?',b.mode,c),
-     query(db,'INSERT INTO mg_group_visibility(code,public,changed_at) VALUES(?,?,?)',c,visible,now)]:[])
+     query(db,'INSERT INTO mg_group_visibility(code,public,changed_at) VALUES(?,?,?)',c,visible,now),
+     ...(planned!==null?[query(db,'INSERT INTO mg_group_rounds(code,planned,changed_at) VALUES(?,?,?)',c,planned,now)]:[])]:[])
     ]);return json({code:c})}catch(e){if(!String(e).includes('UNIQUE'))throw e;const won=await one(db,'SELECT code FROM mg_room_requests WHERE token=? AND request_id=?',b.token,requestId);if(won)return json({code:won.code})}
    }fail('Unable to create room. Please retry.',503);
   }
@@ -145,7 +149,7 @@ export async function onRequest({request,env}){
    await db.batch([query(db,'INSERT OR IGNORE INTO mg_departures(code,token,left_at) VALUES(?,?,?)',c,b.token,now),query(db,'UPDATE mg_results SET skipped=1 WHERE code=? AND token=? AND score IS NULL',c,b.token),query(db,'DELETE FROM mg_room_memberships WHERE token=? AND code=?',b.token,c),query(db,'DELETE FROM mg_active_rooms WHERE token=? AND code=?',b.token,c)]);return json({code:c,left:true});
   }
   if(await one(db,'SELECT token FROM mg_departures WHERE code=? AND token=?',c,b.token)){const removed=!!await one(db,'SELECT token FROM mg_group_removals WHERE code=? AND token=?',c,b.token);if(a==='status')return json({code:c,left:true,removed});fail('You have left this room.',403)}
-  if(['configure','hostReady','launch','advance','close','finishRound','finishSession','bingoCall','remove','visibility'].includes(a)&&!host)fail('Only the host can do this.',403);
+  if(['configure','hostReady','launch','advance','close','finishRound','finishSession','bingoCall','remove','visibility','rounds'].includes(a)&&!host)fail('Only the host can do this.',403);
   if(a==='remove'){
    // Host removes one guest from a group that is waiting to start. Scores already saved stay.
    if(room.status!=='lobby')fail('Players can be removed only before a game starts.',409);
@@ -173,7 +177,18 @@ export async function onRequest({request,env}){
    if(!['public','private'].includes(b.visibility))fail('Choose who can join.');
    await query(db,'INSERT INTO mg_group_visibility(code,public,changed_at) VALUES(?,?,?) ON CONFLICT(code) DO UPDATE SET public=excluded.public,changed_at=excluded.changed_at',c,b.visibility==='public'?1:0,now).run();
   }
-  if(a==='remove'||a==='visibility'){}
+  if(a==='rounds'){
+   // v6.3.1 (D-11): the host sets or clears the planned number of rounds; it cannot drop below rounds already played.
+   if(!flow)fail('Only groups can change the number of rounds.',409);
+   const n=b.plannedRounds;
+   if(n===null||n===undefined)await query(db,'DELETE FROM mg_group_rounds WHERE code=?',c).run();
+   else{
+    if(!Number.isInteger(n)||n<1||n>20)fail('Choose 1 to 20 rounds.');
+    if(n<room.round)fail('That is fewer rounds than you have already played.',409);
+    await query(db,'INSERT INTO mg_group_rounds(code,planned,changed_at) VALUES(?,?,?) ON CONFLICT(code) DO UPDATE SET planned=excluded.planned,changed_at=excluded.changed_at',c,n,now).run();
+   }
+  }
+  if(a==='remove'||a==='visibility'||a==='rounds'){}
   else if(a==='configure'){
    if(!flow||!Object.hasOwn(modes,b.mode))fail('Choose an available activity.');
    if(room.round!==b.round||flow.revision!==b.revision)fail('Group changed. Try again.',409);
@@ -193,6 +208,7 @@ export async function onRequest({request,env}){
   }else if(a==='launch'||a==='advance'){
    if(!Object.hasOwn(modes,b.mode))fail('Choose an available activity.');
    if(plan&&!flow&&room.round>=plan.total_rounds)fail('This session has reached its planned number of rounds.',409);
+   if(flow){const g=await one(db,'SELECT planned FROM mg_group_rounds WHERE code=?',c);if(g&&room.round>=g.planned)fail('All '+g.planned+' rounds are played. Add more rounds or end the group.',409)}
    const count=(await one(db,'SELECT COUNT(*) AS n FROM mg_room_memberships WHERE code=?',c)).n;
    if(count<2)fail('At least two players must join before launch.');
    const pending=(await one(db,'SELECT COUNT(*) AS n FROM mg_results WHERE code=? AND round=? AND score IS NULL AND skipped=0',c,room.round)).n;
@@ -305,7 +321,7 @@ export async function onRequest({request,env}){
   flow=await one(db,'SELECT * FROM mg_group_flow WHERE code=?',c);
   if(flow){const ready=await all(db,'SELECT token FROM mg_group_ready WHERE code=? AND revision=?',c,flow.revision);const ids=await all(db,'SELECT token,id FROM mg_sessions WHERE token IN (SELECT token FROM mg_members WHERE code=?)',c);for(const p of players)p.ready=!!p.host||ready.some(r=>ids.some(i=>i.token===r.token&&i.id===p.id));}
   const bingo=room.mode==='bingo9'?await one(db,'SELECT called FROM mg_bingo_rounds WHERE code=? AND round=?',c,room.round):null;
-  return json({...availability(await one(db,'SELECT * FROM mg_room_availability WHERE code=?',c),now),groupFlow:!!flow,revision:flow?.revision,startsAt:flow?.start_at,bingo,code:c,round:room.round,mode:room.mode,seed:room.seed,status:room.status,started:flow?(room.status==='playing'||plan?.end_reason==='finished'):room.round>0,closed:room.status==='closed'||undefined,sessionFinished:plan?.end_reason==='finished',totalRounds:plan?.total_rounds||null,requiresBegin:!!plan,allReady:!plan||players.every(p=>p.departed||p.skipped||p.score!==null||p.beganAt!==null),host,me:session.id,players,serverTime:now,visibility:(await one(db,'SELECT public FROM mg_group_visibility WHERE code=?',c))?.public?'public':'private',
+  return json({...availability(await one(db,'SELECT * FROM mg_room_availability WHERE code=?',c),now),plannedRounds:flow?(await one(db,'SELECT planned FROM mg_group_rounds WHERE code=?',c))?.planned??null:null,groupFlow:!!flow,revision:flow?.revision,startsAt:flow?.start_at,bingo,code:c,round:room.round,mode:room.mode,seed:room.seed,status:room.status,started:flow?(room.status==='playing'||plan?.end_reason==='finished'):room.round>0,closed:room.status==='closed'||undefined,sessionFinished:plan?.end_reason==='finished',totalRounds:plan?.total_rounds||null,requiresBegin:!!plan,allReady:!plan||players.every(p=>p.departed||p.skipped||p.score!==null||p.beganAt!==null),host,me:session.id,players,serverTime:now,visibility:(await one(db,'SELECT public FROM mg_group_visibility WHERE code=?',c))?.public?'public':'private',
    finished:room.status!=='lobby'&&room.round>0&&players.every(p=>p.departed||p.score!==null||p.skipped===1)});
  }catch(e){
   let msg=String(e.message||e),status=e.status||500;

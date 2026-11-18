@@ -9,7 +9,8 @@ export async function ensureGroupFlow(db){
   // v6.1: the host can remove a guest from the waiting group; the guest is told why.
   `CREATE TABLE IF NOT EXISTS mg_group_removals(code TEXT NOT NULL,token TEXT NOT NULL,removed_at INTEGER NOT NULL,PRIMARY KEY(code,token))`,
   // v6.3 (D-04): a group is private unless its host opens it to everyone.
-  `CREATE TABLE IF NOT EXISTS mg_group_visibility(code TEXT PRIMARY KEY,public INTEGER NOT NULL DEFAULT 0,changed_at INTEGER NOT NULL)`
+  `CREATE TABLE IF NOT EXISTS mg_group_visibility(code TEXT PRIMARY KEY,public INTEGER NOT NULL DEFAULT 0,changed_at INTEGER NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS mg_group_rounds(code TEXT PRIMARY KEY,planned INTEGER NOT NULL,changed_at INTEGER NOT NULL)`
  ].map(sql=>db.prepare(sql).bind())).catch(e=>{installed.delete(db);throw e}));
  await installed.get(db);
 }
