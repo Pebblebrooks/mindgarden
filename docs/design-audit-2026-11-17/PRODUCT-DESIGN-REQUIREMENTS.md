@@ -1,6 +1,6 @@
 # Mind Garden product design requirements
 
-Revision: 1.4 APPROVED BASELINE, 18 November 2026 (1.1 of 17 November plus product-owner decisions D-01 to D-06; see APPROVAL-RECORD.md). Owner: product owner. Applies to every future conversation and release. User approved the PRD, requested the two preview spacing corrections, and authorized the next implementation steps. Deployment remains gated on actual rendered review. See APPROVAL-RECORD.md.
+Revision: 1.4 APPROVED BASELINE, 18 November 2026 (1.1 of 17 November plus product-owner decisions D-01 to D-10; see APPROVAL-RECORD.md). Owner: product owner. Applies to every future conversation and release. User approved the PRD, requested the two preview spacing corrections, and authorized the next implementation steps. Deployment remains gated on actual rendered review. See APPROVAL-RECORD.md.
 
 ## Authority and change control
 
@@ -95,3 +95,12 @@ QA-02 Matrix: 320x568, 390x664, 430x800 portrait; 844x390 and 1024x600 landscape
 QA-03 Release gate: zero unresolved critical clipping/missing controls, no unapproved design differences, no functional regression, no duplicate awards, preserved player/room state, About/version consistent. Separate DOM/API checks, rendered checks and physical-device checks in evidence. If a check is blocked, list it rather than silently passing.
 
 References: https://www.w3.org/TR/WCAG22/ ; https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html
+
+
+## Addendum, revision 1.4 (v6.3.0)
+
+- **Shells (D-07).** Three shells only: Home and library pages with the top bar kept in view while the page scrolls; dialogs with a fixed header and footer and one scrolling body; full-screen games. The Home top bar is fixed at the top on Home and sticky on the library page.
+- **Picture game tiles (D-08).** The group Choose game list uses picture tiles in a grid (2 columns on phones, 5 on desktop) with search, a category filter, an info button per tile and an empty state with Clear search. All 13 group games reuse their solo game picture.
+- **Public groups (D-04).** The host chooses who can join when starting a group: only people they invite (default) or anyone using Mind Garden. A public group is listed under Open groups in Play Together until the game starts; only the host name, game and player count are shown. Listing ends when the group starts, is full (8), is over 24 hours old, or the host has not been seen for 45 seconds. The host can switch privacy in Invite while the group waits. Joining from the list asks for confirmation first. Amends GROUP-01 (D-01 invite-only becomes the default, not the only option).
+- **Round control (D-09).** The host starts every round and everyone starts together. Before starting, the host is told who is away and asked to confirm. A chime (if sounds are on) and "Round N is starting" bring everyone back; a returning player sees "X is back." A player who missed a start sits out that round and is told when it started. Host-set number of rounds is not included.
+- **One word list (D-10).** Player-facing text says group, never room or lobby, in English and Chinese, including server messages.

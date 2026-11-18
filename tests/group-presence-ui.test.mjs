@@ -15,7 +15,7 @@ async function boot(name){
 }
 try{
  // Invite-only: a stranger online sees no groups, only how to start or join.
- const host=await boot('Alexander');host.click('mpCreateOpen');host.click('mpUseGame');await tick();await host.poll();
+ const host=await boot('Alexander');host.click('mpCreateOpen');host.click('mpUseGame');host.click('mpCreateGroup');await tick();await host.poll();
  const code=JSON.parse(host.w.localStorage.getItem('mindGardenRoom8')).code;
  const stranger=await boot('Stranger');await stranger.intervals.get(2500)();await tick();
  // D-03 screen 1: a first visit explains Play Together and offers Start or Join; there is no lobby or rooms list.
@@ -45,7 +45,7 @@ try{
  // Lost host after the game: guest sees results, the away note and Leave; then the automatic close message.
  host.click('mpLaunch');await tick();await tick();
  // D-03 screen 7: the shared countdown names the first step and the fairness rule.
- assert(host.$('mpCountdown'));assert(host.$('box').textContent.includes('Remember the cards'));assert(host.$('box').textContent.includes('same start time'));
+ assert(host.$('mpCountdown'));assert(host.$('box').textContent.includes('Remember the cards'));assert(host.$('box').textContent.includes('same start, for everyone'));
  sqlite.prepare('UPDATE mg_group_flow SET start_at=? WHERE code=?').run(Date.now()-1,code);
  await api('finishRound',{...host.user,code,round:1});await guest.poll();
  assert(guest.$('box').textContent.includes('Waiting for Alexander to choose the next game'));assert(guest.$('mpLeaveGroup'));

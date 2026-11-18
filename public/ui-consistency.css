@@ -324,3 +324,93 @@ html body :is(.game-controls,.game-header-controls,#personalResult,.menu-exit-ba
 /* v6.2.1 (LAY-05): Choose game keeps a stable height; only its list scrolls, so nothing jumps while searching. */
 #ov #box.mp-dialog:has(.mp-catalog){height:min(760px,calc(100dvh - 20px))}
 #ov #box.mp-dialog .mp-catalog{flex:1 1 auto;min-height:0;overflow:auto}
+/* v6.3 app shell (approved review section 3): the top bar stays in view on Home as well as All Games. */
+#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav{position:fixed!important}
+#home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav{position:sticky!important;top:6px!important;z-index:30!important}
+#home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav{top:6px!important;left:2%!important;right:2%!important;z-index:30!important}
+
+/* v6.3 stable panel sizes (approved review section 2, LAY-05). Play Together panels keep one size per
+   device class; only their content scrolls. Gameplay inside a group (.mp-playing) is not affected. */
+#ov #box.mp-dialog:not(.mp-playing){box-sizing:border-box;width:min(720px,calc(100vw - 20px))!important;max-width:none!important;height:min(760px,calc(100dvh - 64px))!important;max-height:none!important;display:flex!important;flex-direction:column;overflow:hidden}
+#ov #box.mp-dialog:not(.mp-playing):has(.mp-catalog){width:min(880px,calc(100vw - 20px))!important}
+@media (max-width:599px){#ov #box.mp-dialog:not(.mp-playing),#ov #box.mp-dialog:not(.mp-playing):has(.mp-catalog){width:calc(100vw - 20px)!important;height:calc(100dvh - 12px)!important}}
+@media (orientation:landscape) and (max-height:500px){#ov #box.mp-dialog:not(.mp-playing),#ov #box.mp-dialog:not(.mp-playing):has(.mp-catalog){width:calc(100vw - 20px)!important;height:calc(100dvh - 12px)!important}}
+#ov #box.mp-dialog:not(.mp-playing)>:is(.mp-shell,.mp-results,.mp-countdown){flex:1 1 auto;min-height:0}
+
+/* v6.3 Choose game: the All Games tile, search and category bar, option buttons and an in-place empty state. */
+#ov #box.mp-dialog .mp-catalog{display:flex!important;flex-direction:column;gap:12px;overflow:hidden!important}
+#ov #box.mp-dialog .mp-catalog-tools{flex:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,220px);gap:10px}
+@media (max-width:520px){#ov #box.mp-dialog .mp-catalog-tools{grid-template-columns:minmax(0,1fr)}}
+#ov #box.mp-dialog .mp-search{position:relative;display:block!important}
+#ov #box.mp-dialog .mp-search input{width:100%;min-height:52px!important;padding:0 48px 0 16px!important;border-radius:14px;text-align:left!important;text-align-last:auto!important}
+#ov #box.mp-dialog .mp-search .mp-search-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;display:flex;opacity:.8}
+#ov #box.mp-dialog .mp-search input::-webkit-search-cancel-button{margin-right:28px}
+#ov #box.mp-dialog .mp-category{display:block!important}
+#ov #box.mp-dialog .mp-category select{width:100%;min-height:52px!important;border-radius:14px}
+#ov #box.mp-dialog .mp-catalog-body{flex:1 1 auto;min-height:0;overflow:auto;padding:2px}
+#ov #box.mp-dialog .mp-catalog .mp-game-cards{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(140px,1fr))!important;gap:12px!important;margin:0!important}
+@media (max-width:599px){#ov #box.mp-dialog .mp-catalog .mp-game-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+#ov #box.mp-dialog .mp-tile-wrap{position:relative;min-width:0}
+#ov #box.mp-dialog .mp-tile-wrap[hidden]{display:none!important}
+#ov #box.mp-dialog .mp-game-tile{position:relative;width:100%;min-height:136px!important;margin:0!important;padding:14px 8px!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:16px!important;white-space:normal!important;line-height:1.25}
+#ov #box.mp-dialog .mp-game-tile .mp-tile-art{width:60px;height:60px;display:flex;align-items:center;justify-content:center}
+#ov #box.mp-dialog .mp-game-tile .mp-tile-art :is(img,.game-illustration){width:56px;height:56px;object-fit:contain}
+#ov #box.mp-dialog .mp-game-tile .mp-tile-art .picture-text{display:none}
+#ov #box.mp-dialog .mp-game-tile .mp-tile-name{font-weight:600;text-align:center!important}
+#ov #box.mp-dialog .mp-game-tile .mp-tile-check{position:absolute;left:8px;top:8px;width:28px;height:28px;border-radius:50%;display:none;align-items:center;justify-content:center;background:var(--gold,#ffd044);color:#163e37}
+#ov #box.mp-dialog .mp-game-tile[aria-pressed=true]{outline:3px solid var(--gold,#ffd044);outline-offset:-3px}
+#ov #box.mp-dialog .mp-game-tile[aria-pressed=true] .mp-tile-check{display:flex}
+#ov #box.mp-dialog .mp-tile-info{position:absolute;right:6px;top:6px;z-index:1}
+#ov #box.mp-dialog .mp-no-games{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:100%;padding:24px 12px;border:1px dashed var(--line);border-radius:16px;box-sizing:border-box}
+#ov #box.mp-dialog .mp-no-games[hidden]{display:none!important}
+#ov #box.mp-dialog .mp-no-games p{margin:0}
+#ov #box.mp-dialog .mp-variant{flex:none;display:grid;gap:8px}
+#ov #box.mp-dialog .mp-variant>p{margin:0;font-weight:600}
+#ov #box.mp-dialog .mp-variant .btn{min-height:52px}
+#ov #box.mp-dialog .mp-catalog>.mp-shell-footer{position:static!important;background:none!important;padding:10px 0 0!important}
+#ov #box.mp-dialog .sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#ov #box.mp-dialog .mp-game-tile .mp-tile-art .number-symbol{font-size:52px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;width:56px;height:56px}
+#ov #box.mp-dialog .mp-game-tile::before,#ov #box.mp-dialog .mp-game-tile::after{content:none!important;display:none!important}
+#ov #box.mp-dialog .mp-game-tile,#ov #box.mp-dialog .mp-game-tile[aria-pressed]{background:rgba(255,255,255,.06)!important;color:inherit!important;border:1px solid var(--line)!important;box-shadow:none!important}
+html[data-v4-mode=light] #ov #box.mp-dialog .mp-game-tile,html[data-v4-mode=light] #ov #box.mp-dialog .mp-game-tile[aria-pressed]{background:#f4f8f0!important}
+#ov #box.mp-dialog .mp-game-tile[aria-pressed=true]{outline:3px solid var(--gold,#ffd044)!important;outline-offset:-3px;background:rgba(255,208,68,.14)!important}
+html body #ov #box.mp-dialog .mp-catalog .mp-game-tile[aria-pressed=true]{background:rgba(255,208,68,.14)!important;background-image:none!important;color:inherit!important;border:1px solid var(--line)!important;outline:3px solid var(--gold,#ffd044)!important;outline-offset:-3px}
+html[data-v4-mode=light] body #ov #box.mp-dialog .mp-catalog .mp-game-tile[aria-pressed=true]{background:#fff5d6!important;color:#173e37!important;outline-color:#b7860b!important}
+html body #ov #box.mp-dialog .mp-catalog .mp-game-tile:not([aria-pressed=true]){background-image:none!important}
+
+/* v6.3 public groups (D-04): who can join, open groups and the invite switch. */
+#ov #box.mp-dialog .mp-choices{display:grid;gap:12px}
+#ov #box.mp-dialog .mp-choice{display:flex!important;align-items:flex-start;gap:14px;width:100%;min-height:72px;margin:0!important;padding:16px!important;border-radius:16px!important;text-align:left!important;white-space:normal!important;background:rgba(255,255,255,.06)!important;background-image:none!important;color:inherit!important;border:1px solid var(--line)!important;box-shadow:none!important}
+html[data-v4-mode=light] #ov #box.mp-dialog .mp-choice{background:#f4f8f0!important}
+#ov #box.mp-dialog .mp-choice[aria-checked=true]{outline:3px solid var(--gold,#ffd044)!important;outline-offset:-3px}
+html[data-v4-mode=light] #ov #box.mp-dialog .mp-choice[aria-checked=true]{outline-color:#b7860b!important}
+#ov #box.mp-dialog .mp-choice .mp-radio{flex:none;width:24px;height:24px;margin-top:2px;border-radius:50%;border:2px solid currentColor;box-sizing:border-box;display:flex;align-items:center;justify-content:center}
+#ov #box.mp-dialog .mp-choice[aria-checked=true] .mp-radio::after{content:'';width:12px;height:12px;border-radius:50%;background:currentColor}
+#ov #box.mp-dialog .mp-choice-text{display:grid;gap:6px;font-weight:400}
+#ov #box.mp-dialog .mp-choice-text strong{display:flex;align-items:center;gap:8px;font-size:1.05em}
+#ov #box.mp-dialog .mp-open-groups{display:grid;gap:10px}
+#ov #box.mp-dialog .mp-open-groups>h3{display:flex;align-items:center;gap:8px;margin:4px 0 0;text-align:left}
+#ov #box.mp-dialog .mp-open-head{display:flex;align-items:center;gap:14px;min-width:0}
+#ov #box.mp-dialog .mp-open-head>div{display:grid;gap:2px;min-width:0}
+#ov #box.mp-dialog .mp-open-head :is(h4,p){margin:0}
+#ov #box.mp-dialog .mp-open-art{flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center}
+#ov #box.mp-dialog .mp-open-art :is(img,.game-illustration){width:44px;height:44px;object-fit:contain}
+#ov #box.mp-dialog .mp-open-art .picture-text{display:none}
+#ov #box.mp-dialog .mp-open-art .number-symbol{font-size:40px;font-weight:800}
+#ov #box.mp-dialog .mp-open-room .btn{width:100%;min-height:48px}
+#ov #box.mp-dialog .mp-visibility{display:grid;gap:8px;padding-top:4px;border-top:1px solid var(--line)}
+#ov #box.mp-dialog .mp-visibility p{margin:8px 0 0}
+#ov #box.mp-dialog .mp-visibility .btn{min-height:48px;justify-self:start}
+#ov #box.mp-dialog .mp-round-starting{font-size:1.25em;font-weight:700;margin:0}
+/* Card content reads left-aligned (approved text rules); legacy rules centred spans and summaries. */
+#ov #box.mp-dialog .mp-choice :is(span,strong){text-align:left!important;text-align-last:auto!important}
+#ov #box.mp-dialog .mp-game-summary>.mp-open-head{display:flex!important;flex-direction:row;align-items:center;gap:14px}
+#ov #box.mp-dialog .mp-game-summary>.mp-open-head>div{display:grid;gap:2px}
+#ov #box.mp-dialog .mp-shell .mp-directory-room .mp-room-summary{align-items:flex-start!important}
+#ov #box.mp-dialog .mp-directory-room .mp-room-summary :is(h4,p),#ov #box.mp-dialog .mp-open-room :is(h4,p){text-align:left!important}
+#ov #box.mp-dialog .mp-first-sub{margin:0;opacity:.9}
+/* v6.3 render review fixes */
+#ov #box.mp-dialog .mp-big-code{font-size:clamp(1.6em,9vw,2.3em)!important;letter-spacing:clamp(.06em,1.6vw,.18em)!important;white-space:nowrap;overflow-wrap:normal}
+#ov #box.mp-dialog .mp-countdown{justify-content:safe center!important;place-content:safe center!important}
+#ov #box.mp-dialog .mp-countdown>p,#ov #box.mp-dialog .mp-countdown p.text-wraps{text-align:center!important}
+#ov #box.mp-dialog .mp-card ol li,#ov #box.mp-dialog .mp-card ol li.text-wraps{text-align:left!important}

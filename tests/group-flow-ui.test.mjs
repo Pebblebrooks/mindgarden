@@ -14,14 +14,14 @@ async function boot(name){
  return {w,user,intervals,errors,$:id=>w.document.getElementById(id),click(id){assert(this.$(id),'Missing '+id);this.$(id).click()},async poll(){await intervals.get(1500)();await tick()}};
 }
 try{
- const host=await boot('Alexander');host.click('mpCreateOpen');assert.equal(host.w.document.querySelectorAll('[data-group-game]').length,13);host.$('mpGameSearch').value='pairs';host.$('mpGameSearch').dispatchEvent(new host.w.Event('input'));assert.equal(host.w.document.querySelectorAll('[data-group-game]:not([hidden])').length,1);host.click('mpUseGame');await tick();await host.poll();
+ const host=await boot('Alexander');host.click('mpCreateOpen');assert.equal(host.w.document.querySelectorAll('[data-group-game]').length,13);host.$('mpGameSearch').value='pairs';host.$('mpGameSearch').dispatchEvent(new host.w.Event('input'));assert.equal(host.w.document.querySelectorAll('[data-group-game]:not([hidden])').length,1);host.click('mpUseGame');host.click('mpCreateGroup');await tick();await host.poll();
  const code=JSON.parse(host.w.localStorage.getItem('mindGardenRoom8')).code;
  assert(host.$('box').textContent.includes('Alexander’s group'));assert(!host.$('mpRosterSelect'));assert(!host.$('mpTab-mine'));assert(host.$('mpLaunch').disabled);
  const guest=await boot('Boris');guest.click('mpJoinOpen');guest.$('mpCode').value=code;guest.$('mpCode').dispatchEvent(new guest.w.Event('input'));guest.click('mpJoin');await tick();await guest.poll();await host.poll();
  await host.intervals.get(2500)();assert(host.$('mpHostNotice').textContent.includes('Boris'));assert(!host.$('mpHostNotice').textContent.includes('I’m here'));
  guest.click('mpReady');await tick();await host.poll();assert.equal(host.$('mpLaunch').disabled,false);assert(host.$('mpRoster').textContent.includes('Boris'));
  host.w.MindGardenMultiplayer.exit();assert(host.$('mpHostExit'));host.click('mpKeepHosting');assert(!host.$('mpHostExit'));assert(!host.$('ov').classList.contains('hidden'));assert(host.$('mpLaunch'));assert.equal(JSON.parse(host.w.localStorage.getItem('mindGardenRoom8')).code,code);
- host.click('mpChangeGame');host.w.document.querySelector('[data-group-game="times8"]').click();host.click('mpUseGame');await tick();await guest.poll();await host.poll();assert(!guest.$('mpReady').disabled);assert(host.$('mpLaunch').disabled);
+ host.click('mpChangeGame');host.w.document.querySelector('[data-tile-key="times8"]').click();host.click('mpUseGame');await tick();await guest.poll();await host.poll();assert(!guest.$('mpReady').disabled);assert(host.$('mpLaunch').disabled);
  guest.click('mpReady');await tick();await host.poll();host.click('mpLaunch');await tick();assert(host.$('mpCountdown'));await guest.poll();assert(guest.$('mpCountdown'));
  // Server elapsed countdown, then both clients show the same quiz without Begin.
  sqlite.prepare('UPDATE mg_group_flow SET start_at=? WHERE code=?').run(Date.now()-1,code);await host.poll();await guest.poll();assert(host.w.document.querySelector('[data-answer]'));assert(guest.w.document.querySelector('[data-answer]'));assert(!host.$('mpBeginGame'));assert.equal(host.w.document.querySelector('.seqline').textContent,guest.w.document.querySelector('.seqline').textContent);

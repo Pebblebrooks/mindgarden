@@ -28,7 +28,7 @@ document.addEventListener('click',e=>{
 // v6.2.1 text rules (VIS-02 + approved review section 1). Answer feedback lines (#mmsg,
 // [data-feedback]) keep one sentence per line. Every other paragraph stays one flowing block:
 // centred while it fits on one line, left-aligned as soon as it wraps.
-const FEEDBACK='#mmsg,[data-feedback]',KEEP_CENTRE='.keep-centre,.mp-big-code,.mp-winner-line,.mp-count-ring,button';
+const FEEDBACK='#mmsg,[data-feedback]',KEEP_CENTRE='.keep-centre,.mp-countdown p,.mp-big-code,.mp-winner-line,.mp-count-ring,button';
 function splitFeedback(p){
  const text=p.textContent.trim();
  const lines=text.split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*|\n+/u).filter(Boolean);
