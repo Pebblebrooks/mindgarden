@@ -25,28 +25,47 @@ document.addEventListener('click',e=>{
  cards.forEach((card,i)=>card.hidden=i!==next);review.querySelector('.answer-page').textContent=T('Review ','回顾 ')+(next+1)+' / '+cards.length;
  review.querySelector('[data-review-step="-1"]').disabled=next===0;review.querySelector('[data-review-step="1"]').disabled=next===cards.length-1;
 });
-// Split plain game instructions into short lines without changing their wording,
-// interactive elements, tables, form values, or answer-button content.
+// v6.2.1 text rules (VIS-02 + approved review section 1). Answer feedback lines (#mmsg,
+// [data-feedback]) keep one sentence per line. Every other paragraph stays one flowing block:
+// centred while it fits on one line, left-aligned as soon as it wraps.
+const FEEDBACK='#mmsg,[data-feedback]',KEEP_CENTRE='.keep-centre,.mp-big-code,.mp-winner-line,.mp-count-ring,button';
+function splitFeedback(p){
+ const text=p.textContent.trim();
+ const lines=text.split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*|\n+/u).filter(Boolean);
+ if(lines.length<2)return;
+ const locale=window.MindGardenLocale,english=locale.convert(text,'en');
+ const chinese=locale.convert(locale.has(english)?english:tr(english),'zh');
+ const format=value=>value.split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*|\n+/u).filter(Boolean).join('\n');
+ locale.add(format(english),format(chinese));
+ p.classList.add('game-copy-lines');
+ const formatted=format(save.lang==='zh'?chinese:english);
+ if(p.textContent!==formatted)p.textContent=formatted;
+}
+function lineCount(p){
+ if(!p.isConnected||!p.offsetParent)return 0;
+ const range=document.createRange();range.selectNodeContents(p);
+ const tops=new Set();for(const r of range.getClientRects())if(r.width>0)tops.add(Math.round(r.top));
+ return tops.size;
+}
+function align(p){
+ if(p.closest(KEEP_CENTRE))return;
+ const wraps=lineCount(p)>1;
+ if(p.classList.contains('text-wraps')!==wraps)p.classList.toggle('text-wraps',wraps);
+}
 function readable(root){
  const paragraphs=root.matches?.('p,#mmsg')?[root]:[...root.querySelectorAll('p,#mmsg')];
  for(const p of paragraphs){
-  if(p.children.length||p.matches('[data-inline-copy]')||p.closest('button,pre,code,[contenteditable]'))continue;
-  const text=p.textContent.trim();
-  const lines=text.split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*|\n+/u).filter(Boolean);
-  if(lines.length<2)continue;
-  const locale=window.MindGardenLocale,english=locale.convert(text,'en');
-  const chinese=locale.convert(locale.has(english)?english:tr(english),'zh');
-  const format=value=>value.split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[。！？])\s*|\n+/u).filter(Boolean).join('\n');
-  locale.add(format(english),format(chinese));
-  p.classList.add('game-copy-lines');
-  const formatted=format(save.lang==='zh'?chinese:english);
-  if(p.textContent!==formatted)p.textContent=formatted;
+  if(p.closest('pre,code,[contenteditable]'))continue;
+  if(p.matches(FEEDBACK)&&!p.children.length&&!p.matches('[data-inline-copy]'))splitFeedback(p);
+  else if(p.classList.contains('game-copy-lines')&&!p.matches(FEEDBACK)){p.classList.remove('game-copy-lines');p.textContent=p.textContent.replace(/\n+/g,' ')}
+  align(p);
  }
 }
-const roots=['mp','mmsg','box'].map(id=>document.getElementById(id)).filter(Boolean);
+const roots=['mp','mmsg','box','game','mini','home'].map(id=>document.getElementById(id)).filter(Boolean);
 let queued=false;
-const observer=new MutationObserver(()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;observer.disconnect();roots.forEach(readable);observe()})});
+const observer=new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;observer.disconnect();roots.forEach(readable);observe()})});
 function observe(){roots.forEach(root=>observer.observe(root,{childList:true,subtree:true,characterData:true}))}
+let resizeTimer=null;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>roots.forEach(readable),120)});
 roots.forEach(readable);observe();
 window.MindGardenFeedback={compare,readable};
 })();

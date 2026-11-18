@@ -1,6 +1,6 @@
 # Mind Garden product design requirements
 
-Revision: 1.3 APPROVED BASELINE, 18 November 2026 (1.1 of 17 November plus product-owner decisions D-01, D-02 and D-03 on group play; see APPROVAL-RECORD.md). Owner: product owner. Applies to every future conversation and release. User approved the PRD, requested the two preview spacing corrections, and authorized the next implementation steps. Deployment remains gated on actual rendered review. See APPROVAL-RECORD.md.
+Revision: 1.4 APPROVED BASELINE, 18 November 2026 (1.1 of 17 November plus product-owner decisions D-01 to D-06; see APPROVAL-RECORD.md). Owner: product owner. Applies to every future conversation and release. User approved the PRD, requested the two preview spacing corrections, and authorized the next implementation steps. Deployment remains gated on actual rendered review. See APPROVAL-RECORD.md.
 
 ## Authority and change control
 
@@ -16,7 +16,7 @@ PRD-04 Deviations requested by anyone, including the product owner in future con
 
 VIS-01 Preserve the established pastel light theme and deep teal dark theme. Gameplay has a quiet plain background. Home scenery is decorative and must not delay or obscure navigation/cards. Preserve the selected scenery when changing theme.
 
-VIS-02 Centre titles and short task/feedback text. Left-align multi-line instructions, help lists and About paragraphs. Do not use text-align-last justification. Maintain a consistent 8px spacing rhythm; standard gaps 8/16/24/32px. Space grows with available height but never strands a question far from its answers.
+VIS-02 Centre titles and short task/feedback text. Left-align multi-line instructions, help lists and About paragraphs. Do not use text-align-last justification. D-05 (approved 18 Nov 2026): a paragraph stays one flowing block; it is centred while it fits on one line and left-aligned as soon as it wraps, on every screen and device. Card titles and card content, form labels and hints are left-aligned. Only in-game answer feedback keeps one sentence per line. Big single values (group code, countdown) stay centred. Lines stay under about 65 characters. Maintain a consistent 8px spacing rhythm; standard gaps 8/16/24/32px. Space grows with available height but never strands a question far from its answers.
 
 VIS-03 Use one family of vector icons. Sizes: normal glyph 24-26px; circled information glyph 20-22px; yellow bulb 28-32px. Independent touch targets are at least 44x44 CSS px, preferably 48x48. Small glyph does not mean small hit area. Never enlarge an icon to fill an entire button.
 
@@ -36,7 +36,7 @@ LAY-03 Keep question, task object and choices as one group. Avoid large blank ga
 
 LAY-04 Ordinary gameplay at normal text size targets no scrolling. At large text or physically small screens, never hide answers, clip controls or shrink targets to pretend everything fits. Reflow first; if still impossible, use an explicitly documented scrollable content region while navigation remains visible. This accessibility exception must be recorded per game/viewport; it is not an excuse for a normal-size mobile overflow.
 
-LAY-05 Dialogs grow with available height up to safe viewport bounds. Header and actions remain reachable; only content scrolls where needed. Avoid nested page/dialog scrolling. Opening Help/Options scrolls the expanded content into view without moving focus unexpectedly or hiding the trigger. The software keyboard must not cover forms or Submit.
+LAY-05 Dialogs grow with available height up to safe viewport bounds. Header and actions remain reachable; only content scrolls where needed. Avoid nested page/dialog scrolling. D-06 (approved 18 Nov 2026): list, form and catalogue panels keep a stable size per device class and never resize with their content: phone portrait full width minus 20 px and full height minus 12 px; phone landscape (under 500 px tall) full width minus 20 px and full height minus 12 px; tablet and desktop 720 px wide (game list 880 px) and up to 760 px tall, never taller than the screen minus 64 px. Empty results show inside the same space. Short confirmations stay small dialogs. Opening Help/Options scrolls the expanded content into view without moving focus unexpectedly or hiding the trigger. The software keyboard must not cover forms or Submit.
 
 LAY-06 Wrapped text determines its own height. Place the following board, card or control after the entire text block, never from a fixed first-line baseline. Preserve at least 16 CSS px between the full question block and task board, and 16-24px between a section heading and its first card. Long names/status labels wrap within cards with 12-16px inner gaps. These separations must survive translation, larger text and shorter viewports; reduce other whitespace or reflow before shrinking type or targets.
 

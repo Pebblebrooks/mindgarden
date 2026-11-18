@@ -174,3 +174,5 @@ html[data-hc="1"] #libraryDisplay::before,html[data-hc="1"] #libraryDisplay::aft
 [data-v4-mode="dark"] .answer-pair{background:#25453d;color:#f3f7ee;}
 [data-v4-mode="dark"] .answer-pending .answer-pair{background:#34453f;}
 @media(max-height:500px){.answer-pair{padding:8px;gap:4px;}}
+/* v6.2.1 text rules: a paragraph that wraps reads left-aligned; one-line text keeps its centring. */
+.text-wraps,#box p.text-wraps,#ov #box p.text-wraps,#game p.text-wraps,#mini p.text-wraps,#home p.text-wraps{text-align:left!important;text-align-last:auto!important}

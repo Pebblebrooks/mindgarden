@@ -318,3 +318,9 @@ html body :is(.game-controls,.game-header-controls,#personalResult,.menu-exit-ba
  #ov #box.mp-dialog .mp-winner .mp-icon,#ov #box.mp-dialog .mp-result-actions>p:first-child:not(:only-child){display:none}
 }
 #ov #box.mp-dialog .mp-shell .mp-roster li>span{margin-inline:0!important}
+/* v6.2.1: checkboxes keep their own size (an old shared rule made every input 100% wide, causing a sideways scrollbar). */
+#ov #box.mp-dialog .mp-shell input[type=checkbox],#ov #box.mp-dialog input[type=checkbox]{width:auto!important;min-width:24px;min-height:24px!important;height:24px;flex:none;margin:0}
+#ov #box.mp-dialog .mp-shell .mp-check{display:flex!important;grid-template-columns:none;align-items:center;gap:10px}
+/* v6.2.1 (LAY-05): Choose game keeps a stable height; only its list scrolls, so nothing jumps while searching. */
+#ov #box.mp-dialog:has(.mp-catalog){height:min(760px,calc(100dvh - 20px))}
+#ov #box.mp-dialog .mp-catalog{flex:1 1 auto;min-height:0;overflow:auto}
