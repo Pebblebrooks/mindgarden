@@ -1,6 +1,6 @@
 # Mind Garden product design requirements
 
-Revision: 1.4 APPROVED BASELINE, 18 November 2026 (1.1 of 17 November plus product-owner decisions D-01 to D-11; see APPROVAL-RECORD.md). Owner: product owner. Applies to every future conversation and release. User approved the PRD, requested the two preview spacing corrections, and authorized the next implementation steps. Deployment remains gated on actual rendered review. See APPROVAL-RECORD.md.
+Revision: 1.5 APPROVED BASELINE, 21 November 2026 (1.1 of 17 November plus product-owner decisions D-01 to D-17; see APPROVAL-RECORD.md). Owner: product owner. Applies to every future conversation and release. User approved the PRD, requested the two preview spacing corrections, and authorized the next implementation steps. Deployment remains gated on actual rendered review. See APPROVAL-RECORD.md.
 
 ## Authority and change control
 
@@ -105,3 +105,11 @@ References: https://www.w3.org/TR/WCAG22/ ; https://www.w3.org/WAI/WCAG22/Unders
 - **Round control (D-09).** The host starts every round and everyone starts together. Before starting, the host is told who is away and asked to confirm. A chime (if sounds are on) and "Round N is starting" bring everyone back; a returning player sees "X is back." A player who missed a start sits out that round and is told when it started. Host-set number of rounds is not included.
 - **One word list (D-10).** Player-facing text says group, never room or lobby, in English and Chinese, including server messages.
 - **Planned rounds (D-11, v6.3.1).** When starting a group the host chooses 1, 3 or 5 rounds, or Keep playing (default, the earlier behaviour). The host can change it in the group, but not below the rounds already played. Labels read "Round 2 of 5". After the last planned round, results are titled Final results with the overall winner by total; the host can play more rounds (the same number again, up to 20 in all), choose another game, or end the group. The server refuses to start a round beyond the plan.
+
+
+## Addendum, revision 1.5 (v6.4.0, 21 November 2026)
+
+- **Save and exit (D-16, isolated exception to GAME-01).** Sudoku and Garden picture puzzles only: the exit dialog is titled "Leave <game>?" and offers Save and exit (primary), Keep playing and Exit without saving. Saves stay on the device, one per game per player, and score only when finished. All other games keep the shared Confirm Exit dialog.
+- **Guides and explanations (D-13, D-15).** Number Patterns names the rule type above the sequence without numbers. Gentle dominoes shows a three-step guide on a player's first game.
+- **Family album (D-14).** Per player, device-only, up to 12 named photos; never in exports or account sync (APP-02).
+- **Caregiver information (D-12) and progress comparison (D-17)** as recorded in APPROVAL-RECORD.md.

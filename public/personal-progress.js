@@ -16,6 +16,12 @@ function open(leader=false){
  const rows=p=>periodRows(scoreRows(p,game.value,level.value),+period.value),avg=a=>a.length?a.reduce((s,r)=>s+r.r,0)/a.length:0;
  function capacity(){return 10}
  function bars(items){return '<div class="analytics-bars">'+items.map(x=>'<div><div><span>'+esc(x.label)+'</span><strong>'+pct(x.v)+'%</strong></div><div class="analytics-track"><i style="width:'+Math.max(0,Math.min(100,pct(x.v)))+'%"></i></div></div>').join('')+'</div>'}
+ // Item 5 (B.46): compare the latest game with the player's own 30-day average (same game and level).
+ function compareLine(leader){let el=$('analysisCompare');if(!el){el=document.createElement('p');el.id='analysisCompare';el.className='analytics-compare';$('analysisStats').after(el)}
+  const all=leader?[]:scoreRows(me(),game.value,level.value),last=all.at(-1),day=86400000,stamp=r=>Date.parse(String(r.d).slice(0,10)+'T12:00:00'),prior=last?all.slice(0,-1).filter(r=>stamp(last)-stamp(r)<=30*day&&stamp(r)<=stamp(last)):[];
+  if(!last||prior.length<2){el.hidden=true;el.textContent='';return}
+  const average=pct(prior.reduce((a,r)=>a+r.r,0)/prior.length),now=pct(last.r),diff=now-average;el.hidden=false;
+  el.textContent=diff===0?T('Your last game: '+now+'%, the same as your 30-day average.','最近一局：'+now+'%，与您 30 天的平均成绩相同。'):T('Your last game: '+now+'%, '+Math.abs(diff)+(Math.abs(diff)===1?' point ':' points ')+(diff>0?'above':'below')+' your 30-day average ('+average+'%).','最近一局：'+now+'%，比您 30 天的平均成绩（'+average+'%）'+(diff>0?'高':'低')+' '+Math.abs(diff)+' 个百分点。')}
  function draw(){
  if(!panel.isConnected)return;
  const own=rows(me()),size=capacity();panel.querySelector('.analytics-filter-drawer summary').textContent=T('Filters','筛选')+' · '+(name(game.value)||'')+' · '+(level.value==='unknown'?T('Not recorded','未记录'):T('Level ','难度 ')+level.value);let count=0,body='',stats='';
@@ -36,7 +42,7 @@ function open(leader=false){
  else if(tab===1){const items=games.map(g=>{const a=periodRows(scoreRows(me(),g,level.value),+period.value);return{label:name(g),v:avg(a),n:a.length}}).filter(x=>x.n);count=items.length;page=Math.min(page,Math.max(0,Math.ceil(count/size)-1));body=bars(items.slice(page*size,(page+1)*size))||'<p>'+T('No scores for these filters','此筛选条件下无成绩')+'</p>'}
  else{count=own.length;page=Math.min(page,Math.max(0,Math.ceil(count/size)-1));body='<table><thead><tr><th>'+T('Date','日期')+'</th><th>'+T('Score','成绩')+'</th><th>'+T('Time','用时')+'</th></tr></thead><tbody>'+own.slice().reverse().slice(page*size,(page+1)*size).map(r=>'<tr><td>'+esc(r.d)+'</td><td>'+pct(r.r)+'%</td><td>'+fmt(r.s)+'</td></tr>').join('')+'</tbody></table>'}
  }
- $('analysisStats').innerHTML=stats;$('levelScoreChart').innerHTML=body;const pages=Math.max(1,Math.ceil(count/size));$('analysisPages').innerHTML=count?'<button class="btn" id="analysisPrev" aria-label="'+T('Previous page','上一页')+'" '+(!page?'disabled':'')+'>‹</button><span>'+(page+1)+' / '+pages+'</span><button class="btn" id="analysisNext" aria-label="'+T('Next page','下一页')+'" '+(page+1>=pages?'disabled':'')+'>›</button>':'';
+ $('analysisStats').innerHTML=stats;compareLine(leader);$('levelScoreChart').innerHTML=body;const pages=Math.max(1,Math.ceil(count/size));$('analysisPages').innerHTML=count?'<button class="btn" id="analysisPrev" aria-label="'+T('Previous page','上一页')+'" '+(!page?'disabled':'')+'>‹</button><span>'+(page+1)+' / '+pages+'</span><button class="btn" id="analysisNext" aria-label="'+T('Next page','下一页')+'" '+(page+1>=pages?'disabled':'')+'>›</button>':'';
  if($('analysisPrev'))$('analysisPrev').onclick=()=>{page--;draw()};if($('analysisNext'))$('analysisNext').onclick=()=>{page++;draw()};
  }
  function change(){const levels=[...new Set(profiles.flatMap(x=>(x.p.log||[]).filter(r=>r.g===game.value).map(r=>r.level||'unknown')))].sort((a,b)=>(Number(a)||99)-(Number(b)||99));level.innerHTML=levels.map(n=>'<option value="'+esc(n)+'">'+(n==='unknown'?T('Not recorded','未记录'):T('Level ','难度 ')+n)+'</option>').join('');page=0;draw()}

@@ -54,3 +54,14 @@
 .cg-comparison th{min-width:7em}.cg-comparison small{display:block;font-size:.75em;opacity:.8;margin-bottom:4px}
 .cg-comparison .cg-match{background:#d3efd4;color:#163f28}.cg-comparison .cg-mismatch{background:#f7d9d3;color:#681e19}
 #cgEntry{margin:20px 0;text-align:center}#cgEntry p{margin:8px 0}#cgFeedback h3{text-align:center;margin:12px 0}
+/* Item 6: saved family album list (cards wrap; 44px targets; LAY-06 gaps). */
+.cg-album-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:12px;margin:16px 0}
+.cg-album-list .cg-photo-label{margin:0;max-width:none;padding:10px;min-width:0;border:1px solid #8fa99a;border-radius:16px;text-align:left}
+.cg-album-list .cg-photo-label img{width:100%;height:96px;border-radius:10px}
+.cg-album-list .cg-photo-label label{display:grid;gap:4px}
+.cg-album-list .cg-photo-label input{min-height:44px;padding:6px 10px}
+.cg-photo-remove{min-height:44px}
+.cg-album-add{display:inline-flex;align-items:center;justify-content:center;min-height:48px;cursor:pointer;position:relative}
+.cg-album-add input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.cg-album-add:has(input:disabled){opacity:.5;cursor:default}
+.cg-album-add:focus-within{outline:3px solid currentColor;outline-offset:2px}

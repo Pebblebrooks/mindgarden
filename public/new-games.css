@@ -19,3 +19,14 @@
 @media(max-width:600px){.new-game{padding:0 3px}.picture-grid,.bingo-grid{gap:5px}.picture-piece{border-width:2px}.domino{width:90px;height:48px}.domino-choice{padding:6px}.bingo-card{padding:5px;min-height:90px}.new-actions .btn{max-width:none}.bingo-call{gap:8px}.feedback-banner{border-radius:8px}}
 
 @media(max-width:600px){.bingo-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,max(calc((100% - (var(--cols) - 1) * 5px) / var(--cols)),calc(84px * var(--fs)))),1fr))}}
+/* Item 3: Dominoes guide card (VIS-02 left-aligned when wrapped; 44px targets). */
+.domino-guide{margin:8px auto 16px;max-width:640px;padding:12px 16px;border-radius:16px;background:#fff7d6;border:2px solid #d9b44a;color:#174a42;text-align:left;line-height:1.4}
+.domino-guide p{margin:6px 0 10px}
+.domino-guide-actions{display:flex;flex-wrap:wrap;gap:8px}
+.domino-guide-actions .btn{min-height:44px}
+html[data-v4-mode="dark"] .domino-guide{background:#3a3417;border-color:#d9b44a;color:#fff6d8}
+/* Item 4: saved game card on the setup screen. */
+.saved-game-card{margin:8px 0 16px;padding:12px 16px;border-radius:16px;background:#e3efe6;border:2px solid #8fa99a;color:#174a42;text-align:left}
+.saved-game-card h3{margin:0 0 4px}.saved-game-card p{margin:0 0 10px}
+.saved-game-actions{display:flex;flex-wrap:wrap;gap:8px}.saved-game-actions .btn{min-height:44px}
+html[data-v4-mode="dark"] .saved-game-card{background:#0f4a50;border-color:#5f9c96;color:#e6f6f1}

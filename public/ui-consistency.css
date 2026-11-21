@@ -144,6 +144,8 @@ html body #personalResult>p{margin:4px 0!important;font-size:calc(.85rem * var(-
 @media(max-width:699px){html body #mini #mp .bingo-card{min-height:60px!important}html body #mini #mp .bingo-card :is(.game-picture,.game-illustration){width:32px!important;height:32px!important}}
 
 /* Keep the task instruction with its sequence, with readable hint copy. */
+html body #mini #mp>.pattern-rule-type{margin:0 auto 8px!important;padding:6px 16px;border-radius:999px;background:var(--pattern-tag-bg,#e3efe6);color:var(--pattern-tag-ink,#174a42);font-size:calc(1.05rem * var(--fs,1));font-weight:600;line-height:1.35;width:fit-content;max-width:100%;box-sizing:border-box;text-align:center}
+html[data-v4-mode="dark"] body #mini #mp>.pattern-rule-type{--pattern-tag-bg:#0f4a50;--pattern-tag-ink:#e6f6f1}
 html body #mini #mp>.pattern-question{font-size:var(--task-font)!important;line-height:1.4;margin:0!important;text-align:center}
 html body #mini>.msg:empty{display:none!important}
 html body #sharedHintStatus:not(:empty){font-size:var(--task-font)!important;line-height:1.4!important;padding-inline:12px}
@@ -328,6 +330,8 @@ html body :is(.game-controls,.game-header-controls,#personalResult,.menu-exit-ba
 #home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav{position:fixed!important}
 #home:not(.hidden):has(#gameLibrary:not(.hidden)) #unifiedNav{position:sticky!important;top:6px!important;z-index:30!important}
 #home:not(.hidden):has(#welcomeDashboard:not(.hidden)) #unifiedNav{top:6px!important;left:2%!important;right:2%!important;z-index:30!important}
+/* LAY-01, v6.4.0: the fixed home top bar takes no space, so the welcome title starts below its measured height (text-size.js sets --nav-clearance to bar height + 24px). */
+#home:not(.hidden) #welcomeDashboard:not(.hidden) .welcome-scene{padding-top:var(--nav-clearance,88px)!important}
 
 /* v6.3 stable panel sizes (approved review section 2, LAY-05). Play Together panels keep one size per
    device class; only their content scrolls. Gameplay inside a group (.mp-playing) is not affected. */
@@ -425,3 +429,6 @@ html body #ov #box.mp-dialog .mp-round-chip{background:rgba(255,255,255,.06)!imp
 html[data-v4-mode="light"] body #ov #box.mp-dialog .mp-round-chip{background:#f4f8f0!important;border-color:#8fa99a!important}
 html body #ov #box.mp-dialog .mp-round-chip[aria-checked=true]{border-color:var(--sun,#f3c64a)!important;outline:2px solid var(--sun,#f3c64a);outline-offset:0}
 html[data-v4-mode="light"] body #ov #box.mp-dialog .mp-round-chip[aria-checked=true]{border-color:#c99a1c!important;outline-color:#c99a1c;background:#fff8e1!important}
+/* Item 1: inline link to About → For family and caregivers. */
+#ov #box .about-care-link{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;background:none!important;border:0!important;box-shadow:none!important;color:inherit;font:inherit;font-weight:600;text-decoration:underline;cursor:pointer}
+#ov #box .about-care h4{margin:16px 0 4px;text-align:left}
