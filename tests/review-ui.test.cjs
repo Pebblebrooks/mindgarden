@@ -8,7 +8,7 @@ setTimeout(()=>{try{
  assert(el('dashProgress')&&el('dashLeaders')&&!el('dashGuide')&&!el('dailyCaption'));
  for(const go of ['progress','leaderboard'])assert(w.document.querySelector('.nav-items [data-go='+go+']'));
  let progress=0,leaders=0;w.openMyProgress=()=>progress++;el('bLb').onclick=()=>leaders++;el('dashProgress').click();el('dashLeaders').click();assert.equal(progress,1);assert.equal(leaders,1);
- assert.deepEqual([...w.document.querySelectorAll('.welcome-ctas .welcome-feature')].map(e=>e.id||(e.classList.contains('personal-open')?'myGames':'')),['dashStart','dashBrowse','myGames','dashTogether','dashProgress','dashLeaders']);assert.equal(el('dashStart').textContent.trim(),'Today’s Games');assert(!w.document.querySelector('.welcome-extra'));
+ assert.deepEqual([...w.document.querySelectorAll('.welcome-ctas .welcome-feature')].map(e=>e.id||(e.classList.contains('personal-open')?'myGames':'')),['dashStart','myGames','dashBrowse','dashTogether','dashProgress','dashLeaders']);assert.equal(el('dashStart').textContent.trim(),'Today’s Games');assert(!w.document.querySelector('.welcome-extra'));
  for(const id of ['homeNatureToggle','homeAnimationToggle'])assert(el(id).closest('.nav-actions'),id+' is in navbar');
  assert(el('homeNatureToggle').textContent.length<5);assert(el('homeAnimationToggle').getAttribute('aria-label').includes('animation'));
  assert.equal(el('navMenu').querySelectorAll('.nav-group').length,5);

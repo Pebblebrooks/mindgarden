@@ -97,6 +97,7 @@
     "viewport-fit.js",
     "board-layout.js",
     "game-ui.js",
-    "v5.js"
+    "v5.js",
+    "browser-back.js"
   ]
 }

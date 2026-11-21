@@ -45,7 +45,7 @@
     "id": "shp",
     "lang": "en",
     "level": 1,
-    "pictures": 9,
+    "pictures": 11,
     "memoryPreview": true
   },
   {
@@ -199,7 +199,7 @@
     "id": "order",
     "lang": "en",
     "level": 1,
-    "pictures": 9,
+    "pictures": 11,
     "memoryPreview": true
   },
   {
@@ -344,6 +344,34 @@
   },
   {
     "id": "melody",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sudoku",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "stroop",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "flags",
+    "lang": "en",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "scene",
     "lang": "en",
     "level": 1,
     "pictures": 0,
@@ -700,6 +728,34 @@
     "memoryPreview": false
   },
   {
+    "id": "sudoku",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "stroop",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "flags",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "scene",
+    "lang": "en",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
     "id": "seq",
     "lang": "zh",
     "level": 1,
@@ -899,7 +955,7 @@
     "id": "order",
     "lang": "zh",
     "level": 1,
-    "pictures": 11,
+    "pictures": 9,
     "memoryPreview": true
   },
   {
@@ -1044,6 +1100,34 @@
   },
   {
     "id": "melody",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sudoku",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "stroop",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "flags",
+    "lang": "zh",
+    "level": 1,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "scene",
     "lang": "zh",
     "level": 1,
     "pictures": 0,
@@ -1394,6 +1478,34 @@
   },
   {
     "id": "melody",
+    "lang": "zh",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "sudoku",
+    "lang": "zh",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "stroop",
+    "lang": "zh",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "flags",
+    "lang": "zh",
+    "level": 15,
+    "pictures": 0,
+    "memoryPreview": false
+  },
+  {
+    "id": "scene",
     "lang": "zh",
     "level": 15,
     "pictures": 0,
